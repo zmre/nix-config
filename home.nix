@@ -35,6 +35,12 @@
   ];
 
   home.file.".p10k.zsh".source = ./home/dotfiles/p10k.zsh;
+  home.file.".config/nvim/lua/options.lua".source = ./home/dotfiles/nvim/lua/options.lua;
+  home.file.".config/nvim/lua/abbreviations.lua".source = ./home/dotfiles/nvim/lua/abbreviations.lua;
+  home.file.".config/nvim/lua/filetypes.lua".source = ./home/dotfiles/nvim/lua/filetypes.lua;
+  home.file.".config/nvim/lua/mappings.lua".source = ./home/dotfiles/nvim/lua/mappings.lua;
+  home.file.".config/nvim/lua/tools.lua".source = ./home/dotfiles/nvim/lua/tools.lua;
+  home.file.".config/nvim/vim/colors.vim".source = ./home/dotfiles/nvim/vim/colors.vim;
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -46,7 +52,30 @@
     enable = true;
     viAlias = true;
     vimAlias = true;
+    extraConfig = ''
+    lua << 
+        require('options').defaults()
+        require('options').gui()
+        require('mappings')
+        require('abbreviations')
+        require('filetypes').config()
+    
+    '';
     #extraConfig = builtins.readFile ./home/extraConfig.vim;
+    #extraConfig = let
+      #luaRequire = module: builtins.readFile (builtins.toString 
+        #./home/dotfiles + "/${module}.lua");
+      #luaConfig = builtins.concatStringsSep "\n" (map luaRequire [
+        #"options"
+        #"mappings"
+        #"abbreviations"
+        #"filetypes"
+      ##]);
+    #in ''
+      #lua << 
+      #${luaConfig}
+      #
+    #'';
 
     plugins = with pkgs.vimPlugins; [
       # Syntax / Language Support ##########################
