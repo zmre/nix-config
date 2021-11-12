@@ -187,6 +187,9 @@
       save = 10000; # save 10,000 lines of history
     };
     initExtra = ''
+      set -o vi
+      export KEYTIMEOUT=1
+      bindkey -v
       source $HOME/.p10k.zsh
     '';
     oh-my-zsh.enable = true;
