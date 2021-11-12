@@ -48,7 +48,7 @@
   programs.nix-index.enable = true;
   programs.direnv = {
     enable = true;
-    enableZshIntegration  true;
+    enableZshIntegration = true;
   };
   programs.zoxide = {
     enable = true;
@@ -57,35 +57,38 @@
   programs.taskwarrior = {
     enable = true;
     colorTheme = "dark-256";
-    dataLocation  "$HOME/.task";
+    dataLocation = "$HOME/.task";
     config = {
       urgency.user.tag.networking.coefficient = -10.0;
       uda.reviewed.type = "date";
       uda.reviewed.label = "Reviewed";
-      report._reviewed.description = "Tasksh review report.  Adjust the filter to your needs.";
+      report._reviewed.description =
+        "Tasksh review report.  Adjust the filter to your needs.";
       report._reviewed.columns = "uuid";
       report._reviewed.sort = "reviewed+,modified+";
-      report._reviewed.filter = "( reviewed.none: or reviewed.before:now-6days ) and ( +PENDING or +WAITING )";
+      report._reviewed.filter =
+        "( reviewed.none: or reviewed.before:now-6days ) and ( +PENDING or +WAITING )";
       search.case.sensitive = "no";
       # Shortcuts
-      alias.dailystatus="status:completed end.after:today all";
-      alias.punt="modify wait:1d";
-      alias.someday="mod +someday wait:someday";
+      alias.dailystatus = "status:completed end.after:today all";
+      alias.punt = "modify wait:1d";
+      alias.someday = "mod +someday wait:someday";
 
       # task ready report default with custom columns
-      default.command="ready";
-      report.ready.columns="id,start.active,depends.indicator,project,due.relative,description.desc";
-      report.ready.labels= ",,Depends, Project, Due, Description";
+      default.command = "ready";
+      report.ready.columns =
+        "id,start.active,depends.indicator,project,due.relative,description.desc";
+      report.ready.labels = ",,Depends, Project, Due, Description";
       #if none of the tasks in a report have a particular column, it will not show in the report
 
-      report.minimal.columns="id,project,description.truncated";
-      report.minimal.labels=" , Project, Description";
-      report.minimal.sort="project+/,urgency-";
+      report.minimal.columns = "id,project,description.truncated";
+      report.minimal.labels = " , Project, Description";
+      report.minimal.sort = "project+/,urgency-";
 
       # Indicate the active task in reports
-      active.indicator=">";
+      active.indicator = ">";
       # Show the tracking of time
-      journal.time="on";
+      journal.time = "on";
     };
   };
 
