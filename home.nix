@@ -19,16 +19,11 @@
 
   home.packages = with pkgs; [
     cargo
-    direnv
-    exa
     fd
     fzy
-    git
     nixfmt
     rnix-lsp
     ripgrep
-    taskwarrior
-    zoxide
     zsh-powerlevel10k
   ];
 
@@ -51,6 +46,48 @@
   programs.bat.enable = true;
   programs.broot.enable = true;
   programs.nix-index.enable = true;
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration  true;
+  };
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+  programs.taskwarrior = {
+    enable = true;
+    colorTheme = "dark-256";
+    dataLocation  "$HOME/.task";
+    config = {
+      urgency.user.tag.networking.coefficient = -10.0;
+      uda.reviewed.type = "date";
+      uda.reviewed.label = "Reviewed";
+      report._reviewed.description = "Tasksh review report.  Adjust the filter to your needs.";
+      report._reviewed.columns = "uuid";
+      report._reviewed.sort = "reviewed+,modified+";
+      report._reviewed.filter = "( reviewed.none: or reviewed.before:now-6days ) and ( +PENDING or +WAITING )";
+      search.case.sensitive = "no";
+      # Shortcuts
+      alias.dailystatus="status:completed end.after:today all";
+      alias.punt="modify wait:1d";
+      alias.someday="mod +someday wait:someday";
+
+      # task ready report default with custom columns
+      default.command="ready";
+      report.ready.columns="id,start.active,depends.indicator,project,due.relative,description.desc";
+      report.ready.labels= ",,Depends, Project, Due, Description";
+      #if none of the tasks in a report have a particular column, it will not show in the report
+
+      report.minimal.columns="id,project,description.truncated";
+      report.minimal.labels=" , Project, Description";
+      report.minimal.sort="project+/,urgency-";
+
+      # Indicate the active task in reports
+      active.indicator=">";
+      # Show the tracking of time
+      journal.time="on";
+    };
+  };
 
   programs.neovim = {
     enable = true;
@@ -65,35 +102,31 @@
           require('filetypes').config()
       
     '';
-    #extraConfig = builtins.readFile ./home/extraConfig.vim;
-    #extraConfig = let
-    #luaRequire = module: builtins.readFile (builtins.toString 
-    #./home/dotfiles + "/${module}.lua");
-    #luaConfig = builtins.concatStringsSep "\n" (map luaRequire [
-    #"options"
-    #"mappings"
-    #"abbreviations"
-    #"filetypes"
-    ##]);
-    #in ''
-    #lua << 
-    #${luaConfig}
-    #
-    #'';
 
     plugins = with pkgs.vimPlugins; [
       # Syntax / Language Support ##########################
-      # vim-gvpr           # gvpr
       rust-vim # rust
+      rust-tools-nvim
+      nvim-lspconfig
+      lspsaga-nvim
+      lspkind-nvim
+      trouble-nvim
       telescope-nvim
       telescope-z-nvim
       telescope-fzy-native-nvim
       telescope-frecency-nvim
-      gitsigns-nvim
 
       # UI #################################################
       onedarkpro-nvim # colorscheme
+      plenary-nvim
+      lsp-colors-nvim
       vim-gitgutter # status in gutter
+      nvim-web-devicons
+      nvim-tree-lua
+      gitsigns-nvim
+      symbols-outline-nvim
+      lualine-nvim
+      barbar-nvim
       # vim-devicons
       #vim-airline
 
@@ -103,12 +136,22 @@
       vim-unimpaired
       vim-repeat # cs"'...
       vim-rsi
+      vim-visualstar
       kommentary
       crates-nvim
       vim-polyglot
       vim-eunuch # :Rename foo.rb
+      indent-blankline-nvim
+      nvim-cmp
+      cmp-nvim-lua
+      cmp-nvim-lsp
+      cmp-buffer
+      cmp-path
+      cmp-emoji
+      nvim-autopairs
 
       vim-fugitive # Gblame
+      vim-rooter
     ];
   };
 
@@ -130,6 +173,19 @@
     #histSize = 100000;
     #syntaxHighlighting.enable = true;
     #syntaxHighlighting.highlighters = [ "main" "brackets" "pattern" "root" "line" ];
+    completionInit = ''
+      autoload -U compinit && completionInit
+      autoload -Uz edit-command-line
+    '';
+    defaultKeymap = "vicmd";
+    history = {
+      expireDuplicatesFirst = true;
+      ignoreSpace = true;
+      save = 10000; # save 10,000 lines of history
+    };
+    initExtra = ''
+      source $HOME/.p10k.zsh
+    '';
     oh-my-zsh.enable = true;
     oh-my-zsh.plugins = [
       "sudo"
@@ -179,6 +235,7 @@
     #];
   };
 
+  programs.exa.enable = true;
   programs.git = {
     enable = true;
     userName = "Patrick Walsh";
@@ -505,6 +562,26 @@
     extraConfig = ''
       ${builtins.readFile ./home/dotfiles/tmux.conf}
     '';
+    sensibleOnTop = true;
+    plugins = with pkgs; [
+      tmuxPlugins.sensible
+      tmuxPlugins.open
+      {
+        plugin = tmuxPlugins.fzf-tmux-url;
+        extraConfig = ''
+          set -g @fzf-url-history-limit '200'
+          set -g @open-S 'https://www.duckduckgo.com/'
+        '';
+      }
+      {
+        plugin = tmuxPlugins.resurrect;
+        extraConfig = ''
+          set -g @resurrect-strategy-nvim 'session'
+          set -g @resurrect-processes ':all:'
+          set -g @resurrect-capture-pane-contents 'on'
+        '';
+      }
+    ];
   };
 
   home.sessionVariables = {
