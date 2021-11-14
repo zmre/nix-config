@@ -130,20 +130,18 @@
       symbols-outline-nvim
       lualine-nvim
       barbar-nvim
-      # vim-devicons
-      #vim-airline
 
       # Editor Features ####################################
       vim-abolish
-      vim-surround # cs"'
+      vim-surround
       vim-unimpaired
-      vim-repeat # cs"'...
+      vim-repeat
       vim-rsi
       vim-visualstar
       kommentary
       crates-nvim
       vim-polyglot
-      vim-eunuch # :Rename foo.rb
+      vim-eunuch
       indent-blankline-nvim
       nvim-cmp
       cmp-nvim-lua
@@ -153,7 +151,7 @@
       cmp-emoji
       nvim-autopairs
 
-      vim-fugitive # Gblame
+      vim-fugitive
       vim-rooter
     ];
   };
@@ -168,14 +166,7 @@
     enable = true;
     enableCompletion = true;
     enableAutosuggestions = true;
-    #enableFzfHistory = true;
     enableSyntaxHighlighting = true;
-    #enableFzfGit = true;
-    #autosuggestions.enable = true;
-    #autosuggestions.extraConfig.ZSH_AUTOSUGGEST_USE_ASYNC = "y";
-    #histSize = 100000;
-    #syntaxHighlighting.enable = true;
-    #syntaxHighlighting.highlighters = [ "main" "brackets" "pattern" "root" "line" ];
     completionInit = ''
       autoload -U compinit && completionInit
       autoload -Uz edit-command-line
@@ -208,7 +199,6 @@
     ];
     oh-my-zsh.theme =
       "../../../../../../../../$HOME/.nix-profile/share/zsh-powerlevel10k/powerlevel10k";
-    #oh-my-zsh.theme = "muse";
     shellAliases = {
       ls = "ls --color=auto -F";
       l = "exa --icons --git-ignore --git -F --extended";
@@ -218,27 +208,6 @@
       fd = "fd -HI"; # when calling the command, search all
       f = "fd"; # default search this dir for files ignoring .gitignore etc
     };
-
-    #setOptions = [
-    #"DISABLE_COMPFIX"
-    #"HYPHEN-INSENSITIVE"
-    #"list_ambiguous"
-    #"vi"
-    #"noautomenu"
-    #"nomenucomplete"
-    #"AUTO_CD"
-    #"BANG_HIST"
-    #"EXTENDED_HISTORY"
-    #"HIST_EXPIRE_DUPS_FIRST"
-    #"HIST_FIND_NO_DUPS"
-    #"HIST_IGNORE_ALL_DUPS"
-    #"HIST_IGNORE_DUPS"
-    #"HIST_IGNORE_SPACE"
-    #"HIST_REDUCE_BLANKS"
-    #"HIST_SAVE_NO_DUPS"
-    #"INC_APPEND_HISTORY"
-    #"SHARE_HISTORY"
-    #];
   };
 
   programs.exa.enable = true;
@@ -556,18 +525,14 @@
 
   programs.tmux = {
     enable = true;
-    #enableSensible = true;
-    #enableMouse = true;
-    #enableFzf = true;
-    #enableVim = true;
     keyMode = "vi";
     shell = "${pkgs.zsh}/bin/zsh";
     historyLimit = 10000;
     escapeTime = 0;
-    #extraConfig = builtins.readFile "./home/dotfiles/tmux.conf";
-    extraConfig = ''
-      ${builtins.readFile ./home/dotfiles/tmux.conf}
-    '';
+    extraConfig = builtins.readFile "./home/dotfiles/tmux.conf";
+    #extraConfig = ''
+    #  ${builtins.readFile ./home/dotfiles/tmux.conf}
+    #'';
     sensibleOnTop = true;
     plugins = with pkgs; [
       tmuxPlugins.sensible
