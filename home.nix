@@ -529,10 +529,9 @@
     shell = "${pkgs.zsh}/bin/zsh";
     historyLimit = 10000;
     escapeTime = 0;
-    extraConfig = builtins.readFile "./home/dotfiles/tmux.conf";
-    #extraConfig = ''
-    #  ${builtins.readFile ./home/dotfiles/tmux.conf}
-    #'';
+    extraConfig = ''
+      ${builtins.readFile ./home/dotfiles/tmux.conf}
+    '';
     sensibleOnTop = true;
     plugins = with pkgs; [
       tmuxPlugins.sensible
