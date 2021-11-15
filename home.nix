@@ -1,10 +1,25 @@
 { config, pkgs, ... }:
 
+let
+  powerlevel10k = pkgs.fetchFromGitHub {
+    owner = "romkatv";
+    repo = "powerlevel10k";
+    rev = "6520323fdbc02190528ff3ded57361088d53cdfb";
+    sha256 = "18m760l5y8qm9w2lpqsxvihkyryamrjd51xi4p6hlv9g7mzh3794";
+  };
+  gitstatus = pkgs.fetchFromGitHub {
+    owner = "romkatv";
+    repo = "gitstatus";
+    rev = "e269964607042ef0fdbda2d7af74ef9c8f618cf4";
+    sha256 = "1pd7l7pxsq8r17jfxifjilaqpjyk2h9npm389h0p5fzsyfyfiwhf";
+  };
+in
+
 {
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
-  home.username = "pwalsh";
+  home.username = "root";
   home.homeDirectory = "/root";
 
   # This value determines the Home Manager release that your
@@ -24,7 +39,6 @@
     nixfmt
     rnix-lsp
     ripgrep
-    zsh-powerlevel10k
   ];
 
   home.file.".p10k.zsh".source = ./home/dotfiles/p10k.zsh;
@@ -167,22 +181,84 @@
     enableCompletion = true;
     enableAutosuggestions = true;
     enableSyntaxHighlighting = true;
-    completionInit = ''
-      autoload -U compinit && completionInit
-      autoload -Uz edit-command-line
-    '';
-    defaultKeymap = "vicmd";
     history = {
       expireDuplicatesFirst = true;
       ignoreSpace = true;
       save = 10000; # save 10,000 lines of history
     };
-    initExtra = ''
-      set -o vi
-      export KEYTIMEOUT=1
-      bindkey -v
-      source $HOME/.p10k.zsh
+    initExtraBeforeCompInit = ''
+      source ${gitstatus}/gitstatus.plugin.zsh
+      source ${powerlevel10k}/powerlevel10k.zsh-theme
     '';
+    completionInit = ''
+      autoload -U compinit && completionInit
+    '';
+    initExtra = ''
+      if [[ -r "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh" ]]; then
+        source "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh"
+      fi
+
+      set -o vi
+      bindkey -v
+
+      # Setup preferred key bindings that emulate the parts of
+      # emacs-style input manipulation that I'm familiar with
+      bindkey '^P' up-history
+      bindkey '^N' down-history
+      bindkey '^?' backward-delete-char
+      bindkey '^h' backward-delete-char
+      bindkey '^w' backward-kill-word
+      bindkey '\e^h' backward-kill-word
+      bindkey '\e^?' backward-kill-word
+      bindkey '^r' history-incremental-search-backward
+      bindkey '^a' beginning-of-line
+      bindkey '^e' end-of-line
+      bindkey '\eb' backward-word
+      bindkey '\ef' forward-word
+      bindkey '^k' kill-line
+      bindkey '^u' backward-kill-line
+
+      # I prefer for up/down and j/k to do partial searches if there is
+      # already text in play, rather than just normal through history
+      bindkey '^[[A' up-line-or-search
+      bindkey '^[[B' down-line-or-search
+      bindkey -M vicmd 'k' up-line-or-search
+      bindkey -M vicmd 'j' down-line-or-search
+
+      # You might not like what I'm doing here, but '/' works like ctrl-r
+      # and matches as you type. I've added pattern matches here though.
+
+      bindkey -M vicmd '/' history-incremental-pattern-search-backward # default is vi-history-search-backward
+      bindkey -M vicmd '?' vi-history-search-backward # default is vi-history-search-forward
+
+      autoload -Uz edit-command-line
+      zle -N edit-command-line
+      bindkey -M vicmd 'v' edit-command-line
+
+      zstyle ':completion:*:manuals'    separate-sections true
+      zstyle ':completion:*:manuals.*'  insert-sections   true
+      zstyle ':completion:*:man:*'      menu yes select
+      zstyle ':completion:*' use-cache on
+      zstyle ':completion:*' cache-path ~/.zsh/cache
+      zstyle ':completion:*:(all-|)files' ignored-patterns '(|*/)CVS'
+      zstyle ':completion:*:cd:*' ignored-patterns '(*/)#CVS'
+      zstyle ':completion:*:*:kill:*' menu yes select
+      zstyle ':completion:*:kill:*'   force-list always
+
+      # Prompt stuff
+      source ${./home/dotfiles/p10k.zsh}
+    '';
+    plugins = [
+      {
+        name = "powerlevel10k";
+        src = powerlevel10k;
+      }
+      {
+        name = "powerlevel10k-config";
+        src = ./home/dotfiles/p10k.zsh;
+        file = "p10k.zsh";
+      }
+    ];
     oh-my-zsh.enable = true;
     oh-my-zsh.plugins = [
       "sudo"
@@ -195,10 +271,9 @@
       "cargo"
       "brew"
       "ripgrep"
+      "vi-mode"
       "zoxide"
     ];
-    oh-my-zsh.theme =
-      "../../../../../../../../$HOME/.nix-profile/share/zsh-powerlevel10k/powerlevel10k";
     shellAliases = {
       ls = "ls --color=auto -F";
       l = "exa --icons --git-ignore --git -F --extended";
@@ -558,6 +633,7 @@
     LANG = "en_US.UTF-8";
     LC_ALL = "en_US.UTF-8";
     TERM = "xterm-256color";
+    KEYTIMEOUT=1;
     EDITOR = "nvim";
     VISUAL = "nvim";
     GIT_EDITOR = "nvim";
@@ -572,5 +648,4 @@
     PAGER = "less";
     FZF_CTRL_R_OPTS = "--sort --exact";
   };
-
 }
