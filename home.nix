@@ -13,9 +13,8 @@ let
     rev = "e269964607042ef0fdbda2d7af74ef9c8f618cf4";
     sha256 = "1pd7l7pxsq8r17jfxifjilaqpjyk2h9npm389h0p5fzsyfyfiwhf";
   };
-in
 
-{
+in {
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -37,6 +36,7 @@ in
     fd
     fzy
     nixfmt
+    luaformatter
     rnix-lsp
     ripgrep
   ];
@@ -52,6 +52,8 @@ in
     ./home/dotfiles/nvim/lua/mappings.lua;
   home.file.".config/nvim/lua/tools.lua".source =
     ./home/dotfiles/nvim/lua/tools.lua;
+  home.file.".config/nvim/lua/plugins.lua".source =
+    ./home/dotfiles/nvim/lua/plugins.lua;
   home.file.".config/nvim/vim/colors.vim".source =
     ./home/dotfiles/nvim/vim/colors.vim;
 
@@ -117,6 +119,7 @@ in
           require('mappings')
           require('abbreviations')
           require('filetypes').config()
+          require('plugins')
       
     '';
 
@@ -127,23 +130,22 @@ in
       nvim-lspconfig
       lspsaga-nvim
       lspkind-nvim
+      lsp-colors-nvim
       trouble-nvim
       telescope-nvim
-      telescope-z-nvim
       telescope-fzy-native-nvim
       telescope-frecency-nvim
 
       # UI #################################################
       onedarkpro-nvim # colorscheme
-      plenary-nvim
-      lsp-colors-nvim
-      vim-gitgutter # status in gutter
+      nvim-colorizer-lua # color over CSS like #00ff00
       nvim-web-devicons
       nvim-tree-lua
-      gitsigns-nvim
+      gitsigns-nvim # status in gutter
       symbols-outline-nvim
       lualine-nvim
       barbar-nvim
+      indent-blankline-nvim
 
       # Editor Features ####################################
       vim-abolish
@@ -156,7 +158,8 @@ in
       crates-nvim
       vim-polyglot
       vim-eunuch
-      indent-blankline-nvim
+
+      # Autocompletion
       nvim-cmp
       cmp-nvim-lua
       cmp-nvim-lsp
@@ -165,6 +168,7 @@ in
       cmp-emoji
       nvim-autopairs
 
+      plenary-nvim # Library for lua plugins
       vim-fugitive
       vim-rooter
     ];
@@ -324,7 +328,7 @@ in
       color.ui = true;
       pull.rebase = true;
       merge.conflictstyle = "diff3";
-      credential.helper = "osxkeychain";
+      #credential.helper = "osxkeychain";
       diff.algorithm = "patience";
       protocol.version = "2";
       core.commitGraph = true;
@@ -633,7 +637,7 @@ in
     LANG = "en_US.UTF-8";
     LC_ALL = "en_US.UTF-8";
     TERM = "xterm-256color";
-    KEYTIMEOUT=1;
+    KEYTIMEOUT = 1;
     EDITOR = "nvim";
     VISUAL = "nvim";
     GIT_EDITOR = "nvim";
