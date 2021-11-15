@@ -135,9 +135,11 @@ in {
       telescope-nvim
       telescope-fzy-native-nvim
       telescope-frecency-nvim
+      neoformat
 
       # UI #################################################
-      onedarkpro-nvim # colorscheme
+      #onedarkpro-nvim # colorscheme
+      onedark-vim # colorscheme
       nvim-colorizer-lua # color over CSS like #00ff00
       nvim-web-devicons
       nvim-tree-lua

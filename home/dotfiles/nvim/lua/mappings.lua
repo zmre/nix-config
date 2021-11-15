@@ -27,11 +27,9 @@ vim.api.nvim_set_keymap('!', '#3', '<ESC>:Ack<Space>', options)
 -- Make ctrl-p open a file finder
 -- When using ctrl-p, screen out media files that we probably don't want
 -- to open in vim. And if we really want, then we can use ,ff
-vim.api.nvim_set_keymap('', '<c-p>',
-                        ':silent Telescope find_files find_command=/usr/local/bin/fd,--type,f,-L,--color,never,--ignore-file,/Users/pwalsh/.ignoremedia<CR>',
-                        options)
-vim.api.nvim_set_keymap('!', '<c-p>',
-                        '<ESC>:silent Telescope find_files find_command=/usr/local/bin/fd,--type,f,-L,--color,never,--ignore-file,/Users/pwalsh/.ignoremedia<CR>',
+vim.api
+    .nvim_set_keymap('', '<c-p>', ':silent Telescope find_files<CR>', options)
+vim.api.nvim_set_keymap('!', '<c-p>', '<ESC>:silent Telescope find_files<CR>',
                         options)
 
 vim.api.nvim_set_keymap('', '<leader>f', ':silent Telescope file_browser<CR>',
@@ -257,5 +255,4 @@ vim.api.nvim_set_keymap('', '<leader>gg', ':StartGrammar<CR>', options)
 -- Hop
 vim.api.nvim_set_keymap('', '}', ":HopWord<CR>", {silent = true})
 vim.api.nvim_set_keymap('', '{', ":HopChar1<CR>", {silent = true})
-
 
