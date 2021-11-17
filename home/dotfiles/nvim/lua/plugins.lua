@@ -188,3 +188,16 @@ vim.api.nvim_exec([[
     autocmd BufWritePre * undojoin | Neoformat
   augroup END
 ]], false)
+
+require("toggleterm").setup {}
+
+-- LSP stuff
+local lspconfig = require("lspconfig")
+lspconfig.rust_analyzer.setup {}
+lspconfig.tsserver.setup {}
+lspconfig.sumneko_lua.setup {}
+lspconfig.rnix.setup {}
+require"lsp_signature".setup()
+require('rust-tools').setup({})
+require'nvim-treesitter.configs'.setup {}
+require("nvim-lsp-ts-utils").setup({})

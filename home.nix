@@ -38,6 +38,24 @@ in {
     nixfmt
     luaformatter
     rnix-lsp
+    sumneko-lua-language-server
+    rust-analyzer
+    rustc
+    rustfmt
+    nodePackages.typescript
+    nodePackages.typescript-language-server
+    nodePackages.diagnostic-languageserver
+    nodePackages.eslint_d
+    tree-sitter-grammars.tree-sitter-vim
+    tree-sitter-grammars.tree-sitter-nix
+    tree-sitter-grammars.tree-sitter-lua
+    tree-sitter-grammars.tree-sitter-css
+    tree-sitter-grammars.tree-sitter-yaml
+    tree-sitter-grammars.tree-sitter-toml
+    tree-sitter-grammars.tree-sitter-rust
+    tree-sitter-grammars.tree-sitter-json
+    tree-sitter-grammars.tree-sitter-typescript
+    tree-sitter-grammars.tree-sitter-javascript
     ripgrep
   ];
 
@@ -125,12 +143,15 @@ in {
 
     plugins = with pkgs.vimPlugins; [
       # Syntax / Language Support ##########################
-      rust-vim # rust
+      vim-polyglot
+      #rust-vim # this is included in vim-polyglot
       rust-tools-nvim
       nvim-lspconfig
       lspsaga-nvim
       lspkind-nvim
+      lsp_signature-nvim
       lsp-colors-nvim
+      nvim-lsp-ts-utils
       trouble-nvim
       telescope-nvim
       telescope-fzy-native-nvim
@@ -148,6 +169,8 @@ in {
       lualine-nvim
       barbar-nvim
       indent-blankline-nvim
+      toggleterm-nvim
+      nvim-treesitter
 
       # Editor Features ####################################
       vim-abolish
@@ -158,7 +181,6 @@ in {
       vim-visualstar
       kommentary
       crates-nvim
-      vim-polyglot
       vim-eunuch
 
       # Autocompletion
