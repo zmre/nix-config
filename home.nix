@@ -1,18 +1,11 @@
 { config, pkgs, ... }:
 
 let
-  powerlevel10k = pkgs.fetchFromGitHub {
-    owner = "romkatv";
-    repo = "powerlevel10k";
-    rev = "6520323fdbc02190528ff3ded57361088d53cdfb";
-    sha256 = "18m760l5y8qm9w2lpqsxvihkyryamrjd51xi4p6hlv9g7mzh3794";
-  };
-  gitstatus = pkgs.fetchFromGitHub {
-    owner = "romkatv";
-    repo = "gitstatus";
-    rev = "e269964607042ef0fdbda2d7af74ef9c8f618cf4";
-    sha256 = "1pd7l7pxsq8r17jfxifjilaqpjyk2h9npm389h0p5fzsyfyfiwhf";
-  };
+  sources = import nix/sources.nix;
+  pkgs-unstable = import sources.nixpkgs { config = { allowUnfree = true; }; };
+  nixos-unstable = import sources.nixos { config = { allowUnfree = true; }; };
+  powerlevel10k = sources.powerlevel10k;
+  gitstatus = sources.gitstatus;
 
 in {
 
@@ -42,20 +35,11 @@ in {
     rust-analyzer
     rustc
     rustfmt
+    tree-sitter
     nodePackages.typescript
     nodePackages.typescript-language-server
     nodePackages.diagnostic-languageserver
     nodePackages.eslint_d
-    tree-sitter-grammars.tree-sitter-vim
-    tree-sitter-grammars.tree-sitter-nix
-    tree-sitter-grammars.tree-sitter-lua
-    tree-sitter-grammars.tree-sitter-css
-    tree-sitter-grammars.tree-sitter-yaml
-    tree-sitter-grammars.tree-sitter-toml
-    tree-sitter-grammars.tree-sitter-rust
-    tree-sitter-grammars.tree-sitter-json
-    tree-sitter-grammars.tree-sitter-typescript
-    tree-sitter-grammars.tree-sitter-javascript
     ripgrep
   ];
 
@@ -197,6 +181,34 @@ in {
       vim-rooter
     ];
   };
+  home.file."${config.xdg.configHome}/nvim/parser/tsx.so".source =
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-tsx}/parser";
+  home.file."${config.xdg.configHome}/nvim/parser/nix.so".source =
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-nix}/parser";
+  home.file."${config.xdg.configHome}/nvim/parser/vim.so".source =
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-vim}/parser";
+  home.file."${config.xdg.configHome}/nvim/parser/lua.so".source =
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-lua}/parser";
+  home.file."${config.xdg.configHome}/nvim/parser/css.so".source =
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-css}/parser";
+  home.file."${config.xdg.configHome}/nvim/parser/yaml.so".source =
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-yaml}/parser";
+  home.file."${config.xdg.configHome}/nvim/parser/toml.so".source =
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-toml}/parser";
+  home.file."${config.xdg.configHome}/nvim/parser/rust.so".source =
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-rust}/parser";
+  home.file."${config.xdg.configHome}/nvim/parser/json.so".source =
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-json}/parser";
+  home.file."${config.xdg.configHome}/nvim/parser/typescript.so".source =
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-typescript}/parser";
+  home.file."${config.xdg.configHome}/nvim/parser/javascript.so".source =
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-javascript}/parser";
+  home.file."${config.xdg.configHome}/nvim/parser/bash.so".source =
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-bash}/parser";
+  home.file."${config.xdg.configHome}/nvim/parser/scala.so".source =
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-scala}/parser";
+  home.file."${config.xdg.configHome}/nvim/parser/scss.so".source =
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-scss}/parser";
 
   programs.fzf = {
     enable = true;
@@ -215,8 +227,8 @@ in {
       save = 10000; # save 10,000 lines of history
     };
     initExtraBeforeCompInit = ''
-      source ${gitstatus}/gitstatus.plugin.zsh
-      source ${powerlevel10k}/powerlevel10k.zsh-theme
+      source ${gitstatus.outPath}/gitstatus.plugin.zsh
+      source ${powerlevel10k.outPath}/powerlevel10k.zsh-theme
     '';
     completionInit = ''
       autoload -U compinit && completionInit

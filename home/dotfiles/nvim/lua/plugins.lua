@@ -199,5 +199,5 @@ lspconfig.sumneko_lua.setup {}
 lspconfig.rnix.setup {}
 require"lsp_signature".setup()
 require('rust-tools').setup({})
-require'nvim-treesitter.configs'.setup {}
+require'nvim-treesitter.configs'.setup {highlight = {enable = true}}
 require("nvim-lsp-ts-utils").setup({})

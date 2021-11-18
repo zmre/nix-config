@@ -1,0 +1,62 @@
+{
+    "gitstatus": {
+        "branch": "master",
+        "description": "Git status for Bash and Zsh prompt",
+        "homepage": "",
+        "owner": "romkatv",
+        "repo": "gitstatus",
+        "rev": "e269964607042ef0fdbda2d7af74ef9c8f618cf4",
+        "sha256": "1pd7l7pxsq8r17jfxifjilaqpjyk2h9npm389h0p5fzsyfyfiwhf",
+        "type": "tarball",
+        "url": "https://github.com/romkatv/gitstatus/archive/e269964607042ef0fdbda2d7af74ef9c8f618cf4.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "niv": {
+        "branch": "master",
+        "description": "Easy dependency management for Nix projects",
+        "homepage": "https://github.com/nmattia/niv",
+        "owner": "nmattia",
+        "repo": "niv",
+        "rev": "5830a4dd348d77e39a0f3c4c762ff2663b602d4c",
+        "sha256": "1d3lsrqvci4qz2hwjrcnd8h5vfkg8aypq3sjd4g3izbc8frwz5sm",
+        "type": "tarball",
+        "url": "https://github.com/nmattia/niv/archive/5830a4dd348d77e39a0f3c4c762ff2663b602d4c.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixos": {
+        "branch": "nixos-unstable",
+        "description": "Nix Packages collection",
+        "homepage": "",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "931ab058daa7e4cd539533963f95e2bb0dbd41e6",
+        "sha256": "079925kw711k8agg17kxq36ininpacfjjhgydjy0pqbkhk59v6gm",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/931ab058daa7e4cd539533963f95e2bb0dbd41e6.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs": {
+        "branch": "nixpkgs-unstable",
+        "description": "Nix Packages collection",
+        "homepage": "",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "5cb226a06c49f7a2d02863d0b5786a310599df6b",
+        "sha256": "0dzz207swwm5m0dyibhxg5psccrcqfh1lzkmzzfns27wc4ria6z3",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs/archive/5cb226a06c49f7a2d02863d0b5786a310599df6b.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "powerlevel10k": {
+        "branch": "master",
+        "description": "A Zsh theme",
+        "homepage": "",
+        "owner": "romkatv",
+        "repo": "powerlevel10k",
+        "rev": "a9f208c8fc509b9c591169dd9758c48ad4325f76",
+        "sha256": "1jkddpmdmp274wkx407dwyi78dhraqq6vdxh15m13yraq1cy17jw",
+        "type": "tarball",
+        "url": "https://github.com/romkatv/powerlevel10k/archive/a9f208c8fc509b9c591169dd9758c48ad4325f76.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}
