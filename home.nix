@@ -1,11 +1,22 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 
 let
   sources = import nix/sources.nix;
   pkgs-unstable = import sources.nixpkgs { config = { allowUnfree = true; }; };
-  nixos-unstable = import sources.nixos { config = { allowUnfree = true; }; };
+  #nixos-unstable = import sources.nixos { config = { allowUnfree = true; }; };
   powerlevel10k = sources.powerlevel10k;
   gitstatus = sources.gitstatus;
+
+  defaultPkgs = with pkgs-unstable; [ fd fzy tree-sitter ripgrep ];
+  luaPkgs = with pkgs-unstable; [ sumneko-lua-language-server luaformatter ];
+  nixEditorPkgs = with pkgs-unstable; [ nixfmt rnix-lsp ];
+  rustPkgs = with pkgs-unstable; [ cargo rustfmt rust-analyzer rustc ];
+  typescriptPkgs = with pkgs-unstable.nodePackages; [
+    typescript
+    typescript-language-server
+    diagnostic-languageserver
+    eslint_d
+  ];
 
 in {
 
@@ -24,24 +35,8 @@ in {
   # changes in each release.
   home.stateVersion = "21.11";
 
-  home.packages = with pkgs; [
-    cargo
-    fd
-    fzy
-    nixfmt
-    luaformatter
-    rnix-lsp
-    sumneko-lua-language-server
-    rust-analyzer
-    rustc
-    rustfmt
-    tree-sitter
-    nodePackages.typescript
-    nodePackages.typescript-language-server
-    nodePackages.diagnostic-languageserver
-    nodePackages.eslint_d
-    ripgrep
-  ];
+  home.packages = defaultPkgs ++ luaPkgs ++ nixEditorPkgs ++ rustPkgs
+    ++ typescriptPkgs;
 
   home.file.".p10k.zsh".source = ./home/dotfiles/p10k.zsh;
   home.file.".config/nvim/lua/options.lua".source =
@@ -125,11 +120,13 @@ in {
       
     '';
 
-    plugins = with pkgs.vimPlugins; [
+    plugins = with pkgs-unstable.vimPlugins; [
       # Syntax / Language Support ##########################
       vim-polyglot
       #rust-vim # this is included in vim-polyglot
       rust-tools-nvim
+      popup-nvim
+      crates-nvim
       nvim-lspconfig
       lspsaga-nvim
       lspkind-nvim
@@ -164,7 +161,6 @@ in {
       vim-rsi
       vim-visualstar
       kommentary
-      crates-nvim
       vim-eunuch
 
       # Autocompletion
@@ -182,33 +178,31 @@ in {
     ];
   };
   home.file."${config.xdg.configHome}/nvim/parser/tsx.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-tsx}/parser";
+    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-tsx}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/nix.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-nix}/parser";
+    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-nix}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/vim.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-vim}/parser";
+    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-vim}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/lua.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-lua}/parser";
+    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-lua}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/css.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-css}/parser";
+    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-css}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/yaml.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-yaml}/parser";
+    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-yaml}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/toml.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-toml}/parser";
+    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-toml}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/rust.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-rust}/parser";
+    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-rust}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/json.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-json}/parser";
+    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-json}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/typescript.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-typescript}/parser";
+    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-typescript}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/javascript.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-javascript}/parser";
+    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-javascript}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/bash.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-bash}/parser";
+    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-bash}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/scala.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-scala}/parser";
-  home.file."${config.xdg.configHome}/nvim/parser/scss.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-scss}/parser";
+    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-scala}/parser";
 
   programs.fzf = {
     enable = true;
@@ -641,14 +635,14 @@ in {
   programs.tmux = {
     enable = true;
     keyMode = "vi";
-    shell = "${pkgs.zsh}/bin/zsh";
+    shell = "${pkgs-unstable.zsh}/bin/zsh";
     historyLimit = 10000;
     escapeTime = 0;
     extraConfig = ''
       ${builtins.readFile ./home/dotfiles/tmux.conf}
     '';
     sensibleOnTop = true;
-    plugins = with pkgs; [
+    plugins = with pkgs-unstable; [
       tmuxPlugins.sensible
       tmuxPlugins.open
       {

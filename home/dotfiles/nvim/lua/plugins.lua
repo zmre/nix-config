@@ -189,7 +189,11 @@ vim.api.nvim_exec([[
   augroup END
 ]], false)
 
-require("toggleterm").setup {}
+require("toggleterm").setup {
+    open_mapping = [[<c-\>]],
+    direction = 'vertical',
+    close_on_exit = true
+}
 
 -- LSP stuff
 local lspconfig = require("lspconfig")
