@@ -122,59 +122,59 @@ in {
 
     plugins = with pkgs-unstable.vimPlugins; [
       # Syntax / Language Support ##########################
-      vim-polyglot
+      vim-polyglot # lazy load all the syntax plugins for all the languages
       #rust-vim # this is included in vim-polyglot
-      rust-tools-nvim
-      popup-nvim
-      crates-nvim
-      nvim-lspconfig
-      lspsaga-nvim
-      lspkind-nvim
-      lsp_signature-nvim
-      lsp-colors-nvim
-      nvim-lsp-ts-utils
-      trouble-nvim
-      telescope-nvim
-      telescope-fzy-native-nvim
-      telescope-frecency-nvim
-      neoformat
+      rust-tools-nvim # lsp stuff and more for rust
+      crates-nvim # inline intelligence for Cargo.toml
+      nvim-lspconfig # setup LSP
+      lspsaga-nvim # makes LSP stuff look nicer and easier to use
+      lspkind-nvim # adds more icons into dropdown selections
+      lsp_signature-nvim # as you type hitns on function parameters
+      nvim-lsp-ts-utils # typescript lsp
+      trouble-nvim # navigate all warnings and errors in quickfix-like window
+      neoformat # autoformat on save, if formatter found
 
       # UI #################################################
       #onedarkpro-nvim # colorscheme
       onedark-vim # colorscheme
+      telescope-nvim # da best popup fuzzy finder
+      telescope-fzy-native-nvim # but fzy gives better results
+      telescope-frecency-nvim # and frecency comes in handy too
       nvim-colorizer-lua # color over CSS like #00ff00
-      nvim-web-devicons
-      nvim-tree-lua
-      gitsigns-nvim # status in gutter
-      symbols-outline-nvim
-      lualine-nvim
-      barbar-nvim
-      indent-blankline-nvim
-      toggleterm-nvim
-      nvim-treesitter
+      nvim-web-devicons # makes things pretty; used by many plugins below
+      nvim-tree-lua # file navigator
+      gitsigns-nvim # git status in gutter
+      symbols-outline-nvim # navigate the current file better
+      lualine-nvim # nice status bar at bottom
+      barbar-nvim # nice buffers (tabs) bar at top
+      indent-blankline-nvim # visual indent
+      toggleterm-nvim # better terminal management
+      nvim-treesitter # better code coloring
 
       # Editor Features ####################################
-      vim-abolish
-      vim-surround
-      vim-unimpaired
-      vim-repeat
-      vim-rsi
-      vim-visualstar
-      kommentary
-      vim-eunuch
+      vim-abolish # better abbreviations / spelling fixer
+      vim-surround # most important plugin for quickly handling brackets
+      vim-unimpaired # bunch of convenient navigation key mappings
+      vim-repeat # supports all of the above so you can use .
+      vim-rsi # brings keyline bindings to editing (like ctrl-e for end of line when in insert mode)
+      vim-visualstar # press * or # on a word to find it
+      kommentary # code commenter
+      vim-eunuch # brings cp/mv type commands. :Rename and :Move are particularly handy
 
       # Autocompletion
-      nvim-cmp
+      nvim-cmp # generic autocompleter
       cmp-nvim-lua
       cmp-nvim-lsp
       cmp-buffer
       cmp-path
       cmp-emoji
-      nvim-autopairs
+      nvim-autopairs # balances parens as you type
 
-      plenary-nvim # Library for lua plugins
-      vim-fugitive
-      vim-rooter
+      # Misc
+      popup-nvim # dependency of some other plugins
+      plenary-nvim # Library for lua plugins; used by many plugins here
+      vim-fugitive # git management
+      vim-rooter # change dir to project root
     ];
   };
   home.file."${config.xdg.configHome}/nvim/parser/tsx.so".source =

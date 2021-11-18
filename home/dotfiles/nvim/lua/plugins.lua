@@ -195,13 +195,15 @@ require("toggleterm").setup {
     close_on_exit = true
 }
 
--- LSP stuff
+-- LSP stuff - minimal with defaults for now
 local lspconfig = require("lspconfig")
 lspconfig.rust_analyzer.setup {}
 lspconfig.tsserver.setup {}
 lspconfig.sumneko_lua.setup {}
 lspconfig.rnix.setup {}
+require'lspsaga'.init_lsp_saga()
 require"lsp_signature".setup()
+require('lspkind').init({})
 require('rust-tools').setup({})
 require'nvim-treesitter.configs'.setup {highlight = {enable = true}}
 require("nvim-lsp-ts-utils").setup({})
