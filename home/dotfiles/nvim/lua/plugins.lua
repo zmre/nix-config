@@ -222,7 +222,6 @@ require('lualine').setup {
         }
     }
 }
-require'nvim-tmux-navigation'.setup {}
 
 -- LSP stuff - minimal with defaults for now
 local lspconfig = require("lspconfig")
