@@ -7,7 +7,7 @@ let
   powerlevel10k = sources.powerlevel10k;
   gitstatus = sources.gitstatus;
 
-  defaultPkgs = with pkgs-unstable; [ fd fzy tree-sitter ripgrep ];
+  defaultPkgs = with pkgs-unstable; [ fd fzy tree-sitter ripgrep curl ];
   luaPkgs = with pkgs-unstable; [ sumneko-lua-language-server luaformatter ];
   nixEditorPkgs = with pkgs-unstable; [ nixfmt rnix-lsp ];
   rustPkgs = with pkgs-unstable; [ cargo rustfmt rust-analyzer rustc ];

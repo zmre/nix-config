@@ -160,6 +160,7 @@ cmp.setup {
 
 }
 
+require('crates').setup()
 require('nvim-autopairs').setup({})
 require("colorizer").setup()
 vim.g.bufferline = {
