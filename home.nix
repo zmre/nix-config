@@ -169,12 +169,14 @@ in {
       cmp-path
       cmp-emoji
       nvim-autopairs # balances parens as you type
+      vim-emoji
 
       # Misc
       popup-nvim # dependency of some other plugins
       plenary-nvim # Library for lua plugins; used by many plugins here
       vim-fugitive # git management
       vim-rooter # change dir to project root
+      vim-tmux-navigator # navigate vim and tmux panes together
     ];
   };
   home.file."${config.xdg.configHome}/nvim/parser/tsx.so".source =

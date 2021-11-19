@@ -195,6 +195,35 @@ require("toggleterm").setup {
     close_on_exit = true
 }
 
+require('lualine').setup {
+    options = {
+        theme = 'papercolor_light',
+        icons_enabled = true,
+        component_separators = {left = '', right = ''},
+        section_separators = {left = '', right = ''}
+    },
+    extensions = {'quickfix', 'nvim-tree', 'fugitive'},
+    sections = {
+        lualine_a = {'mode'},
+        lualine_b = {'branch'},
+        lualine_c = {'nvim-tree', 'filename'},
+        lualine_x = {'encoding', 'fileformat', 'filetype'},
+        lualine_y = {'progress'},
+        lualine_z = {
+            {
+                'diagnostics',
+                sources = {'nvim_lsp'},
+                -- displays diagnostics from defined severity
+                sections = {'error', 'warn'}, -- 'info', 'hint'},}}
+                color_error = "#E06C75", -- changes diagnostic's error foreground color
+                color_warn = "#E5C07B"
+                -- symbols = {error = 'E', warn = 'W', info = 'I', hint = 'H'}
+            }
+        }
+    }
+}
+require'nvim-tmux-navigation'.setup {}
+
 -- LSP stuff - minimal with defaults for now
 local lspconfig = require("lspconfig")
 lspconfig.rust_analyzer.setup {}
