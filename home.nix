@@ -56,7 +56,13 @@ in {
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
-  programs.bat.enable = true;
+  programs.bat = {
+    enable = true;
+    config = {
+      theme = "TwoDark";
+      style = "plain"; # no line numbers, git status, etc... more like cat with colors
+    };
+  };
   programs.broot.enable = true;
   programs.nix-index.enable = true;
   programs.direnv = {
