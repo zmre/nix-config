@@ -135,6 +135,7 @@ in {
       font.italic.style = "Italic";
       font.bold_italic.style = "Bold Italic";
       font.size = 12;
+      shell.program = "/home/zmre/.nix-profile/bin/zsh";
       live_config_reload = true;
       cursor.vi_mode_style = "Underline";
       draw_bold_text_with_bright_colors = true;
@@ -716,12 +717,17 @@ in {
     enableSshSupport = true;
   };
 
+  xsession.windowManager.i3.enable = true;
   xsession.windowManager.i3.config = {
     terminal = "alacritty";
-    modifier = "Mod1";
+    modifier = "Mod4";
+    # need to use i3-gaps package to use these
+    #gaps.outer = 5;
+    #gaps.smartBorders = "on";
+    #gaps.smartGaps = true;
     fonts = {
       names = [ "DejaVu Sans Mono" ];
-      size = 11.0;
+      size = 10.0;
     };
   };
 
