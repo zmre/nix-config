@@ -254,7 +254,10 @@ in {
     enableZshIntegration = true;
     tmux.enableShellIntegration = true;
   };
-  programs.ssh.enable = true;
+  programs.ssh = {
+    enable = true;
+    extraConfig = "IdentityAgent /run/user/1000/gnupg/S.gpg-agent.ssh";
+  };
   programs.gh = {
     enable = true;
     settings = { git_protocol = "ssh"; };
