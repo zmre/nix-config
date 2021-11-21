@@ -1,9 +1,8 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 
 let
   sources = import nix/sources.nix;
   pkgs-unstable = import sources.nixpkgs { config = { allowUnfree = true; }; };
-  #nixos-unstable = import sources.nixos { config = { allowUnfree = true; }; };
   powerlevel10k = sources.powerlevel10k;
   gitstatus = sources.gitstatus;
 
@@ -17,13 +16,14 @@ let
     diagnostic-languageserver
     eslint_d
   ];
+  guiPkgs = with pkgs-unstable; [ neovide ];
 
 in {
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
-  home.username = "root";
-  home.homeDirectory = "/root";
+  home.username = "zmre";
+  home.homeDirectory = "/home/zmre";
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -36,7 +36,7 @@ in {
   home.stateVersion = "21.11";
 
   home.packages = defaultPkgs ++ luaPkgs ++ nixEditorPkgs ++ rustPkgs
-    ++ typescriptPkgs;
+    ++ typescriptPkgs ++ guiPkgs;
 
   home.file.".p10k.zsh".source = ./home/dotfiles/p10k.zsh;
   home.file.".config/nvim/lua/options.lua".source =
@@ -60,7 +60,8 @@ in {
     enable = true;
     config = {
       theme = "TwoDark";
-      style = "plain"; # no line numbers, git status, etc... more like cat with colors
+      style =
+        "plain"; # no line numbers, git status, etc... more like cat with colors
     };
   };
   programs.broot.enable = true;
@@ -108,6 +109,33 @@ in {
       active.indicator = ">";
       # Show the tracking of time
       journal.time = "on";
+    };
+  };
+
+  programs.firefox = {
+    enable = true;
+    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+      ublock-origin
+      https-everywhere
+      noscript
+      vimium
+    ];
+  };
+
+  programs.alacritty = {
+    enable = true;
+    settings = {
+      window.decorations = "none";
+      window.dynamic_title = true;
+      scrolling.history = 3000;
+      font.normal.family = "MesloLGS Nerd Font Mono";
+      font.normal.style = "Regular";
+      font.bold.style = "Bold";
+      font.italic.style = "Italic";
+      font.bold_italic.style = "Bold Italic";
+      font.size = 12;
+      live_config_reload = true;
+      draw_bold_text_with_bright_colors = true;
     };
   };
 
