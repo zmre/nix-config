@@ -112,6 +112,7 @@ in {
     };
   };
 
+  programs.qutebrowser.enable = true;
   programs.firefox = {
     enable = true;
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
@@ -135,7 +136,14 @@ in {
       font.bold_italic.style = "Bold Italic";
       font.size = 12;
       live_config_reload = true;
+      cursor.vi_mode_style = "Underline";
       draw_bold_text_with_bright_colors = true;
+      key_bindings = [{
+        key = "Escape";
+        mods = "Control";
+        mode = "~Search";
+        action = "ToggleViMode";
+      }];
     };
   };
 
@@ -706,6 +714,15 @@ in {
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
+  };
+
+  xsession.windowManager.i3.config = {
+    terminal = "alacritty";
+    modifier = "Mod1";
+    fonts = {
+      names = [ "DejaVu Sans Mono" ];
+      size = 11.0;
+    };
   };
 
   home.sessionVariables = {
