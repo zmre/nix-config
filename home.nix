@@ -245,7 +245,11 @@ in {
     enableZshIntegration = true;
     tmux.enableShellIntegration = true;
   };
-  programs.gh.enable = true;
+  programs.ssh.enable = true;
+  programs.gh = {
+    enable = true;
+    settings = { git_protocol = "ssh"; };
+  };
   programs.zsh = {
     enable = true;
     enableCompletion = true;
