@@ -12,7 +12,9 @@
 
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;
+  hardware.enableAllFirmware = true;
 
+  system.autoUpgrade.enable = true;
   nix = {
     autoOptimiseStore = true;
     gc.automatic = true;
@@ -44,10 +46,12 @@
   boot.loader.systemd-boot.enable = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.initrd.checkJournalingFS = false;
+  boot.supportedFilesystems = ["btrfs"];
 
   #hardware.parallels.enable = true;
 
   networking.hostName = "nixos-pw-vm"; # Define your hostname.
+  #networking.useDHCP = true;
   networking.networkmanager.enable = true;
   networking.networkmanager.wifi.backend = "iwd";
   #networking.wireless.iwd.enable = true;
@@ -60,7 +64,6 @@
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
-  networking.useDHCP = false;
   networking.interfaces.enp0s5.useDHCP = true;
 
   # Configure network proxy if necessary
@@ -80,6 +83,7 @@
   programs.dconf.enable = true;
   programs.light.enable = true;
   programs.zsh.enable = true;
+  programs.command-not-found.enable = true; # suggest what to install if cmd missing
 
   fonts = {
     fontconfig.enable = true;
@@ -97,6 +101,7 @@
     };
   };
 
+  services.locate.enable = true; # periodically update locate db
   services.earlyoom.enable = true;
    
   # Enable the X11 windowing system.
@@ -104,15 +109,23 @@
     enable = true;
     autorun = true;
     xkbOptions = "caps:escape";
-    desktopManager.xterm.enable = true;
+    #desktopManager.xterm.enable = true;
     displayManager.defaultSession = "none+i3";
     displayManager.lightdm.enable = true;
     layout = "us";
     libinput.enable = true;
     libinput.touchpad.disableWhileTyping = true;
+    #windowManager.xmonad = {
+      #enable = true;
+      #enableContribAndExtras = true;
+      #extraPackages = with pkgs; [
+        #
+      #];
+    #};
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [
+        rofi
         dmenu
 	xclip
 	i3status
@@ -130,7 +143,13 @@
 
   # Enable sound.
   sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  hardware.pulseaudio = {
+    enable = true;
+    package = pkgs.pulseaudioFull; # needed for bluetooth audio
+  };
+  # no bluetooth on boot
+  hardware.bluetooth.enable = false;
+  hardware.bluetooth.powerOnBoot = false;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.zmre = {
@@ -148,8 +167,13 @@
     binutils
     coreutils
     dnsutils
+    compsize #btrfs util
   ];
 
+  environment.sessionVariables = {
+    LANGUAGE = "en_US.UTF-8";
+    LC_ALL = "en_US.UTF-8";
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
