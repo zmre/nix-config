@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 let
   sources = import nix/sources.nix;
@@ -109,6 +109,15 @@ in {
       active.indicator = ">";
       # Show the tracking of time
       journal.time = "on";
+    };
+  };
+
+  gtk = {
+    enable = true;
+
+    iconTheme = {
+      name = "Papirus-Dark";
+      package = pkgs.papirus-icon-theme;
     };
   };
 
@@ -256,7 +265,7 @@ in {
   };
   programs.ssh = {
     enable = true;
-    extraConfig = "IdentityAgent /run/user/1000/gnupg/S.gpg-agent.ssh";
+    #extraConfig = "IdentityAgent /run/user/1000/gnupg/S.gpg-agent.ssh";
   };
   programs.gh = {
     enable = true;
@@ -368,6 +377,9 @@ in {
       llt = "exa --icons --git-ignore --git -F --extended -l -T";
       fd = "fd -HI"; # when calling the command, search all
       f = "fd"; # default search this dir for files ignoring .gitignore etc
+      nixosedit =
+        "sudo -E nvim /etc/nixos/configuration.nix ; sudo nixos-rebuild switch";
+      nixedit = "nvim ~/.config/nixpkgs/home.nix ; home-manager switch";
     };
   };
 
@@ -722,15 +734,86 @@ in {
 
   xsession.windowManager.i3.enable = true;
   xsession.windowManager.i3.config = {
-    terminal = "alacritty";
+    terminal = "${pkgs.alacritty}/bin/alacritty";
     modifier = "Mod4";
+    menu =
+      ''"${pkgs.rofi}/bin/rofi -modi drun -show drun -theme glue_pro_blue"'';
     # need to use i3-gaps package to use these
-    #gaps.outer = 5;
-    #gaps.smartBorders = "on";
-    #gaps.smartGaps = true;
+    gaps.inner = 10;
+    gaps.smartBorders = "on";
+    gaps.smartGaps = true;
     fonts = {
       names = [ "DejaVu Sans Mono" ];
       size = 10.0;
+    };
+    focus.newWindow = "focus";
+    focus.followMouse = false;
+    window.border = 1;
+    colors.focused = {
+      background = "#285577";
+      border = "#4c7899";
+      childBorder = "#285577";
+      indicator = "#2e9ef4";
+      text = "#ffffff";
+    };
+    keybindings = let mod = config.xsession.windowManager.i3.config.modifier;
+    in lib.mkOptionDefault {
+      "${mod}+Return" = "exec alacritty";
+      "${mod}+t" = "split toggle";
+      "${mod}+h" = "focus left";
+      "${mod}+j" = "focus down";
+      "${mod}+k" = "focus up";
+      "${mod}+l" = "focus right";
+
+    };
+  };
+  programs.i3status-rust.enable = true;
+  programs.i3status-rust.bars = {
+    bottom = {
+      blocks = [
+        {
+          block = "disk_space";
+          path = "/";
+          alias = "/";
+          info_type = "available";
+          unit = "GB";
+          interval = 60;
+          warning = 20.0;
+          alert = 10.0;
+        }
+        {
+          block = "memory";
+          display_type = "memory";
+          format_mem = "{mem_used_percents}";
+          format_swap = "{swap_used_percents}";
+        }
+        {
+          block = "cpu";
+          interval = 1;
+        }
+        {
+          block = "load";
+          interval = 1;
+          format = "{1m}";
+        }
+        { block = "sound"; }
+        {
+          block = "time";
+          interval = 60;
+          format = "%a %d/%m %R";
+        }
+      ];
+      settings = {
+        theme = {
+          name = "solarized-dark";
+          overrides = {
+            idle_bg = "#123456";
+            idle_fg = "#abcdef";
+          };
+        };
+      };
+      icons = "awesome5";
+      theme = "gruvbox-dark";
     };
   };
 

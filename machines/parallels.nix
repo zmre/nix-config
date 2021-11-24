@@ -5,10 +5,9 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [ # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;
@@ -28,9 +27,10 @@
     allowUnfree = true;
     experimental-features = "nix-command flakes";
     packageOverrides = pkgs: {
-      nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-        inherit pkgs;
-      };
+      nur = import (builtins.fetchTarball
+        "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+          inherit pkgs;
+        };
     };
   };
 
@@ -46,7 +46,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.initrd.checkJournalingFS = false;
-  boot.supportedFilesystems = ["btrfs"];
+  boot.supportedFilesystems = [ "btrfs" ];
 
   #hardware.parallels.enable = true;
 
@@ -78,23 +78,19 @@
     keyMap = "us";
   };
 
-  environment.pathsToLink = ["/libexec"];
+  environment.pathsToLink = [ "/libexec" ];
 
+  programs.ssh.startAgent = true;
   programs.dconf.enable = true;
   programs.light.enable = true;
   programs.zsh.enable = true;
-  programs.command-not-found.enable = true; # suggest what to install if cmd missing
+  programs.command-not-found.enable = true; # suggest install if cmd missing
 
   fonts = {
     fontconfig.enable = true;
     fontDir.enable = true;
     enableGhostscriptFonts = true;
-    fonts = with pkgs; [
-      powerline-fonts
-      source-code-pro
-      nerdfonts
-      vegur
-    ];
+    fonts = with pkgs; [ powerline-fonts source-code-pro nerdfonts vegur ];
     fontconfig.defaultFonts = {
       monospace = [ "MesloLGS Nerd Font Mono" ];
       sansSerif = [ "MesloLGS Nerd Font" ];
@@ -103,7 +99,7 @@
 
   services.locate.enable = true; # periodically update locate db
   services.earlyoom.enable = true;
-   
+
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
@@ -111,32 +107,43 @@
     xkbOptions = "caps:escape";
     #desktopManager.xterm.enable = true;
     displayManager.defaultSession = "none+i3";
+    # Setup a graphical login
     displayManager.lightdm.enable = true;
     layout = "us";
     libinput.enable = true;
     libinput.touchpad.disableWhileTyping = true;
     #windowManager.xmonad = {
-      #enable = true;
-      #enableContribAndExtras = true;
-      #extraPackages = with pkgs; [
-        #
-      #];
+    #enable = true;
+    #enableContribAndExtras = true;
+    #extraPackages = with pkgs; [
+    #
+    #];
     #};
+    # pipewire brings better audio/video handling
+    #pipewire = {
+    #enable = true;
+    #alsa = {
+    #enable = true;
+    #support32Bit = true;
+    #};
+    #pulse.enable = true;
+    #};
+    #gnome3.gnome-keyring.enable = true;
     windowManager.i3 = {
       enable = true;
+      package = pkgs.i3-gaps; # adds extra functionality
       extraPackages = with pkgs; [
         rofi
-        dmenu
-	xclip
-	i3status
-	i3lock
-	i3blocks
+        polybar
+        feh
+        lxappearance
+        xclip
+        i3status-rust
+        i3lock
+        i3blocks
       ];
     };
   };
-
-
-  
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
@@ -154,8 +161,18 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.zmre = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [
+      "wheel" # Enable ‘sudo’ for the user.
+      "networkmanager"
+    ];
   };
+  security.sudo.enable = true;
+  security.sudo.execWheelOnly = true;
+  security.sudo.extraConfig = ''
+    Defaults   timestamp_timeout=-1 
+  '';
+
+  #virtualization.docker.enable = true;
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -167,7 +184,8 @@
     binutils
     coreutils
     dnsutils
-    compsize #btrfs util
+    compsize # btrfs util
+    x11_ssh_askpass
   ];
 
   environment.sessionVariables = {
@@ -175,13 +193,11 @@
     LC_ALL = "en_US.UTF-8";
   };
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  programs.mtr.enable = true;
+  #programs.gnupg.agent = {
+  #enable = true;
+  #enableSSHSupport = true;
+  #};
 
   # List services that you want to enable:
 
@@ -203,4 +219,3 @@
   system.stateVersion = "21.05"; # Did you read the comment?
 
 }
-
