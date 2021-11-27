@@ -16,7 +16,8 @@ let
     diagnostic-languageserver
     eslint_d
   ];
-  guiPkgs = with pkgs-unstable; [ neovide ];
+  networkPkgs = with pkgs-unstable; [ traceroute mtr iftop ];
+  guiPkgs = with pkgs-unstable; [ neovide xss-lock i3-auto-layout ];
 
 in {
 
@@ -36,7 +37,7 @@ in {
   home.stateVersion = "21.11";
 
   home.packages = defaultPkgs ++ luaPkgs ++ nixEditorPkgs ++ rustPkgs
-    ++ typescriptPkgs ++ guiPkgs;
+    ++ typescriptPkgs ++ guiPkgs ++ networkPkgs;
 
   home.file.".p10k.zsh".source = ./home/dotfiles/p10k.zsh;
   home.file.".config/nvim/lua/options.lua".source =
@@ -117,7 +118,7 @@ in {
 
     iconTheme = {
       name = "Papirus-Dark";
-      package = pkgs.papirus-icon-theme;
+      package = pkgs-unstable.papirus-icon-theme;
     };
   };
 
@@ -135,7 +136,7 @@ in {
   programs.alacritty = {
     enable = true;
     settings = {
-      window.decorations = "none";
+      window.decorations = "full";
       window.dynamic_title = true;
       scrolling.history = 3000;
       font.normal.family = "MesloLGS Nerd Font Mono";
@@ -143,8 +144,8 @@ in {
       font.bold.style = "Bold";
       font.italic.style = "Italic";
       font.bold_italic.style = "Bold Italic";
-      font.size = 12;
-      shell.program = "/home/zmre/.nix-profile/bin/zsh";
+      font.size = 9;
+      shell.program = "${pkgs-unstable.zsh}/bin/zsh";
       live_config_reload = true;
       cursor.vi_mode_style = "Underline";
       draw_bold_text_with_bright_colors = true;
@@ -263,10 +264,7 @@ in {
     enableZshIntegration = true;
     tmux.enableShellIntegration = true;
   };
-  programs.ssh = {
-    enable = true;
-    #extraConfig = "IdentityAgent /run/user/1000/gnupg/S.gpg-agent.ssh";
-  };
+  programs.ssh.enable = true;
   programs.gh = {
     enable = true;
     settings = { git_protocol = "ssh"; };
@@ -727,28 +725,241 @@ in {
     ];
   };
 
+  services.dunst.enable = true; # notification daemon
+  # top bar
+  services.polybar = rec {
+    enable = true;
+    package = pkgs.polybar.override {
+      i3GapsSupport = true;
+      pulseSupport = true;
+    };
+    script = "${package}/bin/polybar dracula &";
+    settings = {
+      "colors" = {
+        background = {
+          text = "#282a36";
+          alt = "#282a36";
+        };
+        foreground = {
+          text = "#f8f8f2";
+          alt = "#f8f8f2";
+        };
+        primary = "#13f01e";
+        secondary = "#bd93f9";
+        alert = "#bd93f9";
+      };
+      "bar/dracula" = {
+        #monitor = "DisplayPort-2";
+        height = 28;
+        enable.ipc = true;
+        background = "\${colors.background}";
+        foreground = "\${colors.foreground}";
+        line.size = 3;
+        border = {
+          color = "#44465a";
+          bottom.size = 3;
+        };
+        padding = {
+          left = 0;
+          right = 2;
+        };
+        module.margin = {
+          left = 1;
+          right = 2;
+        };
+        font = [
+          "Source Code Pro:pixelsize=12;1"
+          "Font Awesome 5 Free Solid:size=11;1"
+          "Font Awesome 5 Free Solid:size=10;1"
+          "Font Awesome 5 Brands Regular:size=11;1"
+        ];
+        modules = {
+          left = "i3";
+          center = "date";
+          right = "dunst xkeyboard pulseaudio powermenu";
+        };
+        cursor = {
+          click = "pointer";
+          scroll = "ns-resize";
+        };
+      };
+      "module/dunst" = {
+        type = "custom/ipc";
+        initial = 1;
+        hook = [
+          ''
+            echo "%{A1:${pkgs.dunst}/bin/dunstctl set-paused true && ${pkgs.polybar}/bin/polybar-msg hook dunst 2:}%{F#ff5555}%{F-} on%{A}" &''
+          ''
+            echo "%{A1:${pkgs.dunst}/bin/dunstctl set-paused false && ${pkgs.polybar}/bin/polybar-msg hook dunst 1:}%{F#ff5555}%{F-} off%{A}" &''
+        ];
+      };
+      "module/xkeyboard" = {
+        type = "internal/xkeyboard";
+        blacklist = [ "num lock" ];
+        format = {
+          text = "<label-layout><label-indicator>";
+          spacing = 0;
+          prefix = {
+            text = " ";
+            foreground = "#ffb86c";
+          };
+        };
+        label = {
+          layout = "%layout%";
+          indicator.on = " %name%";
+        };
+      };
+      "module/i3" = {
+        type = "internal/i3";
+        format = "<label-state> <label-mode>";
+        index.sort = true;
+        wrapping.scroll = false;
+        label = {
+          mode = {
+            padding = 2;
+            foreground = "#000";
+            background = "\${colors.primary}";
+          };
+          focused = {
+            text = "%icon%";
+            background = "\${colors.background-alt}";
+            underline = "\${colors.secondary}";
+            padding = 2;
+          };
+          unfocused = {
+            text = "%icon%";
+            padding = 2;
+          };
+          visible = {
+            text = "%icon%";
+            background = "\${self.label-focused-background}";
+            underline = "\${self.label-focused-underline}";
+            padding = "\${self.label-focused-padding}";
+          };
+          urgent = {
+            text = "%icon%";
+            background = "\${colors.alert}";
+            padding = 2;
+          };
+        };
+        ws.icon = {
+          text = [ "1;" "2;" "3;" "4;" "5;" ];
+          default = "";
+        };
+      };
+      "module/date" = {
+        type = "internal/date";
+        interval = 5;
+        date = {
+          text = "";
+          alt = " %m/%d/%y";
+        };
+        time = {
+          text = " %I:%M %P ";
+          alt = " %I:%M %P";
+        };
+        format = {
+          prefix.foreground = "\${colors.foreground-alt}";
+          padding = 0.5;
+        };
+        label = "%date% %time%";
+      };
+      "module/pulseaudio" = {
+        type = "internal/pulseaudio";
+        format.volume = "<label-volume>";
+        label = {
+          volume = "%{F#f1fa8c}%{F-} %percentage%";
+          muted = {
+            text = "";
+            foreground = "#44475a";
+          };
+        };
+      };
+      "module/powermenu" = {
+        type = "custom/menu";
+        expand.right = true;
+        format.spacing = 1;
+        label = {
+          open = {
+            text = "%{T3}";
+            foreground = "#50fa7b";
+          };
+          close = {
+            text = "%{T2}";
+            foreground = "#50fa7b";
+          };
+          separator = {
+            text = "|";
+            foreground = "\${colors.foreground-alt}";
+          };
+        };
+        menu = [
+          [
+            {
+              text = "%{T3} ";
+              exec = "menu-open-1";
+            }
+            {
+              text = "%{T3}";
+              exec = "menu-open-2";
+            }
+          ]
+          [
+            {
+              text = "%{T2}";
+              exec = "menu-open-0";
+            }
+            {
+              text = "%{T3} ";
+              exec = "sudo ${pkgs.systemd}/bin/reboot now";
+            }
+          ]
+          [
+            {
+              text = "%{T3}";
+              exec = "sudo ${pkgs.systemd}/bin/poweroff";
+            }
+            {
+              text = "%{T2}";
+              exec = "menu-open-0";
+            }
+          ]
+        ];
+      };
+      "settings" = { screenchange.reload = true; };
+      "wm" = {
+        margin = {
+          top = 5;
+          bottom = 5;
+        };
+      };
+    };
+  };
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;
   };
+  # manage audio play/pause
+  services.playerctld.enable = true;
 
   xsession.windowManager.i3.enable = true;
   xsession.windowManager.i3.config = {
-    terminal = "${pkgs.alacritty}/bin/alacritty";
+    terminal = "${pkgs-unstable.alacritty}/bin/alacritty";
     modifier = "Mod4";
-    menu =
-      ''"${pkgs.rofi}/bin/rofi -modi drun -show drun -theme glue_pro_blue"'';
+    menu = ''
+      "${pkgs-unstable.rofi}/bin/rofi -modi drun -show drun -theme glue_pro_blue"'';
     # need to use i3-gaps package to use these
-    gaps.inner = 10;
+    gaps.inner = 8;
+    gaps.outer = 2;
     gaps.smartBorders = "on";
     gaps.smartGaps = true;
     fonts = {
-      names = [ "DejaVu Sans Mono" ];
-      size = 10.0;
+      names = [ "pango:DejaVu Sans Mono" ];
+      size = 9.0;
     };
     focus.newWindow = "focus";
     focus.followMouse = false;
-    window.border = 1;
+    window.border = 3;
     colors.focused = {
       background = "#285577";
       border = "#4c7899";
@@ -756,17 +967,89 @@ in {
       indicator = "#2e9ef4";
       text = "#ffffff";
     };
-    keybindings = let mod = config.xsession.windowManager.i3.config.modifier;
+    keybindings = let
+      mod = config.xsession.windowManager.i3.config.modifier;
+      refresh = "killall -SIGUSR1 i3status";
     in lib.mkOptionDefault {
       "${mod}+Return" = "exec alacritty";
+      "${mod}+j" = "focus left";
+      "${mod}+k" = "focus down";
+      "${mod}+l" = "focus up";
+      "${mod}+Tab" = ''
+        exec --no-startup-id "${pkgs-unstable.rofi}/bin/rofi -modi drun -show window -theme iggy"'';
+      "${mod}+semicolon" = "focus right";
+      "${mod}+Shift+j" = "move left";
+      "${mod}+Shift+k" = "move down";
+      "${mod}+Shift+l" = "move up";
+      "${mod}+Shift+semicolon" = "move right";
+      "${mod}+h" = "split h";
+      "${mod}+v" = "split v";
       "${mod}+t" = "split toggle";
-      "${mod}+h" = "focus left";
-      "${mod}+j" = "focus down";
-      "${mod}+k" = "focus up";
-      "${mod}+l" = "focus right";
-
+      "${mod}+s" = "layout stacking";
+      "${mod}+w" = "layout tabbed";
+      "${mod}+e" = "layout toggle split";
+      # Use pactl to adjust volume in PulseAudio.
+      "XF86AudioRaiseVolume" =
+        "exec --no-startup-id ${pkgs-unstable.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +10% && ${refresh}";
+      "XF86AudioLowerVolume" =
+        "exec --no-startup-id ${pkgs-unstable.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -10% && ${refresh}";
+      "XF86AudioMute" =
+        "exec --no-startup-id ${pkgs-unstable.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle && ${refresh}";
+      "XF86AudioMicMute" =
+        "exec --no-startup-id ${pkgs-unstable.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle && ${refresh}";
+      #"XF86AudioPlay" =
+      "XF86AudioPlay" = "exec ${pkgs-unstable.playerctl}/bin/playerctl play";
+      "XF86AudioPause" = "exec ${pkgs-unstable.playerctl}/bin/playerctl pause";
+      "XF86AudioNext" = "exec ${pkgs-unstable.playerctl}/bin/playerctl next";
+      "XF86AudioPrev" = "exec ${pkgs-unstable.playerctl}/bin/playerctl prev";
+      # backlight
+      "XF86MonBrightnessUp" =
+        "exec --no-startup-id ${pkgs-unstable.light}/bin/light -A 5";
+      "XF86MonBrightnessDown" =
+        "exec --no-startup-id ${pkgs-unstable.light}/bin/light -U 5";
     };
+    assigns = {
+      "1: term" = [{ class = "^alacritty$"; }];
+      "2: web" = [{ class = "^(Firefox|qutebrowser)$"; }];
+    };
+    modes = {
+      resize = {
+        Down = "resize grow height 10 px or 10 ppt";
+        Left = "resize shrink width 10 px or 10 ppt";
+        Right = "resize grow width 10 px or 10 ppt";
+        Up = "resize shrink height 10 px or 10 ppt";
+        k = "resize grow height 10 px or 10 ppt";
+        j = "resize shrink width 10 px or 10 ppt";
+        semicolon = "resize grow width 10 px or 10 ppt";
+        l = "resize shrink height 10 px or 10 ppt";
+        Escape = "mode default";
+        Return = "mode default";
+      };
+    };
+    startup = [
+      {
+        command = "systemctl --user restart polybar";
+        always = true;
+        notification = false;
+      }
+      { command = "qutebrowser"; }
+      {
+        command = "alacritty";
+      }
+      # NetworkManager is the most popular way to manage wireless networks on Linux,
+      # and nm-applet is a desktop environment-independent system tray GUI for it.
+      {
+        command = "nm-applet";
+        notification = false;
+      }
+    ];
   };
+  # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
+  # screen before suspend. Use loginctl lock-session to lock your screen.
+  xsession.windowManager.i3.extraConfig = ''
+    exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+    exec_always --no-startup-id i3-auto-layout
+  '';
   programs.i3status-rust.enable = true;
   programs.i3status-rust.bars = {
     bottom = {
