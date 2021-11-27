@@ -1004,9 +1004,9 @@ in {
       "XF86AudioPrev" = "exec ${pkgs-unstable.playerctl}/bin/playerctl prev";
       # backlight
       "XF86MonBrightnessUp" =
-        "exec --no-startup-id ${pkgs-unstable.light}/bin/light -A 5";
+        "exec --no-startup-id ${pkgs-unstable.light}/bin/light -A 1";
       "XF86MonBrightnessDown" =
-        "exec --no-startup-id ${pkgs-unstable.light}/bin/light -U 5";
+        "exec --no-startup-id ${pkgs-unstable.light}/bin/light -U 1";
     };
     assigns = {
       "1: term" = [{ class = "^alacritty$"; }];
