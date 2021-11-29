@@ -6,7 +6,19 @@ let
   powerlevel10k = sources.powerlevel10k;
   gitstatus = sources.gitstatus;
 
-  defaultPkgs = with pkgs-unstable; [ fd fzy tree-sitter ripgrep curl ];
+  defaultPkgs = with pkgs-unstable; [
+    fd
+    fzy
+    tree-sitter
+    ripgrep
+    curl
+    ranger
+    du-dust
+    glow
+    bottom
+    exif
+    niv
+  ];
   luaPkgs = with pkgs-unstable; [ sumneko-lua-language-server luaformatter ];
   nixEditorPkgs = with pkgs-unstable; [ nixfmt rnix-lsp ];
   rustPkgs = with pkgs-unstable; [ cargo rustfmt rust-analyzer rustc ];
@@ -25,6 +37,7 @@ in {
   # paths it should manage.
   home.username = "zmre";
   home.homeDirectory = "/home/zmre";
+  home.enableNixpkgsReleaseCheck = false;
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -54,6 +67,7 @@ in {
     ./home/dotfiles/nvim/lua/plugins.lua;
   home.file.".config/nvim/vim/colors.vim".source =
     ./home/dotfiles/nvim/vim/colors.vim;
+  home.file.".wallpaper.jpg".source = ./home/wallpaper/castle2.jpg;
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -138,6 +152,7 @@ in {
     settings = {
       window.decorations = "full";
       window.dynamic_title = true;
+      background_opacity = 0.9;
       scrolling.history = 3000;
       font.normal.family = "MesloLGS Nerd Font Mono";
       font.normal.style = "Regular";
@@ -378,6 +393,7 @@ in {
       nixosedit =
         "sudo -E nvim /etc/nixos/configuration.nix ; sudo nixos-rebuild switch";
       nixedit = "nvim ~/.config/nixpkgs/home.nix ; home-manager switch";
+      kali = "x11docker -i -m --sudouser=nopasswd kali";
     };
   };
 
@@ -949,7 +965,7 @@ in {
     menu = ''
       "${pkgs-unstable.rofi}/bin/rofi -modi drun -show drun -theme glue_pro_blue"'';
     # need to use i3-gaps package to use these
-    gaps.inner = 8;
+    gaps.inner = 4;
     gaps.outer = 2;
     gaps.smartBorders = "on";
     gaps.smartGaps = true;
@@ -1032,9 +1048,10 @@ in {
         always = true;
         notification = false;
       }
-      { command = "qutebrowser"; }
       {
-        command = "alacritty";
+        command = "feh --bg-fill ~/.wallpaper.jpg";
+        always = true;
+        notification = false;
       }
       # NetworkManager is the most popular way to manage wireless networks on Linux,
       # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -1042,6 +1059,8 @@ in {
         command = "nm-applet";
         notification = false;
       }
+      { command = "qutebrowser"; }
+      { command = "alacritty"; }
     ];
   };
   # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the

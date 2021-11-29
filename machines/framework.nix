@@ -6,7 +6,7 @@
 
 {
   imports = [ # Include the results of the hardware scan.
-    ./hardware-configuration.nix
+    ./framework-hardware.nix
   ];
 
   boot = {
@@ -63,8 +63,8 @@
     ];
     enableAllFirmware = true;
     pulseaudio = {
-      enable = true;
-      package = pkgs.pulseaudioFull; # needed for bluetooth audio
+      enable = false;
+      #package = pkgs.pulseaudioFull; # needed for bluetooth audio
     };
     # no bluetooth on boot
     bluetooth.enable = true;
@@ -72,6 +72,16 @@
   };
   sound.enable = true;
   security.rtkit.enable = true; # bring in audio
+
+  # pipewire brings better audio/video handling
+  services.pipewire = {
+    enable = true;
+    alsa = {
+      enable = true;
+      support32Bit = true;
+    };
+    pulse.enable = true;
+  };
 
   # Set your time zone.
   time.timeZone = "America/Denver";
@@ -107,6 +117,7 @@
       "lxd"
       "render"
       "networkmanager"
+      "docker"
     ];
   };
   security.sudo.enable = true;
@@ -124,11 +135,24 @@
   '';
   security.pam.services.lightdm.enableGnomeKeyring = true;
 
-  services.locate.enable = true; # periodically update locate db
+  services.locate = {
+    enable = true; # periodically update locate db
+    localuser = null;
+    locate = pkgs.mlocate;
+  };
   services.printing.enable = true; # cupsd printing
   services.earlyoom.enable = true; # out of memory detection
   services.thermald.enable = true; # enable thermal data
   services.fprintd.enable = true; # enable fingerprint scanner
+  services.touchegg.enable = true; # multi-touch gestures
+
+  virtualisation.docker = {
+    enable = true;
+    autoPrune.enable = true;
+    autoPrune.dates = "weekly";
+    # Don't start on boot
+    enableOnBoot = false;
+  };
 
   console = {
     font = "Lat2-Terminus16";
@@ -164,6 +188,9 @@
     dnsutils
     compsize # btrfs util
     x11_ssh_askpass
+    x11docker
+    python310 # needed by x11docker
+    tini # needed by x11docker
   ];
   environment.sessionVariables = {
     LANGUAGE = "en_US.UTF-8";
@@ -180,25 +207,20 @@
     displayManager.defaultSession = "none+i3";
     # Setup a graphical login
     displayManager.lightdm.enable = true;
+    # Keyboard
     layout = "us";
+    autoRepeatDelay = 500;
+    autoRepeatInterval = 50;
     # Enable touchpad support
     libinput = {
       enable = true;
+      touchpad.accelSpeed = "0.7";
       touchpad.naturalScrolling = true;
       touchpad.middleEmulation = true;
       touchpad.tapping = true;
       touchpad.scrollMethod = "twofinger";
       #touchpad.disableWhileTyping = true;
     };
-    # pipewire brings better audio/video handling
-    #pipewire = {
-    #enable = true;
-    #alsa = {
-    #enable = true;
-    #support32Bit = true;
-    #};
-    #pulse.enable = true;
-    #};
     #gnome3.gnome-keyring.enable = true;
     windowManager.i3 = {
       enable = true;
