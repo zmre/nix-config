@@ -18,6 +18,7 @@ let
     bottom
     exif
     niv
+    youtube-dl
   ];
   luaPkgs = with pkgs-unstable; [ sumneko-lua-language-server luaformatter ];
   nixEditorPkgs = with pkgs-unstable; [ nixfmt rnix-lsp ];
@@ -29,7 +30,7 @@ let
     eslint_d
   ];
   networkPkgs = with pkgs-unstable; [ traceroute mtr iftop ];
-  guiPkgs = with pkgs-unstable; [ neovide xss-lock i3-auto-layout ];
+  guiPkgs = with pkgs-unstable; [ neovide xss-lock i3-auto-layout mpv ];
 
 in {
 
@@ -68,6 +69,7 @@ in {
   home.file.".config/nvim/vim/colors.vim".source =
     ./home/dotfiles/nvim/vim/colors.vim;
   home.file.".wallpaper.jpg".source = ./home/wallpaper/castle2.jpg;
+  #home.file.".config/touchegg/touchegg.conf".source = ./home/dotfiles/touchegg.conf;
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -133,6 +135,8 @@ in {
     iconTheme = {
       name = "Papirus-Dark";
       package = pkgs-unstable.papirus-icon-theme;
+      #name = "Breeze Dark";
+      #package = pkgs-unstable.gnome-breeze;
     };
   };
 
@@ -792,22 +796,23 @@ in {
         modules = {
           left = "i3";
           center = "date";
-          right = "dunst xkeyboard pulseaudio powermenu";
+          right =
+            "wireless-network battery backlight xkeyboard pulseaudio powermenu";
         };
         cursor = {
           click = "pointer";
           scroll = "ns-resize";
         };
       };
-      "module/dunst" = {
-        type = "custom/ipc";
-        initial = 1;
-        hook = [
-          ''
-            echo "%{A1:${pkgs.dunst}/bin/dunstctl set-paused true && ${pkgs.polybar}/bin/polybar-msg hook dunst 2:}%{F#ff5555}%{F-} on%{A}" &''
-          ''
-            echo "%{A1:${pkgs.dunst}/bin/dunstctl set-paused false && ${pkgs.polybar}/bin/polybar-msg hook dunst 1:}%{F#ff5555}%{F-} off%{A}" &''
-        ];
+      "module/battery" = { type = "internal/battery"; };
+      "module/backlight" = {
+        type = "internal/backlight";
+        card = "intel_backlight";
+        use-actual-brightness = true;
+      };
+      "module/wireless-network" = {
+        type = "internal/network";
+        interface = "wlan0";
       };
       "module/xkeyboard" = {
         type = "internal/xkeyboard";
@@ -970,7 +975,7 @@ in {
     gaps.smartBorders = "on";
     gaps.smartGaps = true;
     fonts = {
-      names = [ "pango:DejaVu Sans Mono" ];
+      names = [ "DejaVu Sans Mono" ];
       size = 9.0;
     };
     focus.newWindow = "focus";

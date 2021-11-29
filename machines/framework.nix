@@ -144,7 +144,7 @@
   services.earlyoom.enable = true; # out of memory detection
   services.thermald.enable = true; # enable thermal data
   services.fprintd.enable = true; # enable fingerprint scanner
-  services.touchegg.enable = true; # multi-touch gestures
+  #services.touchegg.enable = true; # multi-touch gestures
 
   virtualisation.docker = {
     enable = true;
@@ -191,6 +191,7 @@
     x11docker
     python310 # needed by x11docker
     tini # needed by x11docker
+    chkrootkit
   ];
   environment.sessionVariables = {
     LANGUAGE = "en_US.UTF-8";
