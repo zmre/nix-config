@@ -12,6 +12,7 @@ mkShell {
     arping
     dnsenum
     dnsrecon
+    fierce
     fping
     hping
     masscan
@@ -74,5 +75,7 @@ mkShell {
     unrar
     netcat
     ngrep
+    # misc
+    faraday-cli
   ];
 }
