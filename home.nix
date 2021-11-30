@@ -69,6 +69,7 @@ in {
   home.file.".config/nvim/vim/colors.vim".source =
     ./home/dotfiles/nvim/vim/colors.vim;
   home.file.".wallpaper.jpg".source = ./home/wallpaper/castle2.jpg;
+  home.file.".lockpaper.png".source = ./home/wallpaper/kali.png;
   #home.file.".config/touchegg/touchegg.conf".source = ./home/dotfiles/touchegg.conf;
 
   # Let Home Manager install and manage itself.
@@ -746,6 +747,10 @@ in {
   };
 
   services.dunst.enable = true; # notification daemon
+  services.syncthing = {
+    enable = true;
+    tray.enable = true;
+  };
   # top bar
   services.polybar = rec {
     enable = true;
@@ -794,7 +799,7 @@ in {
           "Font Awesome 5 Brands Regular:size=11;1"
         ];
         modules = {
-          left = "i3";
+          left = "cpu syncthing";
           center = "date";
           right =
             "wireless-network battery backlight xkeyboard pulseaudio powermenu";
@@ -804,15 +809,37 @@ in {
           scroll = "ns-resize";
         };
       };
-      "module/battery" = { type = "internal/battery"; };
+      "module/battery" = {
+        type = "internal/battery";
+        battery = "BAT0";
+        adapter = "ACAD";
+        format-charging = "<label-charging>";
+        format-discharging = "<ramp-capacity> <label-discharging>";
+        label-charging = "ﮣ %percentage%%";
+        label-discharging = "%percentage%%";
+        label-full = "";
+      };
       "module/backlight" = {
         type = "internal/backlight";
         card = "intel_backlight";
         use-actual-brightness = true;
+        format = "<label>";
+        label = "%{F#f18cfa}%{F-} %percentage%%";
       };
       "module/wireless-network" = {
         type = "internal/network";
         interface = "wlan0";
+        format-connected = "<ramp-signal> <label-connected>";
+        format-disconnected = "<label-disconnected>";
+        format-packetloss = "<animation-packetloss> <label-connected>";
+        label-disconnected = "睊";
+        label-connected = " %essid% %signal%%";
+        ramp-signal-0 = "😱";
+        ramp-signal-1 = "😠";
+        ramp-signal-2 = "😒";
+        ramp-signal-3 = "😊";
+        ramp-signal-4 = "😃";
+        ramp-signal-5 = "😈";
       };
       "module/xkeyboard" = {
         type = "internal/xkeyboard";
@@ -830,43 +857,13 @@ in {
           indicator.on = " %name%";
         };
       };
-      "module/i3" = {
-        type = "internal/i3";
-        format = "<label-state> <label-mode>";
-        index.sort = true;
-        wrapping.scroll = false;
-        label = {
-          mode = {
-            padding = 2;
-            foreground = "#000";
-            background = "\${colors.primary}";
-          };
-          focused = {
-            text = "%icon%";
-            background = "\${colors.background-alt}";
-            underline = "\${colors.secondary}";
-            padding = 2;
-          };
-          unfocused = {
-            text = "%icon%";
-            padding = 2;
-          };
-          visible = {
-            text = "%icon%";
-            background = "\${self.label-focused-background}";
-            underline = "\${self.label-focused-underline}";
-            padding = "\${self.label-focused-padding}";
-          };
-          urgent = {
-            text = "%icon%";
-            background = "\${colors.alert}";
-            padding = 2;
-          };
-        };
-        ws.icon = {
-          text = [ "1;" "2;" "3;" "4;" "5;" ];
-          default = "";
-        };
+      "module/cpu" = { type = "internal/cpu"; };
+      "module/syncthing" = {
+        type = "custom/script";
+        exec = "echo 1";
+        exec-if = "systemctl is-active syncthing";
+        format = "";
+        interval = 30;
       };
       "module/date" = {
         type = "internal/date";
@@ -1029,8 +1026,10 @@ in {
       "XF86MonBrightnessDown" =
         "exec --no-startup-id ${pkgs-unstable.light}/bin/light -U 1";
     };
+    defaultWorkspace = "1";
     assigns = {
-      "1: term" = [{ class = "^alacritty$"; }];
+      #"1: term" = [{ class = "^Alacritty$"; }];
+      "1: term" = [ ];
       "2: web" = [{ class = "^(Firefox|qutebrowser)$"; }];
     };
     modes = {
@@ -1054,6 +1053,11 @@ in {
         notification = false;
       }
       {
+        command = "systemctl --user restart syncthing";
+        always = true;
+        notification = false;
+      }
+      {
         command = "feh --bg-fill ~/.wallpaper.jpg";
         always = true;
         notification = false;
@@ -1071,7 +1075,7 @@ in {
   # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
   # screen before suspend. Use loginctl lock-session to lock your screen.
   xsession.windowManager.i3.extraConfig = ''
-    exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+    exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork -i ~/.lockpaper.png
     exec_always --no-startup-id i3-auto-layout
   '';
   programs.i3status-rust.enable = true;
