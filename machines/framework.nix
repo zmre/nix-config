@@ -23,6 +23,7 @@
 
   system = {
     autoUpgrade.enable = true;
+    autoUpgrade.channel = "https://nixos.org/channels/nixos-unstable";
     # this captures initial version. don't change it.
     stateVersion = "21.05"; # Did you read the comment?
   };
