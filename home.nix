@@ -22,7 +22,16 @@ let
   ];
   luaPkgs = with pkgs-unstable; [ sumneko-lua-language-server luaformatter ];
   nixEditorPkgs = with pkgs-unstable; [ nixfmt rnix-lsp ];
-  rustPkgs = with pkgs-unstable; [ cargo rustfmt rust-analyzer rustc ];
+  rustPkgs = with pkgs-unstable; [
+    cargo
+    rustfmt
+    rust-analyzer
+    rustc
+    gcc
+    gnumake
+    pkg-config
+    glib
+  ];
   typescriptPkgs = with pkgs-unstable.nodePackages; [
     typescript
     typescript-language-server
@@ -30,7 +39,38 @@ let
     eslint_d
   ];
   networkPkgs = with pkgs-unstable; [ traceroute mtr iftop ];
-  guiPkgs = with pkgs-unstable; [ neovide xss-lock i3-auto-layout mpv ];
+  guiPkgs = with pkgs-unstable; [
+    neovide
+    xss-lock
+    i3-auto-layout
+    mpv
+    keepassxc
+    syncthingtray-minimal
+    spotify-qt
+  ];
+  browser = [ "qutebrowser.desktop" ];
+  associations = {
+    "text/html" = browser;
+    "x-scheme-handler/http" = browser;
+    "x-scheme-handler/https" = browser;
+    "x-scheme-handler/ftp" = browser;
+    "x-scheme-handler/chrome" = browser;
+    "x-scheme-handler/about" = browser;
+    "x-scheme-handler/unknown" = browser;
+    "application/x-extension-htm" = browser;
+    "application/x-extension-html" = browser;
+    "application/x-extension-shtml" = browser;
+    "application/xhtml+xml" = browser;
+    "application/x-extension-xhtml" = browser;
+    "application/x-extension-xht" = browser;
+
+    "text/*" = [ "neovide.desktop" ];
+    "audio/*" = [ "mpv.desktop" ];
+    "video/*" = [ "mpv.dekstop" ];
+    "image/*" = [ "feh.desktop" ];
+    "application/json" = browser; # ".json"  JSON format
+    "application/pdf" = browser; # ".pdf"  Adobe Portable Document Format (PDF)
+  };
 
 in {
 
@@ -82,11 +122,34 @@ in {
         "plain"; # no line numbers, git status, etc... more like cat with colors
     };
   };
-  programs.broot.enable = true;
+  programs.broot = {
+    enable = true;
+    modal = true;
+    verbs = [
+      {
+        execution = ":parent";
+        invocation = "p";
+      }
+      {
+        execution = "$VISUAL {file}";
+        invocation = "edit";
+        shortcut = "e";
+      }
+      {
+        execution = "$EDITOR {directory}/{subpath}";
+        invocation = "create {subpath}";
+      }
+      {
+        execution = "bat {file}";
+        invocation = "view";
+      }
+    ];
+  };
   programs.nix-index.enable = true;
   programs.direnv = {
     enable = true;
     enableZshIntegration = true;
+    nix-direnv.enable = true;
   };
   programs.zoxide = {
     enable = true;
@@ -133,6 +196,10 @@ in {
   gtk = {
     enable = true;
 
+    font = {
+      name = "FiraCode Nerd Font";
+      size = 8;
+    };
     iconTheme = {
       name = "Papirus-Dark";
       package = pkgs-unstable.papirus-icon-theme;
@@ -144,6 +211,7 @@ in {
   programs.qutebrowser.enable = true;
   programs.firefox = {
     enable = true;
+    # TODO: add nur to niv and access that way
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
       ublock-origin
       https-everywhere
@@ -746,10 +814,14 @@ in {
     ];
   };
 
+  xdg.mimeApps.enable = true;
+  xdg.mimeApps.associations.added = associations;
+  xdg.mimeApps.defaultApplications = associations;
+
   services.dunst.enable = true; # notification daemon
   services.syncthing = {
     enable = true;
-    tray.enable = true;
+    tray.enable = false;
   };
   # top bar
   services.polybar = rec {
@@ -769,9 +841,21 @@ in {
           text = "#f8f8f2";
           alt = "#f8f8f2";
         };
-        primary = "#13f01e";
-        secondary = "#bd93f9";
-        alert = "#bd93f9";
+        #primary = "#13f01e";
+        #secondary = "#bd93f9";
+        #alert = "#bd93f9";
+        alert = "\${self.red}";
+
+        yellow = "#ffe74c";
+        green = "#50fa7b";
+        red = "#ff5964";
+        blue = "#35a7ff";
+        navy = "#38618c";
+        purple = "#f18cfa";
+        orange = "#ffb86c";
+        border = "#44465a";
+        darkgray = "#282a36";
+        white = "#f8f8f2";
       };
       "bar/dracula" = {
         #monitor = "DisplayPort-2";
@@ -781,7 +865,8 @@ in {
         foreground = "\${colors.foreground}";
         line.size = 3;
         border = {
-          color = "#44465a";
+          #color = "#44465a";
+          color = "\${colors.border}";
           bottom.size = 3;
         };
         padding = {
@@ -793,16 +878,16 @@ in {
           right = 2;
         };
         font = [
-          "Source Code Pro:pixelsize=12;1"
-          "Font Awesome 5 Free Solid:size=11;1"
-          "Font Awesome 5 Free Solid:size=10;1"
-          "Font Awesome 5 Brands Regular:size=11;1"
+          "FiraCode Nerd Font:pixelsize=12;1"
+          #"Source Code Pro:pixelsize=12;1"
+          #"Font Awesome 5 Free Solid:size=11;1"
+          #"Font Awesome 5 Free Solid:size=10;1"
+          #"Font Awesome 5 Brands Regular:size=11;1"
         ];
         modules = {
-          left = "cpu syncthing";
+          left = "cpu memory temperature";
           center = "date";
-          right =
-            "wireless-network battery backlight xkeyboard pulseaudio powermenu";
+          right = "wireless-network battery backlight pulseaudio powermenu";
         };
         cursor = {
           click = "pointer";
@@ -811,35 +896,76 @@ in {
       };
       "module/battery" = {
         type = "internal/battery";
-        battery = "BAT0";
+        battery = "BAT1";
         adapter = "ACAD";
-        format-charging = "<label-charging>";
-        format-discharging = "<ramp-capacity> <label-discharging>";
-        label-charging = "ﮣ %percentage%%";
+        full-at = 98;
+        label-charging = "%percentage%%";
         label-discharging = "%percentage%%";
-        label-full = "";
+        label-full = "Full";
+        format = {
+          text = "<label-full>";
+          full = {
+            prefix = {
+              text = " ";
+              foreground = "\${colors.green}";
+            };
+          };
+          charging = {
+            text = "<label-charging>";
+            prefix = { text = " "; };
+          };
+          discharging = {
+            # 
+            text = "<ramp-capacity> <label-discharging>";
+          };
+        };
+        ramp-capacity-0 = ""; # 10
+        ramp-capacity-0-foreground = "\${colors.alert}";
+        ramp-capacity-1 = ""; # 20
+        ramp-capacity-1-foreground = "\${colors.alert}";
+        ramp-capacity-2 = ""; # 30
+        ramp-capacity-3 = ""; # 40
+        ramp-capacity-4 = ""; # 50
+        ramp-capacity-5 = ""; # 60
+        ramp-capacity-6 = ""; # 70
+        ramp-capacity-7 = ""; # 80
+        ramp-capacity-8 = ""; # 90
+        ramp-capacity-9 = "";
+        ramp-capacity-9-foreground = "\${colors.green}";
       };
       "module/backlight" = {
         type = "internal/backlight";
         card = "intel_backlight";
         use-actual-brightness = true;
-        format = "<label>";
-        label = "%{F#f18cfa}%{F-} %percentage%%";
+        label = "%percentage%%";
+        format = {
+          text = "<label>";
+          prefix = {
+            text = " ";
+            foreground = "\${colors.yellow}";
+          };
+        };
       };
       "module/wireless-network" = {
         type = "internal/network";
         interface = "wlan0";
-        format-connected = "<ramp-signal> <label-connected>";
+        #format-connected = "<label-connected>";
         format-disconnected = "<label-disconnected>";
-        format-packetloss = "<animation-packetloss> <label-connected>";
+        format-packetloss = {
+          text = "<animation-packetloss> <label-connected>";
+          foreground = "\${colors.alert}";
+        };
         label-disconnected = "睊";
-        label-connected = " %essid% %signal%%";
-        ramp-signal-0 = "😱";
-        ramp-signal-1 = "😠";
-        ramp-signal-2 = "😒";
-        ramp-signal-3 = "😊";
-        ramp-signal-4 = "😃";
-        ramp-signal-5 = "😈";
+        format = {
+          connected = {
+            text = "<label-connected>";
+            prefix = {
+              text = "  ";
+              foreground = "\${colors.purple}";
+            };
+          };
+        };
+        label-connected = "%essid% %signal%%";
       };
       "module/xkeyboard" = {
         type = "internal/xkeyboard";
@@ -849,7 +975,7 @@ in {
           spacing = 0;
           prefix = {
             text = " ";
-            foreground = "#ffb86c";
+            foreground = "\${colors.orange}";
           };
         };
         label = {
@@ -857,13 +983,56 @@ in {
           indicator.on = " %name%";
         };
       };
-      "module/cpu" = { type = "internal/cpu"; };
-      "module/syncthing" = {
-        type = "custom/script";
-        exec = "echo 1";
-        exec-if = "systemctl is-active syncthing";
-        format = "";
-        interval = 30;
+      "module/cpu" = {
+        type = "internal/cpu";
+        format = "<label> <ramp-coreload>";
+        label = " %percentage%%";
+        ramp-coreload-spacing = 1;
+        ramp-coreload-0 = "▁";
+        ramp-coreload-1 = "▂";
+        ramp-coreload-2 = "▃";
+        ramp-coreload-3 = "▄";
+        ramp-coreload-4 = "▅";
+        ramp-coreload-4-foreground = "\${colors.yellow}";
+        ramp-coreload-5 = "▆";
+        ramp-coreload-5-foreground = "\${colors.yellow}";
+        ramp-coreload-6 = "▇";
+        ramp-coreload-6-foreground = "\${colors.alert}";
+        ramp-coreload-7 = "█";
+        ramp-coreload-7-foreground = "\${colors.alert}";
+      };
+      "module/memory" = {
+        type = "internal/memory";
+        interval = 3;
+        format = "<label> <bar-used>";
+        label = " %gb_used%";
+        bar-used-width = 30;
+        bar-used-indicator = "";
+        bar-used-foreground-0 = "\${colors.green}";
+        bar-used-foreground-1 = "#557755";
+        bar-used-foreground-2 = "\${colors.yellow}";
+        bar-used-foreground-3 = "\${colors.alert}";
+        bar-used-fill = "▐";
+        bar-used-empty = "▐";
+        bar-used-empty-foreground = "#444444";
+      };
+      "module/temperature" = {
+        type = "internal/temperature";
+        interval = 10;
+        hwmon-path =
+          "/sys/devices/platform/coretemp.0/hwmon/hwmon4/temp1_input";
+        base-temperature = 20; # celsius
+        warn-temperature = 60;
+        units = true;
+        format = "<ramp> <label>";
+        format-warn = "<ramp> <label-warn>";
+        label = "%temperature-f%";
+        label-warn = "%temperature-f%";
+        label-warn-foreground = "\${colors.alert}";
+        ramp-0 = "";
+        ramp-1 = "";
+        ramp-2 = "";
+        ramp-foreground = "\${colors.yellow}";
       };
       "module/date" = {
         type = "internal/date";
@@ -884,12 +1053,21 @@ in {
       };
       "module/pulseaudio" = {
         type = "internal/pulseaudio";
-        format.volume = "<label-volume>";
+        format-volume = "<ramp-volume> <label-volume>";
+        ramp-volume-0 = "奄";
+        ramp-volume-0-foreground = "\${colors.blue}";
+        ramp-volume-1 = "奔";
+        ramp-volume-1-foreground = "\${colors.blue}";
+        ramp-volume-2 = "墳";
+        ramp-volume-2-foreground = "\${colors.blue}";
+        ramp-volume-3 = " ";
+        ramp-volume-3-foreground = "\${colors.blue}";
+
         label = {
-          volume = "%{F#f1fa8c}%{F-} %percentage%";
+          volume = "%percentage%";
           muted = {
-            text = "";
-            foreground = "#44475a";
+            text = "婢";
+            foreground = "\${colors.blue}";
           };
         };
       };
@@ -900,11 +1078,11 @@ in {
         label = {
           open = {
             text = "%{T3}";
-            foreground = "#50fa7b";
+            foreground = "\${colors.navy}";
           };
           close = {
             text = "%{T2}";
-            foreground = "#50fa7b";
+            foreground = "\${colors.red}";
           };
           separator = {
             text = "|";
@@ -959,7 +1137,9 @@ in {
   };
   # manage audio play/pause
   services.playerctld.enable = true;
+  services.spotifyd.enable = true;
 
+  services.picom.enable = true; # xsession compositor
   xsession.windowManager.i3.enable = true;
   xsession.windowManager.i3.config = {
     terminal = "${pkgs-unstable.alacritty}/bin/alacritty";
@@ -973,7 +1153,7 @@ in {
     gaps.smartGaps = true;
     fonts = {
       names = [ "DejaVu Sans Mono" ];
-      size = 9.0;
+      size = 2.0;
     };
     focus.newWindow = "focus";
     focus.followMouse = false;
@@ -987,7 +1167,7 @@ in {
     };
     keybindings = let
       mod = config.xsession.windowManager.i3.config.modifier;
-      refresh = "killall -SIGUSR1 i3status";
+      refresh = "killall -SIGUSR1 i3status-rs";
     in lib.mkOptionDefault {
       "${mod}+Return" = "exec alacritty";
       "${mod}+j" = "focus left";
@@ -1006,16 +1186,17 @@ in {
       "${mod}+s" = "layout stacking";
       "${mod}+w" = "layout tabbed";
       "${mod}+e" = "layout toggle split";
+      "${mod}+m" = "move scratchpad";
+      "${mod}+o" = "scratchpad show";
       # Use pactl to adjust volume in PulseAudio.
       "XF86AudioRaiseVolume" =
-        "exec --no-startup-id ${pkgs-unstable.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +10% && ${refresh}";
+        "exec --no-startup-id ${pkgs-unstable.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5% && ${refresh}";
       "XF86AudioLowerVolume" =
-        "exec --no-startup-id ${pkgs-unstable.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -10% && ${refresh}";
+        "exec --no-startup-id ${pkgs-unstable.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5% && ${refresh}";
       "XF86AudioMute" =
         "exec --no-startup-id ${pkgs-unstable.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle && ${refresh}";
       "XF86AudioMicMute" =
         "exec --no-startup-id ${pkgs-unstable.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle && ${refresh}";
-      #"XF86AudioPlay" =
       "XF86AudioPlay" = "exec ${pkgs-unstable.playerctl}/bin/playerctl play";
       "XF86AudioPause" = "exec ${pkgs-unstable.playerctl}/bin/playerctl pause";
       "XF86AudioNext" = "exec ${pkgs-unstable.playerctl}/bin/playerctl next";
@@ -1026,10 +1207,9 @@ in {
       "XF86MonBrightnessDown" =
         "exec --no-startup-id ${pkgs-unstable.light}/bin/light -U 1";
     };
-    defaultWorkspace = "1";
+    defaultWorkspace = "workspace number 1";
     assigns = {
-      #"1: term" = [{ class = "^Alacritty$"; }];
-      "1: term" = [ ];
+      "1: term" = [{ class = "^Alacritty$"; }];
       "2: web" = [{ class = "^(Firefox|qutebrowser)$"; }];
     };
     modes = {
@@ -1046,6 +1226,10 @@ in {
         Return = "mode default";
       };
     };
+    #bars.status_command = "i3status-rs";
+    #bar.i3bar_command = "";
+    #bars.workspace_buttons = true;
+    #bars.strip_workspace_numbers = false;
     startup = [
       {
         command = "systemctl --user restart polybar";
@@ -1068,8 +1252,14 @@ in {
         command = "nm-applet";
         notification = false;
       }
+      {
+        command = "syncthingtray";
+        always = true;
+        notification = false;
+      }
       { command = "qutebrowser"; }
       { command = "alacritty"; }
+      { command = "keepassxc"; }
     ];
   };
   # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
@@ -1146,5 +1336,7 @@ in {
     CLICOLOR_FORCE = "yes";
     PAGER = "less";
     FZF_CTRL_R_OPTS = "--sort --exact";
+    BROWSER = "qutebrowser";
+    TERMINAL = "alacritty";
   };
 }

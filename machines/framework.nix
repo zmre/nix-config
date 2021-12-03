@@ -52,16 +52,18 @@
   };
 
   hardware = {
-    opengl.enable = true;
-    opengl.driSupport = true;
-    opengl.extraPackages = with pkgs; [
-      mesa_drivers
-      vaapiIntel
-      vaapiVdpau
-      libvdpau-va-gl
-      intel-media-driver
-    ];
     enableAllFirmware = true;
+    opengl = {
+      enable = true;
+      driSupport = true;
+      extraPackages = with pkgs; [
+        mesa_drivers
+        vaapiIntel
+        vaapiVdpau
+        libvdpau-va-gl
+        intel-media-driver
+      ];
+    };
     pulseaudio = {
       enable = false;
       #package = pkgs.pulseaudioFull; # needed for bluetooth audio
@@ -89,6 +91,9 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   nix = {
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
     autoOptimiseStore = true;
     gc.automatic = true;
     optimise.automatic = true;
@@ -114,6 +119,7 @@
       "wheel" # Enable ‘sudo’ for the user.
       "video"
       "libvirtd"
+      "power"
       "lxd"
       "render"
       "networkmanager"
@@ -125,6 +131,7 @@
   security.sudo.extraConfig = ''
     Defaults   timestamp_timeout=-1 
   '';
+  # Allow fingerprint use by root and zmre
   security.polkit.enable = true;
   security.polkit.extraConfig = ''
     polkit.addRule(function (action, subject) {
@@ -133,7 +140,8 @@
       }
     })
   '';
-  security.pam.services.lightdm.enableGnomeKeyring = true;
+  # KeePassXC replaces this... I think
+  security.pam.services.lightdm.enableGnomeKeyring = false;
 
   services.locate = {
     enable = true; # periodically update locate db
@@ -144,13 +152,15 @@
   services.earlyoom.enable = true; # out of memory detection
   services.thermald.enable = true; # enable thermal data
   services.fprintd.enable = true; # enable fingerprint scanner
+  services.autorandr.enable = true; # autodetect display config
+
   #services.touchegg.enable = true; # multi-touch gestures
 
   virtualisation.docker = {
     enable = true;
     autoPrune.enable = true;
     autoPrune.dates = "weekly";
-    # Don't start on boot
+    # Don't start on boot; but it will start on-demand
     enableOnBoot = false;
   };
 
@@ -159,6 +169,7 @@
     keyMap = "us";
   };
 
+  # TODO: does KeePassXC replace this, too?
   programs.ssh.startAgent = true;
   programs.dconf.enable = true;
   # Used to adjust the brightness of the screen
@@ -167,13 +178,21 @@
   programs.command-not-found.enable = true; # suggest install if cmd missing
 
   fonts = {
+    enableDefaultFonts = true;
     fontconfig.enable = true;
     fontDir.enable = true;
     enableGhostscriptFonts = true;
-    fonts = with pkgs; [ powerline-fonts source-code-pro nerdfonts vegur ];
+    fonts = with pkgs; [
+      powerline-fonts
+      source-code-pro
+      nerdfonts
+      vegur
+      noto-fonts
+    ];
     fontconfig.defaultFonts = {
-      monospace = [ "MesloLGS Nerd Font Mono" ];
-      sansSerif = [ "MesloLGS Nerd Font" ];
+      monospace = [ "MesloLGS Nerd Font Mono" "Noto Mono" ];
+      sansSerif = [ "MesloLGS Nerd Font" "Noto Sans" ];
+      serif = [ "Noto Serif" ];
     };
   };
 
@@ -183,6 +202,7 @@
     curl
     git
     binutils
+    pciutils
     coreutils
     usbutils
     dnsutils
@@ -222,7 +242,6 @@
       touchpad.scrollMethod = "twofinger";
       #touchpad.disableWhileTyping = true;
     };
-    #gnome3.gnome-keyring.enable = true;
     windowManager.i3 = {
       enable = true;
       package = pkgs.i3-gaps; # adds extra functionality
@@ -232,6 +251,7 @@
         feh
         lxappearance
         xclip
+        picom
         i3status-rust
         i3lock
         i3blocks
