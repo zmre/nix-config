@@ -6,15 +6,54 @@
 
 {
   imports = [ # Include the results of the hardware scan.
-    ./hardware-configuration.nix
+    ./parallels-hardware.nix
   ];
+
+  # Use the GRUB 2 boot loader.
+  boot = {
+    loader.grub.enable = true;
+    loader.grub.version = 2;
+    loader.grub.efiSupport = true;
+    loader.grub.efiInstallAsRemovable = true;
+    loader.efi.canTouchEfiVariables = false;
+    loader.efi.efiSysMountPoint = "/boot";
+    # Define on which hard drive you want to install Grub.
+    loader.grub.device = "nodev"; # or "nodev" for efi only
+    loader.systemd-boot.enable = true;
+    kernelPackages = pkgs.linuxPackages_latest;
+    initrd.checkJournalingFS = false;
+    supportedFilesystems = [ "btrfs" ];
+  };
+
+  networking.hostName = "nixos-pw-vm"; # Define your hostname.
+  networking.networkmanager.enable = true;
+  networking.networkmanager.wifi.backend = "iwd";
+  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
+  # Per-interface useDHCP will be mandatory in the future, so this generated config
+  # replicates the default behaviour.
+  networking.interfaces.enp0s5.useDHCP = true;
+
+  # Configure network proxy if necessary
+  # networking.proxy.default = "http://user:password@proxy:port/";
+  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   hardware.opengl.enable = true;
   hardware.opengl.driSupport = true;
   hardware.enableAllFirmware = true;
+  # broken...
+  #hardware.parallels.enable = true;
 
-  system.autoUpgrade.enable = true;
+  system = {
+    autoUpgrade.enable = true;
+    autoUpgrade.channel = "https://nixos.org/channels/nixos-unstable";
+    # this captures initial version. don't change it.
+    stateVersion = "21.05"; # Did you read the comment?
+  };
+
   nix = {
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
     autoOptimiseStore = true;
     gc.automatic = true;
     optimise.automatic = true;
@@ -34,41 +73,9 @@
     };
   };
 
-  # Use the GRUB 2 boot loader.
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
-  boot.loader.grub.efiSupport = true;
-  boot.loader.grub.efiInstallAsRemovable = true;
-  boot.loader.efi.canTouchEfiVariables = false;
-  boot.loader.efi.efiSysMountPoint = "/boot";
-  # Define on which hard drive you want to install Grub.
-  boot.loader.grub.device = "nodev"; # or "nodev" for efi only
-  boot.loader.systemd-boot.enable = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.initrd.checkJournalingFS = false;
-  boot.supportedFilesystems = [ "btrfs" ];
-
-  #hardware.parallels.enable = true;
-
-  networking.hostName = "nixos-pw-vm"; # Define your hostname.
-  #networking.useDHCP = true;
-  networking.networkmanager.enable = true;
-  networking.networkmanager.wifi.backend = "iwd";
-  #networking.wireless.iwd.enable = true;
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
   # Set your time zone.
   time.timeZone = "America/Denver";
   services.timesyncd.enable = true;
-
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.interfaces.enp0s5.useDHCP = true;
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -209,13 +216,5 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   networking.firewall.enable = true;
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "21.05"; # Did you read the comment?
 
 }
