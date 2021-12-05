@@ -796,9 +796,22 @@ in {
       tmuxPlugins.sensible
       tmuxPlugins.open
       {
-        plugin = tmuxPlugins.fzf-tmux-url;
+        plugin = tmuxPlugins.dracula;
         extraConfig = ''
-          set -g @fzf-url-history-limit '200'
+          set -g @dracula-show-battery false
+          set -g @dracula-show-cpu-usage false
+          set -g @dracula-show-ram-usage false
+          set -g @dracula-show-weather false
+          set -g @dracula-show-flags true
+          set -g @dracula-show-powerline true
+          set -g @dracula-refresh-rate 10
+        '';
+      }
+      {
+        plugin = tmuxPlugins.fzf-tmux-url;
+        # default key bind is ctrl-b, u
+        extraConfig = ''
+          set -g @fzf-url-history-limit '2000'
           set -g @open-S 'https://www.duckduckgo.com/'
         '';
       }
