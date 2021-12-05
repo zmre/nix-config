@@ -4,64 +4,123 @@
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-21.11";
     unstable.url = "nixpkgs/nixpkgs-unstable";
-    nur.url = "github:nix-community/NUR";
     darwin.url = "github:lnl7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager/release-21.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    comma = {
-      url = "github:Shopify/comma";
-      flake = false;
-    };
-    flake-compat = {
-      url = "github:edolstra/flake-compat";
-      flake = false;
-    };
+    nur.url = "github:nix-community/NUR";
     flake-utils.url = "github:numtide/flake-utils";
+    gitstatus.url = "github:romkatv/gitstatus";
+    gitstatus.flake = false;
+    powerlevel10k.url = "github:romkatv/powerlevel10k";
+    powerlevel10k.flake = false;
   };
 
-  outputs =
-    { self, nixpkgs, nur, darwin, home-manager, unstable, flake-utils, ... }:
+  outputs = inputs@{ self, ... }:
+    with inputs.nixpkgs.lib;
     let
-      #system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        #inherit system;
-        config = { allowUnfree = true; };
-      };
-
-      lib = nixpkgs.lib;
-
+      forEachSystem = genAttrs [ "x86_64-linux" "x86_64-darwin" ];
+      pkgsBySystem = forEachSystem (system:
+        import inputs.nixpkgs {
+          inherit system;
+          config = { allowUnfree = true; };
+          overlays = with inputs; [ nur.overlay ];
+        });
     in {
-
-      #packages.x86_64-linux.hello = nixpkgs.legacyPackages.x86_64-linux.hello;
-
-      #defaultPackage.x86_64-linux = self.packages.x86_64-linux.hello;
+      inherit pkgsBySystem;
 
       nixosConfigurations = {
-        nixos-pw-vm = lib.nixosSystem {
-          #inherit system;
+        nixos-pw-vm = nixosSystem {
           system = "x86_64-linux";
-          modules = [ ./machines/parallels.nix ];
+          modules = [
+            {
+              nix = {
+                package = pkgsBySystem."x86_64-linux".pkgs.nixFlakes;
+                extraOptions = "experimental-features = nix-command flakes";
+              };
+            }
+            {
+              nixpkgs = {
+                pkgs = pkgsBySystem."x86_64-linux";
+                config.allowUnfree = true;
+                overlays = with inputs; [ nur.overlay ];
+              };
+              # For compatibility with nix-shell, nix-build, etc.
+              environment.etc.nixpkgs.source = inputs.nixpkgs;
+            }
+            ./machines/parallels.nix
+            inputs.home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.zmre = import ./home.nix;
+              home-manager.extraSpecialArgs = inputs;
+            }
+          ];
         };
-        volantis = lib.nixosSystem {
+        volantis = nixosSystem {
           system = "x86_64-linux";
-          modules = [ ./machines/framework.nix ];
+          modules = [
+            {
+              nix = {
+                package = pkgsBySystem."x86_64-linux".pkgs.nixFlakes;
+                extraOptions = "experimental-features = nix-command flakes";
+              };
+            }
+            {
+              nixpkgs = {
+                pkgs = pkgsBySystem."x86_64-linux";
+                config.allowUnfree = true;
+                overlays = with inputs; [ nur.overlay ];
+              };
+              # For compatibility with nix-shell, nix-build, etc.
+              environment.etc.nixpkgs.source = inputs.nixpkgs;
+            }
+            ./machines/framework.nix
+            inputs.home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.zmre = import ./home.nix;
+              home-manager.extraSpecialArgs = inputs;
+            }
+          ];
         };
       };
 
       darwinConfigurations.dragonstone = darwin.lib.darwinSystem {
-        inherit pkgs;
         system = "x86_64-darwin";
-        modules = [ ]; # TODO
+        modules = [
+          {
+            nix = {
+              package = pkgsBySystem."x86_64-darwing".pkgs.nixFlakes;
+              extraOptions = "experimental-features = nix-command flakes";
+            };
+          }
+          ./machines/darwin-configuration.nix
+          {
+            nixpkgs = { 
+              pkgs = pkgsBySystem."x86_64-darwin"; 
+                config.allowUnfree = true;
+            };
+            # For compatibility with nix-shell, nix-build, etc.
+            environment.etc.nixpkgs.source = inputs.nixpkgs;
+          }
+          home-manager.darwinModules.home-manager
+          { home-manager.users.pwalsh = import ./home.nix; }
+        ];
       };
-      homeManagerConfigurations = {
-        zmre = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          system = "x86_64-linux";
-          username = "zmre";
-          homeDirectory = "/home/zmre";
-          configuration = { imports = [ ./home.nix ]; };
-        };
-      };
+
+      # homeManagerConfigurations = {
+      #   zmre = home-manager.lib.homeManagerConfiguration {
+      #     inherit pkgs;
+      #     system = "x86_64-linux";
+      #     username = "zmre";
+      #     homeDirectory = "/home/zmre";
+      #     configuration = { imports = [ ./home.nix ]; };
+      #   };
+      # };
+      #defaultPackage.x86_64-linux = debianSystem.activationPackage;
+      defaultPackage.x86_64-darwin = darwinConfigurations.dragonstone.system;
     };
 }

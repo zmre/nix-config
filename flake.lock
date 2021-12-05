@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "comma": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1588170489,
-        "narHash": "sha256-IT7zlcM1Oh4sWeCJ1m4NkteuajPxTnNo1tbitG0eqlg=",
-        "owner": "Shopify",
-        "repo": "comma",
-        "rev": "4a62ec17e20ce0e738a8e5126b4298a73903b468",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Shopify",
-        "repo": "comma",
-        "type": "github"
-      }
-    },
     "darwin": {
       "inputs": {
         "nixpkgs": [
@@ -36,22 +20,6 @@
         "type": "github"
       }
     },
-    "flake-compat": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1627913399,
-        "narHash": "sha256-hY8g6H2KFL8ownSiFeMOjwPC8P0ueXpCVEbxgda3pko=",
-        "owner": "edolstra",
-        "repo": "flake-compat",
-        "rev": "12c64ca55c1014cdc1b16ed5a804aa8576601ff2",
-        "type": "github"
-      },
-      "original": {
-        "owner": "edolstra",
-        "repo": "flake-compat",
-        "type": "github"
-      }
-    },
     "flake-utils": {
       "locked": {
         "lastModified": 1638122382,
@@ -64,6 +32,22 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "gitstatus": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1635834194,
+        "narHash": "sha256-DvLovPP6u3IBTGjUaxMU08uLFY3Sxe7kCRlh3e+hp90=",
+        "owner": "romkatv",
+        "repo": "gitstatus",
+        "rev": "e269964607042ef0fdbda2d7af74ef9c8f618cf4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "romkatv",
+        "repo": "gitstatus",
         "type": "github"
       }
     },
@@ -118,15 +102,31 @@
         "type": "github"
       }
     },
+    "powerlevel10k": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1636957611,
+        "narHash": "sha256-XJ7gWcAq+xFqCbC3bTBWGTZ0ouftANInJ0fc2uptbco=",
+        "owner": "romkatv",
+        "repo": "powerlevel10k",
+        "rev": "a9f208c8fc509b9c591169dd9758c48ad4325f76",
+        "type": "github"
+      },
+      "original": {
+        "owner": "romkatv",
+        "repo": "powerlevel10k",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
-        "comma": "comma",
         "darwin": "darwin",
-        "flake-compat": "flake-compat",
         "flake-utils": "flake-utils",
+        "gitstatus": "gitstatus",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "nur": "nur",
+        "powerlevel10k": "powerlevel10k",
         "unstable": "unstable"
       }
     },

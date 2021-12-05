@@ -62,16 +62,6 @@
     trustedUsers = [ "root" "@wheel" ];
     buildCores = 0; # use all available cores for building
   };
-  nixpkgs.config = {
-    allowUnfree = true;
-    experimental-features = "nix-command flakes";
-    packageOverrides = pkgs: {
-      nur = import (builtins.fetchTarball
-        "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-          inherit pkgs;
-        };
-    };
-  };
 
   # Set your time zone.
   time.timeZone = "America/Denver";

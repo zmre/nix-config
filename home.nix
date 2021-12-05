@@ -1,12 +1,12 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, powerlevel10k, gitstatus, lib, ... }:
 
 let
-  sources = import nix/sources.nix;
-  pkgs-unstable = import sources.nixpkgs { config = { allowUnfree = true; }; };
-  powerlevel10k = sources.powerlevel10k;
-  gitstatus = sources.gitstatus;
+  #sources = import nix/sources.nix;
+  #pkgs = import sources.nixpkgs { config = { allowUnfree = true; }; };
+  #powerlevel10k = sources.powerlevel10k;
+  #gitstatus = sources.gitstatus;
 
-  defaultPkgs = with pkgs-unstable; [
+  defaultPkgs = with pkgs; [
     fd
     fzy
     tree-sitter
@@ -20,9 +20,9 @@ let
     niv
     youtube-dl
   ];
-  luaPkgs = with pkgs-unstable; [ sumneko-lua-language-server luaformatter ];
-  nixEditorPkgs = with pkgs-unstable; [ nixfmt rnix-lsp ];
-  rustPkgs = with pkgs-unstable; [
+  luaPkgs = with pkgs; [ sumneko-lua-language-server luaformatter ];
+  nixEditorPkgs = with pkgs; [ nixfmt rnix-lsp ];
+  rustPkgs = with pkgs; [
     cargo
     rustfmt
     rust-analyzer
@@ -32,14 +32,14 @@ let
     pkg-config
     glib
   ];
-  typescriptPkgs = with pkgs-unstable.nodePackages; [
+  typescriptPkgs = with pkgs.nodePackages; [
     typescript
     typescript-language-server
     diagnostic-languageserver
     eslint_d
   ];
-  networkPkgs = with pkgs-unstable; [ traceroute mtr iftop ];
-  guiPkgs = with pkgs-unstable; [
+  networkPkgs = with pkgs; [ traceroute mtr iftop ];
+  guiPkgs = with pkgs; [
     neovide
     xss-lock
     i3-auto-layout
@@ -202,16 +202,15 @@ in {
     };
     iconTheme = {
       name = "Papirus-Dark";
-      package = pkgs-unstable.papirus-icon-theme;
+      package = pkgs.papirus-icon-theme;
       #name = "Breeze Dark";
-      #package = pkgs-unstable.gnome-breeze;
+      #package = pkgs.gnome-breeze;
     };
   };
 
   programs.qutebrowser.enable = true;
   programs.firefox = {
     enable = true;
-    # TODO: add nur to niv and access that way
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
       ublock-origin
       https-everywhere
@@ -233,7 +232,7 @@ in {
       font.italic.style = "Italic";
       font.bold_italic.style = "Bold Italic";
       font.size = 9;
-      shell.program = "${pkgs-unstable.zsh}/bin/zsh";
+      shell.program = "${pkgs.zsh}/bin/zsh";
       live_config_reload = true;
       cursor.vi_mode_style = "Underline";
       draw_bold_text_with_bright_colors = true;
@@ -261,7 +260,7 @@ in {
       
     '';
 
-    plugins = with pkgs-unstable.vimPlugins; [
+    plugins = with pkgs.vimPlugins; [
       # Syntax / Language Support ##########################
       vim-polyglot # lazy load all the syntax plugins for all the languages
       #rust-vim # this is included in vim-polyglot
@@ -321,31 +320,31 @@ in {
     ];
   };
   home.file."${config.xdg.configHome}/nvim/parser/tsx.so".source =
-    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-tsx}/parser";
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-tsx}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/nix.so".source =
-    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-nix}/parser";
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-nix}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/vim.so".source =
-    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-vim}/parser";
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-vim}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/lua.so".source =
-    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-lua}/parser";
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-lua}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/css.so".source =
-    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-css}/parser";
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-css}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/yaml.so".source =
-    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-yaml}/parser";
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-yaml}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/toml.so".source =
-    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-toml}/parser";
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-toml}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/rust.so".source =
-    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-rust}/parser";
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-rust}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/json.so".source =
-    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-json}/parser";
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-json}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/typescript.so".source =
-    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-typescript}/parser";
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-typescript}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/javascript.so".source =
-    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-javascript}/parser";
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-javascript}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/bash.so".source =
-    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-bash}/parser";
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-bash}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/scala.so".source =
-    "${pkgs-unstable.tree-sitter.builtGrammars.tree-sitter-scala}/parser";
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-scala}/parser";
 
   programs.fzf = {
     enable = true;
@@ -786,14 +785,14 @@ in {
   programs.tmux = {
     enable = true;
     keyMode = "vi";
-    shell = "${pkgs-unstable.zsh}/bin/zsh";
+    shell = "${pkgs.zsh}/bin/zsh";
     historyLimit = 10000;
     escapeTime = 0;
     extraConfig = ''
       ${builtins.readFile ./home/dotfiles/tmux.conf}
     '';
     sensibleOnTop = true;
-    plugins = with pkgs-unstable; [
+    plugins = with pkgs; [
       tmuxPlugins.sensible
       tmuxPlugins.open
       {
@@ -1142,10 +1141,10 @@ in {
   services.picom.enable = true; # xsession compositor
   xsession.windowManager.i3.enable = true;
   xsession.windowManager.i3.config = {
-    terminal = "${pkgs-unstable.alacritty}/bin/alacritty";
+    terminal = "${pkgs.alacritty}/bin/alacritty";
     modifier = "Mod4";
-    menu = ''
-      "${pkgs-unstable.rofi}/bin/rofi -modi drun -show drun -theme glue_pro_blue"'';
+    menu =
+      ''"${pkgs.rofi}/bin/rofi -modi drun -show drun -theme glue_pro_blue"'';
     # need to use i3-gaps package to use these
     gaps.inner = 4;
     gaps.outer = 2;
@@ -1174,7 +1173,7 @@ in {
       "${mod}+k" = "focus down";
       "${mod}+l" = "focus up";
       "${mod}+Tab" = ''
-        exec --no-startup-id "${pkgs-unstable.rofi}/bin/rofi -modi drun -show window -theme iggy"'';
+        exec --no-startup-id "${pkgs.rofi}/bin/rofi -modi drun -show window -theme iggy"'';
       "${mod}+semicolon" = "focus right";
       "${mod}+Shift+j" = "move left";
       "${mod}+Shift+k" = "move down";
@@ -1190,22 +1189,22 @@ in {
       "${mod}+o" = "scratchpad show";
       # Use pactl to adjust volume in PulseAudio.
       "XF86AudioRaiseVolume" =
-        "exec --no-startup-id ${pkgs-unstable.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5% && ${refresh}";
+        "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5% && ${refresh}";
       "XF86AudioLowerVolume" =
-        "exec --no-startup-id ${pkgs-unstable.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5% && ${refresh}";
+        "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5% && ${refresh}";
       "XF86AudioMute" =
-        "exec --no-startup-id ${pkgs-unstable.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle && ${refresh}";
+        "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle && ${refresh}";
       "XF86AudioMicMute" =
-        "exec --no-startup-id ${pkgs-unstable.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle && ${refresh}";
-      "XF86AudioPlay" = "exec ${pkgs-unstable.playerctl}/bin/playerctl play";
-      "XF86AudioPause" = "exec ${pkgs-unstable.playerctl}/bin/playerctl pause";
-      "XF86AudioNext" = "exec ${pkgs-unstable.playerctl}/bin/playerctl next";
-      "XF86AudioPrev" = "exec ${pkgs-unstable.playerctl}/bin/playerctl prev";
+        "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle && ${refresh}";
+      "XF86AudioPlay" = "exec ${pkgs.playerctl}/bin/playerctl play";
+      "XF86AudioPause" = "exec ${pkgs.playerctl}/bin/playerctl pause";
+      "XF86AudioNext" = "exec ${pkgs.playerctl}/bin/playerctl next";
+      "XF86AudioPrev" = "exec ${pkgs.playerctl}/bin/playerctl prev";
       # backlight
       "XF86MonBrightnessUp" =
-        "exec --no-startup-id ${pkgs-unstable.light}/bin/light -A 1";
+        "exec --no-startup-id ${pkgs.light}/bin/light -A 1";
       "XF86MonBrightnessDown" =
-        "exec --no-startup-id ${pkgs-unstable.light}/bin/light -U 1";
+        "exec --no-startup-id ${pkgs.light}/bin/light -U 1";
     };
     defaultWorkspace = "workspace number 1";
     assigns = {
