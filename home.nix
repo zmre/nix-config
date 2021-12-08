@@ -425,6 +425,22 @@ in {
       zstyle ':completion:*:*:kill:*' menu yes select
       zstyle ':completion:*:kill:*'   force-list always
 
+      # Customize fzf plugin to use fd
+      # Should default to ignore anything in ~/.gitignore
+      export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+      # Use fd (https://github.com/sharkdp/fd) instead of the default find
+      # command for listing path candidates.
+      # - The first argument to the function ($1) is the base path to start traversal
+      # - See the source code (completion.{bash,zsh}) for the details.
+      _fzf_compgen_path() {
+        \fd --hidden --follow . "$1"
+      }
+
+      # Use fd to generate the list for directory completion
+      _fzf_compgen_dir() {
+        \fd --type d --hidden --follow . "$1"
+      }
+
       # Prompt stuff
       source ${./home/dotfiles/p10k.zsh}
     '';
@@ -795,18 +811,6 @@ in {
     plugins = with pkgs; [
       tmuxPlugins.sensible
       tmuxPlugins.open
-      {
-        plugin = tmuxPlugins.dracula;
-        extraConfig = ''
-          set -g @dracula-show-battery false
-          set -g @dracula-show-cpu-usage false
-          set -g @dracula-show-ram-usage false
-          set -g @dracula-show-weather false
-          set -g @dracula-show-flags true
-          set -g @dracula-show-powerline true
-          set -g @dracula-refresh-rate 10
-        '';
-      }
       {
         plugin = tmuxPlugins.fzf-tmux-url;
         # default key bind is ctrl-b, u
