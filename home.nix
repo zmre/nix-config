@@ -13,11 +13,12 @@ let
     ripgrep
     curl
     ranger
+    lf
     du-dust
     glow
     bottom
     exif
-    niv
+    #niv
     youtube-dl
   ];
   luaPkgs = with pkgs; [ sumneko-lua-language-server luaformatter ];
@@ -43,7 +44,6 @@ let
     neovide
     xss-lock
     i3-auto-layout
-    mpv
     keepassxc
     syncthingtray-minimal
     spotify-qt
@@ -110,7 +110,6 @@ in {
     ./home/dotfiles/nvim/vim/colors.vim;
   home.file.".wallpaper.jpg".source = ./home/wallpaper/castle2.jpg;
   home.file.".lockpaper.png".source = ./home/wallpaper/kali.png;
-  #home.file.".config/touchegg/touchegg.conf".source = ./home/dotfiles/touchegg.conf;
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -122,29 +121,31 @@ in {
         "plain"; # no line numbers, git status, etc... more like cat with colors
     };
   };
-  programs.broot = {
-    enable = true;
-    modal = true;
-    verbs = [
-      {
-        execution = ":parent";
-        invocation = "p";
-      }
-      {
-        execution = "$VISUAL {file}";
-        invocation = "edit";
-        shortcut = "e";
-      }
-      {
-        execution = "$EDITOR {directory}/{subpath}";
-        invocation = "create {subpath}";
-      }
-      {
-        execution = "bat {file}";
-        invocation = "view";
-      }
-    ];
-  };
+  programs.mpv.enable = true;
+  programs.mpv.scripts = with pkgs.mpvScripts; [ thumbnail sponsorblock ];
+  # programs.broot = {
+  #   enable = true;
+  #   modal = true;
+  #   verbs = [
+  #     {
+  #       execution = ":parent";
+  #       invocation = "p";
+  #     }
+  #     {
+  #       execution = "$VISUAL {file}";
+  #       invocation = "edit";
+  #       shortcut = "e";
+  #     }
+  #     {
+  #       execution = "$EDITOR {directory}/{subpath}";
+  #       invocation = "create {subpath}";
+  #     }
+  #     {
+  #       execution = "bat {file}";
+  #       invocation = "view";
+  #     }
+  #   ];
+  # };
   programs.nix-index.enable = true;
   programs.direnv = {
     enable = true;
@@ -198,7 +199,7 @@ in {
 
     font = {
       name = "FiraCode Nerd Font";
-      size = 8;
+      size = 9;
     };
     iconTheme = {
       name = "Papirus-Dark";
@@ -209,6 +210,14 @@ in {
   };
 
   programs.qutebrowser.enable = true;
+  programs.qutebrowser.keyBindings = {
+    normal = {
+      ",m" = "spawn mpv {url}";
+      ",M" = "hint links spawn mpv {hint-url}";
+    };
+    prompt = { "<Ctrl-y>" = "prompt-yes"; };
+  };
+
   programs.firefox = {
     enable = true;
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
@@ -540,6 +549,7 @@ in {
         side-by-side = true;
       };
     };
+    #ignores = [ ".cargo" ];
     ignores = import home/dotfiles/gitignore.nix;
   };
 
@@ -913,8 +923,8 @@ in {
     gaps.smartBorders = "on";
     gaps.smartGaps = true;
     fonts = {
-      names = [ "DejaVu Sans Mono" ];
-      size = 2.0;
+      names = [ "pango:DejaVu Sans Mono" ];
+      size = 5.0;
     };
     focus.newWindow = "focus";
     focus.followMouse = false;

@@ -253,5 +253,5 @@
   "~$*"
   "~/.config/pianobar/config"
   "~/.gitignore"
-
+  ".cargo"
 ]
