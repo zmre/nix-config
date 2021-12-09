@@ -57,6 +57,7 @@
     opengl = {
       enable = true;
       driSupport = true;
+      driSupport32Bit = true;
       extraPackages = with pkgs; [
         mesa_drivers
         vaapiIntel
@@ -119,6 +120,7 @@
     extraGroups = [
       "wheel" # Enable ‘sudo’ for the user.
       "video"
+      "render"
       "libvirtd"
       "power"
       "lxd"

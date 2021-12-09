@@ -479,8 +479,9 @@ in {
       fd = "fd -HI"; # when calling the command, search all
       f = "fd"; # default search this dir for files ignoring .gitignore etc
       nixosedit =
-        "sudo -E nvim /etc/nixos/configuration.nix ; sudo nixos-rebuild switch";
-      nixedit = "nvim ~/.config/nixpkgs/home.nix ; home-manager switch";
+        "nvim /etc/nixos/configuration.nix ; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.#";
+      nixedit =
+        "nvim ~/.config/nixpkgs/home.nix ; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.#";
       kali = "x11docker -i -m --sudouser=nopasswd kali";
     };
   };

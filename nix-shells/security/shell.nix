@@ -1,5 +1,5 @@
-with (import (fetchTarball
-  "https://github.com/nixos/nixpkgs/archive/nixpkgs-unstable.tar.gz") { });
+{ pkgs ? import <nixpkgs> { } }:
+with pkgs;
 mkShell {
   buildInputs = [
     # Exploitation
