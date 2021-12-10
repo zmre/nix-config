@@ -13,13 +13,14 @@ let
     ripgrep
     curl
     ranger
-    lf
     du-dust
+    lf
     glow
     bottom
     exif
     #niv
     youtube-dl
+    xplr
   ];
   luaPkgs = with pkgs; [ sumneko-lua-language-server luaformatter ];
   nixEditorPkgs = with pkgs; [ nixfmt rnix-lsp ];
@@ -47,8 +48,11 @@ let
     keepassxc
     syncthingtray-minimal
     spotify-qt
+    slack
+    discord
   ];
-  browser = [ "qutebrowser.desktop" ];
+
+  browser = [ "org.qutebrowser.qutebrowser.desktop" ];
   associations = {
     "text/html" = browser;
     "x-scheme-handler/http" = browser;
@@ -209,23 +213,121 @@ in {
     };
   };
 
-  programs.qutebrowser.enable = true;
-  programs.qutebrowser.keyBindings = {
-    normal = {
-      ",m" = "spawn mpv {url}";
-      ",M" = "hint links spawn mpv {hint-url}";
+  programs.qutebrowser = {
+    enable = true;
+    keyBindings = {
+      normal = {
+        ",m" = "spawn mpv {url}";
+        ",M" = "hint links spawn mpv {hint-url}";
+        ",d" = "spawn youtube-dl -o ~/downloads/%(title)s.%(ext)s {url}')";
+        ",f" = "spawn firefox {url}";
+        "xt" = "config-cycle tabs.show always never";
+        "<f12>" = "inspector";
+      };
+      prompt = { "<Ctrl-y>" = "prompt-yes"; };
     };
-    prompt = { "<Ctrl-y>" = "prompt-yes"; };
+    settings = {
+      confirm_quit = [ "downloads" ]; # only confirm if downloads in progress
+      content.blocking.method = "both";
+      content.default_encoding = "utf-8";
+      content.geolocation = false;
+      content.cookies.accept = "no-3rdparty";
+      content.webrtc_ip_handling_policy = "default-public-interface-only";
+      content.site_specific_quirks.enabled = false;
+      content.headers.user_agent =
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36";
+      content.pdfjs = true;
+      scrolling.smooth = true;
+      # if input is focused on tab load, allow typing
+      input.insert_mode.auto_load = true;
+      # exit insert mode if clicking on non editable item
+      input.insert_mode.auto_leave = true;
+      downloads.location.directory = "${config.home.homeDirectory}/downloads";
+      downloads.location.prompt = false;
+      downloads.position = "bottom";
+      downloads.remove_finished = 10000;
+      completion.use_best_match = true;
+      colors.webpage.preferred_color_scheme = "dark";
+      colors.webpage.darkmode.enabled = true;
+      statusbar.widgets = [ "progress" "keypress" "url" "history" ];
+      tabs.position = "left";
+      tabs.title.format = "{index}: {audio}{current_title}";
+      tabs.title.format_pinned = "{index}: {audio}{current_title}";
+      tabs.last_close = "close";
+      editor.command = [ "neovide" "{}:{line}" ];
+      fileselect.handler = "external";
+      # ranger --choosefile ?
+      fileselect.single_file.command = [
+        "alacritty"
+        "--class"
+        "xplr,xplr"
+        "-t"
+        "Chooser"
+        "-e"
+        #"sh"
+        #"-c"
+        "xplr > {}"
+      ];
+      fileselect.multiple_files.command = [
+        "alacritty"
+        "--class"
+        "xplr,xplr"
+        "-t"
+        "Chooser"
+        "-e"
+        "sh"
+        "-c"
+        "xplr > {}"
+      ];
+    };
+    quickmarks = {
+      icc = "https://ironcorelabs.com/";
+      icweb = "https://github.com/ironcorelabs/website";
+      nix = "https://search.nixos.org/";
+      hm = "https://nix-community.github.io/home-manager/options.html";
+      rd = "https://reddit.com/";
+      yt = "https://youtube.com/";
+      hn = "https://news.ycombinator.com/";
+      tw = "https://twitter.com/";
+      td = "https://twitter.com/i/lists/44223630";
+      gh = "https://github.com/";
+      ghi = "https://github.com/ironcorelabs/";
+      ghz = "https://github.com/zmre/";
+      ghn = "https://github.com/notifications?participating=true";
+      mg = "https://mail.google.com/";
+      mp = "https://mail.protonmail.com/";
+    };
   };
 
   programs.firefox = {
     enable = true;
+    # turns out you have to setup a profile (below) for extensions to install
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
       ublock-origin
       https-everywhere
       noscript
       vimium
     ];
+    profiles.home.id = 0;
+    profiles.home.settings = {
+      "app.update.auto" = false; # nix will handle updates
+      "browser.search.region" = "US";
+      "browser.search.countryCode" = "US";
+      "browser.ctrlTab.recentlyUsedOrder" = false;
+      "browser.newtabpage.enhanced" = true;
+      "devtools.chrome.enabled" = true;
+      "network.prefetch-next" = true;
+      "nework.predictor.enabled" = true;
+      "browser.uidensity" = 1;
+      "privacy.trackingprotection.enabled" = true;
+      "privacy.trackingprotection.socialtracking.enabled" = true;
+      "privacy.trackingprotection.socialtracking.annotate.enabled" = true;
+      "privacy.trackingprotection.socialtracking.notification.enabled" = false;
+      "services.sync.engine.addons" = false;
+      "services.sync.engine.passwords" = false;
+      "services.sync.engine.prefs" = false;
+      "signon.rememberSignons" = false;
+    };
   };
 
   programs.alacritty = {
@@ -235,6 +337,7 @@ in {
       window.dynamic_title = true;
       background_opacity = 0.9;
       scrolling.history = 3000;
+      scrolling.smooth = true;
       font.normal.family = "MesloLGS Nerd Font Mono";
       font.normal.style = "Regular";
       font.bold.style = "Bold";
@@ -245,12 +348,26 @@ in {
       live_config_reload = true;
       cursor.vi_mode_style = "Underline";
       draw_bold_text_with_bright_colors = true;
-      key_bindings = [{
-        key = "Escape";
-        mods = "Control";
-        mode = "~Search";
-        action = "ToggleViMode";
-      }];
+      key_bindings = [
+        {
+          key = "Escape";
+          mods = "Control";
+          mode = "~Search";
+          action = "ToggleViMode";
+        }
+        # cmd-{ and cmd-} and cmd-] and cmd-[ will switch tmux windows
+        {
+          key = "LBracket";
+          mods = "Command";
+          # \x02 is ctrl-b so sequence below is ctrl-b, h
+          chars = "\\x02h";
+        }
+        {
+          key = "RBracket";
+          mods = "Command";
+          chars = "\\x02l";
+        }
+      ];
     };
   };
 
@@ -485,8 +602,8 @@ in {
       ll = "exa --icons --git-ignore --git -F --extended -l";
       lt = "exa --icons --git-ignore --git -F --extended -T";
       llt = "exa --icons --git-ignore --git -F --extended -l -T";
-      fd = "fd -H -t d"; # default search directories
-      f = "fd -H"; # default search this dir for files ignoring .gitignore etc
+      fd = "\\fd -H -t d"; # default search directories
+      f = "\\fd -H"; # default search this dir for files ignoring .gitignore etc
       nixosedit =
         "nvim /etc/nixos/configuration.nix ; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.#";
       nixedit =
@@ -923,8 +1040,8 @@ in {
     gaps.smartBorders = "on";
     gaps.smartGaps = true;
     fonts = {
-      names = [ "pango:DejaVu Sans Mono" ];
-      size = 5.0;
+      names = [ "pango:SauceCodePro Nerd Font" ];
+      size = 6.0;
     };
     focus.newWindow = "focus";
     focus.followMouse = false;
@@ -953,12 +1070,18 @@ in {
       "${mod}+Shift+semicolon" = "move right";
       "${mod}+h" = "split h";
       "${mod}+v" = "split v";
-      "${mod}+t" = "split toggle";
+      "${mod}+t" = "layout tabbed";
       "${mod}+s" = "layout stacking";
-      "${mod}+w" = "layout tabbed";
-      "${mod}+e" = "layout toggle split";
+      "${mod}+w" = "layout default";
+      "${mod}+e" = "layout toggle split tabbed stacking splitv splith";
       "${mod}+m" = "move scratchpad";
       "${mod}+o" = "scratchpad show";
+      "${mod}+p" = "floating toggle";
+      "${mod}+Shift+p" = ''[class="KeePassXC"] scratchpad show'';
+      "${mod}+x" = "move workspace to output next";
+      "${mod}+Ctrl+Right" = "workspace next";
+      "${mod}+Ctrl+Left" = "workspace prev";
+      "${mod}+F9" = "exec i3lock --nofork -i ~/.lockpaper.png";
       # Use pactl to adjust volume in PulseAudio.
       "XF86AudioRaiseVolume" =
         "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5% && ${refresh}";
@@ -1036,8 +1159,11 @@ in {
   # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
   # screen before suspend. Use loginctl lock-session to lock your screen.
   xsession.windowManager.i3.extraConfig = ''
+    default_orientation auto
     exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork -i ~/.lockpaper.png
     exec_always --no-startup-id i3-auto-layout
+    for_window [title="Chooser"] floating enable
+    for_window [class="KeePassXC"] move scratchpad
   '';
   programs.i3status-rust.enable = true;
   programs.i3status-rust.bars = {

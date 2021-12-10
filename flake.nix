@@ -55,6 +55,7 @@
               home-manager.useUserPackages = true;
               home-manager.users.zmre = import ./home.nix;
               home-manager.extraSpecialArgs = inputs;
+              home-manager.verbose = true;
             }
           ];
         };
@@ -99,9 +100,9 @@
           }
           ./machines/darwin-configuration.nix
           {
-            nixpkgs = { 
-              pkgs = pkgsBySystem."x86_64-darwin"; 
-                config.allowUnfree = true;
+            nixpkgs = {
+              pkgs = pkgsBySystem."x86_64-darwin";
+              config.allowUnfree = true;
             };
             # For compatibility with nix-shell, nix-build, etc.
             environment.etc.nixpkgs.source = inputs.nixpkgs;

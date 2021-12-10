@@ -132,7 +132,7 @@ M.gui = function()
     vim.opt.mouse = "nv" -- only use mouse in normal and visual modes (notably not insert and command)
     vim.opt.mousemodel = "popup_setpos"
     -- use the system clipboard for all unnamed yank operations
-    vim.opt.clipboard = "unnamed"
+    vim.opt.clipboard = "unnamedplus"
 
     -- 2021-07-18 something wacky with guioptions right now
     -- print(vim.inspect(vim.api.nvim_get_option_info("guioptions")))

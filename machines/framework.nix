@@ -209,11 +209,9 @@
     coreutils
     usbutils
     dnsutils
+    libva-utils
     compsize # btrfs util
     x11_ssh_askpass
-    x11docker
-    python310 # needed by x11docker
-    tini # needed by x11docker
     chkrootkit
   ];
   environment.sessionVariables = {
