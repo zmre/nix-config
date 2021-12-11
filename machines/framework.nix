@@ -213,6 +213,7 @@
     compsize # btrfs util
     x11_ssh_askpass
     chkrootkit
+    veracrypt
   ];
   environment.sessionVariables = {
     LANGUAGE = "en_US.UTF-8";

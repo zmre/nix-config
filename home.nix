@@ -12,13 +12,21 @@ let
     tree-sitter
     ripgrep
     curl
+    atool
+    file
     ranger
     du-dust
-    lf
-    glow
+    lf # file explorer
+    highlight # code coloring in lf
+    poppler_utils # for pdf2text in lf
+    mediainfo
+    exiftool
+    ueberzug # for terminal image previews
+    glow # view markdown file or dir
+    mdcat # colorize markdown
     bottom
     exif
-    #niv
+    niv
     youtube-dl
     xplr
   ];
@@ -112,8 +120,16 @@ in {
     ./home/dotfiles/nvim/lua/plugins.lua;
   home.file.".config/nvim/vim/colors.vim".source =
     ./home/dotfiles/nvim/vim/colors.vim;
+  home.file.".config/lf/lfrc".source = ./home/dotfiles/lfrc;
+  home.file.".config/lf/previewer.sh".source = ./home/dotfiles/previewer.sh;
+  home.file.".config/lf/pager.sh".source = ./home/dotfiles/pager.sh;
+  home.file.".config/lf/lficons.sh".source = ./home/dotfiles/lficons.sh;
   home.file.".wallpaper.jpg".source = ./home/wallpaper/castle2.jpg;
   home.file.".lockpaper.png".source = ./home/wallpaper/kali.png;
+  #home.file.".tmux.conf".source =
+  #"${config.home-manager-files}/.config/tmux/tmux.conf";
+  #home.file.".gitignore".source =
+  #"${config.home-manager-files}/.config/git/ignore";
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -127,29 +143,6 @@ in {
   };
   programs.mpv.enable = true;
   programs.mpv.scripts = with pkgs.mpvScripts; [ thumbnail sponsorblock ];
-  # programs.broot = {
-  #   enable = true;
-  #   modal = true;
-  #   verbs = [
-  #     {
-  #       execution = ":parent";
-  #       invocation = "p";
-  #     }
-  #     {
-  #       execution = "$VISUAL {file}";
-  #       invocation = "edit";
-  #       shortcut = "e";
-  #     }
-  #     {
-  #       execution = "$EDITOR {directory}/{subpath}";
-  #       invocation = "create {subpath}";
-  #     }
-  #     {
-  #       execution = "bat {file}";
-  #       invocation = "view";
-  #     }
-  #   ];
-  # };
   programs.nix-index.enable = true;
   programs.direnv = {
     enable = true;
@@ -219,7 +212,7 @@ in {
       normal = {
         ",m" = "spawn mpv {url}";
         ",M" = "hint links spawn mpv {hint-url}";
-        ",d" = "spawn youtube-dl -o ~/downloads/%(title)s.%(ext)s {url}')";
+        ",d" = "spawn youtube-dl -o ~/Downloads/%(title)s.%(ext)s {url}')";
         ",f" = "spawn firefox {url}";
         "xt" = "config-cycle tabs.show always never";
         "<f12>" = "inspector";
@@ -242,7 +235,7 @@ in {
       input.insert_mode.auto_load = true;
       # exit insert mode if clicking on non editable item
       input.insert_mode.auto_leave = true;
-      downloads.location.directory = "${config.home.homeDirectory}/downloads";
+      downloads.location.directory = "${config.home.homeDirectory}/Downloads";
       downloads.location.prompt = false;
       downloads.position = "bottom";
       downloads.remove_finished = 10000;
@@ -294,6 +287,7 @@ in {
       ghi = "https://github.com/ironcorelabs/";
       ghz = "https://github.com/zmre/";
       ghn = "https://github.com/notifications?participating=true";
+      gr = "https://goodreads.com/";
       mg = "https://mail.google.com/";
       mp = "https://mail.protonmail.com/";
     };
@@ -566,6 +560,9 @@ in {
       _fzf_compgen_dir() {
         \fd --type d --hidden --follow . "$1"
       }
+
+      # Needed for lf to be pretty
+      . ~/.config/lf/lficons.sh
 
       # Prompt stuff
       source ${./home/dotfiles/p10k.zsh}
@@ -1232,6 +1229,9 @@ in {
       "--raw-control-chars -FXRadeqs -P--Less--?e?x(Next file: %x):(END).:?pB%pB%.";
     CLICOLOR_FORCE = "yes";
     PAGER = "less";
+    # Add colors to man pages
+    MANPAGER = "less -R --use-color -Dd+r -Du+b +Gg -M -s";
+    SYSTEMD_COLORS = "true";
     FZF_CTRL_R_OPTS = "--sort --exact";
     BROWSER = "qutebrowser";
     TERMINAL = "alacritty";
