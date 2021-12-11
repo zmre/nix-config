@@ -5,18 +5,9 @@ set icons
 set incsearch
 set incfilter
 set mouse
-
-#set sortby ctime
-#
-#set cleaner ~/.config/lf/clear_img.sh
-#cd $(zoxide query --exclude "$PWD" -- "nixp")
-# fd | fzy
-# f | fzy
-# See https://github.com/gokcehan/lf/wiki/Integrations
-# if gh is home, maybe gz for zoxide, go for searching subdirs with fd and fzy
-# maybe we want to jump to dir of a file? search files, select, and it auto cd's to it?  maybe that's gf
-# $OPENER, $EDITOR, $PAGER, $SHELL are all used by default unless you override mappings like this: `map e nvim "$f"`
-
+set truncatechar ⋯
+set ifs "\n"
+set color256 true
 
 cmd fd_dir ${{
     res="$(\fd -H -t d | fzy -l 20 2>/dev/tty | sed 's|\\|\\\\|g;s/"/\\"/g')"
@@ -36,3 +27,7 @@ cmd z ${{
 map gd :fd_dir
 map gf :f_file
 map gz push :z<space>
+
+
+# Format string of the prompt shown in the top line. Color format is:  \033[38;5;Xm  where X is in {0..255}.
+set promptfmt "\033[1;38;5;51m[\033[38;5;39m%u\033[38;5;51m@\033[38;5;39m%h\033[38;5;51m] \033[0;38;5;49m%w/\033[38;5;48m%f\033[0m"
