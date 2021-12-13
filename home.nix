@@ -24,11 +24,13 @@ let
     ueberzug # for terminal image previews
     glow # view markdown file or dir
     mdcat # colorize markdown
+    html2text
     bottom
     exif
     niv
     youtube-dl
     xplr
+    vulnix # check for live nix apps that are listed in NVD
   ];
   luaPkgs = with pkgs; [ sumneko-lua-language-server luaformatter ];
   nixEditorPkgs = with pkgs; [ nixfmt rnix-lsp ];
@@ -226,6 +228,7 @@ in {
       content.geolocation = false;
       content.cookies.accept = "no-3rdparty";
       content.webrtc_ip_handling_policy = "default-public-interface-only";
+      content.javascript.can_access_clipboard = true;
       content.site_specific_quirks.enabled = false;
       content.headers.user_agent =
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36";
@@ -290,6 +293,23 @@ in {
       gr = "https://goodreads.com/";
       mg = "https://mail.google.com/";
       mp = "https://mail.protonmail.com/";
+    };
+    searchEngines = {
+      DEFAULT = "https://duckduckgo.com/?q={}&ia=web";
+      d = "https://duckduckgo.com/?q={}&ia=web";
+      w = "https://en.wikipedia.org/wiki/Special:Search?search={}&go=Go&ns0=1";
+      aw = "https://wiki.archlinux.org/?search={}";
+      nw = "https://nixos.wiki/index.php?search={}";
+      np =
+        "https://search.nixos.org/packages?channel=21.11&from=0&size=100&sort=relevance&type=packages&query={}";
+      nu =
+        "https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query={}";
+      no =
+        "https://search.nixos.org/options?channel=21.11&from=0&size=50&sort=relevance&type=packages&query={}";
+      nf =
+        "https://search.nixos.org/flakes?channel=21.11&from=0&size=50&sort=relevance&type=packages&query={}";
+      g = "https://www.google.com/search?hl=en&q={}";
+      gh = "https://github.com/?q={}";
     };
   };
 

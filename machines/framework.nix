@@ -22,8 +22,12 @@
   };
 
   system = {
-    autoUpgrade.enable = true;
-    autoUpgrade.channel = "https://nixos.org/channels/nixos-unstable";
+    # It was trying to upgrade on wake from sleep and sometimes failed in the background
+    # because the wifi wasn't up yet, then left my system in a weird state without a
+    # current per-user profile in place. So for now, I'll upgrade deliberately.
+    # Also, I'm using flakes now, so different system
+    autoUpgrade.enable = false;
+    #autoUpgrade.channel = "https://nixos.org/channels/nixos-unstable";
     # this captures initial version. don't change it.
     stateVersion = "21.05"; # Did you read the comment?
   };
