@@ -211,6 +211,7 @@
     binutils
     pciutils
     coreutils
+    psmisc
     usbutils
     dnsutils
     libva-utils

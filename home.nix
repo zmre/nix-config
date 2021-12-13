@@ -24,13 +24,14 @@ let
     ueberzug # for terminal image previews
     glow # view markdown file or dir
     mdcat # colorize markdown
+    vimv # shell script to bulk rename
     html2text
     bottom
     exif
     niv
     youtube-dl
-    xplr
     vulnix # check for live nix apps that are listed in NVD
+    tickrs
   ];
   luaPkgs = with pkgs; [ sumneko-lua-language-server luaformatter ];
   nixEditorPkgs = with pkgs; [ nixfmt rnix-lsp ];
@@ -252,28 +253,27 @@ in {
       tabs.last_close = "close";
       editor.command = [ "neovide" "{}:{line}" ];
       fileselect.handler = "external";
-      # ranger --choosefile ?
       fileselect.single_file.command = [
         "alacritty"
         "--class"
-        "xplr,xplr"
-        "-t"
-        "Chooser"
-        "-e"
-        #"sh"
-        #"-c"
-        "xplr > {}"
-      ];
-      fileselect.multiple_files.command = [
-        "alacritty"
-        "--class"
-        "xplr,xplr"
+        "lf,lf"
         "-t"
         "Chooser"
         "-e"
         "sh"
         "-c"
-        "xplr > {}"
+        "lf -selection-path {}"
+      ];
+      fileselect.multiple_files.command = [
+        "alacritty"
+        "--class"
+        "lf,lf"
+        "-t"
+        "Chooser"
+        "-e"
+        "sh"
+        "-c"
+        "lf -selection-path {}"
       ];
     };
     quickmarks = {

@@ -5,12 +5,12 @@ NUM_GENS=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/syste
 LAST_GEN=$(sudo nix-env --list-generations --profile /nix/var/nix/profiles/system |tail -1)
 NUM_VULN_PKGS=$(vulnix -S |grep -A 1 "\----" |grep -v "\--" |wc -l)
 echo "Nixpkgs Last Update: $FLAKE_LOCK_DATE"
-echo "Total installed: $NUM_GENS"
+echo "Total generations: $NUM_GENS"
 echo "Last generation: $LAST_GEN"
 echo "Vulnerable packages: $NUM_VULN_PKGS"
 #echo
 #echo "To delete previous generations before the last 7:"
-#echo "sudo nix-env --delete-generations +7"
+#echo "sudo nix-env --delete-generations +7 --profile /nix/var/nix/profiles/system"
 #echo
 #echo "To garbage collect older than 30d:"
 #echo "sudo nix-collect-garbage --delete-older-than 30d"
