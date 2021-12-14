@@ -224,7 +224,9 @@ in {
     };
     settings = {
       confirm_quit = [ "downloads" ]; # only confirm if downloads in progress
+      content.blocking.enabled = true;
       content.blocking.method = "both";
+      content.blocking.hosts.block_subdomains = true;
       content.default_encoding = "utf-8";
       content.geolocation = false;
       content.cookies.accept = "no-3rdparty";
@@ -234,7 +236,9 @@ in {
       content.headers.user_agent =
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36";
       content.pdfjs = true;
+      content.autoplay = false;
       scrolling.smooth = true;
+      auto_save.session = true; # remember open tabs
       # if input is focused on tab load, allow typing
       input.insert_mode.auto_load = true;
       # exit insert mode if clicking on non editable item
@@ -246,11 +250,14 @@ in {
       completion.use_best_match = true;
       colors.webpage.preferred_color_scheme = "dark";
       colors.webpage.darkmode.enabled = true;
+      colors.tabs.bar.bg = "#333333";
+      colors.webpage.bg = "black";
       statusbar.widgets = [ "progress" "keypress" "url" "history" ];
       tabs.position = "left";
       tabs.title.format = "{index}: {audio}{current_title}";
       tabs.title.format_pinned = "{index}: {audio}{current_title}";
       tabs.last_close = "close";
+      spellcheck.languages = [ "en-US" ];
       editor.command = [ "neovide" "{}:{line}" ];
       fileselect.handler = "external";
       fileselect.single_file.command = [
