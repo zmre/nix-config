@@ -1262,5 +1262,6 @@ in {
     FZF_CTRL_R_OPTS = "--sort --exact";
     BROWSER = "qutebrowser";
     TERMINAL = "alacritty";
+    #LIBVA_DRIVER_NAME="iHD";
   };
 }
