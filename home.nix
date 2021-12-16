@@ -33,21 +33,26 @@ let
     vulnix # check for live nix apps that are listed in NVD
     tickrs
   ];
-  luaPkgs = with pkgs; [ sumneko-lua-language-server luaformatter ];
-  nixEditorPkgs = with pkgs; [ nixfmt rnix-lsp ];
-  rustPkgs = with pkgs; [
-    cargo
-    rustfmt
-    rust-analyzer
-    rustc
+  cPkgs = with pkgs; [
+    automake
+    autoconf
     gcc
     gnumake
     pkg-config
+    nasm
     glib
+    libtool
+    libpng
+    libjpeg
+    sqlite
   ];
+  luaPkgs = with pkgs; [ sumneko-lua-language-server luaformatter ];
+  nixEditorPkgs = with pkgs; [ nixfmt rnix-lsp ];
+  rustPkgs = with pkgs; [ cargo rustfmt rust-analyzer rustc ];
   typescriptPkgs = with pkgs.nodePackages; [
     typescript
     typescript-language-server
+    yarn
     diagnostic-languageserver
     eslint_d
   ];
@@ -105,7 +110,7 @@ in {
   # changes in each release.
   home.stateVersion = "21.11";
 
-  home.packages = defaultPkgs ++ luaPkgs ++ nixEditorPkgs ++ rustPkgs
+  home.packages = defaultPkgs ++ cPkgs ++ luaPkgs ++ nixEditorPkgs ++ rustPkgs
     ++ typescriptPkgs ++ guiPkgs ++ networkPkgs;
 
   home.file.".p10k.zsh".source = ./home/dotfiles/p10k.zsh;
