@@ -19,6 +19,7 @@
   outputs = inputs@{ self, ... }:
     with inputs.nixpkgs.lib;
     let
+      inherit (inputs.darwin.lib) darwinSystem;
       forEachSystem = genAttrs [ "x86_64-linux" "x86_64-darwin" ];
       pkgsBySystem = forEachSystem (system:
         import inputs.nixpkgs {
@@ -89,39 +90,36 @@
         };
       };
 
-      darwinConfigurations.dragonstone = darwin.lib.darwinSystem {
+      darwinConfigurations.dragonstone = inputs.darwin.lib.darwinSystem {
         system = "x86_64-darwin";
+        inputs = { inherit darwin nixpkgs; };
+        specialArgs = inputs;
         modules = [
+          inputs.home-manager.darwinModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.pwalsh = import ./home.nix;
+              home-manager.extraSpecialArgs = inputs;
+            }
           {
             nix = {
-              package = pkgsBySystem."x86_64-darwing".pkgs.nixFlakes;
+              package = pkgsBySystem."x86_64-darwin".pkgs.nixFlakes;
               extraOptions = "experimental-features = nix-command flakes";
             };
           }
-          ./machines/darwin-configuration.nix
           {
             nixpkgs = {
-              pkgs = pkgsBySystem."x86_64-darwin";
+              pkgs = pkgsBySystem."x86_64-darwin".nixFlakes;
               config.allowUnfree = true;
             };
             # For compatibility with nix-shell, nix-build, etc.
             environment.etc.nixpkgs.source = inputs.nixpkgs;
           }
-          home-manager.darwinModules.home-manager
-          { home-manager.users.pwalsh = import ./home.nix; }
+          ./machines/darwin-configuration.nix
         ];
       };
 
-      # homeManagerConfigurations = {
-      #   zmre = home-manager.lib.homeManagerConfiguration {
-      #     inherit pkgs;
-      #     system = "x86_64-linux";
-      #     username = "zmre";
-      #     homeDirectory = "/home/zmre";
-      #     configuration = { imports = [ ./home.nix ]; };
-      #   };
-      # };
-      #defaultPackage.x86_64-linux = debianSystem.activationPackage;
-      defaultPackage.x86_64-darwin = darwinConfigurations.dragonstone.system;
+      defaultPackage.x86_64-darwin = self.darwinConfigurations.dragonstone.system;
     };
 }
