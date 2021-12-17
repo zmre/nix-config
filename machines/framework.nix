@@ -47,13 +47,50 @@
       enable = true;
       wifi.backend = "iwd";
       packages = with pkgs; [ networkmanagerapplet ];
+      # don't use dhcp dns... use settings below instead
+      dns = "none";
     };
     # The global useDHCP flag is deprecated, set to false here.
     useDHCP = false;
     interfaces.wlan0.useDHCP = true;
+
+    # use local dns server that uses privacy preserving dns over tls
+    nameservers = [ "127.0.0.1" "::1" ];
+    resolvconf.useLocalResolver = true;
     firewall.enable = true;
     # firewall.allowedTCPPorts = [ ... ];
     # firewall.allowedUDPPorts = [ ... ];
+  };
+  services.dnscrypt-proxy2 = {
+    enable = true;
+    settings = {
+      listen_addresses = [ "127.0.0.1:53" ];
+      ipv4_servers = true;
+      ipv6_servers = false;
+      require_dnssec = true;
+      doh_servers = true;
+      odoh_servers = true;
+      require_nolog = true;
+      bootstrap_resolvers = [ "9.9.9.9:53" "8.8.8.8:53" ];
+      cache = true;
+
+      sources.public-resolvers = {
+        urls = [
+          "https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md"
+          "https://download.dnscrypt.info/resolvers-list/v3/public-resolvers.md"
+        ];
+        cache_file = "/var/lib/dnscrypt-proxy2/public-resolvers.md";
+        minisign_key =
+          "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
+      };
+
+      # You can choose a specific set of servers from https://github.com/DNSCrypt/dnscrypt-resolvers/blob/master/v3/public-resolvers.md
+      server_names = [
+        "cloudflare-security"
+        #"cloudflare-security-ipv6"
+        #"doh-crypto-sx"
+      ];
+    };
   };
 
   hardware = {
