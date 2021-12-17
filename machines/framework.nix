@@ -80,6 +80,7 @@
   };
   sound.enable = true;
   security.rtkit.enable = true; # bring in audio
+  services.blueman.enable = true;
 
   # pipewire brings better audio/video handling
   services.pipewire = {
@@ -181,6 +182,12 @@
   programs.dconf.enable = true;
   # Used to adjust the brightness of the screen
   programs.light.enable = true;
+  # clight requires a latitude and longitude
+  location.latitude = 38.0;
+  location.longitude = -105.0;
+  # Used to automatically adjust brightness and temperature of the screen
+  services.clight.enable = true;
+  # TODO: tune services.clight.settings and friends
   programs.zsh.enable = true;
   programs.command-not-found.enable = true; # suggest install if cmd missing
 
