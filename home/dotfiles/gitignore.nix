@@ -37,7 +37,6 @@
   "*.lib"
   "*.lnk"
   "*.lo"
-  "*.lock"
   "*.log"
   "*.manifest"
   "*.map"

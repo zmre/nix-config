@@ -38,17 +38,14 @@ let
     autoconf
     gcc
     gnumake
+    cmake
     pkg-config
-    nasm
     glib
     libtool
-    libpng
-    libjpeg
-    sqlite
   ];
   luaPkgs = with pkgs; [ sumneko-lua-language-server luaformatter ];
   nixEditorPkgs = with pkgs; [ nixfmt rnix-lsp ];
-  rustPkgs = with pkgs; [ cargo rustfmt rust-analyzer rustc ];
+  rustPkgs = with pkgs; [ cargo rustfmt rust-analyzer rustc clippy ];
   typescriptPkgs = with pkgs.nodePackages; [
     typescript
     typescript-language-server
@@ -253,6 +250,7 @@ in {
       downloads.position = "bottom";
       downloads.remove_finished = 10000;
       completion.use_best_match = true;
+      completion.shrink = true;
       colors.webpage.preferred_color_scheme = "dark";
       colors.webpage.darkmode.enabled = true;
       colors.tabs.bar.bg = "#333333";
@@ -637,7 +635,8 @@ in {
         "nvim /etc/nixos/configuration.nix ; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.#";
       nixedit =
         "nvim ~/.config/nixpkgs/home.nix ; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.#";
-      kali = "x11docker -i -m --sudouser=nopasswd kali";
+      qp = ''
+        qutebrowser --temp-basedir --set content.private_browsing true --set colors.tabs.bar.bg "#552222" --config-py "$HOME/.config/qutebrowser/config.py" --qt-arg name "qp,qp"'';
     };
   };
 
