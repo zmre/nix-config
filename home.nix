@@ -110,6 +110,48 @@ in {
   home.packages = defaultPkgs ++ cPkgs ++ luaPkgs ++ nixEditorPkgs ++ rustPkgs
     ++ typescriptPkgs ++ guiPkgs ++ networkPkgs;
 
+  home.file.".inputrc".text = ''
+    set show-all-if-ambiguous on
+    set completion-ignore-case on
+    set mark-directories on
+    set mark-symlinked-directories on
+
+    # Do not autocomplete hidden files unless the pattern explicitly begins with a dot
+    set match-hidden-files off
+
+    # Show extra file information when completing, like `ls -F` does
+    set visible-stats on
+
+    # Be more intelligent when autocompleting by also looking at the text after
+    # the cursor. For example, when the current line is "cd ~/src/mozil", and
+    # the cursor is on the "z", pressing Tab will not autocomplete it to "cd
+    # ~/src/mozillail", but to "cd ~/src/mozilla". (This is supported by the
+    # Readline used by Bash 4.)
+    set skip-completed-text on
+
+    # Allow UTF-8 input and output, instead of showing stuff like $'\0123\0456'
+    set input-meta on
+    set output-meta on
+    set convert-meta off
+
+    # Use Alt/Meta + Delete to delete the preceding word
+    "\e[3;3~": kill-word
+
+    set keymap vi
+    set editing-mode vi-insert
+    "\e\C-h": backward-kill-word
+    "\e\C-?": backward-kill-word
+    "\eb": backward-word
+    "\C-a": beginning-of-line
+    "\C-l": clear-screen
+    "\C-e": end-of-line
+    "\ef": forward-word
+    "\C-k": kill-line
+    "\C-y": yank
+    # Go up a dir with ctrl-n
+    "\C-n":"cd ..\n"
+    set editing-mode vi
+  '';
   home.file.".p10k.zsh".source = ./home/dotfiles/p10k.zsh;
   home.file.".config/nvim/lua/options.lua".source =
     ./home/dotfiles/nvim/lua/options.lua;
