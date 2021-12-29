@@ -17,15 +17,17 @@
     nikto
     onesixtyone
     p0f
-    nmap
+    # pick one of nmap or nmap-graphical
+    #nmap
     nmap-graphical
     rustscan
     snmpcheck
     sslscan
     tcpflow
     theharvester
+    # pick one of wireshark or wireshark-cli
     wireshark
-    wireshark-cli
+    #wireshark-cli
     zmap
     # Passwords
     fcrackzip
@@ -63,7 +65,8 @@
     multimon-ng
     # crypto / stego
     stegseek
-    exif
+    # installed elsewhere
+    #exif
     zsteg
     # manipulation
     gdb
