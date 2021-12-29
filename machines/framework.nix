@@ -32,11 +32,21 @@
     stateVersion = "21.05"; # Did you read the comment?
   };
 
+  systemd.sleep.extraConfig = ''
+    AllowSuspendThenHibernate=yes
+  '';
+
   powerManagement = {
     enable = true;
     powertop.enable = true;
     #cpuFreqGovernor = lib.mkDefault "ondemand";
   };
+  # an alternative to above? is this needed?
+  #services.auto-cpufreq.enable = true;
+  # Quick suspend if power button pushed
+  services.logind.extraConfig = ''
+    HandlePowerKey=suspend
+  '';
 
   networking = {
     hostName = "volantis";
@@ -58,8 +68,12 @@
     nameservers = [ "127.0.0.1" "::1" ];
     resolvconf.useLocalResolver = true;
     firewall.enable = true;
+    firewall.checkReversePath = false; # disable rpfilter so wireguard works
+    # Note: wireguard setup is not currently reproducible and uses network manager
+    # doing this to avoid putting anything sensitive in here, but should revisit
+    # after working on reproducible secrets stuff. TODO.
     # firewall.allowedTCPPorts = [ ... ];
-    # firewall.allowedUDPPorts = [ ... ];
+    #firewall.allowedUDPPorts = [ ];
   };
   services.dnscrypt-proxy2 = {
     enable = true;
@@ -185,7 +199,7 @@
       }
     })
   '';
-  # KeePassXC replaces this... I think
+  # KeePassXC replaces this for me.
   security.pam.services.lightdm.enableGnomeKeyring = false;
 
   services.locate = {
@@ -224,9 +238,9 @@
   location.longitude = -105.0;
   # Used to automatically adjust brightness and temperature of the screen
   services.clight.enable = true;
-  # TODO: tune services.clight.settings and friends
   programs.zsh.enable = true;
-  programs.command-not-found.enable = true; # suggest install if cmd missing
+  programs.command-not-found.enable =
+    true; # suggest install package if cmd missing
 
   fonts = {
     enableDefaultFonts = true;
@@ -263,6 +277,7 @@
     x11_ssh_askpass
     chkrootkit
     veracrypt
+    firmware-manager
   ];
   environment.sessionVariables = {
     LANGUAGE = "en_US.UTF-8";

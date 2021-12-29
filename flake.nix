@@ -1,5 +1,6 @@
 {
   description = "zmre system configurations";
+  nixConfig.bash-prompt-suffix = "nf# ";
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-21.11";
@@ -27,6 +28,7 @@
           config = { allowUnfree = true; };
           overlays = with inputs; [ nur.overlay ];
         });
+      #homenix = import ./home.nix;
     in {
       inherit pkgsBySystem;
 
@@ -96,12 +98,12 @@
         specialArgs = inputs;
         modules = [
           inputs.home-manager.darwinModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.pwalsh = import ./home.nix;
-              home-manager.extraSpecialArgs = inputs;
-            }
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.pwalsh = import ./home.nix;
+            home-manager.extraSpecialArgs = inputs;
+          }
           {
             nix = {
               package = pkgsBySystem."x86_64-darwin".pkgs.nixFlakes;
@@ -120,6 +122,7 @@
         ];
       };
 
-      defaultPackage.x86_64-darwin = self.darwinConfigurations.dragonstone.system;
+      defaultPackage.x86_64-darwin =
+        self.darwinConfigurations.dragonstone.system;
     };
 }

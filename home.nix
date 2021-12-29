@@ -649,6 +649,16 @@ in {
         src = ./home/dotfiles/p10k.zsh;
         file = "p10k.zsh";
       }
+      {
+        name = "zsh-nix-shell";
+        file = "nix-shell.plugin.zsh";
+        src = pkgs.fetchFromGitHub {
+          owner = "chisui";
+          repo = "zsh-nix-shell";
+          rev = "v0.4.0";
+          sha256 = "037wz9fqmx0ngcwl9az55fgkipb745rymznxnssr3rx9irb6apzg";
+        };
+      }
     ];
     oh-my-zsh.enable = true;
     oh-my-zsh.plugins = [
@@ -674,7 +684,7 @@ in {
       fd = "\\fd -H -t d"; # default search directories
       f = "\\fd -H"; # default search this dir for files ignoring .gitignore etc
       nixosedit =
-        "nvim /etc/nixos/configuration.nix ; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.#";
+        "nvim $(realpath /etc/nixos/configuration.nix) ; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.#";
       nixedit =
         "nvim ~/.config/nixpkgs/home.nix ; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.#";
       qp = ''
@@ -721,7 +731,13 @@ in {
       color.ui = true;
       pull.rebase = true;
       merge.conflictstyle = "diff3";
-      #credential.helper = "osxkeychain";
+      init.defaultBranch = "main";
+      http.sslVerify = true;
+      commit.verbose = true;
+      credential.helper = if pkgs.stdenvNoCC.isDarwin then
+        "osxkeychain"
+      else
+        "cache --timeout=10000000";
       diff.algorithm = "patience";
       protocol.version = "2";
       core.commitGraph = true;

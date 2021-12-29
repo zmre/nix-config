@@ -7,4 +7,6 @@
         inherit pkgs;
       };
   };
+  bash-prompt = "";
+  bash-prompt-suffix = "ns";
 }
