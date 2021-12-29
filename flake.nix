@@ -147,7 +147,10 @@
             ./modules/hardware/framework-volantis.nix
             ./modules/hardware/volantis.nix
           ];
-          extraModules = [ ./profiles/personal.nix ];
+          extraModules = [
+            ./profiles/personal.nix
+            ./modules/home-manager/home-security.nix
+          ];
         };
         nixos-pw-vm = mkNixosConfig {
           hardwareModules = [
