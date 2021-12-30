@@ -29,7 +29,7 @@ let
     vulnix # check for live nix apps that are listed in NVD
     tickrs # track stocks
   ];
-  cPkgs = with pkgs; [
+  cPkgs = with pkgs.stable; [
     automake
     autoconf
     gcc
@@ -39,9 +39,13 @@ let
     glib
     libtool
   ];
+  # live dangerously here with unstable
   luaPkgs = with pkgs; [ sumneko-lua-language-server luaformatter ];
+  # using unstable in my home profile for nix commands
   nixEditorPkgs = with pkgs; [ nix nixfmt nixpkgs-fmt rnix-lsp ];
+  # live dangerously here with unstable
   rustPkgs = with pkgs; [ cargo rustfmt rust-analyzer rustc ];
+  # live dangerously here with unstable
   typescriptPkgs = with pkgs.nodePackages; [
     typescript
     typescript-language-server
@@ -49,10 +53,11 @@ let
     diagnostic-languageserver
     eslint_d
   ];
-  networkPkgs = with pkgs; [ traceroute mtr iftop ];
+  networkPkgs = with pkgs.stable; [ traceroute mtr iftop ];
   guiPkgs = with pkgs; [ neovide ];
 
-in {
+in
+{
   programs.home-manager.enable = true;
   home.enableNixpkgsReleaseCheck = false;
 
@@ -432,6 +437,7 @@ in {
       
     '';
 
+    # going unstable here; living dangerously
     plugins = with pkgs.vimPlugins; [
       # Syntax / Language Support ##########################
       vim-polyglot # lazy load all the syntax plugins for all the languages
@@ -439,10 +445,16 @@ in {
       rust-tools-nvim # lsp stuff and more for rust
       crates-nvim # inline intelligence for Cargo.toml
       nvim-lspconfig # setup LSP
-      lspsaga-nvim # makes LSP stuff look nicer and easier to use
+      # lspsaga isn't checking capabilities so is giving me errors for some languages.
+      # try again in awhile.
+      #lspsaga-nvim # makes LSP stuff look nicer and easier to use
+      # using lightbulb as an alternative to saga
+      nvim-lightbulb
       lspkind-nvim # adds more icons into dropdown selections
       lsp_signature-nvim # as you type hitns on function parameters
-      nvim-lsp-ts-utils # typescript lsp
+      # damn thing is throwing errors when I open nix files. apparently thinks
+      # everything is typescript
+      #nvim-lsp-ts-utils # typescript lsp
       trouble-nvim # navigate all warnings and errors in quickfix-like window
       neoformat # autoformat on save, if formatter found
 
@@ -714,10 +726,11 @@ in {
       init.defaultBranch = "main";
       http.sslVerify = true;
       commit.verbose = true;
-      credential.helper = if pkgs.stdenvNoCC.isDarwin then
-        "osxkeychain"
-      else
-        "cache --timeout=10000000";
+      credential.helper =
+        if pkgs.stdenvNoCC.isDarwin then
+          "osxkeychain"
+        else
+          "cache --timeout=10000000";
       diff.algorithm = "patience";
       protocol.version = "2";
       core.commitGraph = true;

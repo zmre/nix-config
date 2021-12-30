@@ -44,7 +44,7 @@
     networkmanager = {
       enable = true;
       wifi.backend = "iwd";
-      packages = with pkgs; [ networkmanagerapplet ];
+      packages = with pkgs.stable; [ networkmanagerapplet ];
       # don't use dhcp dns... use settings below instead
       dns = "none";
     };

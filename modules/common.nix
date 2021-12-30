@@ -42,7 +42,7 @@
       #small.source = "${inputs.small}";
     };
     # list of acceptable shells in /etc/shells
-    shells = with pkgs; [ bash zsh ];
+    shells = with pkgs.stable; [ bash zsh ];
   };
 
   environment.sessionVariables = {

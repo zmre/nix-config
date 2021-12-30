@@ -5,7 +5,8 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ # Include the results of the hardware scan.
+  imports = [
+    # Include the results of the hardware scan.
     ./parallels-hardware.nix
   ];
 
@@ -44,8 +45,8 @@
   #hardware.parallels.enable = true;
 
   system = {
-    autoUpgrade.enable = true;
-    autoUpgrade.channel = "https://nixos.org/channels/nixos-unstable";
+    #autoUpgrade.enable = true;
+    #autoUpgrade.channel = "https://nixos.org/channels/nixos-unstable";
     # this captures initial version. don't change it.
     stateVersion = "21.05"; # Did you read the comment?
   };
@@ -129,7 +130,7 @@
     windowManager.i3 = {
       enable = true;
       package = pkgs.i3-gaps; # adds extra functionality
-      extraPackages = with pkgs; [
+      extraPackages = with pkgs.stable; [
         rofi
         polybar
         feh

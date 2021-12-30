@@ -1,18 +1,14 @@
-{ inputs, config, lib, pkgs, nixpkgs, stable, nur, ... }: {
-  nixpkgs.config = {
-    allowUnsupportedSystem = true;
-    allowBroken = false;
-    allowUnfree = true;
-    experimental-features = "nix-command flakes";
+{ inputs, config, lib, pkgs, nixpkgs, stable, ... }: {
+  nixpkgs = {
+    config = import ../config.nix;
+    overlays = [ ];
   };
-  nixpkgs.overlays = [ ];
   nix = {
-    package = pkgs.nixFlakes;
+    package = pkgs.stable.nix_2_4;
     extraOptions = ''
       keep-outputs = true
       keep-derivations = true
-      allowUnfree = true
-      ${lib.optionalString (config.nix.package == pkgs.nixFlakes)
+      ${lib.optionalString (config.nix.package == pkgs.stable.nix_2_4)
       "experimental-features = nix-command flakes"}
     '';
     useSandbox = true;
@@ -29,12 +25,10 @@
     readOnlyStore = true;
     nixPath = builtins.map
       (source: "${source}=/etc/${config.environment.etc.${source}.target}") [
-        "home-manager"
-        "nixpkgs"
-        #"small"
-        "stable"
-        #"trunk"
-      ];
+      "home-manager"
+      "nixpkgs"
+      "stable"
+    ];
 
     registry = {
       nixpkgs = {

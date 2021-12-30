@@ -17,8 +17,7 @@
     compsize # btrfs util
     x11_ssh_askpass
     chkrootkit
-    #TODO: re-enable after unfree issue resolved
-    #veracrypt
+    veracrypt
     firmware-manager
   ];
 
@@ -125,8 +124,8 @@
     };
     windowManager.i3 = {
       enable = true;
-      package = pkgs.i3-gaps; # adds extra functionality
-      extraPackages = with pkgs; [
+      package = pkgs.stable.i3-gaps; # adds extra functionality
+      extraPackages = with pkgs.stable; [
         rofi
         polybar
         feh

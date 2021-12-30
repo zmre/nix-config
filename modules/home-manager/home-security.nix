@@ -10,6 +10,7 @@
     arping
     dnsenum
     dnsrecon
+    enum4linux-ng
     fierce
     fping
     hping

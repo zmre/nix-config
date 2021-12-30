@@ -213,7 +213,7 @@ require('lualine').setup {
         lualine_z = {
             {
                 'diagnostics',
-                sources = {'nvim_lsp'},
+                sources = {'nvim_diagnostic'},
                 -- displays diagnostics from defined severity
                 sections = {'error', 'warn'}, -- 'info', 'hint'},}}
                 color_error = "#E06C75", -- changes diagnostic's error foreground color
@@ -227,12 +227,19 @@ require('lualine').setup {
 -- LSP stuff - minimal with defaults for now
 local lspconfig = require("lspconfig")
 lspconfig.rust_analyzer.setup {}
-lspconfig.tsserver.setup {}
+lspconfig.tsserver.setup {
+    -- Needed for inlayHints. Merge this table with your settings or copy
+    -- it from the source if you want to add your own init_options.
+    -- init_options = require("nvim-lsp-ts-utils").init_options
+}
 lspconfig.sumneko_lua.setup {}
 lspconfig.rnix.setup {}
-require'lspsaga'.init_lsp_saga()
+-- temporarily disabled due to bugs 2021-12
+-- require'lspsaga'.init_lsp_saga()
+-- temporary replacement for saga:
+require'nvim-lightbulb'.update_lightbulb {}
 require"lsp_signature".setup()
 require('lspkind').init({})
 require('rust-tools').setup({})
 require'nvim-treesitter.configs'.setup {highlight = {enable = true}}
-require("nvim-lsp-ts-utils").setup({})
+-- require("nvim-lsp-ts-utils").setup({})
