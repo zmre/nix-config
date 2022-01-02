@@ -238,8 +238,27 @@ in
         ",f" = "spawn firefox {url}";
         "xt" = "config-cycle tabs.show always never";
         "<f12>" = "inspector";
+        # search for link with / then hit enter to follow
+        "<return>" = "follow-selected";
       };
       prompt = { "<Ctrl-y>" = "prompt-yes"; };
+      insert = {
+        "<Ctrl-h>" = "fake-key <Backspace>";
+        "<Ctrl-a>" = "fake-key <Home>";
+        "<Ctrl-e>" = "fake-key <End>";
+        "<Ctrl-b>" = "fake-key <Left>";
+        "<Mod1-b>" = "fake-key <Ctrl-Left>";
+        "<Ctrl-f>" = "fake-key <Right>";
+        "<Mod1-f>" = "fake-key <Ctrl-Right>";
+        "<Ctrl-p>" = "fake-key <Up>";
+        "<Ctrl-n>" = "fake-key <Down>";
+        "<Mod1-d>" = "fake-key <Ctrl-Delete>";
+        "<Ctrl-d>" = "fake-key <Delete>";
+        "<Ctrl-w>" = "fake-key <Ctrl-Backspace>";
+        "<Ctrl-u>" = "fake-key <Shift-Home><Delete>";
+        "<Ctrl-k>" = "fake-key <Shift-End><Delete>";
+        "<Ctrl-x><Ctrl-e>" = "open-editor";
+      };
     };
     settings = {
       confirm_quit = [ "downloads" ]; # only confirm if downloads in progress
@@ -249,6 +268,8 @@ in
       content.default_encoding = "utf-8";
       content.geolocation = false;
       content.cookies.accept = "no-3rdparty";
+      # might break some sites; stops fingerprinting
+      content.canvas_reading = false;
       content.webrtc_ip_handling_policy = "default-public-interface-only";
       content.javascript.can_access_clipboard = true;
       content.site_specific_quirks.enabled = false;
@@ -270,7 +291,6 @@ in
       completion.shrink = true;
       colors.webpage.preferred_color_scheme = "dark";
       colors.webpage.darkmode.enabled = true;
-      colors.tabs.bar.bg = "#333333";
       colors.webpage.bg = "black";
       statusbar.widgets = [ "progress" "keypress" "url" "history" ];
       tabs.position = "left";
@@ -345,6 +365,20 @@ in
       gh = "https://github.com/?q={}";
       yt = "https://www.youtube.com/results?search_query={}";
     };
+    extraConfig = ''
+      # stolen from reddit; will block or allow skip of ads on youtube
+      from qutebrowser.api import interceptor
+
+      def filter_yt(info: interceptor.Request):
+          """Block the given request if necessary."""
+          url = info.request_url
+          if (url.host() == 'www.youtube.com' and url.path() == '/get_video_info' and '&adformat=' in url.query()):
+              info.block()
+
+      interceptor.register(filter_yt)
+
+      ${builtins.readFile ./dotfiles/qutebrowser-theme-onedark.py}
+    '';
   };
 
   # Backup browser for when Qutebrowser doesn't work as expected
