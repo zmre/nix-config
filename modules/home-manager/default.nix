@@ -20,6 +20,7 @@ let
     ueberzug # for terminal image previews
     glow # view markdown file or dir
     mdcat # colorize markdown
+    neofetch # display key software/version info in term
     vimv # shell script to bulk rename
     html2text
     bottom
