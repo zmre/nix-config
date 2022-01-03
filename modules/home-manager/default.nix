@@ -494,7 +494,6 @@ in
       #nvim-lsp-ts-utils # typescript lsp
       trouble-nvim # navigate all warnings and errors in quickfix-like window
       neoformat # autoformat on save, if formatter found
-      statix # lint nix files
 
       # UI #################################################
       #onedarkpro-nvim # colorscheme
@@ -906,7 +905,7 @@ in
         extraConfig = ''
           set -g @resurrect-strategy-nvim 'session'
           set -g @resurrect-processes ': all:'
-            set - g @resurrect-capture-pane-contents 'on'
+          set -g @resurrect-capture-pane-contents 'on'
         '';
       }
     ];
