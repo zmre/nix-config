@@ -34,6 +34,9 @@ in
     spotify-qt
     slack
     discord
+    ueberzug
+    ytfzf
+    djvulibre
   ];
   gtk = {
     enable = true;

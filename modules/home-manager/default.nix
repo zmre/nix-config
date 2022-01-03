@@ -8,11 +8,16 @@ let
     ripgrep
     curl
     atool
+    unzip
     file
     ranger
     jq
     du-dust
-    lf # file explorer
+    lynx
+    sourceHighlight # for lf preview
+    ffmpegthumbnailer # for lf preview
+    pandoc # for lf preview
+    imagemagick # for lf preview
     highlight # code coloring in lf
     poppler_utils # for pdf2text in lf
     mediainfo # used by lf
@@ -160,10 +165,6 @@ in
     ./dotfiles/nvim/lua/plugins.lua;
   home.file.".config/nvim/vim/colors.vim".source =
     ./dotfiles/nvim/vim/colors.vim;
-  home.file.".config/lf/lfrc".source = ./dotfiles/lfrc;
-  home.file.".config/lf/previewer.sh".source = ./dotfiles/previewer.sh;
-  home.file.".config/lf/pager.sh".source = ./dotfiles/pager.sh;
-  home.file.".config/lf/lficons.sh".source = ./dotfiles/lficons.sh;
   home.file.".wallpaper.jpg".source = ./wallpaper/castle2.jpg;
   home.file.".lockpaper.png".source = ./wallpaper/kali.png;
   #home.file.".tmux.conf".source =
@@ -347,6 +348,7 @@ in
       gr = "https://goodreads.com/";
       mg = "https://mail.google.com/";
       mp = "https://mail.protonmail.com/";
+      po = "https://getpocket.com/my-list";
     };
     searchEngines = {
       DEFAULT = "https://duckduckgo.com/?q={}&ia=web";
@@ -580,6 +582,7 @@ in
     enableCompletion = true;
     enableAutosuggestions = true;
     enableSyntaxHighlighting = true;
+    enableVteIntegration = true;
     history = {
       expireDuplicatesFirst = true;
       ignoreSpace = true;
@@ -677,6 +680,7 @@ in
         file = "p10k.zsh";
       }
       {
+        # lets me use zsh as the shell in a nix-shell environment
         name = "zsh-nix-shell";
         file = "nix-shell.plugin.zsh";
         src = pkgs.fetchFromGitHub {
@@ -710,6 +714,7 @@ in
       llt = "exa --icons --git-ignore --git -F --extended -l -T";
       fd = "\\fd -H -t d"; # default search directories
       f = "\\fd -H"; # default search this dir for files ignoring .gitignore etc
+      lf = "~/.config/lf/lfimg";
       nixosedit =
         "nvim $(realpath /etc/nixos/configuration.nix) ; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.#";
       nixedit =
@@ -720,6 +725,96 @@ in
   };
 
   programs.exa.enable = true;
+  # my prefered file explorer; mnemonic: list files
+  programs.lf = {
+    enable = true;
+    settings = {
+      icons = true;
+      incsearch = true;
+      ifs = "\n";
+      findlen = 2;
+      scrolloff = 3;
+      drawbox = true;
+      promptfmt =
+        "\\033[1;38;5;51m[\\033[38;5;39m%u\\033[38;5;51m@\\033[38;5;39m%h\\033[38;5;51m] \\033[0;38;5;49m%w/\\033[38;5;48m%f\\033[0m";
+    };
+    extraConfig = ''
+      set incfilter
+      set mouse
+      set truncatechar ⋯
+      set cleaner ~/.config/lf/cls.sh
+      set previewer ~/.config/lf/pv.sh
+    '';
+    # NOTE: some weird syntax below. let me explain. if you have a ${} inside a quote, you escape this way:
+    # "\${escaped}"
+    # ''blah''${escaped}blah''
+    # So you use double apostrophe to escape the ${. Weird but effective. See 
+    # https://nixos.org/guides/nix-pills/basics-of-language.html#idm140737320582880
+    commands = {
+      "fd_dir" = ''
+        ''${{
+                res="$(\fd -H -t d | fzy -l 20 2>/dev/tty | sed 's|\\|\\\\|g;s/"/\\"/g')"
+                [ ! -z "$res" ] && lf -remote "send $id cd \"$res\""
+              }}'';
+
+      "f_file" = ''
+        ''${{
+                res="$(\fd -H | fzy -l 20 2>/dev/tty | sed 's|\\|\\\\|g;s/"/\\"/g')"
+                [ ! -z "$res" ] && lf -remote "send $id select \"$res\""
+              }}'';
+      z = ''
+        ''${{
+                res="$(zoxide query --exclude "$PWD" -- "$1")"
+                [ ! -z "$res" ] && lf -remote "send $id cd \"$res\""
+              }}'';
+      # Purpose of this is to allow for opening multiple selected files. Default only works on one.
+      # Default will use data from mimetype associations.
+      # TODO: make cross platform
+      # Note: this gets overridden when in selection-path (file dialog) mode
+      open =
+        "\${{ for f in $fx; do xdg-open $f > /dev/null 2> /dev/null & done;; }}";
+
+      # for use as file chooser
+      printfx = "\${{echo $fx}}";
+
+      "vi-rename" = ''
+        ''${{
+                vimv $fx
+                lf -remote "send $id echo '$(cat /tmp/.vimv-latest)'"
+                lf -remote 'send load'
+                lf -remote 'send clear'
+              }}'';
+      "fzf_search" = ''
+        ''${{
+            res="$( \
+                RG_PREFIX="${pkgs.ripgrep}/bin/rg --column --line-number --no-heading --color=always --smart-case "
+                FZF_DEFAULT_COMMAND="$RG_PREFIX \'\' " fzf --bind "change:reload:$RG_PREFIX {q} || true" --ansi --layout=reverse --header 'Search in files' | cut -d':' -f1
+            )"
+            [ ! -z "$res" ] && lf -remote "send $id select \"$res\""
+        }}'';
+    };
+    keybindings = {
+      "." = "set hidden!";
+      i = "!~/.config/lf/pager.sh $f"; # mnemonic: info
+      # use the system open command
+      o = "open";
+      "<c-z>" = "$ kill -STOP $PPID";
+      "gr" = "fzf_search"; # ripgrep search
+      "gd" = "fd_dir"; # mnemonic: go find dir
+      "gf" = "f_file"; # mnemonic: go find file
+      "gz" = "push :z<space>"; # mnemonic: go zoxide
+      "R" = "vi-rename";
+      "<enter>" = ":printfx; quit";
+    };
+    #set previewer ~/.config/lf/previewer.sh
+
+  };
+  home.file.".config/lf/lfimg".source = ./dotfiles/lf/lfimg;
+  home.file.".config/lf/pv.sh".source = ./dotfiles/lf/pv.sh;
+  home.file.".config/lf/cls.sh".source = ./dotfiles/lf/cls.sh;
+  #home.file.".config/lf/previewer.sh".source = ./dotfiles/lf/previewer.sh;
+  home.file.".config/lf/pager.sh".source = ./dotfiles/lf/pager.sh;
+  home.file.".config/lf/lficons.sh".source = ./dotfiles/lf/lficons.sh;
   programs.git = {
     enable = true;
     userName = "Patrick Walsh";
@@ -809,8 +904,8 @@ in
         plugin = tmuxPlugins.resurrect;
         extraConfig = ''
           set -g @resurrect-strategy-nvim 'session'
-          set -g @resurrect-processes ':all:'
-          set -g @resurrect-capture-pane-contents 'on'
+          set -g @resurrect-processes ': all:'
+            set - g @resurrect-capture-pane-contents 'on'
         '';
       }
     ];
