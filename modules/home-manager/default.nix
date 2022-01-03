@@ -48,7 +48,7 @@ let
   # live dangerously here with unstable
   luaPkgs = with pkgs; [ sumneko-lua-language-server luaformatter ];
   # using unstable in my home profile for nix commands
-  nixEditorPkgs = with pkgs; [ nix nixfmt nixpkgs-fmt rnix-lsp ];
+  nixEditorPkgs = with pkgs; [ nix statix nixfmt nixpkgs-fmt rnix-lsp ];
   # live dangerously here with unstable
   rustPkgs = with pkgs; [ cargo rustfmt rust-analyzer rustc ];
   # live dangerously here with unstable
@@ -494,6 +494,7 @@ in
       #nvim-lsp-ts-utils # typescript lsp
       trouble-nvim # navigate all warnings and errors in quickfix-like window
       neoformat # autoformat on save, if formatter found
+      statix # lint nix files
 
       # UI #################################################
       #onedarkpro-nvim # colorscheme
@@ -772,7 +773,7 @@ in
       # TODO: make cross platform
       # Note: this gets overridden when in selection-path (file dialog) mode
       open =
-        "\${{ for f in $fx; do xdg-open $f > /dev/null 2> /dev/null & done;; }}";
+        ''''${{ for f in $fx; do xdg-open "$f" 2>&1 > /dev/null ; done }}'';
 
       # for use as file chooser
       printfx = "\${{echo $fx}}";

@@ -91,6 +91,38 @@ case "$1" in
       draw "$cache"
     fi
     ;;
+  # specifying extensions is faster than relying on mime-type below
+  README.*|CONTRIBUTING|*.c|*.cc|*.cpp|*.css|*.go|*.h|*.hh|*.hpp|*.hs|*.html|*.java|*.js|*.json|*.lua|*.php|*.py|*.rb|*.scala|*.ts|*.jsx|*.tsx|*.sh|*.pl|*.rs|*.json|*.toml|*.conf|*.vim|*.bash|*.zsh|*.nix) 
+    source-highlight -q --outlang-def=esc.outlang --style-file=esc.style -i "$1" || bat --color=always --paging=never "$1"
+    exit 0
+    ;;
+  # specifying extensions is faster than relying on mime-type below
+  *.jpg|*.jpeg|*.gif|*.bmp|*.tif|*.tiff|*.png) 
+    if [ -n "$FIFO_UEBERZUG" ]; then
+      orientation="$(identify -format '%[EXIF:Orientation]\n' -- "$1")"
+      if [ -n "$orientation" ] && [ "$orientation" != 1 ]; then
+        cache="$(hash "$1").jpg"
+        cache "$cache"
+        convert -- "$1" -auto-orient "$cache"
+        draw "$cache"
+      else
+        draw "$1"
+      fi
+    else
+      exiftool "$1"
+    fi
+    ;;
+  # specifying extensions is faster than relying on mime-type below
+  *.mjpg|*.mjpeg|*.pbm|*.pgm|*.ppm|*.tga|*.xbm|*.xpm|*.svg|*.svgz|*.mng|*.pcx|*.mov|*.mpg|*.mpeg|*.m2v|*.mkv|*.webm|*.ogm|*.mp4|*.m4v|*.mp4v|*.vob|*.qt|*.nuv|*.wmv|*.asf|*.rm|*.rmvb|*.flc|*.avi|*.fli|*.flv|*.gl|*.dl|*.xcf|*.xwd|*.yuv|*.cgm|*.emf|*.ogv|*.ogx|*.aac|*.au|*.flac|*.m4a|*.mid|*.midi|*.mka|*.mp3|*.mpc|*.ogg|*.ra|*.wav|*.oga|*.opus|*.spx|*.xspf) 
+    if [ -n "$FIFO_UEBERZUG" ]; then
+      cache="$(hash "$1").jpg"
+      cache "$cache"
+      ffmpegthumbnailer -i "$1" -o "$cache" -s 0
+      draw "$cache"
+    else
+      mediainfo "$1"
+      exit 0
+    fi
 esac
 
 case "$(file -Lb --mime-type -- "$1")" in
@@ -99,8 +131,6 @@ case "$(file -Lb --mime-type -- "$1")" in
     exit 0
     ;;
   text/*)
-    #highlight -q -O ansi -- "$1" || cat -- "$1"
-    #pygmentize -f terminal -- "$1" || cat -- "$1"
     source-highlight -q --outlang-def=esc.outlang --style-file=esc.style -i "$1" || bat --color=always --paging=never "$1"
     exit 0
     ;;
@@ -115,6 +145,9 @@ case "$(file -Lb --mime-type -- "$1")" in
       else
         draw "$1"
       fi
+    else
+      exiftool "$1"
+      exit 0
     fi
     ;;
   video/*)
@@ -123,6 +156,9 @@ case "$(file -Lb --mime-type -- "$1")" in
       cache "$cache"
       ffmpegthumbnailer -i "$1" -o "$cache" -s 0
       draw "$cache"
+    else
+      mediainfo "$1"
+      exit 0
     fi
     ;;
 esac
