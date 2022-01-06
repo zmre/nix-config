@@ -57,6 +57,7 @@
           "render"
           "networkmanager"
           "docker"
+          "wireshark"
         ];
         #hashedPassword = "generate with: mkpasswd -m sha-512";
       };

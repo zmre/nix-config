@@ -2,17 +2,24 @@
 let
   homeDir = config.home.homeDirectory;
   defaultPkgs = with pkgs.stable; [
+    # filesystem
     fd
+    ripgrep
+    du-dust
     fzy
     tree-sitter
-    ripgrep
     curl
+
+    # compression
     atool
     unzip
+    gzip
+    xz
+    zip
+
+    # file viewers
     file
-    ranger
     jq
-    du-dust
     lynx
     sourceHighlight # for lf preview
     ffmpegthumbnailer # for lf preview
@@ -22,16 +29,17 @@ let
     poppler_utils # for pdf2text in lf
     mediainfo # used by lf
     exiftool # used by lf
-    ueberzug # for terminal image previews
+    exif
     glow # view markdown file or dir
     mdcat # colorize markdown
+    html2text
+
     neofetch # display key software/version info in term
     vimv # shell script to bulk rename
-    html2text
-    bottom
-    exif
+    btop
     niv # TODO: do I need this now that I'm using flakes?
-    youtube-dl
+    #youtube-dl replaced by yt-dlp
+    yt-dlp
     vulnix # check for live nix apps that are listed in NVD
     tickrs # track stocks
   ];
@@ -180,8 +188,22 @@ in
         "plain"; # no line numbers, git status, etc... more like cat with colors
     };
   };
-  programs.mpv.enable = true;
-  programs.mpv.scripts = with pkgs.mpvScripts; [ thumbnail sponsorblock ];
+  programs.mpv = {
+    enable = true;
+    scripts = with pkgs.mpvScripts; [ thumbnail sponsorblock ];
+    config = {
+      # disable on-screen controller -- else I get a message saying I have to add this
+      osc = false;
+      # Use a large seekable RAM cache even for local input.
+      cache = true;
+      save-position-on-quit = false;
+      x11-bypass-compositor = true;
+      #ytdl-format = "bestvideo+bestaudio";
+      # have mpv use yt-dlp instead of youtube-dl
+      script-opts-append = "ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp";
+    };
+    defaultProfiles = [ "gpu-hq" ];
+  };
   programs.nix-index.enable = true;
   programs.direnv = {
     enable = true;
@@ -235,9 +257,13 @@ in
     keyBindings = {
       normal = {
         ",m" = "spawn mpv {url}";
-        ",M" = "hint links spawn mpv {hint-url}";
-        ",d" = "spawn youtube-dl -o ~/Downloads/%(title)s.%(ext)s {url}')";
-        ",f" = "spawn firefox {url}";
+        ",M" = ''hint links spawn mpv "{hint-url}"'';
+        ",d" = ''spawn yt-dlp -o "~/Downloads/%(title)s.%(ext)s" "{url}"'';
+        ",D" = ''
+          hint links spawn yt-dlp -o "~/Downloads/%(title)s.%(ext)s" "{url}"'';
+        ",f" = ''spawn firefox "{url}"'';
+        # get current page as markdown link
+        ",ym" = "yank inline [{title}]({url:pretty})";
         "xt" = "config-cycle tabs.show always never";
         "<f12>" = "inspector";
         # search for link with / then hit enter to follow

@@ -27,14 +27,19 @@ let
 in
 {
   home.packages = with pkgs.stable; [
+    # wm support
     xss-lock
-    i3-auto-layout
-    keepassxc
     syncthingtray-minimal
+    #i3-auto-layout # should change default split; not working
+
+    # apps
+    keepassxc
     spotify-qt
     slack
     discord
-    ueberzug
+
+    # terminal linux-only apps
+    ueberzug # for terminal image previews
     ytfzf
     djvulibre
   ];
@@ -51,11 +56,23 @@ in
       #name = "Breeze Dark";
       #package = pkgs.gnome-breeze;
     };
+    theme = {
+      package = pkgs.matcha-gtk-theme;
+      name = "Matcha-dark-azul";
+      #name = "Adwaita-dark";
+      #
+    };
   };
   xdg.mimeApps.enable = true;
   xdg.mimeApps.associations.added = associations;
   xdg.mimeApps.defaultApplications = associations;
 
+  services.udiskie = {
+    enable = true; # automount disks
+    automount = true;
+    notify = true;
+    tray = "auto";
+  };
   services.dunst.enable = true; # notification daemon
   # top bar
   services.polybar = rec {
@@ -499,9 +516,17 @@ in
         always = true;
         notification = false;
       }
+      {
+        command = "blueman-tray";
+        always = true;
+        notification = false;
+      }
       { command = "qutebrowser"; }
       { command = "alacritty"; }
-      { command = "keepassxc"; }
+      {
+        command = "keepassxc";
+        always = true;
+      }
     ];
   };
   # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
