@@ -33,6 +33,7 @@ let
     glow # view markdown file or dir
     mdcat # colorize markdown
     html2text
+    pkgs.zk # note finder
 
     neofetch # display key software/version info in term
     vimv # shell script to bulk rename
@@ -42,6 +43,14 @@ let
     yt-dlp
     vulnix # check for live nix apps that are listed in NVD
     tickrs # track stocks
+    bandwhich # bandwidth monitor by process
+    bmon # bandwidth monitor by interface
+    caddy # local filesystem server
+    aspell # spell checker
+    aria # cli downloader
+    kalker # cli calculator; alt. to bc and calc
+    nix-tree # explore dependencies
+    nix-prefetch-git # used to get sha/rev
   ];
   cPkgs = with pkgs.stable; [
     automake
@@ -69,6 +78,16 @@ let
   ];
   networkPkgs = with pkgs.stable; [ traceroute mtr iftop ];
   guiPkgs = with pkgs; [ neovide ];
+
+  zk-nvim = pkgs.vimUtils.buildVimPlugin {
+    name = "zk-nvim";
+    src = pkgs.fetchFromGitHub {
+      owner = "mickael-menu";
+      repo = "zk-nvim";
+      rev = "58260434219535536f9eb03fffbbafd2eb0bc997";
+      sha256 = "0csl87vz8m33h0hh9fnjf97kvg7fh0qkchr22aaw18mslwidi2pj";
+    };
+  };
 
 in
 {
@@ -184,6 +203,7 @@ in
     enable = true;
     config = {
       theme = "TwoDark";
+      italic-text = "always";
       style =
         "plain"; # no line numbers, git status, etc... more like cat with colors
     };
@@ -217,7 +237,7 @@ in
   programs.taskwarrior = {
     enable = true;
     colorTheme = "dark-256";
-    dataLocation = "$HOME/.task";
+    dataLocation = "~/.task";
     config = {
       urgency.user.tag.networking.coefficient = -10.0;
       uda.reviewed.type = "date";
@@ -267,7 +287,7 @@ in
         "xt" = "config-cycle tabs.show always never";
         "<f12>" = "inspector";
         # search for link with / then hit enter to follow
-        "<return>" = "follow-selected";
+        "<return>" = "selection-follow";
       };
       prompt = { "<Ctrl-y>" = "prompt-yes"; };
       insert = {
@@ -307,6 +327,7 @@ in
       content.autoplay = false;
       scrolling.smooth = true;
       auto_save.session = true; # remember open tabs
+      session.lazy_restore = true;
       # if input is focused on tab load, allow typing
       input.insert_mode.auto_load = true;
       # exit insert mode if clicking on non editable item
@@ -558,6 +579,11 @@ in
       nvim-autopairs # balances parens as you type
       vim-emoji
 
+      # Notes
+      #vimwiki
+      #taskwiki
+      zk-nvim
+
       # Misc
       popup-nvim # dependency of some other plugins
       plenary-nvim # Library for lua plugins; used by many plugins here
@@ -747,6 +773,7 @@ in
         "nvim ~/.config/nixpkgs/home.nix ; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.#";
       qp = ''
         qutebrowser --temp-basedir --set content.private_browsing true --set colors.tabs.bar.bg "#552222" --config-py "$HOME/.config/qutebrowser/config.py" --qt-arg name "qp,qp"'';
+      calc = "kalker";
     };
   };
 
@@ -797,8 +824,8 @@ in
       # Default will use data from mimetype associations.
       # TODO: make cross platform
       # Note: this gets overridden when in selection-path (file dialog) mode
-      open =
-        ''''${{ for f in $fx; do xdg-open "$f" 2>&1 > /dev/null ; done }}'';
+      open = ''
+        &{{ for f in $fx; do xdg-open "$f" 2>&1 > /dev/null || open "$f" 2>&1 > /dev/null" ; done }}'';
 
       # for use as file chooser
       printfx = "\${{echo $fx}}";

@@ -26,6 +26,7 @@
     sslscan
     tcpflow
     theharvester
+    # wireshark moved to nixos config
     # pick one of wireshark or wireshark-cli
     wireshark
     #wireshark-cli

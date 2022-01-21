@@ -30,6 +30,7 @@ in
     # wm support
     xss-lock
     syncthingtray-minimal
+    arandr
     #i3-auto-layout # should change default split; not working
 
     # apps
@@ -37,11 +38,16 @@ in
     spotify-qt
     slack
     discord
+    nomacs
 
     # terminal linux-only apps
     ueberzug # for terminal image previews
-    ytfzf
+    ytfzf # terminal youtube search/launch
     djvulibre
+
+    # media center
+    #(pkgs.kodi.passthru.withPackages
+    #(kodiPkgs: with kodiPkgs; [ netflix youtube pvr-hdhomerun ]))
   ];
   gtk = {
     enable = true;

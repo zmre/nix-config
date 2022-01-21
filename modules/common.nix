@@ -48,6 +48,7 @@
   environment.sessionVariables = {
     LANGUAGE = "en_US.UTF-8";
     LC_ALL = "en_US.UTF-8";
+    ZK_NOTEBOOK_DIR = "~/Notes";
   };
   environment.pathsToLink = [ "/libexec" ];
 }

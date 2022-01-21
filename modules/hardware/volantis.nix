@@ -21,9 +21,10 @@
     autoUpgrade.enable = false;
   };
 
-  systemd.sleep.extraConfig = ''
-    AllowSuspendThenHibernate=yes
-  '';
+  # Leaving this here, but since enabling, lots of power drain when the laptop is sleeping
+  #systemd.sleep.extraConfig = ''
+  #AllowSuspendThenHibernate=yes
+  #'';
 
   powerManagement = {
     enable = true;
@@ -32,9 +33,9 @@
   # an alternative to above? is this needed?
   #services.auto-cpufreq.enable = true;
   # Quick suspend if power button pushed
-  services.logind.extraConfig = ''
-    HandlePowerKey=suspend
-  '';
+  #services.logind.extraConfig = ''
+  #HandlePowerKey=suspend
+  #'';
 
   networking = {
     hostName = "volantis";

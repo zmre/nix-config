@@ -100,6 +100,9 @@
     };
   };
 
+  # needed here instead of home-manager so we can run as a user and not root
+  programs.wireshark.enable = true;
+
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
@@ -111,8 +114,8 @@
     displayManager.lightdm.enable = true;
     # Keyboard
     layout = "us";
-    autoRepeatDelay = 500;
-    autoRepeatInterval = 50;
+    autoRepeatDelay = 275;
+    autoRepeatInterval = 20;
     # Enable touchpad support
     libinput = {
       enable = true;

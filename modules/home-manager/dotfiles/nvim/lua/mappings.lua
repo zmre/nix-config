@@ -148,7 +148,9 @@ vim.api.nvim_set_keymap('c', '%%',
 -- gx is a built-in to open URLs under the cursor, but when
 -- not using netrw, it doesn't work right. Or maybe it's just me
 -- but anyway this command works great.
-vim.api.nvim_set_keymap('', 'gx', ":sil !open <c-r><c-a><cr>", options)
+vim.api.nvim_set_keymap('', 'gx',
+                        ":!open \"<c-r><c-a><cr>\" || xdg-open \"<c-r><c-a><cr>\"",
+                        options)
 
 -- open/close folds with space bar
 vim.api.nvim_set_keymap('', '<Space>',
@@ -211,9 +213,11 @@ vim.api.nvim_set_keymap('!', '<leader>e',
                         options)
 
 local options = {noremap = true, silent = true}
+
 -- Move to previous/next
 vim.api.nvim_set_keymap('', '[b', ':BufferPrevious<CR>', options)
 vim.api.nvim_set_keymap('', ']b', ':BufferNext<CR>', options)
+
 -- Goto buffer in position...
 vim.api.nvim_set_keymap('', '[1', ':BufferGoto 1<CR>', options)
 vim.api.nvim_set_keymap('', '[2', ':BufferGoto 2<CR>', options)
@@ -252,7 +256,10 @@ vim.api.nvim_set_keymap('', ']\\', ':BufferPick<CR>', options)
 vim.cmd([[command StartGrammar lua require("plugins.grammarous").check()]])
 vim.api.nvim_set_keymap('', '<leader>gg', ':StartGrammar<CR>', options)
 
--- Hop
-vim.api.nvim_set_keymap('', '}', ":HopWord<CR>", {silent = true})
-vim.api.nvim_set_keymap('', '{', ":HopChar1<CR>", {silent = true})
+-- Pane navigation integrated with tmux
+vim.api.nvim_set_keymap('', '<c-h>', ':TmuxNavigateLeft<cr>', {silent = true})
+vim.api.nvim_set_keymap('', '<c-j>', ':TmuxNavigateDown<cr>', {silent = true})
+vim.api.nvim_set_keymap('', '<c-k>', ':TmuxNavigateUp<cr>', {silent = true})
+vim.api.nvim_set_keymap('', '<c-l>', ':TmuxNavigateRight<cr>', {silent = true})
+-- add mapping for :TmuxNavigatePrevious ? c-\, the default, used by toggleterm
 

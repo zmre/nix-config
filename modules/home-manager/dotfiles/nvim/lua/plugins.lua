@@ -64,6 +64,14 @@ require('telescope').setup {
 }
 require'telescope'.load_extension('fzy_native')
 
+-- Change project directory using local cd only
+vim.g.rooter_cd_cmd = 'lcd'
+-- Look for these files/dirs as hints
+vim.g.rooter_patterns = {
+    '.git', '_darcs', '.hg', '.bzr', '.svn', 'Makefile', 'package.json', '.zk',
+    'Cargo.toml', 'build.sbt', 'Package.swift', 'Makefile.in'
+}
+
 require("gitsigns").setup {
     signs = {
         add = {
@@ -190,11 +198,77 @@ vim.api.nvim_exec([[
   augroup END
 ]], false)
 
+vim.g.tmux_navigator_no_mappings = 1
+
 require("toggleterm").setup {
     open_mapping = [[<c-\>]],
+    insert_mappings = true, -- from normal or insert mode
+    start_in_insert = true,
+    hide_numbers = true,
     direction = 'vertical',
+    size = function(term) return vim.o.columns * 0.3 end,
     close_on_exit = true
 }
+vim.api.nvim_set_keymap('t', [[<C-\]], "<Cmd>ToggleTermToggleAll<cr>",
+                        {noremap = true})
+
+require("zk").setup({
+    picker = "telescope",
+    -- automatically attach buffers in a zk notebook that match the given filetypes
+    lsp = {
+        auto_attach = {enabled = true, filetypes = {"markdown", "vimwiki"}},
+        config = {
+            on_attach = function(client, bufnr)
+                local opts = {noremap = true, silent = true}
+                -- Create a new note after asking for its title.
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>zn",
+                                            "<Cmd>ZkNew { title = vim.fn.input('Title: ') }<CR>",
+                                            opts)
+                -- Open notes.
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>zo",
+                                            "<Cmd>ZkNotes<CR>", opts)
+                -- Open notes associated with the selected tags.
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>zt",
+                                            "<Cmd>ZkTags<CR>", opts)
+
+                -- Search for the notes matching a given query.
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>zf",
+                                            "<Cmd>ZkNotes { match = vim.fn.input('Search: ') }<CR>",
+                                            opts)
+                -- Search for the notes matching the current visual selection.
+                vim.api.nvim_buf_set_keymap(bufnr, "v", "<leader>zf",
+                                            ":'<,'>ZkMatch<CR>", opts)
+                -- Open the link under the caret.
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "<CR>",
+                                            "<Cmd>lua vim.lsp.buf.definition()<CR>",
+                                            opts)
+                -- Create the note in the same directory as the current buffer after asking for title
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>znt",
+                                            "<Cmd>ZkNew { dir = vim.fn.expand('%:p:h'), title = vim.fn.input('Title: ') }<CR>",
+                                            opts)
+                -- Create a new note in the same directory as the current buffer, using the current selection for title.
+                vim.api.nvim_buf_set_keymap(bufnr, "v", "<leader>znt",
+                                            ":'<,'>ZkNewFromTitleSelection { dir = vim.fn.expand('%:p:h') }<CR>",
+                                            opts)
+                -- Open notes linking to the current buffer.
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>zb",
+                                            "<Cmd>lua vim.lsp.buf.references()<CR>",
+                                            opts)
+                -- Open notes linked by the current buffer.
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>zl",
+                                            "<Cmd>ZkLinks<CR>", opts)
+                -- Preview a linked note.
+                vim.api.nvim_buf_set_keymap(bufnr, "n", "K",
+                                            "<Cmd>lua vim.lsp.buf.hover()<CR>",
+                                            opts)
+                -- Open the code actions for a visual selection.
+                vim.api.nvim_buf_set_keymap(bufnr, "v", "<leader>za",
+                                            ":'<,'>lua vim.lsp.buf.range_code_action()<CR>",
+                                            opts)
+            end
+        }
+    }
+})
 
 require('lualine').setup {
     options = {
@@ -224,22 +298,73 @@ require('lualine').setup {
     }
 }
 
+local function attached(client, bufnr)
+    local function buf_set_keymap(...)
+        vim.api.nvim_buf_set_keymap(bufnr, ...)
+    end
+    local opts = {noremap = true, silent = false}
+
+    print("LSP attached")
+
+    -- Create a new note after asking for its title.
+    buf_set_keymap('', "#7", "<cmd>SymbolsOutline<CR>", opts)
+    buf_set_keymap('!', "#7", "<cmd>SymbolsOutline<CR>", opts)
+    buf_set_keymap('', '<leader>gs', '<cmd>SymbolsOutline<CR>', opts)
+    buf_set_keymap('', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+    buf_set_keymap('', "gD", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
+    -- buf_set_keymap('', "gD", ":Telescope lsp_implementations<CR>", opts)
+    buf_set_keymap('', "<leader>gd", "<Cmd>lua vim.lsp.buf.definition()<CR>",
+                   opts)
+    buf_set_keymap('', "<leader>fsd",
+                   "<cmd>lua vim.lsp.buf.document_symbol()<CR>", opts)
+    buf_set_keymap('', "<leader>fsw",
+                   "<cmd>lua vim.lsp.buf.workspace_symbol()<CR>", opts)
+    buf_set_keymap('n', "<leader>gf", "<cmd>lua vim.lsp.buf.code_action()<CR>",
+                   opts)
+    buf_set_keymap('v', "<leader>gf",
+                   "<cmd>lua vim.lsp.buf.range_code_action()<CR>", opts)
+    buf_set_keymap('', "<leader>gi", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
+    buf_set_keymap('', "<leader>gt",
+                   "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+    buf_set_keymap('', "<leader>ge",
+                   "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>",
+                   opts)
+    buf_set_keymap('', "<leader>q", ":TroubleToggle<CR>", opts)
+    buf_set_keymap('', "[e", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>", opts)
+    buf_set_keymap('', "]e", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
+    -- Set some keybinds conditional on server capabilities
+    if client.resolved_capabilities.document_formatting then
+        buf_set_keymap("n", "<leader>=",
+                       "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+    elseif client.resolved_capabilities.document_range_formatting then
+        buf_set_keymap("v", "<leader>=",
+                       "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+    elseif client.resolved_capabilities.rename then
+        buf_set_keymap('', "<leader>gr", "<cmd>lua vim.lsp.buf.rename()<CR>",
+                       opts)
+    end
+end
+
 -- LSP stuff - minimal with defaults for now
 local lspconfig = require("lspconfig")
-lspconfig.rust_analyzer.setup {}
+lspconfig.rust_analyzer.setup {on_attach = attached}
 lspconfig.tsserver.setup {
     -- Needed for inlayHints. Merge this table with your settings or copy
     -- it from the source if you want to add your own init_options.
     -- init_options = require("nvim-lsp-ts-utils").init_options
 }
-lspconfig.sumneko_lua.setup {}
-lspconfig.rnix.setup {}
--- temporarily disabled due to bugs 2021-12
+lspconfig.sumneko_lua.setup {
+    settings = {Lua = {diagnostics = {globals = {"vim"}}}},
+    on_attach = attached
+}
+lspconfig.rnix.setup {on_attach = attached}
+-- temporarily disabled due to bugs editing nix files 2021-12
 -- require'lspsaga'.init_lsp_saga()
 -- temporary replacement for saga:
 require'nvim-lightbulb'.update_lightbulb {}
 require"lsp_signature".setup()
 require('lspkind').init({})
-require('rust-tools').setup({})
+require('rust-tools').setup({server = {on_attach = attached}})
 require'nvim-treesitter.configs'.setup {highlight = {enable = true}}
 -- require("nvim-lsp-ts-utils").setup({})
+

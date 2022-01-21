@@ -14,6 +14,9 @@ M.defaults = function()
     -- vim.g.loaded_matchit = 0
     -- vim.g.loaded_matchparen = 0
     vim.g.loaded_spec = 0
+    vim.g.vim_markdown_no_default_key_mappings = 1
+    vim.g.markdown_folding = 1
+    vim.g.vim_markdown_auto_insert_bullets = 1
 
     opt.spell = true
     opt.spelllang = "en_us"
@@ -89,10 +92,11 @@ M.defaults = function()
     opt.number = false
     opt.relativenumber = false
     opt.completeopt = "menu,menuone,noselect" -- needed for autocompletion stuff
+    opt.conceallevel = 2
 
     -- Globals
     vim.g.vimsyn_embed = 'l' -- Highlight Lua code inside .vim files
-    vim.g.polyglot_disabled = {'markdown'}
+    -- vim.g.polyglot_disabled = {'markdown'}
     vim.g.foldlevelstart = 3
 
     -- map the leader key
@@ -104,6 +108,16 @@ M.defaults = function()
     vim.cmd('syn sync minlines=5000')
     vim.cmd('syntax on')
     vim.cmd('runtime vim/colors.vim')
+
+    -- Wiki syntax additions
+    vim.api.nvim_exec([[
+      " markdownWikiLink is a new region
+      syn region markdownWikiLink matchgroup=markdownLinkDelimiter start="\[\[" end="\]\]" contains=markdownUrl keepend oneline concealends
+      " markdownLinkText is copied from runtime files with 'concealends' appended
+      syn region markdownLinkText matchgroup=markdownLinkTextDelimiter start="!\=\[\%(\%(\_[^][]\|\[\_[^][]*\]\)*]\%( \=[[(]\)\)\@=" end="\]\%( \=[[(]\)\@=" nextgroup=markdownLink,markdownId skipwhite contains=@markdownInline,markdownLineStart concealends
+      " markdownLink is copied from runtime files with 'conceal' appended
+      syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")" contains=markdownUrl keepend contained conceal
+    ]], false)
 
     -- Brief highlight on yank
     vim.api.nvim_exec([[
