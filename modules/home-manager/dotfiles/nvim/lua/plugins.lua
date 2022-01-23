@@ -340,6 +340,15 @@ require("toggleterm").setup {
 vim.api.nvim_set_keymap('t', [[<C-\]], "<Cmd>ToggleTermToggleAll<cr>",
                         {noremap = true})
 
+vim.g.taskwiki_disable_concealcursor = 'yes'
+vim.g.taskwiki_markdown_syntax = 'markdown'
+vim.g.taskwiki_markup_syntax = 'markdown'
+vim.g.taskwiki_dont_fold = 1
+vim.g.taskwiki_task_path = '~/Notes/t'
+vim.g.taskwiki_data_location = '~/.task'
+vim.g.taskwiki_task_note_root = 't'
+vim.g.wiki_root = '~/Notes'
+
 require("zk").setup({
     picker = "telescope",
     -- automatically attach buffers in a zk notebook that match the given filetypes
@@ -348,24 +357,8 @@ require("zk").setup({
         config = {
             on_attach = function(_, bufnr)
                 local opts = {noremap = true, silent = true}
-                -- Create a new note after asking for its title.
-                vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>zn",
-                                            "<Cmd>ZkNew { title = vim.fn.input('Title: ') }<CR>",
-                                            opts)
-                -- Open notes.
-                vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>zo",
-                                            "<Cmd>ZkNotes<CR>", opts)
-                -- Open notes associated with the selected tags.
-                vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>zt",
-                                            "<Cmd>ZkTags<CR>", opts)
-
-                -- Search for the notes matching a given query.
-                vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>zf",
-                                            "<Cmd>ZkNotes { match = vim.fn.input('Search: ') }<CR>",
-                                            opts)
-                -- Search for the notes matching the current visual selection.
-                vim.api.nvim_buf_set_keymap(bufnr, "v", "<leader>zf",
-                                            ":'<,'>ZkMatch<CR>", opts)
+                -- key bindings for opening notes and creating notes moved to general mappings
+                -- these bindings only make sense inside an open note
                 -- Open the link under the caret.
                 vim.api.nvim_buf_set_keymap(bufnr, "n", "<CR>",
                                             "<Cmd>lua vim.lsp.buf.definition()<CR>",
@@ -430,7 +423,7 @@ local function attached(client, bufnr)
         vim.api.nvim_buf_set_keymap(bufnr, ...)
     end
     local opts = {noremap = true, silent = false}
-    if client.name == "tsserver" then
+    if client.name == "tsserver" or client.name == "rnix" then
         client.resolved_capabilities.document_formatting = false
     end
     print("LSP attached")
@@ -503,7 +496,9 @@ null_ls.setup {
     debug = false,
     sources = {
         formatting.lua_format, formatting.nixfmt, formatting.prettier.with {
-            extra_args = {"--no-semi", "--single-quote", "--jsx-single-quote"}
+            extra_args = {"--no-semi", "--single-quote", "--jsx-single-quote"},
+            disabled_filetypes = {"markdown"}
+
         }, formatting.rustfmt, diagnostics.eslint_d
     },
     on_attach = attached

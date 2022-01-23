@@ -99,9 +99,16 @@ let
       sha256 = "1ap3ijh64ynyxzbc62ijfkbwasv506i17pc65bh3w4dfpzn6rlpy";
     };
   };
-
-in
-{
+  vim-roam-task = pkgs.vimUtils.buildVimPluginFrom2Nix {
+    name = "vim-roam-task";
+    src = pkgs.fetchFromGitHub {
+      owner = "samgriesemer";
+      repo = "vim-roam-task";
+      rev = "ee293dee7daf220cbcf86fb1c8c39b7daaccf1aa";
+      sha256 = "1bgcqcx3fqgp84ll445b381mwg0w3gc6zmccfcibfrdgjwa7sfky";
+    };
+  };
+in {
   programs.home-manager.enable = true;
   home.enableNixpkgsReleaseCheck = false;
 
@@ -145,6 +152,7 @@ in
     TERMINAL = "alacritty";
     HOMEBREW_NO_AUTO_UPDATE = 1;
     #LIBVA_DRIVER_NAME="iHD";
+    ZK_NOTEBOOK_DIR = "${config.home.homeDirectory}/Notes";
   };
 
   home.file.".inputrc".text = ''
@@ -522,6 +530,9 @@ in
     enable = true;
     viAlias = true;
     vimAlias = true;
+    # solely needed for taskwiki/vim-roam-task
+    withPython3 = true;
+    extraPython3Packages = (ps: with ps; [ pynvim tasklib six ]);
     extraConfig = ''
       lua << 
           require('options').defaults()
@@ -588,8 +599,9 @@ in
       vim-emoji
 
       # Notes
-      vimwiki
-      taskwiki
+      #vimwiki
+      #taskwiki
+      vim-roam-task
       zk-nvim
 
       # Misc
@@ -917,11 +929,10 @@ in
       init.defaultBranch = "main";
       http.sslVerify = true;
       commit.verbose = true;
-      credential.helper =
-        if pkgs.stdenvNoCC.isDarwin then
-          "osxkeychain"
-        else
-          "cache --timeout=10000000";
+      credential.helper = if pkgs.stdenvNoCC.isDarwin then
+        "osxkeychain"
+      else
+        "cache --timeout=10000000";
       diff.algorithm = "patience";
       protocol.version = "2";
       core.commitGraph = true;

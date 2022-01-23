@@ -45,6 +45,21 @@ vim.api.nvim_set_keymap('', '<leader>fd',
                         ':silent Telescope lsp_document_symbols<CR>', options)
 vim.api.nvim_set_keymap('', '<leader>fz', ':silent Telescope zoxide list<CR>',
                         options)
+-- Create a new note after asking for its title.
+vim.api.nvim_set_keymap("", "<leader>zn",
+                        "<Cmd>ZkNew { title = vim.fn.input('Title: ') }<CR>",
+                        options)
+-- Open notes.
+vim.api.nvim_set_keymap("", "<leader>zo", "<Cmd>ZkNotes<CR>", options)
+-- Open notes associated with the selected tags.
+vim.api.nvim_set_keymap("", "<leader>zt", "<Cmd>ZkTags<CR>", options)
+
+-- Search for the notes matching a given query.
+vim.api.nvim_set_keymap("", "<leader>zf",
+                        "<Cmd>ZkNotes { match = vim.fn.input('Search: ') }<CR>",
+                        options)
+-- Search for the notes matching the current visual selection.
+vim.api.nvim_set_keymap("v", "<leader>zf", ":'<,'>ZkMatch<CR>", options)
 
 -- Make F4 toggle showing invisible characters
 vim.api.nvim_set_keymap('', '_z', ':set list<CR>:map #4 _Z<CR>', {})

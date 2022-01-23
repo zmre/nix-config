@@ -43,12 +43,14 @@
     };
     # list of acceptable shells in /etc/shells
     shells = with pkgs.stable; [ bash zsh ];
+    # Note: these vars are pam environment so set on login globally
+    # as part of parent to shells. Starting new shells doesn't get the
+    # new env. You have to logout first. Or use home-manager vars instead.
+    sessionVariables = {
+      LANGUAGE = "en_US.UTF-8";
+      LC_ALL = "en_US.UTF-8";
+    };
+    pathsToLink = [ "/libexec" ];
   };
 
-  environment.sessionVariables = {
-    LANGUAGE = "en_US.UTF-8";
-    LC_ALL = "en_US.UTF-8";
-    ZK_NOTEBOOK_DIR = "~/Notes";
-  };
-  environment.pathsToLink = [ "/libexec" ];
 }

@@ -24,8 +24,7 @@ let
     "application/pdf" = browser; # ".pdf"  Adobe Portable Document Format (PDF)
   };
 
-in
-{
+in {
   home.packages = with pkgs.stable; [
     # wm support
     xss-lock
@@ -422,56 +421,54 @@ in
       indicator = "#2e9ef4";
       text = "#ffffff";
     };
-    keybindings =
-      let
-        mod = config.xsession.windowManager.i3.config.modifier;
-        refresh = "killall -SIGUSR1 i3status-rs";
-      in
-      lib.mkOptionDefault {
-        "${mod}+Return" = "exec alacritty";
-        "${mod}+j" = "focus left";
-        "${mod}+k" = "focus down";
-        "${mod}+l" = "focus up";
-        "${mod}+Tab" = ''
-          exec --no-startup-id "${pkgs.rofi}/bin/rofi -modi drun -show window -theme iggy"'';
-        "${mod}+semicolon" = "focus right";
-        "${mod}+Shift+j" = "move left";
-        "${mod}+Shift+k" = "move down";
-        "${mod}+Shift+l" = "move up";
-        "${mod}+Shift+semicolon" = "move right";
-        "${mod}+h" = "split h";
-        "${mod}+v" = "split v";
-        "${mod}+t" = "layout tabbed";
-        "${mod}+s" = "layout stacking";
-        "${mod}+w" = "layout default";
-        "${mod}+e" = "layout toggle split tabbed stacking splitv splith";
-        "${mod}+m" = "move scratchpad";
-        "${mod}+o" = "scratchpad show";
-        "${mod}+p" = "floating toggle";
-        "${mod}+Shift+p" = ''[class="KeePassXC"] scratchpad show'';
-        "${mod}+x" = "move workspace to output next";
-        "${mod}+Ctrl+Right" = "workspace next";
-        "${mod}+Ctrl+Left" = "workspace prev";
-        "${mod}+F9" = "exec i3lock --nofork -i ~/.lockpaper.png";
-        # Use pactl to adjust volume in PulseAudio.
-        "XF86AudioRaiseVolume" =
-          "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5% && ${refresh}";
-        "XF86AudioLowerVolume" =
-          "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5% && ${refresh}";
-        "XF86AudioMute" =
-          "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle && ${refresh}";
-        "XF86AudioMicMute" =
-          "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle && ${refresh}";
-        "XF86AudioPlay" = "exec ${pkgs.playerctl}/bin/playerctl play";
-        "XF86AudioPause" = "exec ${pkgs.playerctl}/bin/playerctl pause";
-        "XF86AudioNext" = "exec ${pkgs.playerctl}/bin/playerctl next";
-        "XF86AudioPrev" = "exec ${pkgs.playerctl}/bin/playerctl prev";
-        # backlight
-        "XF86MonBrightnessUp" =
-          "exec --no-startup-id ${pkgs.light}/bin/light -A 1";
-        "XF86MonBrightnessDown" =
-          "exec --no-startup-id ${pkgs.light}/bin/light -U 1";
-      };
+    keybindings = let
+      mod = config.xsession.windowManager.i3.config.modifier;
+      refresh = "killall -SIGUSR1 i3status-rs";
+    in lib.mkOptionDefault {
+      "${mod}+Return" = "exec alacritty";
+      "${mod}+j" = "focus left";
+      "${mod}+k" = "focus down";
+      "${mod}+l" = "focus up";
+      "${mod}+Tab" = ''
+        exec --no-startup-id "${pkgs.rofi}/bin/rofi -modi drun -show window -theme iggy"'';
+      "${mod}+semicolon" = "focus right";
+      "${mod}+Shift+j" = "move left";
+      "${mod}+Shift+k" = "move down";
+      "${mod}+Shift+l" = "move up";
+      "${mod}+Shift+semicolon" = "move right";
+      "${mod}+h" = "split h";
+      "${mod}+v" = "split v";
+      "${mod}+t" = "layout tabbed";
+      "${mod}+s" = "layout stacking";
+      "${mod}+w" = "layout default";
+      "${mod}+e" = "layout toggle split tabbed stacking splitv splith";
+      "${mod}+m" = "move scratchpad";
+      "${mod}+o" = "scratchpad show";
+      "${mod}+p" = "floating toggle";
+      "${mod}+Shift+p" = ''[class="KeePassXC"] scratchpad show'';
+      "${mod}+x" = "move workspace to output next";
+      "${mod}+Ctrl+Right" = "workspace next";
+      "${mod}+Ctrl+Left" = "workspace prev";
+      "${mod}+F9" = "exec i3lock --nofork -i ~/.lockpaper.png";
+      # Use pactl to adjust volume in PulseAudio.
+      "XF86AudioRaiseVolume" =
+        "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5% && ${refresh}";
+      "XF86AudioLowerVolume" =
+        "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5% && ${refresh}";
+      "XF86AudioMute" =
+        "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle && ${refresh}";
+      "XF86AudioMicMute" =
+        "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle && ${refresh}";
+      "XF86AudioPlay" = "exec ${pkgs.playerctl}/bin/playerctl play";
+      "XF86AudioPause" = "exec ${pkgs.playerctl}/bin/playerctl pause";
+      "XF86AudioNext" = "exec ${pkgs.playerctl}/bin/playerctl next";
+      "XF86AudioPrev" = "exec ${pkgs.playerctl}/bin/playerctl prev";
+      # backlight
+      "XF86MonBrightnessUp" =
+        "exec --no-startup-id ${pkgs.light}/bin/light -A 1";
+      "XF86MonBrightnessDown" =
+        "exec --no-startup-id ${pkgs.light}/bin/light -U 1";
+    };
     defaultWorkspace = "workspace number 1";
     assigns = {
       "1: term" = [{ class = "^Alacritty$"; }];
