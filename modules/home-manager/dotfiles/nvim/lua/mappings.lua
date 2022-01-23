@@ -11,14 +11,9 @@ vim.api.nvim_set_keymap('!', '#1', '<Esc>', options)
 -- vim.api.nvim_set_keymap('', '#2', ':NvimTreeToggle<CR>', options)
 -- vim.api.nvim_set_keymap('!', '#2', '<ESC>:NvimTreeToggle<CR>', options)
 -- vim.api.nvim_set_keymap('', '-', ':NvimTreeFindFile<CR>', options)
-vim.api.nvim_set_keymap('', '#2',
-                        ':lua require("plugins.nvim-tree").toggle()<CR>',
-                        options)
-vim.api.nvim_set_keymap('!', '#2',
-                        '<ESC>:lua require("plugins.nvim-tree").toggle()<CR>',
-                        options)
-vim.api.nvim_set_keymap('', '-', ':lua require("plugins.nvim-tree").find()<CR>',
-                        options)
+vim.api.nvim_set_keymap('', '#2', '<cmd>NvimTreeToggle<CR>', options)
+vim.api.nvim_set_keymap('!', '#2', '<cmd>NvimTreeToggle<CR>', options)
+vim.api.nvim_set_keymap('', '-', '<cmd>NvimTreeFindFile<CR>', options)
 
 -- Make F3 bring up project search (cmd-t or ack/ag/rg)
 vim.api.nvim_set_keymap('', '#3', ':Ack<Space>', options)
@@ -114,10 +109,10 @@ vim.api.nvim_set_keymap('', '<D-0>', 'g^', options)
 -- Yank to end of line using more familiar method
 vim.api.nvim_set_keymap('', 'Y', 'y$', options)
 -- Bubble lines up and down using the unimpaired plugin
-vim.api.nvim_set_keymap('n', '<C-Up>', '[e', options)
-vim.api.nvim_set_keymap('n', '<C-Down>', ']e', options)
-vim.api.nvim_set_keymap('v', '<C-Up>', '[egv', options)
-vim.api.nvim_set_keymap('v', '<C-Down>', ']egv', options)
+vim.api.nvim_set_keymap('n', '<A-Up>', '[e', options)
+vim.api.nvim_set_keymap('n', '<A-Down>', ']e', options)
+vim.api.nvim_set_keymap('v', '<A-Up>', '[egv', options)
+vim.api.nvim_set_keymap('v', '<A-Down>', ']egv', options)
 
 -- Visually select the text that was last edited/pasted
 -- Similar to gv but works after paste
@@ -135,6 +130,9 @@ vim.api.nvim_set_keymap('!', '<D-[>', '<C-o><<', options)
 vim.api.nvim_set_keymap('n', '<D-]>', '>>', options)
 vim.api.nvim_set_keymap('v', '<D-]>', '>gv', options)
 vim.api.nvim_set_keymap('!', '<D-]>', '<C-o>>>', options)
+-- keep visual block so you can move things repeatedly
+vim.api.nvim_set_keymap('v', "<", "<gv", options)
+vim.api.nvim_set_keymap('v', ">", ">gv", options)
 
 -- TODO: this should be in programming setup
 -- nmap <D-b> :make<CR>
@@ -180,6 +178,8 @@ vim.api.nvim_set_keymap('v', '<D-v>', '"*p', options)
 vim.api.nvim_set_keymap('!', '<D-v>', '<C-R>*', options)
 vim.api.nvim_set_keymap('c', '<D-v>', '<C-R>*', options)
 vim.api.nvim_set_keymap('v', '<D-c>', '"*y', options)
+-- When pasting over selected text, keep original register value
+vim.api.nvim_set_keymap('v', 'p', '"_dP', options)
 
 -- cmd-w to close the current buffer
 vim.api.nvim_set_keymap('', '<D-w>', ':bd<CR>', options)
@@ -217,6 +217,8 @@ local options = {noremap = true, silent = true}
 -- Move to previous/next
 vim.api.nvim_set_keymap('', '[b', ':BufferPrevious<CR>', options)
 vim.api.nvim_set_keymap('', ']b', ':BufferNext<CR>', options)
+vim.api.nvim_set_keymap('', '<S-h>', ':BufferPrevious<CR>', options)
+vim.api.nvim_set_keymap('', '<S-l>', ':BufferNext<CR>', options)
 
 -- Goto buffer in position...
 vim.api.nvim_set_keymap('', '[1', ':BufferGoto 1<CR>', options)

@@ -1,16 +1,90 @@
+local signs = {
+    {name = "DiagnosticSignError", text = ""},
+    {name = "DiagnosticSignWarn", text = ""},
+    {name = "DiagnosticSignHint", text = ""},
+    {name = "DiagnosticSignInfo", text = ""}
+}
+-- following options are the default
+-- each of these are documented in `:help nvim-tree.OPTION_NAME`
+vim.g.nvim_tree_icons = {
+    default = "",
+    symlink = "",
+    git = {
+        unstaged = "",
+        staged = "S",
+        unmerged = "",
+        renamed = "➜",
+        deleted = "",
+        untracked = "U",
+        ignored = "◌"
+    },
+    folder = {
+        default = "",
+        open = "",
+        empty = "",
+        empty_open = "",
+        symlink = ""
+    }
+}
+local nvim_tree_config = require("nvim-tree.config")
+local tree_cb = nvim_tree_config.nvim_tree_callback
 require'nvim-tree'.setup {
     -- disables netrw completely
     disable_netrw = true,
     -- hijack netrw window on startup
-    hijack_netrw = false,
+    hijack_netrw = true,
     -- open the tree when running this setup function
     open_on_setup = false,
+    auto_close = true,
+    update_to_buf_dir = {enable = true, auto_open = true},
+    update_focused_file = {enable = true, update_cwd = true},
     -- show lsp diagnostics in the signcolumn
     diagnostics = {
         enable = true,
-        icons = {hint = "", info = "", warning = "", error = ""}
+        icons = {hint = "", info = "", warning = "", error = ""}
+    },
+    view = {
+        width = 30,
+        height = 30,
+        hide_root_folder = false,
+        side = "left",
+        auto_resize = true,
+        mappings = {
+            custom_only = false,
+            list = {
+                {key = {"l", "<CR>", "o"}, cb = tree_cb "edit"},
+                {key = "h", cb = tree_cb "close_node"},
+                {key = "v", cb = tree_cb "vsplit"}
+            }
+        },
+        number = false,
+        relativenumber = false
     }
 }
+for _, sign in ipairs(signs) do
+    vim.fn.sign_define(sign.name,
+                       {texthl = sign.name, text = sign.text, numhl = ""})
+end
+vim.diagnostic.config({
+    virtual_text = false,
+    signs = {active = {signs}},
+    update_in_insert = true,
+    underline = true,
+    severity_sort = true,
+    float = {
+        focusable = false,
+        style = "minimal",
+        border = "rounded",
+        source = "always",
+        header = "",
+        prefix = ""
+    }
+})
+vim.lsp.handlers["textDocument/hover"] =
+    vim.lsp.with(vim.lsp.handlers.hover, {border = "rounded"})
+
+vim.lsp.handlers["textDocument/signatureHelp"] =
+    vim.lsp.with(vim.lsp.handlers.signature_help, {border = "rounded"})
 
 local actions = require('telescope.actions')
 local action_state = require('telescope.actions.state')
@@ -41,6 +115,9 @@ end
 
 require('telescope').setup {
     file_ignore_patterns = {"*.bak"},
+    prompt_prefix = " ",
+    selection_caret = " ",
+    path_display = {"smart"},
     defaults = {
         mappings = {
             n = {
@@ -63,6 +140,8 @@ require('telescope').setup {
     }
 }
 require'telescope'.load_extension('fzy_native')
+-- TODO: make this attempt only on linux
+require'telescope'.load_extension('media_files')
 
 -- Change project directory using local cd only
 vim.g.rooter_cd_cmd = 'lcd'
@@ -123,6 +202,40 @@ vim.api.nvim_set_keymap('v', '<leader>c<space>',
                         '<Plug>kommentary_visual_default', {})
 vim.o.completeopt = "menuone,noselect"
 
+require("luasnip/loaders/from_vscode").lazy_load()
+local luasnip = require("luasnip")
+local check_backspace = function()
+    local col = vim.fn.col "." - 1
+    return col == 0 or vim.fn.getline("."):sub(col, col):match "%s"
+end
+local kind_icons = {
+    Text = "",
+    Method = "m",
+    Function = "",
+    Constructor = "",
+    Field = "",
+    Variable = "",
+    Class = "",
+    Interface = "",
+    Module = "",
+    Property = "",
+    Unit = "",
+    Value = "",
+    Enum = "",
+    Keyword = "",
+    Snippet = "",
+    Color = "",
+    File = "",
+    Reference = "",
+    Folder = "",
+    EnumMember = "",
+    Constant = "",
+    Struct = "",
+    Event = "",
+    Operator = "",
+    TypeParameter = ""
+}
+-- find more here: https://www.nerdfonts.com/cheat-sheet
 local cmp = require 'cmp'
 cmp.setup {
     mapping = {
@@ -136,36 +249,51 @@ cmp.setup {
             behavior = cmp.ConfirmBehavior.Replace,
             select = true
         },
-        ['<Tab>'] = function(fallback)
-            if vim.fn.pumvisible() == 1 then
-                vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true,
-                                                               true, true), 'n')
-                --[[ elseif luasnip.expand_or_jumpable() then
-                    vim.fn.feedkeys(vim.api.nvim_replace_termcodes(
-                                        '<Plug>luasnip-expand-or-jump', true,                                        true, true), '') ]]
+        ["<Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.select_next_item()
+            elseif luasnip.expandable() then
+                luasnip.expand()
+            elseif luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump()
+            elseif check_backspace() then
+                fallback()
             else
                 fallback()
             end
-        end,
-        ['<S-Tab>'] = function(fallback)
-            if vim.fn.pumvisible() == 1 then
-                vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-p>', true,
-                                                               true, true), 'n')
-                --[[ elseif luasnip.jumpable(-1) then
-                    vim.fn.feedkeys(vim.api.nvim_replace_termcodes(
-                                        '<Plug>luasnip-jump-prev', true, true,
-                                        true), '') ]]
+        end, {"i", "s"}),
+        ["<S-Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+                luasnip.jump(-1)
             else
                 fallback()
             end
+        end, {"i", "s"})
+    },
+    documentation = true,
+    sources = {
+        {name = 'nvim_lsp'}, {name = 'buffer'}, {name = 'emoji'},
+        {name = 'nvim_lua'}, {name = 'path'}, {name = "crates"},
+        {name = 'luasnip'}
+    },
+    formatting = {
+        fields = {"kind", "abbr", "menu"},
+        format = function(entry, vim_item)
+            -- Kind icons
+            vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
+            -- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
+            vim_item.menu = ({
+                nvim_lsp = "[LSP]",
+                luasnip = "[Snippet]",
+                buffer = "[Buffer]",
+                path = "[Path]"
+            })[entry.source.name]
+            return vim_item
         end
     },
-    sources = {
-        {name = 'nvim_lsp'}, -- {name = 'luasnip'},
-        {name = 'buffer'}, {name = 'emoji'}, {name = 'nvim_lua'},
-        {name = "crates"}
-    }
-
+    snippet = {expand = function(args) luasnip.lsp_expand(args.body) end}
 }
 
 require('crates').setup()
@@ -181,22 +309,22 @@ vim.g.bufferline = {
     -- exclude_ft = {''},
 }
 
-vim.g.neoformat_try_formatprg = 1
--- Enable alignment
-vim.g.neoformat_basic_format_align = 1
+-- vim.g.neoformat_try_formatprg = 1
+-- -- Enable alignment
+-- vim.g.neoformat_basic_format_align = 1
 
--- Enable tab to spaces conversion
-vim.g.neoformat_basic_format_retab = 1
+-- -- Enable tab to spaces conversion
+-- vim.g.neoformat_basic_format_retab = 1
 
--- Enable trimmming of trailing whitespace
-vim.g.neoformat_basic_format_trim = 1
-vim.g.neoformat_run_all_formatters = 1
-vim.api.nvim_exec([[
-  augroup fmt
-    autocmd!
-    autocmd BufWritePre * undojoin | Neoformat
-  augroup END
-]], false)
+-- -- Enable trimmming of trailing whitespace
+-- vim.g.neoformat_basic_format_trim = 1
+-- vim.g.neoformat_run_all_formatters = 1
+-- vim.api.nvim_exec([[
+--   augroup fmt
+--     autocmd!
+--     autocmd BufWritePre * undojoin | Neoformat
+--   augroup END
+-- ]], false)
 
 vim.g.tmux_navigator_no_mappings = 1
 
@@ -206,7 +334,7 @@ require("toggleterm").setup {
     start_in_insert = true,
     hide_numbers = true,
     direction = 'vertical',
-    size = function(term) return vim.o.columns * 0.3 end,
+    size = function(_) return vim.o.columns * 0.3 end,
     close_on_exit = true
 }
 vim.api.nvim_set_keymap('t', [[<C-\]], "<Cmd>ToggleTermToggleAll<cr>",
@@ -218,7 +346,7 @@ require("zk").setup({
     lsp = {
         auto_attach = {enabled = true, filetypes = {"markdown", "vimwiki"}},
         config = {
-            on_attach = function(client, bufnr)
+            on_attach = function(_, bufnr)
                 local opts = {noremap = true, silent = true}
                 -- Create a new note after asking for its title.
                 vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>zn",
@@ -292,7 +420,6 @@ require('lualine').setup {
                 sections = {'error', 'warn'}, -- 'info', 'hint'},}}
                 color_error = "#E06C75", -- changes diagnostic's error foreground color
                 color_warn = "#E5C07B"
-                -- symbols = {error = 'E', warn = 'W', info = 'I', hint = 'H'}
             }
         }
     }
@@ -303,7 +430,9 @@ local function attached(client, bufnr)
         vim.api.nvim_buf_set_keymap(bufnr, ...)
     end
     local opts = {noremap = true, silent = false}
-
+    if client.name == "tsserver" then
+        client.resolved_capabilities.document_formatting = false
+    end
     print("LSP attached")
 
     -- Create a new note after asking for its title.
@@ -311,19 +440,22 @@ local function attached(client, bufnr)
     buf_set_keymap('!', "#7", "<cmd>SymbolsOutline<CR>", opts)
     buf_set_keymap('', '<leader>gs', '<cmd>SymbolsOutline<CR>', opts)
     buf_set_keymap('', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-    buf_set_keymap('', "gD", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-    -- buf_set_keymap('', "gD", ":Telescope lsp_implementations<CR>", opts)
+    buf_set_keymap('', "<leader>gD",
+                   "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
+    buf_set_keymap('', "<leader>gi", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
     buf_set_keymap('', "<leader>gd", "<Cmd>lua vim.lsp.buf.definition()<CR>",
                    opts)
+    buf_set_keymap('', "<leader>gr", "<Cmd>Telescope lsp_references<CR>", opts)
     buf_set_keymap('', "<leader>fsd",
                    "<cmd>lua vim.lsp.buf.document_symbol()<CR>", opts)
     buf_set_keymap('', "<leader>fsw",
                    "<cmd>lua vim.lsp.buf.workspace_symbol()<CR>", opts)
-    buf_set_keymap('n', "<leader>gf", "<cmd>lua vim.lsp.buf.code_action()<CR>",
-                   opts)
+    -- buf_set_keymap('n', "<leader>gf", "<cmd>lua vim.lsp.buf.code_action()<CR>",
+    -- opts)
+    buf_set_keymap('n', "<leader>gf",
+                   "<cmd>Telescope lsp_code_actions theme=cursor<CR>", opts)
     buf_set_keymap('v', "<leader>gf",
                    "<cmd>lua vim.lsp.buf.range_code_action()<CR>", opts)
-    buf_set_keymap('', "<leader>gi", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
     buf_set_keymap('', "<leader>gt",
                    "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
     buf_set_keymap('', "<leader>ge",
@@ -334,37 +466,138 @@ local function attached(client, bufnr)
     buf_set_keymap('', "]e", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
     -- Set some keybinds conditional on server capabilities
     if client.resolved_capabilities.document_formatting then
-        buf_set_keymap("n", "<leader>=",
-                       "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-    elseif client.resolved_capabilities.document_range_formatting then
+        buf_set_keymap("n", "<leader>g=",
+                       "<cmd>lua vim.lsp.buf.formatting_sync()<CR>", opts)
+        buf_set_keymap("v", "<leader>g=",
+                       "<cmd>lua vim.lsp.buf.rang_formatting()<CR>", opts)
+        vim.cmd([[
+            augroup LspFormatting
+                autocmd! * <buffer>
+                autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+            augroup END
+            ]])
+    end
+    if client.resolved_capabilities.implementation then
+        buf_set_keymap('', "<leader>gI", ":Telescope lsp_implementations<CR>",
+                       opts)
+    end
+    if client.resolved_capabilities.document_range_formatting then
         buf_set_keymap("v", "<leader>=",
                        "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
-    elseif client.resolved_capabilities.rename then
-        buf_set_keymap('', "<leader>gr", "<cmd>lua vim.lsp.buf.rename()<CR>",
+    end
+    if client.resolved_capabilities.rename then
+        buf_set_keymap('', "<leader>gR", "<cmd>lua vim.lsp.buf.rename()<CR>",
                        opts)
     end
 end
 
 -- LSP stuff - minimal with defaults for now
+local null_ls = require("null-ls")
+
+-- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
+local formatting = null_ls.builtins.formatting
+-- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
+local diagnostics = null_ls.builtins.diagnostics
+
+null_ls.setup {
+    debug = false,
+    sources = {
+        formatting.lua_format, formatting.nixfmt, formatting.prettier.with {
+            extra_args = {"--no-semi", "--single-quote", "--jsx-single-quote"}
+        }, formatting.rustfmt, diagnostics.eslint_d
+    },
+    on_attach = attached
+}
 local lspconfig = require("lspconfig")
-lspconfig.rust_analyzer.setup {on_attach = attached}
+local cmp_nvim_lsp = require("cmp_nvim_lsp")
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+cmp_nvim_lsp.update_capabilities(capabilities)
+
+lspconfig.rust_analyzer.setup {
+    on_attach = attached,
+    capabilities = capabilities
+}
 lspconfig.tsserver.setup {
     -- Needed for inlayHints. Merge this table with your settings or copy
     -- it from the source if you want to add your own init_options.
     -- init_options = require("nvim-lsp-ts-utils").init_options
+    capabilities = capabilities
 }
 lspconfig.sumneko_lua.setup {
     settings = {Lua = {diagnostics = {globals = {"vim"}}}},
-    on_attach = attached
+    on_attach = attached,
+    capabilities = capabilities
 }
-lspconfig.rnix.setup {on_attach = attached}
+lspconfig.rnix.setup {on_attach = attached, capabilities = capabilities}
+lspconfig.cssls.setup {capabilities = capabilities}
+lspconfig.eslint.setup {capabilities = capabilities}
+lspconfig.html.setup {capabilities = capabilities}
+lspconfig.jsonls.setup {
+    settings = {
+        json = {
+            schemas = {
+                -- Find more schemas here: https://www.schemastore.org/json/
+                {
+                    description = "TypeScript compiler configuration file",
+                    fileMatch = {"tsconfig.json", "tsconfig.*.json"},
+                    url = "https://json.schemastore.org/tsconfig.json"
+                }, {
+                    description = "Babel configuration",
+                    fileMatch = {
+                        ".babelrc.json", ".babelrc", "babel.config.json"
+                    },
+                    url = "https://json.schemastore.org/babelrc.json"
+                }, {
+                    description = "ESLint config",
+                    fileMatch = {".eslintrc.json", ".eslintrc"},
+                    url = "https://json.schemastore.org/eslintrc.json"
+                }, {
+                    description = "Prettier config",
+                    fileMatch = {
+                        ".prettierrc", ".prettierrc.json",
+                        "prettier.config.json"
+                    },
+                    url = "https://json.schemastore.org/prettierrc"
+                }, {
+                    description = "Stylelint config",
+                    fileMatch = {
+                        ".stylelintrc", ".stylelintrc.json",
+                        "stylelint.config.json"
+                    },
+                    url = "https://json.schemastore.org/stylelintrc"
+                }, {
+                    description = "Json schema for properties json file for a GitHub Workflow template",
+                    fileMatch = {
+                        ".github/workflow-templates/**.properties.json"
+                    },
+                    url = "https://json.schemastore.org/github-workflow-template-properties.json"
+                }, {
+                    description = "NPM configuration file",
+                    fileMatch = {"package.json"},
+                    url = "https://json.schemastore.org/package.json"
+                }
+            }
+        }
+    },
+    setup = {
+        commands = {
+            Format = {
+                function()
+                    vim.lsp.buf.range_formatting({}, {0, 0},
+                                                 {vim.fn.line "$", 0})
+                end
+            }
+        }
+    },
+    capabilities = capabilities
+}
+
 -- temporarily disabled due to bugs editing nix files 2021-12
 -- require'lspsaga'.init_lsp_saga()
--- temporary replacement for saga:
-require'nvim-lightbulb'.update_lightbulb {}
-require"lsp_signature".setup()
-require('lspkind').init({})
 require('rust-tools').setup({server = {on_attach = attached}})
-require'nvim-treesitter.configs'.setup {highlight = {enable = true}}
--- require("nvim-lsp-ts-utils").setup({})
 
+require'nvim-treesitter.configs'.setup {
+    highlight = {enable = true, additional_vim_regex_highlighting = true},
+    indent = {enable = true, disable = {"yaml"}}
+}

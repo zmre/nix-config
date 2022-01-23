@@ -18,6 +18,7 @@ M.defaults = function()
     vim.g.markdown_folding = 1
     vim.g.vim_markdown_auto_insert_bullets = 1
 
+    opt.swapfile = false
     opt.spell = true
     opt.spelllang = "en_us"
     opt.ruler = true -- show the cursor position all the time
@@ -54,8 +55,8 @@ M.defaults = function()
     -- wrapping
     opt.wrap = true
     opt.sidescroll = 2 -- min number of columns to scroll from edge
-    opt.scrolloff = 4 -- when 4 away from edge start scrolling
-    opt.sidescrolloff = 4 -- keep cursor one col from end of line
+    opt.scrolloff = 8 -- when 4 away from edge start scrolling
+    opt.sidescrolloff = 8 -- keep cursor one col from end of line
     opt.textwidth = 0
     opt.breakindent = true
     opt.showbreak = "» "
@@ -93,6 +94,7 @@ M.defaults = function()
     opt.relativenumber = false
     opt.completeopt = "menu,menuone,noselect" -- needed for autocompletion stuff
     opt.conceallevel = 2
+    opt.fileencoding = "utf-8"
 
     -- Globals
     vim.g.vimsyn_embed = 'l' -- Highlight Lua code inside .vim files

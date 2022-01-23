@@ -75,6 +75,8 @@ let
     yarn
     diagnostic-languageserver
     eslint_d
+    prettier
+    vscode-langservers-extracted # lsp servers for json, html, css
   ];
   networkPkgs = with pkgs.stable; [ traceroute mtr iftop ];
   guiPkgs = with pkgs; [ neovide ];
@@ -86,6 +88,15 @@ let
       repo = "zk-nvim";
       rev = "58260434219535536f9eb03fffbbafd2eb0bc997";
       sha256 = "0csl87vz8m33h0hh9fnjf97kvg7fh0qkchr22aaw18mslwidi2pj";
+    };
+  };
+  telescope-media-files = pkgs.vimUtils.buildVimPlugin {
+    name = "telescope-media-files";
+    src = pkgs.fetchFromGitHub {
+      owner = "nvim-telescope";
+      repo = "telescope-media-files.nvim";
+      rev = "513e4ee385edd72bf0b35a217b7e39f84b6fe93c";
+      sha256 = "1ap3ijh64ynyxzbc62ijfkbwasv506i17pc65bh3w4dfpzn6rlpy";
     };
   };
 
@@ -316,6 +327,7 @@ in
       content.default_encoding = "utf-8";
       content.geolocation = false;
       content.cookies.accept = "no-3rdparty";
+      qt.highdpi = true;
       # might break some sites; stops fingerprinting
       content.canvas_reading = false;
       content.webrtc_ip_handling_policy = "default-public-interface-only";
@@ -529,18 +541,9 @@ in
       rust-tools-nvim # lsp stuff and more for rust
       crates-nvim # inline intelligence for Cargo.toml
       nvim-lspconfig # setup LSP
-      # lspsaga isn't checking capabilities so is giving me errors for some languages.
-      # try again in awhile.
-      #lspsaga-nvim # makes LSP stuff look nicer and easier to use
-      # using lightbulb as an alternative to saga
-      nvim-lightbulb
-      lspkind-nvim # adds more icons into dropdown selections
-      lsp_signature-nvim # as you type hitns on function parameters
-      # damn thing is throwing errors when I open nix files. apparently thinks
-      # everything is typescript
-      #nvim-lsp-ts-utils # typescript lsp
+      null-ls-nvim # formatting and linting via lsp system
       trouble-nvim # navigate all warnings and errors in quickfix-like window
-      neoformat # autoformat on save, if formatter found
+      #neoformat # autoformat on save, if formatter found
 
       # UI #################################################
       #onedarkpro-nvim # colorscheme
@@ -548,6 +551,7 @@ in
       telescope-nvim # da best popup fuzzy finder
       telescope-fzy-native-nvim # but fzy gives better results
       telescope-frecency-nvim # and frecency comes in handy too
+      telescope-media-files # only works on linux, but image preview
       nvim-colorizer-lua # color over CSS like #00ff00
       nvim-web-devicons # makes things pretty; used by many plugins below
       nvim-tree-lua # file navigator
@@ -571,17 +575,21 @@ in
 
       # Autocompletion
       nvim-cmp # generic autocompleter
-      cmp-nvim-lua
+      luasnip
+      friendly-snippets
       cmp-nvim-lsp
+      cmp-nvim-lua
       cmp-buffer
       cmp-path
+      cmp-cmdline
+      cmp_luasnip
       cmp-emoji
       nvim-autopairs # balances parens as you type
       vim-emoji
 
       # Notes
-      #vimwiki
-      #taskwiki
+      vimwiki
+      taskwiki
       zk-nvim
 
       # Misc
