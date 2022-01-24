@@ -16,35 +16,35 @@ M.config = function()
       autocmd BufRead *.mc              setlocal filetype=mason
       autocmd BufRead *.fish            setlocal filetype=fish
 
-      autocmd FileType c lua require('options').programming()
-      autocmd FileType ruby lua require('options').programming()
-      autocmd FileType rust lua require('filetypes').rust()
-      autocmd FileType php lua require('options').programming()
-      autocmd FileType php3 lua require('options').programming()
-      autocmd FileType perl lua require('options').programming()
-      autocmd FileType python lua require('options').programming()
-      autocmd FileType mason lua require('options').programming()
-      autocmd FileType vim lua require('options').programming()
-      autocmd FileType lua lua require('options').programming()
-      autocmd FileType sh lua require('options').programming()
-      autocmd FileType zsh lua require('options').programming()
-      autocmd FileType scala lua require('options').programming()
-      autocmd FileType javascript lua require('options').programming()
-      autocmd FileType javascriptreact lua require('options').programming()
-      autocmd FileType typescript lua require('options').programming()
-      autocmd FileType typescriptreact lua require('options').programming()
-      autocmd FileType markdown lua require('filetypes').markdown()
-      autocmd FileType vimwiki lua require('filetypes').markdown()
-      autocmd FileType html lua require('options').programming()
-      autocmd FileType css lua require('options').programming()
-      autocmd FileType xml lua require('options').lua()
+      autocmd FileType c lua require('zmre.options').programming()
+      autocmd FileType ruby lua require('zmre.options').programming()
+      autocmd FileType rust lua require('zmre.filetypes').rust()
+      autocmd FileType php lua require('zmre.options').programming()
+      autocmd FileType php3 lua require('zmre.options').programming()
+      autocmd FileType perl lua require('zmre.options').programming()
+      autocmd FileType python lua require('zmre.options').programming()
+      autocmd FileType mason lua require('zmre.options').programming()
+      autocmd FileType vim lua require('zmre.options').programming()
+      autocmd FileType lua lua require('zmre.options').programming()
+      autocmd FileType sh lua require('zmre.options').programming()
+      autocmd FileType zsh lua require('zmre.options').programming()
+      autocmd FileType scala lua require('zmre.options').programming()
+      autocmd FileType javascript lua require('zmre.options').programming()
+      autocmd FileType javascriptreact lua require('zmre.options').programming()
+      autocmd FileType typescript lua require('zmre.options').programming()
+      autocmd FileType typescriptreact lua require('zmre.options').programming()
+      autocmd FileType markdown lua require('zmre.filetypes').markdown()
+      autocmd FileType vimwiki lua require('zmre.filetypes').markdown()
+      autocmd FileType html lua require('zmre.options').programming()
+      autocmd FileType css lua require('zmre.options').programming()
+      autocmd FileType xml lua require('zmre.options').lua()
     augroup END
   ]], false)
 end
 
 M.rust = function()
-    require('options').programming()
-    require('options').fourspaceindent()
+    require('zmre.options').programming()
+    require('zmre.options').fourspaceindent()
     vim.bo.makeprg = "cargo"
     vim.cmd("compiler cargo")
     vim.g.rustfmt_autosave = 1
@@ -61,14 +61,14 @@ M.rust = function()
 end
 
 M.c = function()
-    require('options').programming()
-    require('options').fourspaceindent()
+    require('zmre.options').programming()
+    require('zmre.options').fourspaceindent()
     vim.bo.makeprg = "make"
 end
 
 M.lua = function()
-    require('options').programming()
-    require('options').fourspaceindent()
+    require('zmre.options').programming()
+    require('zmre.options').fourspaceindent()
 end
 
 M.markdown = function()

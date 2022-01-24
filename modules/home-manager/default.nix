@@ -33,14 +33,13 @@ let
     glow # view markdown file or dir
     mdcat # colorize markdown
     html2text
-    pkgs.zk # note finder
 
     neofetch # display key software/version info in term
     vimv # shell script to bulk rename
     btop
     niv # TODO: do I need this now that I'm using flakes?
     #youtube-dl replaced by yt-dlp
-    yt-dlp
+    yt-dlp # download youtube and other web videos
     vulnix # check for live nix apps that are listed in NVD
     tickrs # track stocks
     bandwhich # bandwidth monitor by process
@@ -51,6 +50,7 @@ let
     kalker # cli calculator; alt. to bc and calc
     nix-tree # explore dependencies
     nix-prefetch-git # used to get sha/rev
+    fortune
   ];
   cPkgs = with pkgs.stable; [
     automake
@@ -198,16 +198,17 @@ in {
     set editing-mode vi
   '';
   home.file.".p10k.zsh".source = ./dotfiles/p10k.zsh;
-  home.file.".config/nvim/lua/options.lua".source =
+  home.file.".config/nvim/lua/zmre/options.lua".source =
     ./dotfiles/nvim/lua/options.lua;
-  home.file.".config/nvim/lua/abbreviations.lua".source =
+  home.file.".config/nvim/lua/zmre/abbreviations.lua".source =
     ./dotfiles/nvim/lua/abbreviations.lua;
-  home.file.".config/nvim/lua/filetypes.lua".source =
+  home.file.".config/nvim/lua/zmre/filetypes.lua".source =
     ./dotfiles/nvim/lua/filetypes.lua;
-  home.file.".config/nvim/lua/mappings.lua".source =
+  home.file.".config/nvim/lua/zmre/mappings.lua".source =
     ./dotfiles/nvim/lua/mappings.lua;
-  home.file.".config/nvim/lua/tools.lua".source = ./dotfiles/nvim/lua/tools.lua;
-  home.file.".config/nvim/lua/plugins.lua".source =
+  home.file.".config/nvim/lua/zmre/tools.lua".source =
+    ./dotfiles/nvim/lua/tools.lua;
+  home.file.".config/nvim/lua/zmre/plugins.lua".source =
     ./dotfiles/nvim/lua/plugins.lua;
   home.file.".config/nvim/vim/colors.vim".source =
     ./dotfiles/nvim/vim/colors.vim;
@@ -533,28 +534,39 @@ in {
     # solely needed for taskwiki/vim-roam-task
     withPython3 = true;
     extraPython3Packages = (ps: with ps; [ pynvim tasklib six ]);
+    extraPackages = with pkgs; [
+      proselint
+      pkgs.zk # note finder
+    ];
     extraConfig = ''
       lua << 
-          require('options').defaults()
-          require('options').gui()
-          require('mappings')
-          require('abbreviations')
-          require('filetypes').config()
-          require('plugins')
+          require('zmre.options').defaults()
+          require('zmre.options').gui()
+          require('zmre.mappings')
+          require('zmre.abbreviations')
+          require('zmre.filetypes').config()
+          require('zmre.plugins').ui()
+          require('zmre.plugins').diagnostics()
+          require('zmre.plugins').telescope()
+          require('zmre.plugins').completions()
+          require('zmre.plugins').notes()
+          require('zmre.plugins').misc()
       
     '';
 
     # going unstable here; living dangerously
     plugins = with pkgs.vimPlugins; [
+      # Common dependencies of other plugins
+      popup-nvim # dependency of some other plugins
+      plenary-nvim # Library for lua plugins; used by many plugins here
+
       # Syntax / Language Support ##########################
       vim-polyglot # lazy load all the syntax plugins for all the languages
-      #rust-vim # this is included in vim-polyglot
       rust-tools-nvim # lsp stuff and more for rust
       crates-nvim # inline intelligence for Cargo.toml
-      nvim-lspconfig # setup LSP
+      nvim-lspconfig # setup LSP for intelligent coding
       null-ls-nvim # formatting and linting via lsp system
       trouble-nvim # navigate all warnings and errors in quickfix-like window
-      #neoformat # autoformat on save, if formatter found
 
       # UI #################################################
       #onedarkpro-nvim # colorscheme
@@ -586,30 +598,34 @@ in {
 
       # Autocompletion
       nvim-cmp # generic autocompleter
-      luasnip
-      friendly-snippets
-      cmp-nvim-lsp
-      cmp-nvim-lua
-      cmp-buffer
-      cmp-path
-      cmp-cmdline
-      cmp_luasnip
-      cmp-emoji
+      cmp-nvim-lsp # use lsp as source for completions
+      cmp-nvim-lua # makes vim config editing better with completions
+      cmp-buffer # any text in open buffers
+      cmp-path # complete paths
+      cmp-cmdline # completing in :commands
+      cmp-emoji # complete :emojis:
       nvim-autopairs # balances parens as you type
-      vim-emoji
+      vim-emoji # TODO: redundant now?
+      luasnip # snippets driver
+      cmp_luasnip # snippets completion
+      friendly-snippets # actual library of snippets used by luasnip
 
       # Notes
-      #vimwiki
-      #taskwiki
-      vim-roam-task
-      zk-nvim
+      vim-roam-task # a clone of taskwiki that doesn't require vimwiki
+      zk-nvim # lsp for a folder of notes for searching/linking/etc.
+      goyo-vim # distraction free, width constrained writing mode
+      limelight-vim # pairs with goyo for typewriter mode dimming inactive paragraphs
+      {
+        plugin = vim-grammarous; # grammar check
+        optional = true; # don't want it to load unless it's needed
+      }
 
       # Misc
-      popup-nvim # dependency of some other plugins
-      plenary-nvim # Library for lua plugins; used by many plugins here
       vim-fugitive # git management
       vim-rooter # change dir to project root
       vim-tmux-navigator # navigate vim and tmux panes together
+      FixCursorHold-nvim # remove this when neovim #12587 is resolved
+      impatient-nvim # speeds startup times by caching lua bytecode
     ];
   };
   home.file."${config.xdg.configHome}/nvim/parser/tsx.so".source =
