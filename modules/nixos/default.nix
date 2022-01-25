@@ -109,12 +109,26 @@
     autorun = true;
     defaultDepth = 24;
     xkbOptions = "caps:escape";
-    displayManager.defaultSession = "none+i3";
     # Setup a graphical login
-    displayManager.lightdm.enable = true;
+    displayManager = {
+      lightdm.enable = true;
+      defaultSession = "none+i3";
+      sessionCommands = ''
+        case $(hostname) in
+          volantis)
+            ${pkgs.xorg.xrandr}/bin/xrandr --newmode "3000x2000_60.00"  513.44  3000 3240 3568 4136  2000 2001 2004 2069  -HSync +Vsync
+            ${pkgs.xorg.xrandr}/bin/xrandr --addmode eDP-1 "3000x2000_60.00"
+            ${pkgs.xorg.xrandr}/bin/xrandr -s 3000x2000
+            ;;
+          *)
+            echo unknown host
+            ;;
+        esac
+      '';
+    };
     # Keyboard
     layout = "us";
-    autoRepeatDelay = 275;
+    autoRepeatDelay = 265;
     autoRepeatInterval = 20;
     # Enable touchpad support
     libinput = {

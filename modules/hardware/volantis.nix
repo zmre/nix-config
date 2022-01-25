@@ -18,9 +18,6 @@
     QT_SCALE_FACTOR = "1.5";
   };
 
-  #xrandr --newmode "3000x2000_60.00"  513.44  3000 3240 3568 4136  2000 2001 2004 2069  -HSync +Vsync
-  #xrandr --addmode eDP-1 "3000x2000_60.00"
-
   system = {
     # It was trying to upgrade on wake from sleep and sometimes failed in the background
     # because the wifi wasn't up yet, then left my system in a weird state without a
