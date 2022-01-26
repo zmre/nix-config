@@ -81,33 +81,6 @@ let
   networkPkgs = with pkgs.stable; [ traceroute mtr iftop ];
   guiPkgs = with pkgs; [ neovide ];
 
-  zk-nvim = pkgs.vimUtils.buildVimPlugin {
-    name = "zk-nvim";
-    src = pkgs.fetchFromGitHub {
-      owner = "mickael-menu";
-      repo = "zk-nvim";
-      rev = "58260434219535536f9eb03fffbbafd2eb0bc997";
-      sha256 = "0csl87vz8m33h0hh9fnjf97kvg7fh0qkchr22aaw18mslwidi2pj";
-    };
-  };
-  telescope-media-files = pkgs.vimUtils.buildVimPlugin {
-    name = "telescope-media-files";
-    src = pkgs.fetchFromGitHub {
-      owner = "nvim-telescope";
-      repo = "telescope-media-files.nvim";
-      rev = "513e4ee385edd72bf0b35a217b7e39f84b6fe93c";
-      sha256 = "1ap3ijh64ynyxzbc62ijfkbwasv506i17pc65bh3w4dfpzn6rlpy";
-    };
-  };
-  vim-roam-task = pkgs.vimUtils.buildVimPluginFrom2Nix {
-    name = "vim-roam-task";
-    src = pkgs.fetchFromGitHub {
-      owner = "samgriesemer";
-      repo = "vim-roam-task";
-      rev = "ee293dee7daf220cbcf86fb1c8c39b7daaccf1aa";
-      sha256 = "1bgcqcx3fqgp84ll445b381mwg0w3gc6zmccfcibfrdgjwa7sfky";
-    };
-  };
 in {
   programs.home-manager.enable = true;
   home.enableNixpkgsReleaseCheck = false;

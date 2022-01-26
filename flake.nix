@@ -36,18 +36,23 @@
     comma.flake = false;
     # I use the nur repo for firefox extensions
     nur.url = "github:nix-community/NUR";
+    # My extra nvim plugins -- setup in overlays
+    zk-nvim = {
+      url = "github:mickael-menu/zk-nvim";
+      flake = false;
+    };
+    telescope-media-files = {
+      url = "github:nvim-telescope/telescope-media-files.nvim";
+      flake = false;
+    };
+    vim-roam-task = {
+      url = "github:samgriesemer/vim-roam-task";
+      flake = false;
+    };
   };
 
-  outputs =
-    inputs@{ self
-    , nixpkgs
-    , darwin
-    , home-manager
-    , nixos-hardware
-    , devshell
-    , flake-utils
-    , ...
-    }:
+  outputs = inputs@{ self, nixpkgs, darwin, home-manager, nixos-hardware
+    , devshell, flake-utils, ... }:
     let
       inherit (darwin.lib) darwinSystem;
       inherit (nixpkgs.lib) nixosSystem;
@@ -64,17 +69,11 @@
 
       # generate a base darwin configuration with the
       # specified hostname, overlays, and any extraModules applied
-      mkDarwinConfig =
-        { system ? "x86_64-darwin"
-        , nixpkgs ? inputs.nixpkgs
-        , stable ? inputs.darwin-stable
-        , lib ? (mkLib nixpkgs)
-        , baseModules ? [
-            home-manager.darwinModules.home-manager
-            ./modules/darwin
-          ]
-        , extraModules ? [ ]
-        }:
+      mkDarwinConfig = { system ? "x86_64-darwin", nixpkgs ? inputs.nixpkgs
+        , stable ? inputs.darwin-stable, lib ? (mkLib nixpkgs), baseModules ? [
+          home-manager.darwinModules.home-manager
+          ./modules/darwin
+        ], extraModules ? [ ] }:
         darwinSystem {
           inherit system;
           modules = baseModules ++ extraModules;
@@ -83,18 +82,12 @@
 
       # generate a base nixos configuration with the
       # specified overlays, hardware modules, and any extraModules applied
-      mkNixosConfig =
-        { system ? "x86_64-linux"
-        , nixpkgs ? inputs.nixpkgs
-        , stable ? inputs.nixos-stable
-        , lib ? (mkLib nixpkgs)
-        , hardwareModules
+      mkNixosConfig = { system ? "x86_64-linux", nixpkgs ? inputs.nixpkgs
+        , stable ? inputs.nixos-stable, lib ? (mkLib nixpkgs), hardwareModules
         , baseModules ? [
-            home-manager.nixosModules.home-manager
-            ./modules/nixos
-          ]
-        , extraModules ? [ ]
-        }:
+          home-manager.nixosModules.home-manager
+          ./modules/nixos
+        ], extraModules ? [ ] }:
         nixosSystem {
           inherit system;
           modules = baseModules ++ hardwareModules ++ extraModules;
@@ -103,23 +96,17 @@
 
       # generate a home-manager configuration usable on any unix system
       # with overlays and any extraModules applied
-      mkHomeConfig =
-        { username
-        , system ? "x86_64-linux"
-        , nixpkgs ? inputs.nixpkgs
-        , stable ? inputs.nixos-stable
-        , lib ? (mkLib nixpkgs)
-        , baseModules ? [
-            ./modules/home-manager
-            {
-              home.sessionVariables = {
-                NIX_PATH =
-                  "nixpkgs=${nixpkgs}:stable=${stable}\${NIX_PATH:+:}$NIX_PATH";
-              };
-            }
-          ]
-        , extraModules ? [ ]
-        }:
+      mkHomeConfig = { username, system ? "x86_64-linux"
+        , nixpkgs ? inputs.nixpkgs, stable ? inputs.nixos-stable
+        , lib ? (mkLib nixpkgs), baseModules ? [
+          ./modules/home-manager
+          {
+            home.sessionVariables = {
+              NIX_PATH =
+                "nixpkgs=${nixpkgs}:stable=${stable}\${NIX_PATH:+:}$NIX_PATH";
+            };
+          }
+        ], extraModules ? [ ] }:
         homeManagerConfiguration rec {
           inherit system username;
           homeDirectory = "${homePrefix system}/${username}";
@@ -128,31 +115,25 @@
             imports = baseModules ++ extraModules ++ [ ./modules/overlays.nix ];
           };
         };
-    in
-    {
+    in {
       checks = listToAttrs (
         # darwin checks
-        (map
-          (system: {
-            name = system;
-            value = {
-              darwin =
-                self.darwinConfigurations.dragonstone.config.system.build.toplevel;
-            };
-          })
-          lib.platforms.darwin) ++
+        (map (system: {
+          name = system;
+          value = {
+            darwin =
+              self.darwinConfigurations.dragonstone.config.system.build.toplevel;
+          };
+        }) lib.platforms.darwin) ++
         # linux checks
-        (map
-          (system: {
-            name = system;
-            value = {
-              volantis =
-                self.nixosConfigurations.volantis.config.system.build.toplevel;
-              parallels = self.homeConfigurations.parallels.activationPackage;
-            };
-          })
-          lib.platforms.linux)
-      );
+        (map (system: {
+          name = system;
+          value = {
+            volantis =
+              self.nixosConfigurations.volantis.config.system.build.toplevel;
+            parallels = self.homeConfigurations.parallels.activationPackage;
+          };
+        }) lib.platforms.linux));
 
       darwinConfigurations = {
         # dragonstone-m1 = mkDarwinConfig {
@@ -214,27 +195,26 @@
     } //
     # add a devShell to this flake
     eachDefaultSystem (system:
-    let
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [
-          devshell.overlay
-          (final: prev: {
-            # expose stable packages via pkgs.stable
-            stable = import inputs.nixos-stable {
-              system = prev.system;
-              config.allowUnfree = true;
-            };
-          })
-        ];
-      };
-      nixBin = pkgs.writeShellScriptBin "nix" ''
-        ${pkgs.nix_2_4}/bin/nix --option experimental-features "nix-command flakes" "$@"
-      '';
-    in
-    {
-      devShell = pkgs.devshell.mkShell {
-        packages = [ nixBin pkgs.treefmt pkgs.nixfmt pkgs.stylua ];
-      };
-    });
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [
+            devshell.overlay
+            (final: prev: {
+              # expose stable packages via pkgs.stable
+              stable = import inputs.nixos-stable {
+                system = prev.system;
+                config.allowUnfree = true;
+              };
+            })
+          ];
+        };
+        nixBin = pkgs.writeShellScriptBin "nix" ''
+          ${pkgs.nix_2_4}/bin/nix --option experimental-features "nix-command flakes" "$@"
+        '';
+      in {
+        devShell = pkgs.devshell.mkShell {
+          packages = [ nixBin pkgs.treefmt pkgs.nixfmt pkgs.stylua ];
+        };
+      });
 }

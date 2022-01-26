@@ -10,7 +10,28 @@
       };
       #trunk = import inputs.trunk { system = prev.system; };
       #small = import inputs.small { system = prev.system; };
+      # from malob's config
+
+      # Overlay that adds some additional Neovim plugins
+      vimPlugins = prev.vimPlugins // {
+        vim-roam-task = prev.vimUtils.buildVimPluginFrom2Nix {
+          name = "vim-roam-task";
+          pname = "vim-roam-task";
+          src = inputs.vim-roam-task;
+        };
+        telescope-media-files = prev.vimUtils.buildVimPlugin {
+          name = "telescope-media-files";
+          pname = "telescope-media-files";
+          src = inputs.telescope-media-files;
+        };
+        zk-nvim = prev.vimUtils.buildVimPlugin {
+          name = "zk-nvim";
+          pname = "zk-nvim";
+          src = inputs.zk-nvim;
+        };
+      };
     })
     inputs.nur.overlay
+
   ];
 }
