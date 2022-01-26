@@ -66,6 +66,7 @@ M.ui = function()
     }
     local nvim_tree_config = require("nvim-tree.config")
     local tree_cb = nvim_tree_config.nvim_tree_callback
+    vim.g.nvim_tree_respect_buf_cwd = 1
     require'nvim-tree'.setup {
         -- disables netrw completely
         disable_netrw = true,
@@ -74,6 +75,7 @@ M.ui = function()
         -- open the tree when running this setup function
         open_on_setup = false,
         auto_close = true,
+        update_cwd = true,
         update_to_buf_dir = {enable = true, auto_open = true},
         update_focused_file = {enable = true, update_cwd = true},
         -- show lsp diagnostics in the signcolumn
@@ -164,14 +166,26 @@ M.ui = function()
     require('indent_blankline').setup({show_current_context = true})
 
     require("colorizer").setup()
+    -- require('bufferline').setup {
+    --     options = {
+    --         numbers = 'none',
+    --         always_show_bufferline = true,
+    --         max_name_length = 40,
+    --         max_prefix_length = 40, -- prefix used when a buffer is de-duplicated
+    --         show_buffer_icons = true,
+    --         show_buffer_close_icons = true,
+    --         show_close_icon = true,
+    --         show_tab_indicators = true,
+    --         separator_style = "thin",
+    --         offsets = {{filetype = "NvimTree", text = "", padding = 1}}
+    --     }
+    -- }
     vim.g.bufferline = {
         animation = true,
         closable = true,
         clickable = true,
         maximum_length = 40,
         icons = true
-        -- exclude_name = {''},
-        -- exclude_ft = {''},
     }
     require('lualine').setup {
         options = {
@@ -697,12 +711,26 @@ end
 -- rooter, kommentary, autopairs, tmux, toggleterm
 M.misc = function()
     -- Change project directory using local cd only
-    vim.g.rooter_cd_cmd = 'lcd'
+    -- vim.g.rooter_cd_cmd = 'lcd'
     -- Look for these files/dirs as hints
-    vim.g.rooter_patterns = {
-        '.git', '_darcs', '.hg', '.bzr', '.svn', 'Makefile', 'package.json',
-        '.zk', 'Cargo.toml', 'build.sbt', 'Package.swift', 'Makefile.in'
-    }
+    -- vim.g.rooter_patterns = {
+    --     '.git', '_darcs', '.hg', '.bzr', '.svn', 'Makefile', 'package.json',
+    --     '.zk', 'Cargo.toml', 'build.sbt', 'Package.swift', 'Makefile.in'
+    -- }
+    require('project_nvim').setup({
+        active = true,
+        on_config_done = nil,
+        manual_mode = false,
+        detection_methods = {"pattern", "lsp"},
+        patterns = {
+            ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json",
+            ".zk", "Cargo.toml", "build.sbt", "Package.swift", "Makefile.in"
+        },
+        show_hidden = false,
+        silent_chdir = true,
+        ignore_lsp = {}
+    })
+    require('telescope').load_extension('projects')
 
     require('kommentary.config').configure_language({"lua", "rust"}, {
         prefer_single_line_comments = true
@@ -731,4 +759,3 @@ M.misc = function()
 end -- misc
 
 return M
-

@@ -37,7 +37,6 @@ let
     neofetch # display key software/version info in term
     vimv # shell script to bulk rename
     btop
-    niv # TODO: do I need this now that I'm using flakes?
     #youtube-dl replaced by yt-dlp
     yt-dlp # download youtube and other web videos
     vulnix # check for live nix apps that are listed in NVD
@@ -49,7 +48,6 @@ let
     aria # cli downloader
     kalker # cli calculator; alt. to bc and calc
     nix-tree # explore dependencies
-    nix-prefetch-git # used to get sha/rev
     fortune
   ];
   cPkgs = with pkgs.stable; [
@@ -555,9 +553,10 @@ in {
       symbols-outline-nvim # navigate the current file better
       lualine-nvim # nice status bar at bottom
       barbar-nvim # nice buffers (tabs) bar at top
+      #bufferline-nvim
       indent-blankline-nvim # visual indent
       toggleterm-nvim # better terminal management
-      nvim-treesitter # better code coloring
+      pkgs.stable.vimPlugins.nvim-treesitter # better code coloring
 
       # Editor Features ####################################
       vim-abolish # better abbreviations / spelling fixer
@@ -595,7 +594,8 @@ in {
 
       # Misc
       vim-fugitive # git management
-      vim-rooter # change dir to project root
+      #vim-rooter # change dir to project root
+      project-nvim
       vim-tmux-navigator # navigate vim and tmux panes together
       FixCursorHold-nvim # remove this when neovim #12587 is resolved
       impatient-nvim # speeds startup times by caching lua bytecode
