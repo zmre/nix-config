@@ -2,6 +2,13 @@
   # bundles essential nixos modules
   imports = [ ../common.nix ];
 
+  # Note: these vars are pam environment so set on login globally
+  # as part of parent to shells. Starting new shells doesn't get the
+  # new env. You have to logout first. Or use home-manager vars instead.
+  environment.sessionVariables = {
+    LANGUAGE = "en_US.UTF-8";
+    LC_ALL = "en_US.UTF-8";
+  };
   environment.systemPackages = with pkgs.stable; [
     vim
     wget
@@ -16,16 +23,18 @@
     libva-utils
     compsize # btrfs util
     x11_ssh_askpass
-    chkrootkit
     veracrypt
     firmware-manager
   ];
+
+  i18n.defaultLocale = "en_US.UTF-8";
 
   services.locate = {
     enable = true; # periodically update locate db
     localuser = null;
     locate = pkgs.mlocate;
   };
+  services.timesyncd.enable = true;
   services.printing.enable = true; # cupsd printing
   services.earlyoom.enable = true; # out of memory detection
   services.thermald.enable = true; # enable thermal data
@@ -35,6 +44,8 @@
   security.sudo.extraConfig = ''
     Defaults   timestamp_timeout=-1 
   '';
+  # suggest install package if cmd missing
+  programs.command-not-found.enable = true;
 
   hm = { pkgs, ... }: { imports = [ ../home-manager/home-linux.nix ]; };
 

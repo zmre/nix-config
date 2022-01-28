@@ -13,7 +13,6 @@
       AppleShowAllExtensions = true;
       FXEnableExtensionChangeWarning = true;
       QuitMenuItem = true;
-      WarnOnEmptyTrash = false;
       _FXShowPosixPathInTitle = false;
     };
 
@@ -67,7 +66,7 @@
       # no popup menus when holding down letters
       ApplePressAndHoldEnabled = false;
       # delay before repeating keystrokes
-      InitialKeyRepeat = 10;
+      InitialKeyRepeat = 14;
       # delay between repeated keystrokes upon holding a key
       KeyRepeat = 1;
       AppleShowAllExtensions = true;

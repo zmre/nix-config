@@ -4,22 +4,24 @@
     exploitdb
     metasploit
     sqlmap
+    arpoison
+
     # Recon
     avahi
     arp-scan
     arping
     dnsenum
     dnsrecon
-    enum4linux-ng
+    enum4linux-ng # local privesc finder
     fierce
+    httrack # offline browser / website mirror
     fping
     hping
+    ike-scan
     masscan
     nikto
     onesixtyone
     p0f
-    # pick one of nmap or nmap-graphical
-    #nmap
     nmap-graphical
     rustscan
     snmpcheck
@@ -31,6 +33,7 @@
     wireshark
     #wireshark-cli
     zmap
+
     # Passwords
     fcrackzip
     john
@@ -39,11 +42,17 @@
     pdfcrack
     rarcrack
     thc-hydra
+    crunch # wordlist generator
+    ncrack # network auth cracker
+
     # Sniffing
     ettercap
     bettercap
     dsniff
     mitmproxy
+    wireshark
+    ngrep
+
     # Web
     burpsuite
     dirb
@@ -51,25 +60,31 @@
     wfuzz
     wpscan
     zap
+
     # wifi
     aircrack-ng
     gqrx
     kismet
     wifite2
     reaverwps
+
     # bluetooth
     bluez
+
     # rfid
     proxmark3
     gnuradio
     gqrx
     hackrf
     multimon-ng
+
     # crypto / stego
     stegseek
+
     # installed elsewhere
     #exif
     zsteg
+
     # manipulation
     gdb
     radare2
@@ -77,9 +92,14 @@
     sqlitebrowser
     unrar
     netcat
-    ngrep
+    pwncat # netcat on steroids
+    capstone # cstool disassembly tool
+    afl # fuzzer tool
+    binwalk
+
     # misc
     faraday-cli
+    corkscrew # tunnel ssh through http proxies
 
   ];
 }

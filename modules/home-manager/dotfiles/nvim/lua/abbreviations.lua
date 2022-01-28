@@ -1,4 +1,6 @@
 vim.cmd("ab jjcheck ✓")
+vim.cmd("ab Ironcore IronCore")
+vim.cmd("ab Hubspot HubSpot")
 vim.cmd("ab jjheart ♥")
 vim.cmd("ab jjcomm ⌘")
 vim.cmd("ab accidant accident")
@@ -59,5 +61,4 @@ vim.cmd("ab thursday Thursday")
 vim.cmd("ab friday Friday")
 vim.cmd("ab saturday Saturday")
 vim.cmd("ab sunday Sunday")
-
 

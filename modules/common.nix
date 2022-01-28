@@ -2,11 +2,6 @@
   imports = [ ./primary.nix ./nixpkgs.nix ./overlays.nix ];
 
   time.timeZone = "America/Denver";
-  services.timesyncd.enable = true;
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  # suggest install package if cmd missing
-  programs.command-not-found.enable = true;
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -43,13 +38,6 @@
     };
     # list of acceptable shells in /etc/shells
     shells = with pkgs.stable; [ bash zsh ];
-    # Note: these vars are pam environment so set on login globally
-    # as part of parent to shells. Starting new shells doesn't get the
-    # new env. You have to logout first. Or use home-manager vars instead.
-    sessionVariables = {
-      LANGUAGE = "en_US.UTF-8";
-      LC_ALL = "en_US.UTF-8";
-    };
     pathsToLink = [ "/libexec" ];
   };
 

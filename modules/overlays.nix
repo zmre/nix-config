@@ -6,6 +6,8 @@
       stable = import stable {
         system = prev.system;
         config.allowUnfree = true;
+        config.allowBroken = true;
+        config.allowUnsupportedSystem = true;
         nix.package = inputs.nixos-stable.nix_2_4;
       };
       #trunk = import inputs.trunk { system = prev.system; };

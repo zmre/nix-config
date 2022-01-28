@@ -14,8 +14,8 @@
     useSandbox = true;
     allowedUsers = [ "@wheel" ];
     trustedUsers = [ "${config.user.name}" "root" "@admin" "@wheel" ];
-    autoOptimiseStore = true;
-    optimise.automatic = true;
+    #autoOptimiseStore = true;
+    #optimise.automatic = true;
     gc = {
       automatic = true;
       options = "--delete-older-than 30d";
@@ -46,22 +46,6 @@
         };
         flake = stable;
       };
-
-      # trunk = {
-      #   from = {
-      #     id = "trunk";
-      #     type = "indirect";
-      #   };
-      #   flake = inputs.trunk;
-      # };
-
-      # small = {
-      #   from = {
-      #     id = "small";
-      #     type = "indirect";
-      #   };
-      #   flake = inputs.small;
-      # };
     };
   };
 }

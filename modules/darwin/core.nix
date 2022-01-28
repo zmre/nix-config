@@ -5,7 +5,7 @@ in {
   environment = {
     loginShell = pkgs.zsh;
     pathsToLink = [ "/Applications" ];
-    backupFileExtension = "backup";
+    #backupFileExtension = "backup";
     etc = { darwin.source = "${inputs.darwin}"; };
     # Use a custom configuration.nix location.
     # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
@@ -19,7 +19,7 @@ in {
     remapCapsLockToEscape = true;
   };
 
-  fonts.enableFontDir = true;
+  fonts.enableFontDir = false;
   nix.nixPath = [ "darwin=/etc/${config.environment.etc.darwin.target}" ];
   nix.extraOptions = ''
     extra-platforms = x86_64-darwin aarch64-darwin

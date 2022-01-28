@@ -9,6 +9,8 @@ let
     fzy
     tree-sitter
     curl
+    duf # df alternative showing free disk space
+    fswatch
 
     # compression
     atool
@@ -29,26 +31,41 @@ let
     poppler_utils # for pdf2text in lf
     mediainfo # used by lf
     exiftool # used by lf
+    mediainfo
     exif
     glow # view markdown file or dir
     mdcat # colorize markdown
     html2text
 
-    neofetch # display key software/version info in term
-    vimv # shell script to bulk rename
-    btop
-    #youtube-dl replaced by yt-dlp
-    yt-dlp # download youtube and other web videos
-    vulnix # check for live nix apps that are listed in NVD
-    tickrs # track stocks
+    # network
+    gping
     bandwhich # bandwidth monitor by process
     bmon # bandwidth monitor by interface
-    caddy # local filesystem server
-    aspell # spell checker
+    caddy # local filesystem web server
     aria # cli downloader
+    ncftp
+
+    newsboat # console rss reader
+    neofetch # display key software/version info in term
+    nodePackages.readability-cli # quick commandline website article read
+    vimv # shell script to bulk rename
+    # TODO: btop failing on darwin but works in nix-shell on darwin
+    #btop
+    #youtube-dl replaced by yt-dlp
+    yt-dlp
+    vulnix # check for live nix apps that are listed in NVD
+    tickrs # track stocks
+    taskwarrior-tui
+    aspell # spell checker
     kalker # cli calculator; alt. to bc and calc
     nix-tree # explore dependencies
+    asciinema # terminal screencast
+    ctags
+    catimg # ascii rendering of any image in terminal x-pltfrm
     fortune
+    ipcalc
+    kondo # free disk space by cleaning project build dirs
+    optipng
   ];
   cPkgs = with pkgs.stable; [
     automake
@@ -60,8 +77,8 @@ let
     glib
     libtool
   ];
-  # live dangerously here with unstable
-  luaPkgs = with pkgs; [ sumneko-lua-language-server luaformatter ];
+  # TODO: sumneko-lua-language-server failing on darwin
+  luaPkgs = with pkgs.stable; [ luaformatter ];
   # using unstable in my home profile for nix commands
   nixEditorPkgs = with pkgs; [ nix statix nixfmt nixpkgs-fmt rnix-lsp ];
   # live dangerously here with unstable
@@ -76,8 +93,11 @@ let
     prettier
     vscode-langservers-extracted # lsp servers for json, html, css
   ];
+  # TODO: traceroute fails on darwin
   networkPkgs = with pkgs.stable; [ traceroute mtr iftop ];
-  guiPkgs = with pkgs; [ neovide ];
+  guiPkgs = with pkgs; [ 
+    #neovide
+  ];
 
 in {
   programs.home-manager.enable = true;
@@ -91,9 +111,9 @@ in {
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "21.11";
+  home.stateVersion = "20.09";
   home.packages = defaultPkgs ++ cPkgs ++ luaPkgs ++ nixEditorPkgs ++ rustPkgs
-    ++ typescriptPkgs ++ guiPkgs ++ networkPkgs;
+    ++ typescriptPkgs ++ guiPkgs; # ++ networkPkgs;
 
   # TODO: comma, gnupg?, ffmpeg?
 
@@ -199,22 +219,6 @@ in {
         "plain"; # no line numbers, git status, etc... more like cat with colors
     };
   };
-  programs.mpv = {
-    enable = true;
-    scripts = with pkgs.mpvScripts; [ thumbnail sponsorblock ];
-    config = {
-      # disable on-screen controller -- else I get a message saying I have to add this
-      osc = false;
-      # Use a large seekable RAM cache even for local input.
-      cache = true;
-      save-position-on-quit = false;
-      x11-bypass-compositor = true;
-      #ytdl-format = "bestvideo+bestaudio";
-      # have mpv use yt-dlp instead of youtube-dl
-      script-opts-append = "ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp";
-    };
-    defaultProfiles = [ "gpu-hq" ];
-  };
   programs.nix-index.enable = true;
   programs.direnv = {
     enable = true;
@@ -260,241 +264,6 @@ in {
       active.indicator = ">";
       # Show the tracking of time
       journal.time = "on";
-    };
-  };
-
-  programs.qutebrowser = {
-    enable = true;
-    keyBindings = {
-      normal = {
-        ",m" = "spawn mpv {url}";
-        ",M" = ''hint links spawn mpv "{hint-url}"'';
-        ",d" = ''spawn yt-dlp -o "~/Downloads/%(title)s.%(ext)s" "{url}"'';
-        ",D" = ''
-          hint links spawn yt-dlp -o "~/Downloads/%(title)s.%(ext)s" "{url}"'';
-        ",f" = ''spawn firefox "{url}"'';
-        # get current page as markdown link
-        ",ym" = "yank inline [{title}]({url:pretty})";
-        "xt" = "config-cycle tabs.show always never";
-        "<f12>" = "inspector";
-        # search for link with / then hit enter to follow
-        "<return>" = "selection-follow";
-      };
-      prompt = { "<Ctrl-y>" = "prompt-yes"; };
-      insert = {
-        "<Ctrl-h>" = "fake-key <Backspace>";
-        "<Ctrl-a>" = "fake-key <Home>";
-        "<Ctrl-e>" = "fake-key <End>";
-        "<Ctrl-b>" = "fake-key <Left>";
-        "<Mod1-b>" = "fake-key <Ctrl-Left>";
-        "<Ctrl-f>" = "fake-key <Right>";
-        "<Mod1-f>" = "fake-key <Ctrl-Right>";
-        "<Ctrl-p>" = "fake-key <Up>";
-        "<Ctrl-n>" = "fake-key <Down>";
-        "<Mod1-d>" = "fake-key <Ctrl-Delete>";
-        "<Ctrl-d>" = "fake-key <Delete>";
-        "<Ctrl-w>" = "fake-key <Ctrl-Backspace>";
-        "<Ctrl-u>" = "fake-key <Shift-Home><Delete>";
-        "<Ctrl-k>" = "fake-key <Shift-End><Delete>";
-        "<Ctrl-x><Ctrl-e>" = "open-editor";
-      };
-    };
-    settings = {
-      confirm_quit = [ "downloads" ]; # only confirm if downloads in progress
-      content.blocking.enabled = true;
-      content.blocking.method = "both";
-      content.blocking.hosts.block_subdomains = true;
-      content.default_encoding = "utf-8";
-      content.geolocation = false;
-      content.cookies.accept = "no-3rdparty";
-      qt.highdpi = true;
-      # might break some sites; stops fingerprinting
-      content.canvas_reading = false;
-      content.webrtc_ip_handling_policy = "default-public-interface-only";
-      content.javascript.can_access_clipboard = true;
-      content.site_specific_quirks.enabled = false;
-      content.headers.user_agent =
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36";
-      content.pdfjs = true;
-      content.autoplay = false;
-      scrolling.smooth = true;
-      auto_save.session = true; # remember open tabs
-      session.lazy_restore = true;
-      # if input is focused on tab load, allow typing
-      input.insert_mode.auto_load = true;
-      # exit insert mode if clicking on non editable item
-      input.insert_mode.auto_leave = true;
-      downloads.location.directory = "${config.home.homeDirectory}/Downloads";
-      downloads.location.prompt = false;
-      downloads.position = "bottom";
-      downloads.remove_finished = 10000;
-      completion.use_best_match = true;
-      completion.shrink = true;
-      colors.webpage.preferred_color_scheme = "dark";
-      colors.webpage.darkmode.enabled = true;
-      colors.webpage.bg = "black";
-      statusbar.widgets = [ "progress" "keypress" "url" "history" ];
-      tabs.position = "left";
-      tabs.title.format = "{index}: {audio}{current_title}";
-      tabs.title.format_pinned = "{index}: {audio}{current_title}";
-      tabs.last_close = "close";
-      spellcheck.languages = [ "en-US" ];
-      editor.command = [ "neovide" "{}:{line}" ];
-      fileselect.handler = "external";
-      fileselect.single_file.command = [
-        "alacritty"
-        "--class"
-        "lf,lf"
-        "-t"
-        "Chooser"
-        "-e"
-        "sh"
-        "-c"
-        "lf -selection-path {}"
-      ];
-      fileselect.multiple_files.command = [
-        "alacritty"
-        "--class"
-        "lf,lf"
-        "-t"
-        "Chooser"
-        "-e"
-        "sh"
-        "-c"
-        "lf -selection-path {}"
-      ];
-    };
-    # these create :whatever commands
-    aliases = {
-      # bookmarklet copied from getpocket.com/add/?ep=1
-      pocket =
-        "jseval --url javascript:(function()%7Bvar%20e=function(t,n,r,i,s)%7Bvar%20o=[5725664,2839244,3201831,4395922,8906499,4608765,5885226,5372109,1439837,3633248];var%20i=i%7C%7C0,u=0,n=n%7C%7C[],r=r%7C%7C0,s=s%7C%7C0;var%20a=%7B'a':97,'b':98,'c':99,'d':100,'e':101,'f':102,'g':103,'h':104,'i':105,'j':106,'k':107,'l':108,'m':109,'n':110,'o':111,'p':112,'q':113,'r':114,'s':115,'t':116,'u':117,'v':118,'w':119,'x':120,'y':121,'z':122,'A':65,'B':66,'C':67,'D':68,'E':69,'F':70,'G':71,'H':72,'I':73,'J':74,'K':75,'L':76,'M':77,'N':78,'O':79,'P':80,'Q':81,'R':82,'S':83,'T':84,'U':85,'V':86,'W':87,'X':88,'Y':89,'Z':90,'0':48,'1':49,'2':50,'3':51,'4':52,'5':53,'6':54,'7':55,'8':56,'9':57,'%5C/':47,':':58,'?':63,'=':61,'-':45,'_':95,'&':38,'$':36,'!':33,'.':46%7D;if(!s%7C%7Cs==0)%7Bt=o[0]+t%7Dfor(var%20f=0;f%3Ct.length;f++)%7Bvar%20l=function(e,t)%7Breturn%20a[e[t]]?a[e[t]]:e.charCodeAt(t)%7D(t,f);if(!l*1)l=3;var%20c=l*(o[i]+l*o[u%25o.length]);n[r]=(n[r]?n[r]+c:c)+s+u;var%20p=c%25(50*1);if(n[p])%7Bvar%20d=n[r];n[r]=n[p];n[p]=d%7Du+=c;r=r==50?0:r+1;i=i==o.length-1?0:i+1%7Dif(s==193)%7Bvar%20v='';for(var%20f=0;f%3Cn.length;f++)%7Bv+=String.fromCharCode(n[f]%25(25*1)+97)%7Do=function()%7B%7D;return%20v+'c7a8217062'%7Delse%7Breturn%20e(u+'',n,r,i,s+1)%7D%7D;var%20t=document,n=t.location.href,r=t.title;var%20i=e(n);var%20s=t.createElement('script');s.type='text/javascript';s.src='https://getpocket.com/b/r4.js?h='+i+'&u='+encodeURIComponent(n)+'&t='+encodeURIComponent(r);e=i=function()%7B%7D;var%20o=t.getElementsByTagName('head')[0]%7C%7Ct.documentElement;o.appendChild(s)%7D)()";
-    };
-    quickmarks = {
-      icc = "https://ironcorelabs.com/";
-      icweb = "https://github.com/ironcorelabs/website";
-      nix = "https://search.nixos.org/";
-      hm = "https://nix-community.github.io/home-manager/options.html";
-      rd = "https://reddit.com/";
-      yt = "https://youtube.com/";
-      hn = "https://news.ycombinator.com/";
-      tw = "https://twitter.com/";
-      td = "https://twitter.com/i/lists/44223630";
-      gh = "https://github.com/";
-      ghi = "https://github.com/ironcorelabs/";
-      ghz = "https://github.com/zmre/";
-      ghn = "https://github.com/notifications?participating=true";
-      gr = "https://goodreads.com/";
-      mg = "https://mail.google.com/";
-      mp = "https://mail.protonmail.com/";
-      po = "https://getpocket.com/my-list";
-    };
-    searchEngines = {
-      DEFAULT = "https://duckduckgo.com/?q={}&ia=web";
-      d = "https://duckduckgo.com/?q={}&ia=web";
-      w = "https://en.wikipedia.org/wiki/Special:Search?search={}&go=Go&ns0=1";
-      aw = "https://wiki.archlinux.org/?search={}";
-      nw = "https://nixos.wiki/index.php?search={}";
-      np =
-        "https://search.nixos.org/packages?channel=21.11&from=0&size=100&sort=relevance&type=packages&query={}";
-      nu =
-        "https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query={}";
-      no =
-        "https://search.nixos.org/options?channel=21.11&from=0&size=50&sort=relevance&type=packages&query={}";
-      nf =
-        "https://search.nixos.org/flakes?channel=21.11&from=0&size=50&sort=relevance&type=packages&query={}";
-      g = "https://www.google.com/search?hl=en&q={}";
-      gh = "https://github.com/?q={}";
-      yt = "https://www.youtube.com/results?search_query={}";
-    };
-    extraConfig = ''
-      # stolen from reddit; will block or allow skip of ads on youtube
-      from qutebrowser.api import interceptor
-
-      def filter_yt(info: interceptor.Request):
-          """Block the given request if necessary."""
-          url = info.request_url
-          if (url.host() == 'www.youtube.com' and url.path() == '/get_video_info' and '&adformat=' in url.query()):
-              info.block()
-
-      interceptor.register(filter_yt)
-
-      ${builtins.readFile ./dotfiles/qutebrowser-theme-onedark.py}
-    '';
-  };
-
-  # Backup browser for when Qutebrowser doesn't work as expected
-  programs.firefox = {
-    enable = true;
-    # turns out you have to setup a profile (below) for extensions to install
-    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-      ublock-origin
-      https-everywhere
-      noscript
-      vimium
-    ];
-    profiles.home.id = 0;
-    profiles.home.settings = {
-      "app.update.auto" = false; # nix will handle updates
-      "browser.search.region" = "US";
-      "browser.search.countryCode" = "US";
-      "browser.ctrlTab.recentlyUsedOrder" = false;
-      "browser.newtabpage.enhanced" = true;
-      "devtools.chrome.enabled" = true;
-      "devtools.theme" = "dark";
-      "extensions.pocket.enabled" = true;
-      "network.prefetch-next" = true;
-      "nework.predictor.enabled" = true;
-      "browser.uidensity" = 1;
-      "privacy.trackingprotection.enabled" = true;
-      "privacy.trackingprotection.socialtracking.enabled" = true;
-      "privacy.trackingprotection.socialtracking.annotate.enabled" = true;
-      "privacy.trackingprotection.socialtracking.notification.enabled" = false;
-      "services.sync.engine.addons" = false;
-      "services.sync.engine.passwords" = false;
-      "services.sync.engine.prefs" = false;
-      "signon.rememberSignons" = false;
-    };
-  };
-
-  programs.alacritty = {
-    enable = true;
-    settings = {
-      window.decorations = "full";
-      window.dynamic_title = true;
-      background_opacity = 0.9;
-      scrolling.history = 3000;
-      scrolling.smooth = true;
-      font.normal.family = "MesloLGS Nerd Font Mono";
-      font.normal.style = "Regular";
-      font.bold.style = "Bold";
-      font.italic.style = "Italic";
-      font.bold_italic.style = "Bold Italic";
-      font.size = 9;
-      shell.program = "${pkgs.zsh}/bin/zsh";
-      live_config_reload = true;
-      cursor.vi_mode_style = "Underline";
-      draw_bold_text_with_bright_colors = true;
-      key_bindings = [
-        {
-          key = "Escape";
-          mods = "Control";
-          mode = "~Search";
-          action = "ToggleViMode";
-        }
-        # cmd-{ and cmd-} and cmd-] and cmd-[ will switch tmux windows
-        {
-          key = "LBracket";
-          mods = "Command";
-          # \x02 is ctrl-b so sequence below is ctrl-b, h
-          chars = "\\x02h";
-        }
-        {
-          key = "RBracket";
-          mods = "Command";
-          chars = "\\x02l";
-        }
-      ];
     };
   };
 
@@ -643,7 +412,8 @@ in {
     enableCompletion = true;
     enableAutosuggestions = true;
     enableSyntaxHighlighting = true;
-    enableVteIntegration = true;
+    # TODO: next line only builds on linux, not darwin...
+    #enableVteIntegration = true; # let's the terminal track current working dir
     history = {
       expireDuplicatesFirst = true;
       ignoreSpace = true;
@@ -783,6 +553,7 @@ in {
       qp = ''
         qutebrowser --temp-basedir --set content.private_browsing true --set colors.tabs.bar.bg "#552222" --config-py "$HOME/.config/qutebrowser/config.py" --qt-arg name "qp,qp"'';
       calc = "kalker";
+      df = "duf";
     };
   };
 
@@ -946,9 +717,7 @@ in {
     shell = "${pkgs.zsh}/bin/zsh";
     historyLimit = 10000;
     escapeTime = 0;
-    extraConfig = ''
-      ${builtins.readFile ./dotfiles/tmux.conf}
-    '';
+    extraConfig = builtins.readFile ./dotfiles/tmux.conf;
     sensibleOnTop = true;
     plugins = with pkgs; [
       tmuxPlugins.sensible
@@ -970,12 +739,6 @@ in {
         '';
       }
     ];
-  };
-
-  # Need to set this up per device... just install it and let config be manual
-  services.syncthing = {
-    enable = true;
-    tray.enable = false;
   };
 
 }

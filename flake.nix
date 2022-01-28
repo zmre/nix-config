@@ -16,8 +16,6 @@
     darwin-stable.url = "github:nixos/nixpkgs/nixpkgs-21.11-darwin";
     nixos-stable.url = "github:nixos/nixpkgs/nixos-21.11";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    #small.url = "github:nixos/nixpkgs/nixos-unstable-small";
-    #trunk.url = "github:nixos/nixpkgs/master";
 
     flake-compat.url = "github:edolstra/flake-compat";
     flake-compat.flake = false;
@@ -118,13 +116,15 @@
     in {
       checks = listToAttrs (
         # darwin checks
-        (map (system: {
-          name = system;
-          value = {
-            darwin =
-              self.darwinConfigurations.dragonstone.config.system.build.toplevel;
-          };
-        }) lib.platforms.darwin) ++
+        (map
+          (system: {
+            name = system;
+            value = {
+              dragonstone =
+                self.darwinConfigurations.dragonstone.config.system.build.toplevel;
+            };
+          })
+          lib.platforms.darwin) ++
         # linux checks
         (map (system: {
           name = system;
@@ -195,26 +195,29 @@
     } //
     # add a devShell to this flake
     eachDefaultSystem (system:
-      let
-        pkgs = import nixpkgs {
-          inherit system;
-          overlays = [
-            devshell.overlay
-            (final: prev: {
-              # expose stable packages via pkgs.stable
-              stable = import inputs.nixos-stable {
-                system = prev.system;
-                config.allowUnfree = true;
-              };
-            })
-          ];
-        };
-        nixBin = pkgs.writeShellScriptBin "nix" ''
-          ${pkgs.nix_2_4}/bin/nix --option experimental-features "nix-command flakes" "$@"
-        '';
-      in {
-        devShell = pkgs.devshell.mkShell {
-          packages = [ nixBin pkgs.treefmt pkgs.nixfmt pkgs.stylua ];
-        };
-      });
+    let
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [
+          devshell.overlay
+          (final: prev: {
+            # expose stable packages via pkgs.stable
+            stable = import inputs.nixos-stable {
+              system = prev.system;
+              config.allowUnfree = true;
+              config.allowBroken = true;
+              config.allowUnsupportedSystem = true;
+            };
+          })
+        ];
+      };
+      nixBin = pkgs.writeShellScriptBin "nix" ''
+        ${pkgs.nix_2_4}/bin/nix --option experimental-features "nix-command flakes" "$@"
+      '';
+    in
+    {
+      devShell = pkgs.devshell.mkShell {
+        packages = [ nixBin pkgs.treefmt pkgs.nixfmt pkgs.stylua ];
+      };
+    });
 }
