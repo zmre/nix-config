@@ -30,25 +30,11 @@
       "findutils" # TODO: needed?
       "gdrive"
       "ical-buddy"
-      "mas"
+      #"mas"
       "ncspot"
-      "wireshark-chmodbpf"
-      "xbar"
-      "zoom"
-      "quicklook-csv"
-      "quicklook-json"
-      "quicklookase"
-      "webpquicklook"
-      "qlmarkdown"
-      "qlprettypatch"
-      "qlstephen"
-      "qlvideo"
-      "reikey"
-      "revisionist"
-      "silentknight"
-      "systhist"
-      "lockrattler"
       "chkrootkit"
+      # because the nix recipe isn't compiling on darwin
+      "lua-language-server"
     ];
   };
 }

@@ -106,7 +106,6 @@ M.defaults = function()
     vim.api.nvim_set_keymap('n', ',', '', {})
     vim.g.mapleader = ',' -- Namespace for custom shortcuts
 
-    -- TODO: Do this a more lua native way
     vim.cmd([[filetype plugin indent on]])
     vim.cmd('syn sync minlines=5000')
     vim.cmd('syntax on')
@@ -232,4 +231,3 @@ M.programming = function()
 end
 
 return M
-

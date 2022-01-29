@@ -147,7 +147,7 @@
         dragonstone = mkDarwinConfig {
           system = "x86_64-darwin";
           extraModules = [
-            ./profiles/personal.nix
+            ./profiles/pwalsh.nix
             ./modules/darwin/apps.nix
             { homebrew.brewPrefix = "/usr/local/bin"; }
           ];
@@ -160,7 +160,7 @@
             ./modules/hardware/framework-volantis.nix
             ./modules/hardware/volantis.nix
           ];
-          extraModules = [ ./profiles/personal.nix ];
+          extraModules = [ ./profiles/zmre.nix ];
         };
         nixos-pw-vm = mkNixosConfig {
           hardwareModules = [
@@ -168,7 +168,7 @@
             ./modules/hardware/parallels.nix
             #nixos-hardware.nixosModules.lenovo-thinkpad-t460s
           ];
-          extraModules = [ ./profiles/personal.nix ];
+          extraModules = [ ./profiles/zmre.nix ];
         };
       };
 

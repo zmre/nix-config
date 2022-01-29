@@ -45,12 +45,10 @@ let
     aria # cli downloader
     ncftp
 
-    newsboat # console rss reader
     neofetch # display key software/version info in term
     nodePackages.readability-cli # quick commandline website article read
     vimv # shell script to bulk rename
-    # TODO: btop failing on darwin but works in nix-shell on darwin
-    #btop
+    pkgs.btop
     #youtube-dl replaced by yt-dlp
     yt-dlp
     vulnix # check for live nix apps that are listed in NVD
@@ -77,7 +75,7 @@ let
     glib
     libtool
   ];
-  # TODO: sumneko-lua-language-server failing on darwin
+  # sumneko-lua-language-server failing on darwin, so installing in home-linux and brew
   luaPkgs = with pkgs.stable; [ luaformatter ];
   # using unstable in my home profile for nix commands
   nixEditorPkgs = with pkgs; [ nix statix nixfmt nixpkgs-fmt rnix-lsp ];
@@ -412,8 +410,9 @@ in {
     enableCompletion = true;
     enableAutosuggestions = true;
     enableSyntaxHighlighting = true;
-    # TODO: next line only builds on linux, not darwin...
-    #enableVteIntegration = true; # let's the terminal track current working dir
+    # let's the terminal track current working dir but only builds on linux
+    enableVteIntegration = if pkgs.stdenvNoCC.isDarwin then false else true;
+
     history = {
       expireDuplicatesFirst = true;
       ignoreSpace = true;
@@ -602,7 +601,6 @@ in {
               }}'';
       # Purpose of this is to allow for opening multiple selected files. Default only works on one.
       # Default will use data from mimetype associations.
-      # TODO: make cross platform
       # Note: this gets overridden when in selection-path (file dialog) mode
       open = ''
         &{{ for f in $fx; do xdg-open "$f" 2>&1 > /dev/null || open "$f" 2>&1 > /dev/null" ; done }}'';
@@ -739,6 +737,72 @@ in {
         '';
       }
     ];
+  };
+
+  programs.newsboat = {
+    enable = true;
+    autoReload = true;
+    browser = if pkgs.stdenvNoCC.isDarwin then "open" else "${pkgs.xdg-utils}/bin/xdg-open";
+    maxItems = 100;
+    extraConfig = ''
+      show-read-feeds  no
+      bind-key j next-unread
+      bind-key k prev-unread
+      highlight article "^(Feed|Title|Author|Link|Date):.*$" yellow default bold
+      highlight article "https?://[^ ]+" blue default underline
+      '';
+    urls = [
+        {tags = ["security"]; title = "Cyberscoop"; url="https://www.cyberscoop.com/feed/";}
+        {tags = ["security"]; title = "Krebs on Security"; url="https://krebsonsecurity.com/feed/";}
+        {tags = ["security"]; title = "DefenseOne"; url="http://www.defenseone.com/rss/technology/ ";}
+        {tags = ["news"]; title = "NPR"; url="http://www.npr.org/rss/rss.php?id=1001";}
+        {tags = ["news"]; title = "Reuters Domestic"; url="http://feeds.reuters.com/Reuters/domesticNews";}
+        {tags = ["startup"]; title = "TechCrunch"; url="https://techcrunch.com/feed/";}
+        {tags = ["tech"]; title = "Reuters Tech"; url="http://feeds.reuters.com/reuters/technologyNews?format=xml";}
+        {tags = ["tech"]; title = "EFF"; url="http://www.eff.org/rss/updates.xml";}
+      ];
+  };
+
+  programs.alacritty = {
+    enable = true;
+    settings = {
+      window.decorations = "full";
+      window.dynamic_title = true;
+      #background_opacity = 0.9;
+      window.opacity = 0.9;
+      scrolling.history = 3000;
+      scrolling.smooth = true;
+      font.normal.family = "MesloLGS Nerd Font Mono";
+      font.normal.style = "Regular";
+      font.bold.style = "Bold";
+      font.italic.style = "Italic";
+      font.bold_italic.style = "Bold Italic";
+      font.size = if pkgs.stdenvNoCC.isDarwin then 16 else 9;
+      shell.program = "${pkgs.zsh}/bin/zsh";
+      live_config_reload = true;
+      cursor.vi_mode_style = "Underline";
+      draw_bold_text_with_bright_colors = true;
+      key_bindings = [
+        {
+          key = "Escape";
+          mods = "Control";
+          mode = "~Search";
+          action = "ToggleViMode";
+        }
+        # cmd-{ and cmd-} and cmd-] and cmd-[ will switch tmux windows
+        {
+          key = "LBracket";
+          mods = "Command";
+          # \x02 is ctrl-b so sequence below is ctrl-b, h
+          chars = "\\x02h";
+        }
+        {
+          key = "RBracket";
+          mods = "Command";
+          chars = "\\x02l";
+        }
+      ];
+    };
   };
 
 }

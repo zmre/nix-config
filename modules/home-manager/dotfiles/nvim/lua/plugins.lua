@@ -487,8 +487,10 @@ M.telescope = function()
         }
     }
     require'telescope'.load_extension('fzy_native')
-    -- TODO: make this attempt only on linux
-    require'telescope'.load_extension('media_files')
+    if vim.fn.has('mac') ~= 1 then
+        -- doesn't currently work on mac
+        require'telescope'.load_extension('media_files')
+    end
 
 end -- telescope
 
