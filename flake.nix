@@ -116,15 +116,13 @@
     in {
       checks = listToAttrs (
         # darwin checks
-        (map
-          (system: {
-            name = system;
-            value = {
-              dragonstone =
-                self.darwinConfigurations.dragonstone.config.system.build.toplevel;
-            };
-          })
-          lib.platforms.darwin) ++
+        (map (system: {
+          name = system;
+          value = {
+            dragonstone =
+              self.darwinConfigurations.dragonstone.config.system.build.toplevel;
+          };
+        }) lib.platforms.darwin) ++
         # linux checks
         (map (system: {
           name = system;
@@ -148,7 +146,6 @@
           system = "x86_64-darwin";
           extraModules = [
             ./profiles/pwalsh.nix
-            ./modules/darwin/apps.nix
             { homebrew.brewPrefix = "/usr/local/bin"; }
           ];
         };
@@ -195,29 +192,28 @@
     } //
     # add a devShell to this flake
     eachDefaultSystem (system:
-    let
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [
-          devshell.overlay
-          (final: prev: {
-            # expose stable packages via pkgs.stable
-            stable = import inputs.nixos-stable {
-              system = prev.system;
-              config.allowUnfree = true;
-              config.allowBroken = true;
-              config.allowUnsupportedSystem = true;
-            };
-          })
-        ];
-      };
-      nixBin = pkgs.writeShellScriptBin "nix" ''
-        ${pkgs.nix_2_4}/bin/nix --option experimental-features "nix-command flakes" "$@"
-      '';
-    in
-    {
-      devShell = pkgs.devshell.mkShell {
-        packages = [ nixBin pkgs.treefmt pkgs.nixfmt pkgs.stylua ];
-      };
-    });
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [
+            devshell.overlay
+            (final: prev: {
+              # expose stable packages via pkgs.stable
+              stable = import inputs.nixos-stable {
+                system = prev.system;
+                config.allowUnfree = true;
+                config.allowBroken = true;
+                config.allowUnsupportedSystem = true;
+              };
+            })
+          ];
+        };
+        nixBin = pkgs.writeShellScriptBin "nix" ''
+          ${pkgs.nix_2_4}/bin/nix --option experimental-features "nix-command flakes" "$@"
+        '';
+      in {
+        devShell = pkgs.devshell.mkShell {
+          packages = [ nixBin pkgs.treefmt pkgs.nixfmt pkgs.stylua ];
+        };
+      });
 }
