@@ -93,9 +93,11 @@ let
   ];
   # TODO: traceroute fails on darwin
   networkPkgs = with pkgs.stable; [ traceroute mtr iftop ];
-  guiPkgs = with pkgs; [ 
-    #neovide
-  ];
+  guiPkgs = with pkgs;
+    [
+      # 22-01-29 currently fails on mac with "could not compile futures-util" :(
+      #neovide
+    ];
 
 in {
   programs.home-manager.enable = true;
@@ -742,7 +744,10 @@ in {
   programs.newsboat = {
     enable = true;
     autoReload = true;
-    browser = if pkgs.stdenvNoCC.isDarwin then "open" else "${pkgs.xdg-utils}/bin/xdg-open";
+    browser = if pkgs.stdenvNoCC.isDarwin then
+      "open"
+    else
+      "${pkgs.xdg-utils}/bin/xdg-open";
     maxItems = 100;
     extraConfig = ''
       show-read-feeds  no
@@ -750,17 +755,49 @@ in {
       bind-key k prev-unread
       highlight article "^(Feed|Title|Author|Link|Date):.*$" yellow default bold
       highlight article "https?://[^ ]+" blue default underline
-      '';
+    '';
     urls = [
-        {tags = ["security"]; title = "Cyberscoop"; url="https://www.cyberscoop.com/feed/";}
-        {tags = ["security"]; title = "Krebs on Security"; url="https://krebsonsecurity.com/feed/";}
-        {tags = ["security"]; title = "DefenseOne"; url="http://www.defenseone.com/rss/technology/ ";}
-        {tags = ["news"]; title = "NPR"; url="http://www.npr.org/rss/rss.php?id=1001";}
-        {tags = ["news"]; title = "Reuters Domestic"; url="http://feeds.reuters.com/Reuters/domesticNews";}
-        {tags = ["startup"]; title = "TechCrunch"; url="https://techcrunch.com/feed/";}
-        {tags = ["tech"]; title = "Reuters Tech"; url="http://feeds.reuters.com/reuters/technologyNews?format=xml";}
-        {tags = ["tech"]; title = "EFF"; url="http://www.eff.org/rss/updates.xml";}
-      ];
+      {
+        tags = [ "security" ];
+        title = "Cyberscoop";
+        url = "https://www.cyberscoop.com/feed/";
+      }
+      {
+        tags = [ "security" ];
+        title = "Krebs on Security";
+        url = "https://krebsonsecurity.com/feed/";
+      }
+      {
+        tags = [ "security" ];
+        title = "DefenseOne";
+        url = "http://www.defenseone.com/rss/technology/ ";
+      }
+      {
+        tags = [ "news" ];
+        title = "NPR";
+        url = "http://www.npr.org/rss/rss.php?id=1001";
+      }
+      {
+        tags = [ "news" ];
+        title = "Reuters Domestic";
+        url = "http://feeds.reuters.com/Reuters/domesticNews";
+      }
+      {
+        tags = [ "startup" ];
+        title = "TechCrunch";
+        url = "https://techcrunch.com/feed/";
+      }
+      {
+        tags = [ "tech" ];
+        title = "Reuters Tech";
+        url = "http://feeds.reuters.com/reuters/technologyNews?format=xml";
+      }
+      {
+        tags = [ "tech" ];
+        title = "EFF";
+        url = "http://www.eff.org/rss/updates.xml";
+      }
+    ];
   };
 
   programs.alacritty = {

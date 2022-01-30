@@ -48,6 +48,8 @@ in {
 
     # doesn't compile on darwin as of Jan 2022
     sumneko-lua-language-server
+    # doesn't compile on darwin as of Jan 2022
+    neovide
 
     # media center
     #(pkgs.kodi.passthru.withPackages
@@ -620,9 +622,45 @@ in {
     defaultProfiles = [ "gpu-hq" ];
   };
 
+  # Backup browser for when Qutebrowser doesn't work as expected
+  # currently fails to compile on darwin
+  programs.firefox = {
+    enable = true;
+    # turns out you have to setup a profile (below) for extensions to install
+    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+      ublock-origin
+      https-everywhere
+      noscript
+      vimium
+    ];
+    profiles.home.id = 0;
+    profiles.home.settings = {
+      "app.update.auto" = false; # nix will handle updates
+      "browser.search.region" = "US";
+      "browser.search.countryCode" = "US";
+      "browser.ctrlTab.recentlyUsedOrder" = false;
+      "browser.newtabpage.enhanced" = true;
+      "devtools.chrome.enabled" = true;
+      "devtools.theme" = "dark";
+      "extensions.pocket.enabled" = true;
+      "network.prefetch-next" = true;
+      "nework.predictor.enabled" = true;
+      "browser.uidensity" = 1;
+      "privacy.trackingprotection.enabled" = true;
+      "privacy.trackingprotection.socialtracking.enabled" = true;
+      "privacy.trackingprotection.socialtracking.annotate.enabled" = true;
+      "privacy.trackingprotection.socialtracking.notification.enabled" = false;
+      "services.sync.engine.addons" = false;
+      "services.sync.engine.passwords" = false;
+      "services.sync.engine.prefs" = false;
+      "signon.rememberSignons" = false;
+    };
+  };
+
   # currently fails to compile on darwin
   programs.qutebrowser = {
     enable = true;
+    loadAutoconfig = false;
     keyBindings = {
       normal = {
         ",m" = "spawn mpv {url}";
@@ -780,41 +818,5 @@ in {
       ${builtins.readFile ./dotfiles/qutebrowser-theme-onedark.py}
     '';
   };
-
-  # Backup browser for when Qutebrowser doesn't work as expected
-  # currently fails to compile on darwin
-  programs.firefox = {
-    enable = true;
-    # turns out you have to setup a profile (below) for extensions to install
-    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-      ublock-origin
-      https-everywhere
-      noscript
-      vimium
-    ];
-    profiles.home.id = 0;
-    profiles.home.settings = {
-      "app.update.auto" = false; # nix will handle updates
-      "browser.search.region" = "US";
-      "browser.search.countryCode" = "US";
-      "browser.ctrlTab.recentlyUsedOrder" = false;
-      "browser.newtabpage.enhanced" = true;
-      "devtools.chrome.enabled" = true;
-      "devtools.theme" = "dark";
-      "extensions.pocket.enabled" = true;
-      "network.prefetch-next" = true;
-      "nework.predictor.enabled" = true;
-      "browser.uidensity" = 1;
-      "privacy.trackingprotection.enabled" = true;
-      "privacy.trackingprotection.socialtracking.enabled" = true;
-      "privacy.trackingprotection.socialtracking.annotate.enabled" = true;
-      "privacy.trackingprotection.socialtracking.notification.enabled" = false;
-      "services.sync.engine.addons" = false;
-      "services.sync.engine.passwords" = false;
-      "services.sync.engine.prefs" = false;
-      "signon.rememberSignons" = false;
-    };
-  };
-
 
 }

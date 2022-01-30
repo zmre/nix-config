@@ -17,6 +17,7 @@
       "marked"
       "mpv"
       "owasp-zap"
+      "qutebrowser"
       "qlmarkdown"
       "qlprettypatch"
       "qlstephen"

@@ -133,10 +133,13 @@ end
 M.gui = function()
     vim.opt.title = true
     vim.opt.switchbuf = "useopen,usetab,newtab"
-    -- vim.opt.guifont = "Liga MesloLGL Nerd Font:h16"
     -- vim.opt.guifont = "Liga DejaVuSansMono Nerd Font:h16"
     -- vim.opt.guifont = "FiraCode Nerd Font:h16" -- no italics
-    vim.opt.guifont = "Hasklug Nerd Font:h9"
+    if vim.fn.has('mac') then
+        vim.opt.guifont = "Liga MesloLGS Nerd Font:h18"
+    else
+        vim.opt.guifont = "Hasklug Nerd Font:h9"
+    end
     if vim.g.neovide ~= nil then
         vim.g.neovide_transparency = 0.8
         vim.g.neovide_cursor_animation_length = 0.01
