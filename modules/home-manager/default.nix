@@ -20,6 +20,7 @@ let
     zip
 
     # file viewers
+    less
     file
     jq
     lynx
