@@ -32,6 +32,16 @@
           src = inputs.zk-nvim;
         };
       };
+      hackernews-tui = prev.rustPlatform.buildRustPackage {
+        name = "hackernews-tui";
+        pname = "hackernews-tui";
+        cargoLock = { lockFile = inputs.hackernews-tui + /Cargo.lock; };
+        buildDependencies = [ prev.glib ];
+        buildInputs = [ prev.pkg-config ]
+          ++ prev.lib.optionals prev.stdenv.isDarwin
+          [ prev.darwin.apple_sdk.frameworks.Security ];
+        src = inputs.hackernews-tui;
+      };
     })
     inputs.nur.overlay
 

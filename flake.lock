@@ -114,6 +114,22 @@
         "type": "github"
       }
     },
+    "hackernews-tui": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1642356026,
+        "narHash": "sha256-kAVH4ezdvm84Jc5llvdCdqfyTmsqBYKx/4S9VyP6keI=",
+        "owner": "aome510",
+        "repo": "hackernews-TUI",
+        "rev": "8f30cc728df73257888dba7afbc812b4065c93db",
+        "type": "github"
+      },
+      "original": {
+        "owner": "aome510",
+        "repo": "hackernews-TUI",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -221,6 +237,7 @@
         "flake-compat": "flake-compat",
         "flake-utils": "flake-utils",
         "gitstatus": "gitstatus",
+        "hackernews-tui": "hackernews-tui",
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",
         "nixos-stable": "nixos-stable",

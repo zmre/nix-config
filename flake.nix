@@ -47,6 +47,10 @@
       url = "github:samgriesemer/vim-roam-task";
       flake = false;
     };
+    hackernews-tui = {
+      url = "github:aome510/hackernews-TUI";
+      flake = false;
+    };
   };
 
   outputs = inputs@{ self, nixpkgs, darwin, home-manager, nixos-hardware

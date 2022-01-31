@@ -65,6 +65,7 @@ let
     ipcalc
     kondo # free disk space by cleaning project build dirs
     optipng
+    pkgs.hackernews-tui
   ];
   cPkgs = with pkgs.stable; [
     automake
