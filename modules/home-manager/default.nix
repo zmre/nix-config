@@ -11,6 +11,7 @@ let
     curl
     duf # df alternative showing free disk space
     fswatch
+    tree
 
     # compression
     atool
@@ -93,8 +94,8 @@ let
     prettier
     vscode-langservers-extracted # lsp servers for json, html, css
   ];
-  # TODO: traceroute fails on darwin
-  networkPkgs = with pkgs.stable; [ traceroute mtr iftop ];
+
+  networkPkgs = with pkgs.stable; [ mtr iftop ];
   guiPkgs = with pkgs;
     [
       # 22-01-29 currently fails on mac with "could not compile futures-util" :(
@@ -115,7 +116,7 @@ in {
   # changes in each release.
   home.stateVersion = "20.09";
   home.packages = defaultPkgs ++ cPkgs ++ luaPkgs ++ nixEditorPkgs ++ rustPkgs
-    ++ typescriptPkgs ++ guiPkgs; # ++ networkPkgs;
+    ++ typescriptPkgs ++ guiPkgs ++ networkPkgs;
 
   # TODO: comma, gnupg?, ffmpeg?
 
@@ -280,8 +281,11 @@ in {
       proselint
       pkgs.zk # note finder
     ];
+    # make sure impatient is loaded before everything else to speed things up
     extraConfig = ''
-      lua << 
+      lua << EOF
+          require('impatient')
+          require('impatient').enable_profile()
           require('zmre.options').defaults()
           require('zmre.options').gui()
           require('zmre.mappings')
@@ -293,7 +297,7 @@ in {
           require('zmre.plugins').completions()
           require('zmre.plugins').notes()
           require('zmre.plugins').misc()
-      
+      EOF
     '';
 
     # going unstable here; living dangerously
@@ -365,11 +369,13 @@ in {
 
       # Misc
       vim-fugitive # git management
-      #vim-rooter # change dir to project root
       project-nvim
       vim-tmux-navigator # navigate vim and tmux panes together
       FixCursorHold-nvim # remove this when neovim #12587 is resolved
       impatient-nvim # speeds startup times by caching lua bytecode
+      which-key-nvim
+      vim-bbye # fix bdelete buffer stuff
+      #nvim-whichkey-setup-lua
     ];
   };
   home.file."${config.xdg.configHome}/nvim/parser/tsx.so".source =

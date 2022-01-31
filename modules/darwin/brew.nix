@@ -56,12 +56,34 @@
     ];
 
     masApps = {
-      "Monodraw" = 920404675;
+      "Monodraw" = 920404675; # ASCII drawings
       "Yubico Authenticator" = 1497506650;
       "PCalc" = 403504866;
-      "WireGuard" = 1451685025;
+      "WireGuard" = 1451685025; # VPN
       "Forecast Bar" = 982710545;
-      "Kaleidoscope" = 587512244;
+      "Kaleidoscope" = 587512244; # GUI 3-way merge
+      "iMovie" = 408981434;
+      "Blurred" = 1497527363; # dim non-foreground windows
+      "Save to Pocket" = 1477385213;
+      "Fantastical" = 975937182;
+      "DaisyDisk" = 411643860;
+      "Tweetbot" = 1384080005;
+      "Disk Speed Test" = 425264550;
+      "Endel" = 1484348796;
+      "Wipr" = 1320666476;
+      "Cardhop" = 1290358394;
+      "Strongbox" = 1270075435;
+      "Pocket" = 568494494;
+      "Slack" = 803453959;
+      "Kindle" = 405399194;
+      "Scrivener" = 1310686187;
+      "Keynote" = 409183694;
+      "Vinegar" = 1591303229;
+      "PeakHour" = 1241445112;
+      "Amphetamine" = 937984704;
+      "Vimari" = 1480933944;
+      "Xcode" = 497799835;
+      "iStumbler" = 546033581;
     };
     brews = [
       # should be able to manage chunkwm and skhd outside of brew
@@ -318,7 +340,6 @@
 #zoxide
 #zsh
 #zstd
-#alacritty
 #amethyst
 #armitage
 #blockblock

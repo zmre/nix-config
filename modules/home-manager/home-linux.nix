@@ -51,6 +51,8 @@ in {
     # doesn't compile on darwin as of Jan 2022
     neovide
 
+    traceroute
+
     # media center
     #(pkgs.kodi.passthru.withPackages
     #(kodiPkgs: with kodiPkgs; [ netflix youtube pvr-hdhomerun ]))
