@@ -47,4 +47,7 @@ in {
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
 
+  # allow touchid to auth sudo -- this comes from pam.nix, which needs to be loaded before this
+  security.pam.enableSudoTouchIdAuth = true;
+
 }
