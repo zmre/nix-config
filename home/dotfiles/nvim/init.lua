@@ -1,6 +1,0 @@
-require('options').defaults()
-require('options').gui()
---require('plugins')
-require('mappings')
-require('abbreviations')
-require('filetypes').config()
