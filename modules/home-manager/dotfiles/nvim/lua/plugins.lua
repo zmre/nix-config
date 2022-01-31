@@ -334,7 +334,8 @@ M.diagnostics = function()
                 -- with the taskwiki (roam-task) stuff.
                 disabled_filetypes = {"markdown"}
 
-            }, formatting.rustfmt, diagnostics.eslint_d
+            }, diagnostics.eslint_d
+            -- removed formatting.rustfmt since rust_analyzer seems to do the same thing
         },
         on_attach = attached
     }
@@ -425,7 +426,10 @@ M.diagnostics = function()
 
     -- temporarily disabled due to bugs editing nix files 2021-12
     -- require'lspsaga'.init_lsp_saga()
-    require('rust-tools').setup({server = {on_attach = attached}})
+    require('rust-tools').setup({
+        server = {on_attach = attached},
+        tools = {autoSetHints = true, inlay_hints = {only_current_line = true}}
+    })
     require('crates').setup()
 
 end -- Diagnostics setup
