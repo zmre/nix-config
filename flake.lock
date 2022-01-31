@@ -98,6 +98,21 @@
         "type": "github"
       }
     },
+    "flake-utils_2": {
+      "locked": {
+        "lastModified": 1642700792,
+        "narHash": "sha256-XqHrk7hFb+zBvRg6Ghl+AZDq03ov6OshJLiSWOoX5es=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "846b2ae0fc4cc943637d3d1def4454213e203cba",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "gitstatus": {
       "flake": false,
       "locked": {
@@ -197,6 +212,19 @@
         "type": "github"
       }
     },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1642903813,
+        "narHash": "sha256-0lNfGW8sNfyTrixoQhVG00Drl/ECaf5GbfKAQ1ZDoyE=",
+        "path": "/nix/store/2vw01kp965w65cjb390c5hpcn220qavi-source",
+        "rev": "689b76bcf36055afdeb2e9852f5ecdd2bf483f87",
+        "type": "path"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
     "nur": {
       "locked": {
         "lastModified": 1643088557,
@@ -244,9 +272,29 @@
         "nixpkgs": "nixpkgs",
         "nur": "nur",
         "powerlevel10k": "powerlevel10k",
+        "sbhosts": "sbhosts",
         "telescope-media-files": "telescope-media-files",
         "vim-roam-task": "vim-roam-task",
         "zk-nvim": "zk-nvim"
+      }
+    },
+    "sbhosts": {
+      "inputs": {
+        "flake-utils": "flake-utils_2",
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1643645357,
+        "narHash": "sha256-+w5ESk6T6hDTnjjsxEM8QaYrgfhd1lzEOyfwD3DylJg=",
+        "owner": "StevenBlack",
+        "repo": "hosts",
+        "rev": "595dc4faa1799e1714177a353dd99274a0ab48a2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "StevenBlack",
+        "repo": "hosts",
+        "type": "github"
       }
     },
     "telescope-media-files": {

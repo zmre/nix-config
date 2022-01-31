@@ -51,10 +51,12 @@
       url = "github:aome510/hackernews-TUI";
       flake = false;
     };
+    # blocklist to add to hosts file -- stops ads and malware across apps
+    sbhosts.url = "github:StevenBlack/hosts";
   };
 
   outputs = inputs@{ self, nixpkgs, darwin, home-manager, nixos-hardware
-    , devshell, flake-utils, ... }:
+    , devshell, flake-utils, sbhosts, ... }:
     let
       inherit (darwin.lib) darwinSystem;
       inherit (nixpkgs.lib) nixosSystem;
@@ -150,7 +152,26 @@
           system = "x86_64-darwin";
           extraModules = [
             ./profiles/pwalsh.nix
-            { homebrew.brewPrefix = "/usr/local/bin"; }
+            {
+              homebrew.brewPrefix = "/usr/local/bin";
+            }
+            # Can't use networking.extraHosts outside of NixOS, so this hack:
+            {
+              environment.etc.hosts.text = ''
+                255.255.255.255	broadcasthost
+                ::1				localhost
+                fe80::1%lo0		localhost
+                127.0.0.1⇥  ⇥   localhost
+                127.0.0.1       dev1.ironcorelabs.com
+                127.0.0.1       dev1.scrambledbits.org
+
+                # Added by Docker Desktop
+                # To allow the same kube context to work on the host and the container:
+                127.0.0.1 kubernetes.docker.internal
+                # End of section
+
+              '' + builtins.readFile ("${sbhosts}/hosts");
+            }
           ];
         };
       };
@@ -161,7 +182,11 @@
             ./modules/hardware/framework-volantis.nix
             ./modules/hardware/volantis.nix
           ];
-          extraModules = [ ./profiles/zmre.nix ];
+          extraModules = [
+            ./profiles/zmre.nix
+            sbhosts.nixosModule
+            { networking.stevenBlackHosts.enable = true; }
+          ];
         };
         nixos-pw-vm = mkNixosConfig {
           hardwareModules = [
