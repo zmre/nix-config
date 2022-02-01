@@ -420,7 +420,15 @@ in {
     enableZshIntegration = true;
     tmux.enableShellIntegration = true;
   };
-  programs.ssh.enable = true;
+  programs.ssh = {
+    enable = true;
+    compression = true;
+    controlMaster = "auto";
+    includes = [ "*.conf" ];
+    extraConfig = ''
+      AddKeysToAgent yes
+    '';
+  };
   programs.gh = {
     enable = true;
     settings = { git_protocol = "ssh"; };
