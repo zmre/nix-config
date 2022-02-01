@@ -47,6 +47,7 @@ let
     caddy # local filesystem web server
     aria # cli downloader
     ncftp
+    hostname
 
     # misc
     neofetch # display key software/version info in term
@@ -596,6 +597,12 @@ in {
       # search for a note and with ctrl-n, create it if not found
       # add subdir as needed like "n meetings" or "n wiki"
       n = "zk edit --interactive";
+      hmswitch = ''
+        nix-shell -p home-manager --run "home-manager switch --flake ~/.config/nixpkgs/.#$(hostname -s)"'';
+      dwswitch =
+        "darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) --show-trace";
+      noswitch =
+        "sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.# --show-tract";
     };
   };
 
