@@ -11,7 +11,7 @@ in {
     # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
 
     # packages installed in system profile
-    systemPackages = with pkgs; [ git curl coreutils ];
+    systemPackages = with pkgs; [ git curl coreutils gnused ];
   };
 
   # Just configure DNS for WiFi for now
