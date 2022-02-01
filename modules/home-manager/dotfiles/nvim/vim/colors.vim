@@ -74,9 +74,9 @@ function! OneDarkExtensions()
   hi link markdownHeadingDelimeter Statement
   hi link markdownOrderedListMarker Statement
   hi link markdownListMarker Statement
-  hi markdownBold         guifg=fg      guibg=bg ctermfg=NONE gui=bold cterm=bold
+  hi markdownBold         guifg=#ffffff      guibg=bg ctermfg=NONE gui=bold cterm=bold
   hi markdownItalic       guifg=fg      guibg=bg ctermfg=NONE gui=italic cterm=italic
-  hi markdownBoldItalic   guifg=fg      guibg=bg ctermfg=NONE gui=bold,italic cterm=bold,italic
+  hi markdownBoldItalic   guifg=#ffffff      guibg=bg ctermfg=NONE gui=bold,italic cterm=bold,italic
   hi! markdownH1  guifg=#dddb4d     guibg=bg         gui=bold      ctermfg=yellow      ctermbg=NONE       cterm=bold         guisp=NONE
   hi! markdownH2  guifg=#dddb4d     guibg=bg         gui=bold      ctermfg=yellow      ctermbg=NONE       cterm=bold         guisp=NONE
   hi! markdownH3  guifg=#dddb4d     guibg=bg         gui=NONE      ctermfg=yellow      ctermbg=NONE       cterm=NONE         guisp=NONE

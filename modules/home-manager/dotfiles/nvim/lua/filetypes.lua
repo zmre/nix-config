@@ -37,7 +37,7 @@ M.config = function()
       autocmd FileType vimwiki lua require('zmre.filetypes').markdown()
       autocmd FileType html lua require('zmre.options').programming()
       autocmd FileType css lua require('zmre.options').programming()
-      autocmd FileType xml lua require('zmre.options').lua()
+      autocmd FileType xml lua require('zmre.filetypes').lua()
     augroup END
   ]], false)
 end
@@ -133,4 +133,3 @@ M.markdown = function()
 end
 
 return M
-

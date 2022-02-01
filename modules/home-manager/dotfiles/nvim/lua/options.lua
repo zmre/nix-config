@@ -23,6 +23,7 @@ M.defaults = function()
     opt.spell = true
     opt.spelllang = "en_us"
     opt.ruler = true -- show the cursor position all the time
+    opt.cursorline = true -- add indicator for current line
     opt.secure = true -- don't execute shell cmds in .vimrc not owned by me
     opt.history = 50 -- keep 50 lines of command line history
     opt.shell = "zsh"

@@ -32,7 +32,6 @@
       "lockrattler"
       "marked"
       "mpv"
-      "owasp-zap"
       "qutebrowser"
       "qlmarkdown"
       "qlprettypatch"
@@ -51,6 +50,8 @@
       "xbar"
       "zenmap"
       "zoom"
+      # would be better to load these in a security shell, but nix versions don't build on mac
+      "owasp-zap"
       "burp-suite"
       #"paw"
     ];
@@ -78,7 +79,7 @@
       "Kindle" = 405399194;
       "Scrivener" = 1310686187;
       "Keynote" = 409183694;
-      "Vinegar" = 1591303229;
+      #"Vinegar" = 1591303229;
       "PeakHour" = 1241445112;
       "Amphetamine" = 937984704;
       "Vimari" = 1480933944;
@@ -104,6 +105,10 @@
       "chkrootkit"
       # because the nix recipe isn't compiling on darwin
       "lua-language-server"
+      # would rather load these as part of a security shell, but...
+      "p0f" # the nix one only builds on linux
+      "hashcat" # the nix one only builds on linux
+      "hydra" # the nix one only builds on linux
     ];
   };
 }
@@ -124,73 +129,23 @@
 #lynx
 #multimarkdown
 #net-snmp
+#ossp-uuid
+#p7zip
+#yubico-piv-tool
+#pdf2json
+#pdftohtml
+#procs
+#proxmark3
+#recon-ng # not currently available on nix?
 
 ############### to examine
-#opus
-#orc
-#ossp-uuid
-#p0f
-#p11-kit
-#p7zip
-#packer
-#pandoc
-#pango
-#pari
-#pass
-#pbc
-#pcre
-#pcre2
-#pcsc-lite
-#pdf2json
-#pdfcrack
-#pdftohtml
-#peg-markdown
-#perl
-#pidof
-#pillow
-#pinentry
-#pixman
-#pkcs11-helper
-#pkg-config
-#pngcheck
-#pngquant
-#poppler
-#popt
-#portaudio
-#postgresql
-#procs
-#proctools
-#profanity
-#protobuf
-#protobuf-c
-#proxmark3
-#proxychains-ng
-#psgrep
-#pstree
-#pth
-#pwgen
-#pwnat
-#pwntools
-#py3cairo
-#pybind11
-#pygobject3
-#pyqt
-#pyqt@5
-#pyside
-#python
-#qemu
 #qpdf
 #qprint
 #qrencode
-#radare2
-#rainbarf
 #rav1e
 #readline
 #reaver
 #recode
-#recon-ng
-#ripgrep
-#ripgrep-all
 #ripmime
 #rtmpdump
 #rubberband
@@ -329,7 +284,6 @@
 #yq
 #yt-dlp
 #ytop
-#yubico-piv-tool
 #yuicompressor
 #zeek
 #zenith

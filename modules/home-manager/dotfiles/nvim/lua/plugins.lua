@@ -166,27 +166,6 @@ M.ui = function()
     require('indent_blankline').setup({show_current_context = true})
 
     require("colorizer").setup()
-    -- require('bufferline').setup {
-    --     options = {
-    --         numbers = 'none',
-    --         always_show_bufferline = true,
-    --         max_name_length = 40,
-    --         max_prefix_length = 40, -- prefix used when a buffer is de-duplicated
-    --         show_buffer_icons = true,
-    --         show_buffer_close_icons = true,
-    --         show_close_icon = true,
-    --         show_tab_indicators = true,
-    --         separator_style = "thin",
-    --         offsets = {{filetype = "NvimTree", text = "", padding = 1}}
-    --     }
-    -- }
-    vim.g.bufferline = {
-        animation = true,
-        closable = true,
-        clickable = true,
-        maximum_length = 40,
-        icons = true
-    }
     require('lualine').setup {
         options = {
             theme = 'papercolor_light',
@@ -216,6 +195,121 @@ M.ui = function()
     require'nvim-treesitter.configs'.setup {
         highlight = {enable = true, additional_vim_regex_highlighting = true},
         indent = {enable = true, disable = {"yaml"}}
+    }
+    require'bufferline'.setup {
+        options = {
+            numbers = "none", -- | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
+            close_command = "Bdelete! %d", -- can be a string | function, see "Mouse actions"
+            right_mouse_command = "Bdelete! %d", -- can be a string | function, see "Mouse actions"
+            left_mouse_command = "buffer %d", -- can be a string | function, see "Mouse actions"
+            middle_mouse_command = nil, -- can be a string | function, see "Mouse actions"
+            indicator_icon = "▎",
+            buffer_close_icon = "",
+            -- buffer_close_icon = '',
+            modified_icon = "●",
+            close_icon = "",
+            -- close_icon = '',
+            left_trunc_marker = "",
+            right_trunc_marker = "",
+            max_name_length = 35,
+            max_prefix_length = 20, -- prefix used when a buffer is de-duplicated
+            tab_size = 40,
+            diagnostics = false, -- | "nvim_lsp" | "coc",
+            diagnostics_update_in_insert = false,
+            offsets = {{filetype = "NvimTree", text = "", padding = 1}},
+            show_buffer_icons = true,
+            show_buffer_close_icons = true,
+            show_close_icon = true,
+            show_tab_indicators = true,
+            persist_buffer_sort = false, -- whether or not custom sorted buffers should persist
+            -- can also be a table containing 2 custom separators
+            -- [focused and unfocused]. eg: { '|', '|' }
+            separator_style = "thin", -- | "thick" | "thin" | { 'any', 'any' },
+            enforce_regular_tabs = true,
+            always_show_bufferline = true
+        },
+        highlights = {
+            fill = {
+                guifg = {attribute = "fg", highlight = "#ff0000"},
+                guibg = {attribute = "bg", highlight = "TabLine"}
+            },
+            background = {
+                guifg = {attribute = "fg", highlight = "TabLine"},
+                guibg = {attribute = "bg", highlight = "TabLine"}
+            },
+
+            buffer_visible = {
+                guifg = {attribute = "fg", highlight = "TabLine"},
+                guibg = {attribute = "bg", highlight = "TabLine"}
+            },
+
+            close_button = {
+                guifg = {attribute = "fg", highlight = "TabLine"},
+                guibg = {attribute = "bg", highlight = "TabLine"}
+            },
+            close_button_visible = {
+                guifg = {attribute = "fg", highlight = "TabLine"},
+                guibg = {attribute = "bg", highlight = "TabLine"}
+            },
+            tab_selected = {
+                guifg = {attribute = "fg", highlight = "Normal"},
+                guibg = {attribute = "bg", highlight = "Normal"}
+            },
+            tab = {
+                guifg = {attribute = "fg", highlight = "TabLine"},
+                guibg = {attribute = "bg", highlight = "TabLine"}
+            },
+            tab_close = {
+                -- guifg = {attribute='fg',highlight='LspDiagnosticsDefaultError'},
+                guifg = {attribute = "fg", highlight = "TabLineSel"},
+                guibg = {attribute = "bg", highlight = "Normal"}
+            },
+
+            duplicate_selected = {
+                guifg = {attribute = "fg", highlight = "TabLineSel"},
+                guibg = {attribute = "bg", highlight = "TabLineSel"},
+                gui = "italic"
+            },
+            duplicate_visible = {
+                guifg = {attribute = "fg", highlight = "TabLine"},
+                guibg = {attribute = "bg", highlight = "TabLine"},
+                gui = "italic"
+            },
+            duplicate = {
+                guifg = {attribute = "fg", highlight = "TabLine"},
+                guibg = {attribute = "bg", highlight = "TabLine"},
+                gui = "italic"
+            },
+
+            modified = {
+                guifg = {attribute = "fg", highlight = "TabLine"},
+                guibg = {attribute = "bg", highlight = "TabLine"}
+            },
+            modified_selected = {
+                guifg = {attribute = "fg", highlight = "Normal"},
+                guibg = {attribute = "bg", highlight = "Normal"}
+            },
+            modified_visible = {
+                guifg = {attribute = "fg", highlight = "TabLine"},
+                guibg = {attribute = "bg", highlight = "TabLine"}
+            },
+
+            separator = {
+                guifg = {attribute = "bg", highlight = "TabLine"},
+                guibg = {attribute = "bg", highlight = "TabLine"}
+            },
+            separator_selected = {
+                guifg = {attribute = "bg", highlight = "Normal"},
+                guibg = {attribute = "bg", highlight = "Normal"}
+            },
+            indicator_selected = {
+                guifg = {
+                    attribute = "fg",
+                    highlight = "LspDiagnosticsDefaultHint"
+                },
+                guibg = {attribute = "bg", highlight = "Normal"}
+            }
+        }
     }
 
 end -- UI setup
@@ -251,48 +345,85 @@ M.diagnostics = function()
         local opts = {noremap = true, silent = false}
         if client.name == "tsserver" or client.name == "rnix" then
             client.resolved_capabilities.document_formatting = false
+            client.resolved_capabilities.document_range_formatting = false
         end
-        print("LSP attached")
 
+        print("LSP attached " .. client.name)
+
+        local which_key = require("which-key")
+        local local_leader_opts = {
+            mode = "n", -- NORMAL mode
+            prefix = "<leader>",
+            buffer = bufnr, -- Local mappings.
+            silent = true, -- use `silent` when creating keymaps
+            noremap = true, -- use `noremap` when creating keymaps
+            nowait = true -- use `nowait` when creating keymaps
+        }
+        local local_leader_opts_visual = {
+            mode = "v", -- VISUAL mode
+            prefix = "<leader>",
+            buffer = bufnr, -- Local mappings.
+            silent = true, -- use `silent` when creating keymaps
+            noremap = true, -- use `noremap` when creating keymaps
+            nowait = true -- use `nowait` when creating keymaps
+        }
+
+        local leader_mappings = {
+            ["q"] = {"<cmd>TroubleToggle<CR>", "Show Trouble list"},
+            l = {
+                name = "Local LSP",
+                s = {"<cmd>SymbolsOutline<CR>", "Show Symbols"},
+                d = {
+                    "<Cmd>lua vim.lsp.buf.definition()<CR>", "Go to definition"
+                },
+                D = {
+                    "<cmd>lua vim.lsp.buf.implementation()<CR>",
+                    "Implementation"
+                },
+                i = {"<Cmd>lua vim.lsp.buf.hover()<CR>", "Info hover"},
+                I = {
+                    "<Cmd>Telescope lsp_implementations<CR>", "Implementations"
+                },
+                r = {"<cmd>Telescope lsp_references<CR>", "References"},
+                f = {
+                    "<cmd>Telescope lsp_code_actions theme=cursor<CR>",
+                    "Fix Code Actions"
+                },
+                t = {"<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature"},
+                e = {
+                    "<cmd>lua vim.diagnostic.open_float()<CR>",
+                    "Show Line Diags"
+                }
+            },
+            f = {
+                ["sd"] = {
+                    "<cmd>Telescope lsp_document_symbols<CR>",
+                    "Find symbol in document"
+                },
+                ["sw"] = {
+                    "<cmd>Telescope lsp_workspace_symbols<CR>",
+                    "Find symbol in workspace"
+                }
+            }
+        }
+        which_key.register(leader_mappings, local_leader_opts)
         -- Create a new note after asking for its title.
         buf_set_keymap('', "#7", "<cmd>SymbolsOutline<CR>", opts)
         buf_set_keymap('!', "#7", "<cmd>SymbolsOutline<CR>", opts)
-        buf_set_keymap('', '<leader>gs', '<cmd>SymbolsOutline<CR>', opts)
         buf_set_keymap('', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-        buf_set_keymap('', "<leader>gD",
-                       "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-        buf_set_keymap('', "<leader>gi", "<cmd>lua vim.lsp.buf.hover()<CR>",
-                       opts)
-        buf_set_keymap('', "<leader>gd",
-                       "<Cmd>lua vim.lsp.buf.definition()<CR>", opts)
-        buf_set_keymap('', "<leader>gr", "<Cmd>Telescope lsp_references<CR>",
-                       opts)
-        buf_set_keymap('', "<leader>fsd",
-                       "<cmd>lua vim.lsp.buf.document_symbol()<CR>", opts)
-        buf_set_keymap('', "<leader>fsw",
-                       "<cmd>lua vim.lsp.buf.workspace_symbol()<CR>", opts)
-        -- buf_set_keymap('n', "<leader>gf", "<cmd>lua vim.lsp.buf.code_action()<CR>",
-        -- opts)
-        buf_set_keymap('n', "<leader>gf",
-                       "<cmd>Telescope lsp_code_actions theme=cursor<CR>", opts)
-        buf_set_keymap('v', "<leader>gf",
-                       "<cmd>lua vim.lsp.buf.range_code_action()<CR>", opts)
-        buf_set_keymap('', "<leader>gt",
-                       "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
-        buf_set_keymap('', "<leader>ge",
-                       "<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>",
-                       opts)
-        buf_set_keymap('', "<leader>q", ":TroubleToggle<CR>", opts)
-        buf_set_keymap('', "[e", "<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>",
-                       opts)
-        buf_set_keymap('', "]e", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>",
-                       opts)
+        -- override standard tag jump
+        buf_set_keymap('', 'C-]', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+        buf_set_keymap('!', 'C-]', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+
         -- Set some keybinds conditional on server capabilities
         if client.resolved_capabilities.document_formatting then
-            buf_set_keymap("n", "<leader>g=",
-                           "<cmd>lua vim.lsp.buf.formatting_sync()<CR>", opts)
-            buf_set_keymap("v", "<leader>g=",
-                           "<cmd>lua vim.lsp.buf.rang_formatting()<CR>", opts)
+            which_key.register({
+                l = {
+                    ["="] = {
+                        "<cmd>lua vim.lsp.buf.formatting_sync()<CR>", "Format"
+                    }
+                }
+            }, local_leader_opts)
             vim.cmd([[
             augroup LspFormatting
                 autocmd! * <buffer>
@@ -301,16 +432,29 @@ M.diagnostics = function()
             ]])
         end
         if client.resolved_capabilities.implementation then
-            buf_set_keymap('', "<leader>gI",
-                           ":Telescope lsp_implementations<CR>", opts)
+            which_key.register({
+                l = {
+                    ["I"] = {
+                        "<cmd>Telescope lsp_implementations<CR>",
+                        "Implementations"
+                    }
+                }
+            }, local_leader_opts)
         end
         if client.resolved_capabilities.document_range_formatting then
-            buf_set_keymap("v", "<leader>=",
-                           "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+            which_key.register({
+                l = {
+                    ["="] = {
+                        "<cmd>lua vim.lsp.buf.range_formatting()<CR>",
+                        "Format Range"
+                    }
+                }
+            }, local_leader_opts_visual)
         end
         if client.resolved_capabilities.rename then
-            buf_set_keymap('', "<leader>gR",
-                           "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
+            which_key.register({
+                l = {["R"] = {"<cmd>lua vim.lsp.buf.rename()<CR>", "Rename"}}
+            }, local_leader_opts)
         end
     end
 
@@ -320,21 +464,19 @@ M.diagnostics = function()
     -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
     local formatting = null_ls.builtins.formatting
     -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
-    local diagnostics = null_ls.builtins.diagnostics
+    -- local diagnostics = null_ls.builtins.diagnostics
 
     null_ls.setup {
         debug = false,
         sources = {
-            formatting.lua_format, formatting.nixfmt,
-            formatting.prettier.with {
-                extra_args = {
-                    "--no-semi", "--single-quote", "--jsx-single-quote"
-                },
+            formatting.lua_format, formatting.nixfmt, formatting.prettier.with {
+                -- extra_args = {
+                --     "--no-semi", "--single-quote", "--jsx-single-quote"
+                -- },
                 -- Disable markdown because formatting on save conflicts in weird ways
                 -- with the taskwiki (roam-task) stuff.
                 disabled_filetypes = {"markdown"}
-
-            }, diagnostics.eslint_d
+            } -- diagnostics.eslint_d
             -- removed formatting.rustfmt since rust_analyzer seems to do the same thing
         },
         on_attach = attached
@@ -353,7 +495,8 @@ M.diagnostics = function()
         -- Needed for inlayHints. Merge this table with your settings or copy
         -- it from the source if you want to add your own init_options.
         -- init_options = require("nvim-lsp-ts-utils").init_options
-        capabilities = capabilities
+        capabilities = capabilities,
+        on_attach = attached
     }
     lspconfig.sumneko_lua.setup {
         settings = {Lua = {diagnostics = {globals = {"vim"}}}},
@@ -362,7 +505,7 @@ M.diagnostics = function()
     }
     lspconfig.rnix.setup {on_attach = attached, capabilities = capabilities}
     lspconfig.cssls.setup {capabilities = capabilities}
-    lspconfig.eslint.setup {capabilities = capabilities}
+    -- lspconfig.eslint.setup {capabilities = capabilities}
     lspconfig.html.setup {capabilities = capabilities}
     lspconfig.jsonls.setup {
         settings = {
@@ -586,33 +729,6 @@ M.notes = function()
     vim.g.taskwiki_task_note_root = 't'
     vim.g.wiki_root = '~/Notes'
 
-    local options = {noremap = true, silent = true}
-
-    -- Create a new note after asking for its title.
-    vim.api.nvim_set_keymap("", "<leader>zn",
-                            "<Cmd>ZkNew { dir = vim.fn.input('Folder: ',vim.env.ZK_NOTEBOOK_DIR .. '/wiki','dir'), title = vim.fn.input('Title: ') }<CR>",
-                            options)
-    -- Open notes.
-    vim.api.nvim_set_keymap("", "<leader>zo", "<Cmd>ZkNotes<CR>", options)
-    -- Open notes associated with the selected tags.
-    vim.api.nvim_set_keymap("", "<leader>zt", "<Cmd>ZkTags<CR>", options)
-
-    -- Search for the notes matching a given query.
-    vim.api.nvim_set_keymap("", "<leader>zf",
-                            "<Cmd>ZkNotes { match = vim.fn.input('Search: ') }<CR>",
-                            options)
-    -- Search for the notes matching the current visual selection.
-    vim.api.nvim_set_keymap("v", "<leader>zf", ":'<,'>ZkMatch<CR>", options)
-
-    vim.api.nvim_set_keymap("", "<leader>zm",
-                            "<cmd>lua require('zk.commands').get('ZkNew')({ dir = vim.fn.input('Folder: ',vim.env.ZK_NOTEBOOK_DIR .. '/meetings','dir'), title = vim.fn.input('Title: ') })<CR>",
-                            options)
-    vim.api.nvim_set_keymap("", "<leader>zt",
-                            "<Cmd>ZkNew { dir = vim.env.ZK_NOTEBOOK_DIR .. '/wiki/diary', title = os.date('%Y-%m-%d') }<CR>",
-                            options)
-    vim.api.nvim_set_keymap("", "<leader>h", ":e ~/Notes/wiki/HotSheet.md<CR>",
-                            options)
-
     require("zk").setup({
         picker = "telescope",
         -- automatically attach buffers in a zk notebook that match the given filetypes
@@ -620,35 +736,87 @@ M.notes = function()
             auto_attach = {enabled = true, filetypes = {"markdown", "vimwiki"}},
             config = {
                 on_attach = function(_, bufnr)
+                    print("ZK attached")
+
+                    local which_key = require("which-key")
+                    local local_leader_opts = {
+                        mode = "n", -- NORMAL mode
+                        prefix = "<leader>",
+                        buffer = bufnr, -- Local mappings.
+                        silent = true, -- use `silent` when creating keymaps
+                        noremap = true, -- use `noremap` when creating keymaps
+                        nowait = true -- use `nowait` when creating keymaps
+                    }
+                    local local_leader_opts_visual = {
+                        mode = "v", -- VISUAL mode
+                        prefix = "<leader>",
+                        buffer = bufnr, -- Local mappings.
+                        silent = true, -- use `silent` when creating keymaps
+                        noremap = true, -- use `noremap` when creating keymaps
+                        nowait = true -- use `nowait` when creating keymaps
+                    }
+
+                    local leader_mappings = {
+                        n = {
+                            -- Create the note in the same directory as the current buffer after asking for title
+                            p = {
+                                "<Cmd>ZkNew { dir = vim.fn.expand('%:p:h'), title = vim.fn.input('Title: ') }<CR>",
+                                "New peer note (same dir)"
+                            },
+                            l = {"<Cmd>ZkLinks<CR>", "Show note links"},
+                            -- the following duplicate with the ,l_ namespace on purpose because of programming muscle memory
+                            r = {
+                                "<cmd>Telescope lsp_references<CR>",
+                                "References to this note"
+                            },
+                            i = {
+                                "<Cmd>lua vim.lsp.buf.hover()<CR>",
+                                "Info preview"
+                            }
+                        },
+                        l = {
+                            name = "Local LSP",
+                            -- Open notes linking to the current buffer.
+                            r = {
+                                "<cmd>Telescope lsp_references<CR>",
+                                "References to this note"
+                            },
+                            i = {
+                                "<Cmd>lua vim.lsp.buf.hover()<CR>",
+                                "Info preview"
+                            },
+                            f = {
+                                "<cmd>Telescope lsp_code_actions theme=cursor<CR>",
+                                "Fix Code Actions"
+                            }
+
+                        }
+                    }
+                    which_key.register(leader_mappings, local_leader_opts)
+                    local leader_mappings_visual = {
+                        n = {
+                            p = {
+                                ":'<,'>ZkNewFromTitleSelection { dir = vim.fn.expand('%:p:h') }<CR>",
+                                "New peer note (same dir) selection for title"
+                            }
+                            -- Create a new note in the same directory as the current buffer, using the current selection for title.
+                        }
+                    }
+                    which_key.register(leader_mappings_visual,
+                                       local_leader_opts_visual)
+
                     local opts = {noremap = true, silent = true}
-                    -- key bindings for opening notes and creating notes moved to general mappings
-                    -- these bindings only make sense inside an open note
-                    -- Open the link under the caret.
+
+                    -- TODO: Make <CR> magic...
+                    --   in normal mode, if on a link, it should open the link (note or url)
+                    --   in visual mode, it should prompt for folder, create a note, and make a link
+                    -- Meanwhile, just go to definition
                     vim.api.nvim_buf_set_keymap(bufnr, "n", "<CR>",
                                                 "<Cmd>lua vim.lsp.buf.definition()<CR>",
                                                 opts)
-                    -- Create the note in the same directory as the current buffer after asking for title
-                    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>znt",
-                                                "<Cmd>ZkNew { dir = vim.fn.expand('%:p:h'), title = vim.fn.input('Title: ') }<CR>",
-                                                opts)
-                    -- Create a new note in the same directory as the current buffer, using the current selection for title.
-                    vim.api.nvim_buf_set_keymap(bufnr, "v", "<leader>znt",
-                                                ":'<,'>ZkNewFromTitleSelection { dir = vim.fn.expand('%:p:h') }<CR>",
-                                                opts)
-                    -- Open notes linking to the current buffer.
-                    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>zb",
-                                                "<Cmd>lua vim.lsp.buf.references()<CR>",
-                                                opts)
-                    -- Open notes linked by the current buffer.
-                    vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>zl",
-                                                "<Cmd>ZkLinks<CR>", opts)
                     -- Preview a linked note.
-                    vim.api.nvim_buf_set_keymap(bufnr, "n", "K",
+                    vim.api.nvim_buf_set_keymap(bufnr, "", "K",
                                                 "<Cmd>lua vim.lsp.buf.hover()<CR>",
-                                                opts)
-                    -- Open the code actions for a visual selection.
-                    vim.api.nvim_buf_set_keymap(bufnr, "v", "<leader>za",
-                                                ":'<,'>lua vim.lsp.buf.range_code_action()<CR>",
                                                 opts)
                 end
             }
@@ -665,7 +833,7 @@ M.notes = function()
     -- Max width for writing
     vim.g.goyo_width = 100
 
-    function goyo_enter()
+    function Goyo_enter()
         -- Keep cursor roughly centered on the screen in typewriter mode
         vim.opt.scrolloff = 999
         local ft = vim.api.nvim_buf_get_option(0, "filetype")
@@ -674,14 +842,14 @@ M.notes = function()
         end
     end
 
-    function goyo_leave()
+    function Goyo_leave()
         -- Keep cursor roughly centered on the screen in typewriter mode
         vim.opt.scrolloff = 8
         vim.cmd("Limelight!") -- Turn off dimmimng unconditionally
     end
 
-    vim.cmd('autocmd! User GoyoEnter nested lua goyo_enter()')
-    vim.cmd('autocmd! User GoyoLeave nested lua goyo_leave()')
+    vim.cmd('autocmd! User GoyoEnter nested lua Goyo_enter()')
+    vim.cmd('autocmd! User GoyoLeave nested lua Goyo_leave()')
 
     -- Grammar
     vim.g["grammarous#disabled_rules"] = {
@@ -697,11 +865,10 @@ M.notes = function()
         }
     }
     -- Grammar stuff
-    local opts = {noremap = false, silent = true}
     vim.cmd(
         [[command StartGrammar2 lua require('zmre.plugins').grammar_check()]])
-    vim.api.nvim_set_keymap('', '<leader>gg', ':StartGrammar2<CR>', opts)
 end -- notes
+
 M.grammar_check = function()
     vim.cmd('packadd vim-grammarous')
     local opts = {noremap = false, silent = true}
@@ -762,6 +929,7 @@ M.misc = function()
     }
     vim.api.nvim_set_keymap('t', [[<C-\]], "<Cmd>ToggleTermToggleAll<cr>",
                             {noremap = true})
+
 end -- misc
 
 return M

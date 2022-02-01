@@ -1,105 +1,113 @@
 { config, lib, pkgs, ... }: {
-  home.packages = with pkgs; [
-    # Exploitation
-    exploitdb
-    metasploit
-    sqlmap
-    arpoison
+  home.packages = with pkgs;
+    [
+      # Exploitation
+      exploitdb
+      metasploit
+      sqlmap
+      arpoison
 
-    # Recon
-    avahi
-    arp-scan
-    arping
-    dnsenum
-    dnsrecon
-    enum4linux-ng # local privesc finder
-    fierce
-    httrack # offline browser / website mirror
-    fping
-    hping
-    ike-scan
-    masscan
-    nikto
-    onesixtyone
-    p0f
-    nmap-graphical
-    rustscan
-    snmpcheck
-    sslscan
-    tcpflow
-    theharvester
-    # wireshark moved to nixos config
-    # pick one of wireshark or wireshark-cli
-    wireshark
-    #wireshark-cli
-    zmap
+      # Recon
+      avahi
+      arp-scan
+      arping
+      dnsenum
+      dnsrecon
+      fierce # dns recon
+      httrack # offline browser / website mirror
+      fping
+      hping
+      masscan
+      nikto
+      onesixtyone
+      nmap-graphical
+      rustscan
+      snmpcheck
+      sslscan
+      theharvester
+      # wireshark moved to nixos config
+      # pick one of wireshark or wireshark-cli
+      wireshark
+      #wireshark-cli
+      #zmap # currently marked broken 2022-01-31
 
-    # Passwords
-    fcrackzip
-    john
-    hashcat
-    hashcat-utils
-    pdfcrack
-    rarcrack
-    thc-hydra
-    crunch # wordlist generator
-    ncrack # network auth cracker
+      # Passwords
+      fcrackzip
+      john
+      hashcat-utils
+      pdfcrack
+      rarcrack
+      crunch # wordlist generator
+      ncrack # network auth cracker
 
-    # Sniffing
-    ettercap
-    bettercap
-    dsniff
-    mitmproxy
-    wireshark
-    ngrep
+      # Sniffing
+      ettercap
+      bettercap
+      mitmproxy
+      wireshark
+      ngrep
+      #netsniff-ng ?
 
-    # Web
-    burpsuite
-    dirb
-    gobuster
-    wfuzz
-    wpscan
-    zap
+      # Web
+      dirb
+      gobuster
+      wfuzz
+      wpscan
+      urlhunter
 
-    # wifi
-    aircrack-ng
-    gqrx
-    kismet
-    wifite2
-    reaverwps
+      # crypto / stego
+      #exif # installed elsewhere
+      zsteg
 
-    # bluetooth
-    bluez
+      # manipulation
+      gdb
+      radare2
+      sqlitebrowser
+      unrar
+      netcat
+      pwncat # netcat on steroids
+      capstone # cstool disassembly tool
+      binwalk
 
-    # rfid
-    proxmark3
-    gnuradio
-    gqrx
-    hackrf
-    multimon-ng
+      # misc
+      faraday-cli
+      corkscrew # tunnel ssh through http proxies
+      pwntools
+    ] ++ lib.optionals
+    (!stdenv.isDarwin) [ # Things that only build on Linux go here
+      # Recon
+      enum4linux-ng # local privesc finder
+      ike-scan
+      # Passwords
+      hashcat
+      thc-hydra
+      # Sniffing
+      dsniff
+      tcpflow
+      p0f
+      netsniff-ng
+      # Web
+      burpsuite
+      zap
+      # Wifi
+      kismet
+      wifite2
+      reaverwps
+      aircrack-ng
+      # bluetooth
+      bluez
+      # rfid
+      proxmark3
+      gnuradio
+      gqrx
+      hackrf
+      multimon-ng
+      # crypto / stego
+      pngcheck
+      stegseek
+      # manipulation
+      radare2-cutter
+      afl # fuzzer tool
 
-    # crypto / stego
-    stegseek
-
-    # installed elsewhere
-    #exif
-    zsteg
-
-    # manipulation
-    gdb
-    radare2
-    radare2-cutter
-    sqlitebrowser
-    unrar
-    netcat
-    pwncat # netcat on steroids
-    capstone # cstool disassembly tool
-    afl # fuzzer tool
-    binwalk
-
-    # misc
-    faraday-cli
-    corkscrew # tunnel ssh through http proxies
-
-  ];
+    ];
 }

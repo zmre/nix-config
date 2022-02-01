@@ -7,7 +7,8 @@ let
     ripgrep
     du-dust
     fzy
-    tree-sitter
+    tree-sitter # need unstable to get new markdown parser
+    tree-sitter-grammars.tree-sitter-markdown
     curl
     duf # df alternative showing free disk space
     fswatch
@@ -47,6 +48,7 @@ let
     aria # cli downloader
     ncftp
 
+    # misc
     neofetch # display key software/version info in term
     nodePackages.readability-cli # quick commandline website article read
     vimv # shell script to bulk rename
@@ -67,6 +69,11 @@ let
     kondo # free disk space by cleaning project build dirs
     optipng
     pkgs.hackernews-tui
+    procps
+    pstree
+
+    # so i can just update configs and not whole system:
+    #home-manager
   ];
   cPkgs = with pkgs.stable; [
     automake
@@ -321,14 +328,16 @@ in {
       telescope-fzy-native-nvim # but fzy gives better results
       telescope-frecency-nvim # and frecency comes in handy too
       telescope-media-files # only works on linux, but image preview
+      dressing-nvim # dresses up vim.ui.input and vim.ui.select and uses telescope
       nvim-colorizer-lua # color over CSS like #00ff00
       nvim-web-devicons # makes things pretty; used by many plugins below
       nvim-tree-lua # file navigator
       gitsigns-nvim # git status in gutter
       symbols-outline-nvim # navigate the current file better
       lualine-nvim # nice status bar at bottom
-      barbar-nvim # nice buffers (tabs) bar at top
-      #bufferline-nvim
+      #barbar-nvim # nice buffers (tabs) bar at top
+      vim-bbye # fix bdelete buffer stuff needed with bufferline
+      bufferline-nvim
       indent-blankline-nvim # visual indent
       toggleterm-nvim # better terminal management
       pkgs.stable.vimPlugins.nvim-treesitter # better code coloring
@@ -374,7 +383,6 @@ in {
       FixCursorHold-nvim # remove this when neovim #12587 is resolved
       impatient-nvim # speeds startup times by caching lua bytecode
       which-key-nvim
-      vim-bbye # fix bdelete buffer stuff
       #nvim-whichkey-setup-lua
     ];
   };
@@ -404,6 +412,8 @@ in {
     "${pkgs.tree-sitter.builtGrammars.tree-sitter-bash}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/scala.so".source =
     "${pkgs.tree-sitter.builtGrammars.tree-sitter-scala}/parser";
+  home.file."${config.xdg.configHome}/nvim/parser/markdown.so".source =
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-markdown}/parser";
 
   programs.fzf = {
     enable = true;
@@ -433,7 +443,7 @@ in {
       source ${inputs.powerlevel10k.outPath}/powerlevel10k.zsh-theme
     '';
     completionInit = ''
-      autoload -U compinit && completionInit
+      autoload -U compinit
     '';
     initExtra = ''
       if [[ -r "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh" ]]; then
@@ -466,6 +476,8 @@ in {
       bindkey '^[[B' down-line-or-search
       bindkey -M vicmd 'k' up-line-or-search
       bindkey -M vicmd 'j' down-line-or-search
+      bindkey '^r' history-incremental-search-backward
+      bindkey '^s' history-incremental-search-forward
 
       # You might not like what I'm doing here, but '/' works like ctrl-r
       # and matches as you type. I've added pattern matches here though.
@@ -486,6 +498,12 @@ in {
       zstyle ':completion:*:cd:*' ignored-patterns '(*/)#CVS'
       zstyle ':completion:*:*:kill:*' menu yes select
       zstyle ':completion:*:kill:*'   force-list always
+      zstyle -e ':completion:*:default' list-colors 'reply=("$${PREFIX:+=(#bi)($PREFIX:t)(?)*==34=34}:$${(s.:.)LS_COLORS}")'
+
+      # taskwarrior
+      zstyle ':completion:*:*:task:*' verbose yes
+      zstyle ':completion:*:*:task:*:descriptions' format '%U%B%d%b%u'
+      zstyle ':completion:*:*:task:*' group-name '\'
 
       # Customize fzf plugin to use fd
       # Should default to ignore anything in ~/.gitignore
@@ -506,9 +524,13 @@ in {
       # Needed for lf to be pretty
       . ~/.config/lf/lficons.sh
 
+      # Setup zoxide
+      eval "$(zoxide init zsh)"
+
       # Prompt stuff
       source ${./dotfiles/p10k.zsh}
     '';
+    sessionVariables = { };
     plugins = [
       {
         name = "powerlevel10k";
@@ -531,21 +553,21 @@ in {
         };
       }
     ];
-    oh-my-zsh.enable = true;
-    oh-my-zsh.plugins = [
-      "sudo"
-      "gitfast"
-      "vim-interaction"
-      "docker"
-      "taskwarrior"
-      "tmux"
-      "fzf"
-      "cargo"
-      "brew"
-      "ripgrep"
-      "vi-mode"
-      "zoxide"
-    ];
+    # oh-my-zsh.enable = true;
+    # oh-my-zsh.plugins = [
+    #   "sudo"
+    #   "gitfast"
+    #   "vim-interaction"
+    #   "docker"
+    #   "taskwarrior"
+    #   "tmux"
+    #   "fzf"
+    #   "cargo"
+    #   "brew"
+    #   "ripgrep"
+    #   "vi-mode"
+    #   "zoxide"
+    # ];
     shellAliases = {
       ls = "ls --color=auto -F";
       l = "exa --icons --git-ignore --git -F --extended";
@@ -563,6 +585,9 @@ in {
         qutebrowser --temp-basedir --set content.private_browsing true --set colors.tabs.bar.bg "#552222" --config-py "$HOME/.config/qutebrowser/config.py" --qt-arg name "qp,qp"'';
       calc = "kalker";
       df = "duf";
+      # search for a note and with ctrl-n, create it if not found
+      # add subdir as needed like "n meetings" or "n wiki"
+      n = "zk edit --interactive";
     };
   };
 
