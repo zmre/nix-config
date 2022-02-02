@@ -137,7 +137,7 @@ if v:version >= 600
     filetype plugin on
     filetype indent on
     set hlsearch
-    syn keyword TODO TODO: PWTODO PWTODO: FIXME FIXME: TODO Todo todo contained
+    syn keyword TODO TODO: PWTODO PWTODO: FIXME FIXME: TODO Todo todo TK TK: contained
     syntax on
   endif
 endif
