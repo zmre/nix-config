@@ -42,8 +42,9 @@
           [ prev.darwin.apple_sdk.frameworks.Security ];
         src = inputs.hackernews-tui;
       };
+      gtm-okr = inputs.gtm-okr.packages.${final.system}.gtm-okr;
+
     })
     inputs.nur.overlay
-
   ];
 }

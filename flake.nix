@@ -53,6 +53,8 @@
     };
     # blocklist to add to hosts file -- stops ads and malware across apps
     sbhosts.url = "github:StevenBlack/hosts";
+    gtm-okr.url = "github:zmre/gtm-okr";
+    gtm-okr.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs@{ self, nixpkgs, darwin, home-manager, nixos-hardware

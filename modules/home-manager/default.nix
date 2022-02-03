@@ -72,9 +72,7 @@ let
     pkgs.hackernews-tui
     procps
     pstree
-
-    # so i can just update configs and not whole system:
-    #home-manager
+    pkgs.gtm-okr
   ];
   cPkgs = with pkgs.stable; [
     automake
@@ -220,6 +218,14 @@ in {
   #"${config.home-manager-files}/.config/tmux/tmux.conf";
   #home.file.".gitignore".source =
   #"${config.home-manager-files}/.config/git/ignore";
+  # Config for hackernews-tui to make it darker
+  home.file.".config/hn-tui.toml".text = ''
+    [theme.palette]
+    background = "#242424"
+    foreground = "#f6f6ef"
+    selection_background = "#4a4c4c"
+    selection_foreground = "#d8dad6"
+  '';
 
   programs.bat = {
     enable = true;
@@ -602,7 +608,7 @@ in {
       dwswitch =
         "darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) --show-trace";
       noswitch =
-        "sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.# --show-tract";
+        "sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.# --show-trace";
     };
   };
 
