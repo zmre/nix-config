@@ -91,15 +91,22 @@ let
   # live dangerously here with unstable
   rustPkgs = with pkgs; [ cargo cargo-watch rustfmt rust-analyzer rustc ];
   # live dangerously here with unstable
-  typescriptPkgs = with pkgs.nodePackages; [
-    typescript
-    typescript-language-server
-    yarn
-    diagnostic-languageserver
-    eslint_d
-    prettier
-    vscode-langservers-extracted # lsp servers for json, html, css
-  ];
+  typescriptPkgs = with pkgs.nodePackages;
+    [
+      typescript
+      typescript-language-server
+      yarn
+      diagnostic-languageserver
+      eslint_d
+      prettier
+      vscode-langservers-extracted # lsp servers for json, html, css
+      tailwindcss
+      pnpm
+      svelte-language-server
+    ] ++ [
+      # weird hack to allow for funky package name
+      pkgs.nodePackages."@tailwindcss/language-server"
+    ];
 
   networkPkgs = with pkgs.stable; [ mtr iftop ];
   guiPkgs = with pkgs;
@@ -325,6 +332,7 @@ in {
       rust-tools-nvim # lsp stuff and more for rust
       crates-nvim # inline intelligence for Cargo.toml
       nvim-lspconfig # setup LSP for intelligent coding
+      # nvim-lsp-ts-utils for inlays
       null-ls-nvim # formatting and linting via lsp system
       trouble-nvim # navigate all warnings and errors in quickfix-like window
 
@@ -421,6 +429,8 @@ in {
     "${pkgs.tree-sitter.builtGrammars.tree-sitter-scala}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/markdown.so".source =
     "${pkgs.tree-sitter.builtGrammars.tree-sitter-markdown}/parser";
+  home.file."${config.xdg.configHome}/nvim/parser/svelte.so".source =
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-svelte}/parser";
 
   programs.fzf = {
     enable = true;

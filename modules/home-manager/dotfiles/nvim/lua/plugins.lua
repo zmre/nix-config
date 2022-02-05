@@ -211,9 +211,15 @@ M.ui = function()
             -- close_icon = '',
             left_trunc_marker = "",
             right_trunc_marker = "",
-            max_name_length = 35,
-            max_prefix_length = 20, -- prefix used when a buffer is de-duplicated
-            tab_size = 40,
+            max_name_length = 40,
+            max_prefix_length = 30, -- prefix used when a buffer is de-duplicated
+            tab_size = 20,
+            name_formatter = function(buf) -- buf contains a "name", "path" and "bufnr"
+                -- remove extension from markdown files for example
+                if buf.name:match('%.md') then
+                    return vim.fn.fnamemodify(buf.name, ':t:r')
+                end
+            end,
             diagnostics = false, -- | "nvim_lsp" | "coc",
             diagnostics_update_in_insert = false,
             offsets = {{filetype = "NvimTree", text = "", padding = 1}},
@@ -225,7 +231,7 @@ M.ui = function()
             -- can also be a table containing 2 custom separators
             -- [focused and unfocused]. eg: { '|', '|' }
             separator_style = "thin", -- | "thick" | "thin" | { 'any', 'any' },
-            enforce_regular_tabs = true,
+            enforce_regular_tabs = false, -- if true, all tabs same width
             always_show_bufferline = true
         },
         highlights = {
@@ -343,7 +349,8 @@ M.diagnostics = function()
             vim.api.nvim_buf_set_keymap(bufnr, ...)
         end
         local opts = {noremap = true, silent = false}
-        if client.name == "tsserver" or client.name == "rnix" then
+        if client.name == "tsserver" or client.name == "jsonls" or client.name ==
+            "rnix" or client.name == "eslint" or client.name == "html" then
             client.resolved_capabilities.document_formatting = false
             client.resolved_capabilities.document_range_formatting = false
         end
@@ -464,19 +471,24 @@ M.diagnostics = function()
     -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
     local formatting = null_ls.builtins.formatting
     -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
-    -- local diagnostics = null_ls.builtins.diagnostics
+    local diagnostics = null_ls.builtins.diagnostics
 
     null_ls.setup {
         debug = false,
         sources = {
-            formatting.lua_format, formatting.nixfmt, formatting.prettier.with {
+            formatting.lua_format, formatting.nixfmt,
+            formatting.prettier.with {
                 -- extra_args = {
                 --     "--no-semi", "--single-quote", "--jsx-single-quote"
                 -- },
                 -- Disable markdown because formatting on save conflicts in weird ways
                 -- with the taskwiki (roam-task) stuff.
                 disabled_filetypes = {"markdown"}
-            } -- diagnostics.eslint_d
+            }, diagnostics.eslint_d.with {
+                args = {
+                    "-f", "json", "--stdin", "--stdin-filename", "$FILENAME"
+                }
+            }
             -- removed formatting.rustfmt since rust_analyzer seems to do the same thing
         },
         on_attach = attached
@@ -491,23 +503,23 @@ M.diagnostics = function()
         on_attach = attached,
         capabilities = capabilities
     }
-    lspconfig.tsserver.setup {
-        -- Needed for inlayHints. Merge this table with your settings or copy
-        -- it from the source if you want to add your own init_options.
-        -- init_options = require("nvim-lsp-ts-utils").init_options
-        capabilities = capabilities,
-        on_attach = attached
-    }
+    lspconfig.tsserver.setup {capabilities = capabilities, on_attach = attached}
     lspconfig.sumneko_lua.setup {
         settings = {Lua = {diagnostics = {globals = {"vim"}}}},
         on_attach = attached,
         capabilities = capabilities
     }
+    lspconfig.svelte.setup {on_attach = attached, capabilities = capabilities}
+    lspconfig.tailwindcss.setup {
+        on_attach = attached,
+        capabilities = capabilities
+    }
     lspconfig.rnix.setup {on_attach = attached, capabilities = capabilities}
-    lspconfig.cssls.setup {capabilities = capabilities}
-    -- lspconfig.eslint.setup {capabilities = capabilities}
-    lspconfig.html.setup {capabilities = capabilities}
+    lspconfig.cssls.setup {on_attach = attached, capabilities = capabilities}
+    lspconfig.eslint.setup {on_attach = attached, capabilities = capabilities}
+    lspconfig.html.setup {on_attach = attached, capabilities = capabilities}
     lspconfig.jsonls.setup {
+        on_attach = attached,
         settings = {
             json = {
                 schemas = {
