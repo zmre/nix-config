@@ -514,6 +514,8 @@ in {
       zle -N edit-command-line
       bindkey -M vicmd 'v' edit-command-line
 
+      zstyle ':completion:*' completer _extensions _complete _approximate
+      zstyle ':completion:*' menu select
       zstyle ':completion:*:manuals'    separate-sections true
       zstyle ':completion:*:manuals.*'  insert-sections   true
       zstyle ':completion:*:man:*'      menu yes select
@@ -529,6 +531,16 @@ in {
       zstyle ':completion:*:*:task:*' verbose yes
       zstyle ':completion:*:*:task:*:descriptions' format '%U%B%d%b%u'
       zstyle ':completion:*:*:task:*' group-name '\'
+
+      zmodload -a colors
+      zstyle ':completion:*' list-colors $${(s.:.)LS_COLORS} # complete with same colors as ls
+      zstyle ':completion:*:*:*:*:hosts' list-colors '=*=1;36' # bold cyan
+      zstyle ':completion:*:*:*:*:users' list-colors '=*=36;40' # dark cyan on black
+
+      setopt list_ambiguous
+
+      zmodload -a autocomplete
+      zmodload -a complist
 
       # Customize fzf plugin to use fd
       # Should default to ignore anything in ~/.gitignore
