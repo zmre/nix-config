@@ -70,10 +70,10 @@
       wvous-tr-corner = 5;
     };
 
-    universalaccess = {
-      # get rid of extra transparency in menu bar and elsewhere
-      reduceTransparency = false;
-    };
+    # universalaccess = {
+    # get rid of extra transparency in menu bar and elsewhere
+    # reduceTransparency = false;
+    # };
 
     NSGlobalDomain = {
       # 2 = heavy font smoothing; if text looks blurry, back this down to 1
