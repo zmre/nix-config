@@ -196,7 +196,11 @@
             ./modules/hardware/parallels.nix
             #nixos-hardware.nixosModules.lenovo-thinkpad-t460s
           ];
-          extraModules = [ ./profiles/zmre.nix ];
+          extraModules = [
+            ./profiles/zmre.nix
+            sbhosts.nixosModule
+            { networking.stevenBlackHosts.enable = true; }
+          ];
         };
       };
 
