@@ -525,7 +525,8 @@ in {
       zstyle ':completion:*:cd:*' ignored-patterns '(*/)#CVS'
       zstyle ':completion:*:*:kill:*' menu yes select
       zstyle ':completion:*:kill:*'   force-list always
-      zstyle -e ':completion:*:default' list-colors 'reply=("$${PREFIX:+=(#bi)($PREFIX:t)(?)*==34=34}:$${(s.:.)LS_COLORS}")'
+      # TODO: need to look this up as below is broken
+      zstyle -e ':completion:*:default' list-colors 'reply=("$${PREFIX:+=(#bi)($PREFIX:t)(?)*==34=34}:''${(s.:.)LS_COLORS}")'
 
       # taskwarrior
       zstyle ':completion:*:*:task:*' verbose yes
@@ -533,7 +534,8 @@ in {
       zstyle ':completion:*:*:task:*' group-name '\'
 
       zmodload -a colors
-      zstyle ':completion:*' list-colors $${(s.:.)LS_COLORS} # complete with same colors as ls
+      # TODO: need to look this up as below is broken
+      zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS} # complete with same colors as ls
       zstyle ':completion:*:*:*:*:hosts' list-colors '=*=1;36' # bold cyan
       zstyle ':completion:*:*:*:*:users' list-colors '=*=36;40' # dark cyan on black
 

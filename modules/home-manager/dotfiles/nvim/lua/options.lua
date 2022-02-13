@@ -207,10 +207,9 @@ end
 
 M.programming = function()
     vim.wo.number = true
-    vim.bo.number = true
     vim.wo.spell = false
-    vim.opt.cursorline = true -- add indicator for current line
-    vim.cmd 'syn keyword PWTODO FIXME TODO Todo todo contained'
+    vim.wo.relativenumber = false
+    vim.wo.cursorline = true -- add indicator for current line
 
     M.twospaceindent()
     -- Setup Ctrl and Cmd-/ to toggle comments

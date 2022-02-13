@@ -36,6 +36,7 @@ M.config = function()
       autocmd FileType markdown lua require('zmre.filetypes').markdown()
       autocmd FileType vimwiki lua require('zmre.filetypes').markdown()
       autocmd FileType html lua require('zmre.options').programming()
+      autocmd FileType svelte lua require('zmre.options').programming()
       autocmd FileType css lua require('zmre.options').programming()
       autocmd FileType xml lua require('zmre.filetypes').lua()
     augroup END

@@ -800,8 +800,11 @@ M.notes = function()
                             f = {
                                 "<cmd>Telescope lsp_code_actions theme=cursor<CR>",
                                 "Fix Code Actions"
+                            },
+                            e = {
+                                "<cmd>lua vim.diagnostic.open_float()<CR>",
+                                "Show Line Diags"
                             }
-
                         }
                     }
                     which_key.register(leader_mappings, local_leader_opts)
