@@ -74,6 +74,7 @@ let
     pstree
     pkgs.gtm-okr
   ];
+  # below is to make compiling tools/projects without dedicated nix environments more likely to succeed
   cPkgs = with pkgs.stable; [
     automake
     autoconf
@@ -83,6 +84,8 @@ let
     pkg-config
     glib
     libtool
+    libiconv # so many things fail to compile without this
+    openssl # also needed by many things
   ];
   # sumneko-lua-language-server failing on darwin, so installing in home-linux and brew
   luaPkgs = with pkgs.stable; [ luaformatter ];
