@@ -735,7 +735,8 @@ in {
       completion.use_best_match = true;
       completion.shrink = true;
       colors.webpage.preferred_color_scheme = "dark";
-      colors.webpage.darkmode.enabled = true;
+      # enabling darkmode auto-changes website colors and images and often makes things worse instead of better :-(
+      colors.webpage.darkmode.enabled = false;
       colors.webpage.bg = "black";
       statusbar.widgets = [ "progress" "keypress" "url" "history" ];
       tabs.position = "left";
