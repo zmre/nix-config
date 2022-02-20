@@ -55,7 +55,7 @@ let
     vimv # shell script to bulk rename
     pkgs.btop
     #youtube-dl replaced by yt-dlp
-    yt-dlp
+    pkgs.yt-dlp
     vulnix # check for live nix apps that are listed in NVD
     tickrs # track stocks
     taskwarrior-tui
