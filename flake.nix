@@ -129,6 +129,8 @@
           value = {
             dragonstone =
               self.darwinConfigurations.dragonstone.config.system.build.toplevel;
+            attolia =
+              self.darwinConfigurations.attolia.config.system.build.toplevel;
           };
         }) lib.platforms.darwin) ++
         # linux checks
@@ -142,14 +144,28 @@
         }) lib.platforms.linux));
 
       darwinConfigurations = {
-        # dragonstone-m1 = mkDarwinConfig {
-        #   system = "aarch64-darwin";
-        #   extraModules = [
-        #     ./profiles/personal.nix
-        #     ./modules/darwin/apps.nix
-        #     { homebrew.brewPrefix = "/opt/homebrew/bin"; }
-        #   ];
-        # };
+        attolia = mkDarwinConfig {
+          system = "aarch64-darwin";
+          extraModules = [
+            ./profiles/pwalsh.nix
+            {
+              homebrew.brewPrefix = "/usr/local/bin";
+            }
+            # Can't use networking.extraHosts outside of NixOS, so this hack:
+            {
+              environment.etc.hosts.text = ''
+                127.0.0.1       dev1.ironcorelabs.com
+                127.0.0.1       dev1.scrambledbits.org
+
+                # Added by Docker Desktop
+                # To allow the same kube context to work on the host and the container:
+                127.0.0.1 kubernetes.docker.internal
+                # End of section
+
+              '' + builtins.readFile ("${sbhosts}/hosts");
+            }
+          ];
+        };
         dragonstone = mkDarwinConfig {
           system = "x86_64-darwin";
           extraModules = [
@@ -201,6 +217,11 @@
       };
 
       homeConfigurations = {
+        attolia = mkHomeConfig {
+          username = "pwalsh";
+          system = "aarch64-darwin";
+          extraModules = [ ./profiles/home-manager/personal.nix ];
+        };
         dragonstone = mkHomeConfig {
           username = "pwalsh";
           system = "x86_64-darwin";
@@ -210,11 +231,6 @@
           username = "zmre";
           extraModules = [ ./profiles/home-manager/personal.nix ];
         };
-        # darwinServerM1 = mkHomeConfig {
-        #   username = "kclejeune";
-        #   system = "aarch64-darwin";
-        #   extraModules = [ ./profiles/home-manager/personal.nix ];
-        # };
         parallels = mkHomeConfig {
           username = "zmre";
           extraModules = [ ./profiles/home-manager/personal.nix ];
