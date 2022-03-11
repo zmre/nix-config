@@ -73,6 +73,8 @@ let
     procps
     pstree
     pkgs.gtm-okr
+
+    #pkgs.qutebrowser
   ];
   # below is to make compiling tools/projects without dedicated nix environments more likely to succeed
   cPkgs = with pkgs.stable; [
@@ -451,6 +453,9 @@ in {
   };
   programs.gh = {
     enable = true;
+    # stable is currently failing as of 2022-02-17
+    # error: Could not find a version that satisfies the requirement tomlkit<0.8,>=0.7 (from remarshal)
+    package = pkgs.gh;
     settings = { git_protocol = "ssh"; };
   };
   programs.zsh = {

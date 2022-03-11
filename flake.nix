@@ -160,10 +160,6 @@
             # Can't use networking.extraHosts outside of NixOS, so this hack:
             {
               environment.etc.hosts.text = ''
-                255.255.255.255	broadcasthost
-                ::1				localhost
-                fe80::1%lo0		localhost
-                127.0.0.1⇥  ⇥   localhost
                 127.0.0.1       dev1.ironcorelabs.com
                 127.0.0.1       dev1.scrambledbits.org
 

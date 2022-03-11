@@ -42,6 +42,10 @@
           [ prev.darwin.apple_sdk.frameworks.Security ];
         src = inputs.hackernews-tui;
       };
+      # qutebrowser = prev.qutebrowser.override {
+      #   nativeBuildInputs = prev.qutebrowser.nativeBuildInputs ++ prev.lib.optionals prev.stdenv.isDarwin
+      #     [ prev.darwin.apple_sdk.frameworks.Security ]; #darwin.cctools
+      # };
       gtm-okr = inputs.gtm-okr.packages.${final.system}.gtm-okr;
 
     })

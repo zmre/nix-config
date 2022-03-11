@@ -206,6 +206,7 @@ M.tabindent = function()
 end
 
 M.programming = function()
+    vim.opt.number = true
     vim.wo.number = true
     vim.wo.spell = false
     vim.wo.relativenumber = false
