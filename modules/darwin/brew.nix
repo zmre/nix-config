@@ -1,7 +1,9 @@
 { inputs, config, pkgs, ... }: {
   homebrew = {
     enable = true;
-    autoUpdate = false;
+    autoUpdate = true;
+    cleanup =
+      "uninstall"; # should maybe be "zap" - remove anything not listed here
     global = {
       brewfile = true;
       noLock = true;
@@ -14,36 +16,56 @@
       "homebrew/core"
       "homebrew/services"
       "koekeishiya/formulae"
+      "homebrew/cask-drivers" # for flipper zero
     ];
 
     casks = [
-      #"bartender"
+      "adobe-creative-cloud"
+      "amethyst"
+      "audio-hijack"
+      "backblaze"
+      "bartender"
       "blockblock"
+      "brave-browser"
+      "canon-eos-utility"
+      "canon-eos-webcam-utility"
       "choosy"
-      #"font-dejavu-sans-mono-nerd-font"
-      #"font-droid-sans-mono-nerd-font"
-      #"font-fira-code-nerd-font"
-      #"font-fira-mono-nerd-font"
-      #"font-hasklug-nerd-font"
-      #"font-inconsolata-nerd-font"
-      #"font-meslo-lg-nerd-font"
+      "default-folder-x"
+      "discord"
+      "docker"
+      "dropbox"
+      "firefox"
       "gpg-suite"
-      "iina"
+      "imageoptim"
+      "karabiner-elements"
+      "little-snitch"
       "lockrattler"
+      "loopback"
       "marked"
+      "microsoft-office"
       "mpv"
+      "noun-project"
+      "obs"
+      "parallels"
+      "protonmail-bridge"
+      #"qflipper" # TODO: add this back when their site is back up
       "qutebrowser"
       "qlmarkdown"
       "qlprettypatch"
-      "qlstephen"
       "qlvideo"
-      "quicklook-csv"
-      "quicklook-json"
       "quicklookase"
       "reikey"
-      "revisionist"
+      "raycast"
+      "signal"
       "silentknight"
-      "systhist"
+      "silnite"
+      "skype"
+      "spotify"
+      "superhuman"
+      "sync"
+      "syncthing"
+      "textexpander"
+      "tor-browser"
       "transmission"
       "webpquicklook"
       "wireshark-chmodbpf"
@@ -57,6 +79,7 @@
     ];
 
     masApps = {
+      "Brother iPrint&Scan" = 1193539993;
       "Monodraw" = 920404675; # ASCII drawings
       "Yubico Authenticator" = 1497506650;
       "PCalc" = 403504866;
@@ -79,17 +102,16 @@
       "Kindle" = 405399194;
       "Scrivener" = 1310686187;
       "Keynote" = 409183694;
-      #"Vinegar" = 1591303229;
+      "Vinegar" = 1591303229;
       "PeakHour" = 1241445112;
+      "StopTheMadness" = 1376402589;
       "Amphetamine" = 937984704;
       "Vimari" = 1480933944;
       "Xcode" = 497799835;
       "iStumbler" = 546033581;
     };
     brews = [
-      # should be able to manage chunkwm and skhd outside of brew
-      #"yabai"
-      #"skhd"
+      "pam-reattach"
       "brightness"
       "ciphey"
       "ca-certificates"
@@ -100,7 +122,6 @@
       "findutils" # TODO: needed?
       "gdrive"
       "ical-buddy"
-      #"mas"
       "ncspot"
       "chkrootkit"
       # because the nix recipe isn't compiling on darwin
@@ -220,17 +241,13 @@
 #the_silver_searcher
 #theharvester
 #theora
-#tickrs
 #tidy-html5
 #tig
 #tika
 #timewarrior
 #tmux
 #tokyo-cabinet
-#topgrade
 #torsocks
-#tree
-#tree-sitter
 #ttfautohint
 #ttyplot
 #ubertooth
@@ -280,7 +297,6 @@
 #yasm
 #ykman
 #ykpers
-#youtube-dl
 #yq
 #yt-dlp
 #ytop
@@ -324,7 +340,6 @@
 #gitkraken
 #gitup
 #goneovim
-#gpg-suite
 #graphql-playground
 #gswitch
 #hammerspoon
@@ -333,7 +348,6 @@
 #keepassxc
 #kitty
 #macdown
-#marked
 #osxfuse
 #pacifist
 #powershell

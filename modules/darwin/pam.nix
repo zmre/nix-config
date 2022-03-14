@@ -14,6 +14,7 @@ let
         # Enable sudo Touch ID authentication, if not already enabled
         if ! grep 'pam_tid.so' ${file} > /dev/null; then
           /usr/bin/sed -i "" '2i\
+        auth       optional     /opt/homebrew/lib/pam/pam_reattach.so # nix-darwin: ${option}\
         auth       sufficient     pam_tid.so # nix-darwin: ${option}
           ' ${file}
         fi
@@ -30,6 +31,7 @@ in {
     security.pam.enableSudoTouchIdAuth = mkEnableOption ''
       Enable sudo authentication with Touch ID
       When enabled, this option adds the following line to /etc/pam.d/sudo:
+          auth       optional     /opt/homebrew/lib/pam/pam_reattach.so
           auth       sufficient     pam_tid.so
       (Note that macOS resets this file when doing a system update. As such, sudo
       authentication with Touch ID won't work after a system update until the nix-darwin

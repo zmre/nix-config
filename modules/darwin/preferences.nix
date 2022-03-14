@@ -22,7 +22,7 @@
       AppleShowAllExtensions = true;
       FXEnableExtensionChangeWarning = true;
       QuitMenuItem = true;
-      _FXShowPosixPathInTitle = false;
+      _FXShowPosixPathInTitle = true;
     };
 
     # trackpad settings

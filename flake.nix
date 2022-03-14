@@ -149,7 +149,7 @@
           extraModules = [
             ./profiles/pwalsh.nix
             {
-              homebrew.brewPrefix = "/usr/local/bin";
+              homebrew.brewPrefix = "/opt/homebrew/bin";
             }
             # Can't use networking.extraHosts outside of NixOS, so this hack:
             {
@@ -220,12 +220,18 @@
         attolia = mkHomeConfig {
           username = "pwalsh";
           system = "aarch64-darwin";
-          extraModules = [ ./profiles/home-manager/personal.nix ];
+          extraModules = [
+            ./profiles/home-manager/personal.nix
+            ./profiles/home-manager/darwin.nix
+          ];
         };
         dragonstone = mkHomeConfig {
           username = "pwalsh";
           system = "x86_64-darwin";
-          extraModules = [ ./profiles/home-manager/personal.nix ];
+          extraModules = [
+            ./profiles/home-manager/personal.nix
+            ./profiles/home-manager/darwin.nix
+          ];
         };
         volantis = mkHomeConfig {
           username = "zmre";

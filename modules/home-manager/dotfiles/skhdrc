@@ -129,10 +129,10 @@ launch < v [
 cmd + shift - f8 : echo "toggle brain.fm local music" ; ~/bin/brain-kill-local || nohup ~/bin/brainlocal 35
 
 # focus window
-fn - h : chunkc tiling::window --focus west; echo "fn - h: focus west"
-fn - j : chunkc tiling::window --focus south; echo "fn - j: focus south"
-fn - k : chunkc tiling::window --focus north; echo "fn - k: focus north"
-fn - l : chunkc tiling::window --focus east; echo "fn - l: focus east"
+fn - h : yabai -m window --focus west; echo "fn - h: focus west"
+fn - j : yabai -m window --focus south; echo "fn - h: focus south"
+fn - k : yabai -m window --focus north; echo "fn - h: focus north"
+fn - l : yabai -m window --focus east; echo "fn - h: focus east"
 
 # equalize size of windows
 fn - 0 : chunkc tiling::desktop --equalize; echo "fn - 0: equalize windows"
@@ -141,16 +141,16 @@ fn - 0 : chunkc tiling::desktop --equalize; echo "fn - 0: equalize windows"
 shift + fn - 0 : chunkc tiling::desktop --layout monocle ; chunkc tiling::desktop --layout bsp; echo "fn - 0: reset layout"
 
 # swap window
-shift + fn - h : chunkc tiling::window --swap west ; echo "fn + shift - h: swap west"
-shift + fn - j : chunkc tiling::window --swap south ; echo "fn + shift - j: swap south"
-shift + fn - k : chunkc tiling::window --swap north ; echo "fn + shift - k: swap north"
-shift + fn - l : chunkc tiling::window --swap east ; echo "fn + shift - l: swap east"
+shift + fn - h : yabai -m window --swap north; echo "fn + shift - h: swap west"
+shift + fn - j : yabai -m window --swap south ; echo "fn + shift - j: swap south"
+shift + fn - k : yabai -m window --swap north ; echo "fn + shift - k: swap north"
+shift + fn - l : yabai -m window --swap east ; echo "fn + shift - l: swap east"
 
 # move window
-ctrl + fn - h : chunkc tiling::window --warp west ; echo "fn + ctrl - h: warp west"
-ctrl + fn - j : chunkc tiling::window --warp south ; echo "fn + ctrl - j: warp south"
-ctrl + fn - k : chunkc tiling::window --warp north ; echo "fn + ctrl - k: warp north"
-ctrl + fn - l : chunkc tiling::window --warp east ; echo "fn + ctrl - l: warp east"
+ctrl + fn - h : yabai -m window --warp west ; echo "fn + ctrl - h: warp west"
+ctrl + fn - j : yabai -m window --warp south ; echo "fn + ctrl - j: warp south"
+ctrl + fn - k : yabai -m window --warp north ; echo "fn + ctrl - k: warp north"
+ctrl + fn - l : yabai -m window --warp east ; echo "fn + ctrl - l: warp east"
 
 # --grid-layout rows:cols:left:top:width:height
 
@@ -195,36 +195,36 @@ float < space : chunkc tiling::desktop --layout bsp ; skhd -k "0x35" ; echo 'ret
 #shift + alt - x : chunkc tiling::window --send-to-desktop $(chunkc get _last_active_desktop)
 #shift + alt - z : chunkc tiling::window --send-to-desktop prev
 #shift + alt - c : chunkc tiling::window --send-to-desktop next
-fn - 1 : chunkc tiling::window --send-to-desktop 1 ; echo 'fn - 1: send to desktop 1'
-fn - 2 : chunkc tiling::window --send-to-desktop 2 ; echo 'fn - 2: send to desktop 2'
-fn - 3 : chunkc tiling::window --send-to-desktop 3 ; echo 'fn - 3: send to desktop 3'
-fn - 4 : chunkc tiling::window --send-to-desktop 4 ; echo 'fn - 4: send to desktop 4'
-fn - 5 : chunkc tiling::window --send-to-desktop 5 ; echo 'fn - 5: send to desktop 5'
-fn - 6 : chunkc tiling::window --send-to-desktop 6 ; echo 'fn - 6: send to desktop 6'
-fn - 7 : chunkc tiling::window --send-to-desktop 7 ; echo 'fn - 7: send to desktop 7'
-fn - 8 : chunkc tiling::window --send-to-desktop 8 ; echo 'fn - 8: send to desktop 8'
-fn - 9 : chunkc tiling::window --send-to-desktop 9 ; echo 'fn - 9: send to desktop 9'
+fn - 1 : yabai -m window --space 1 ; echo 'fn - 1: send to desktop 1'
+fn - 2 : yabai -m window --space 2 ; echo 'fn - 2: send to desktop 2'
+fn - 3 : yabai -m window --space 3 ; echo 'fn - 3: send to desktop 3'
+fn - 4 : yabai -m window --space 4 ; echo 'fn - 4: send to desktop 4'
+fn - 5 : yabai -m window --space 5 ; echo 'fn - 5: send to desktop 5'
+fn - 6 : yabai -m window --space 6 ; echo 'fn - 6: send to desktop 6'
+fn - 7 : yabai -m window --space 7 ; echo 'fn - 7: send to desktop 7'
+fn - 8 : yabai -m window --space 8 ; echo 'fn - 8: send to desktop 8'
+fn - 9 : yabai -m window --space 9 ; echo 'fn - 9: send to desktop 9'
 
 # send window to desktop and follow focus
-shift + fn - 1 : chunkc tiling::window --send-to-desktop 1; skhd -k 'ctrl - 1'; echo 'fn + shift - 1: send to desktop 1 and follow focus'
-shift + fn - 2 : chunkc tiling::window --send-to-desktop 2;  skhd -k 'ctrl - 2'; echo 'fn + shift - 2: send to desktop 2 and follow focus'
-shift + fn - 3 : chunkc tiling::window --send-to-desktop 3;  skhd -k 'ctrl - 3'; echo 'fn + shift - 3: send to desktop 3 and follow focus'
-shift + fn - 4 : chunkc tiling::window --send-to-desktop 4; skhd -k 'ctrl - 4'; echo 'fn + shift - 4: send to desktop 4 and follow focus'
-shift + fn - 5 : chunkc tiling::window --send-to-desktop 5;  skhd -k 'ctrl - 5'; echo 'fn + shift - 5: send to desktop 5 and follow focus'
-shift + fn - 6 : chunkc tiling::window --send-to-desktop 6;  skhd -k 'ctrl - 6'; echo 'fn + shift - 6: send to desktop 6 and follow focus'
-shift + fn - 7 : chunkc tiling::window --send-to-desktop 7;  skhd -k 'ctrl - 7'; echo 'fn + shift - 7: send to desktop 7 and follow focus'
-shift + fn - 8 : chunkc tiling::window --send-to-desktop 8;  skhd -k 'ctrl - 8'; echo 'fn + shift - 8: send to desktop 8 and follow focus'
-shift + fn - 9 : chunkc tiling::window --send-to-desktop 9;  skhd -k 'ctrl - 9'; echo 'fn + shift - 9: send to desktop 9 and follow focus'
+shift + fn - 1 : yabai -m window --space 1; skhd -k 'ctrl - 1'; echo 'fn + shift - 1: send to desktop 1 and follow focus'
+shift + fn - 2 : yabai -m window --space 2;  skhd -k 'ctrl - 2'; echo 'fn + shift - 2: send to desktop 2 and follow focus'
+shift + fn - 3 : yabai -m window --space 3;  skhd -k 'ctrl - 3'; echo 'fn + shift - 3: send to desktop 3 and follow focus'
+shift + fn - 4 : yabai -m window --space 4; skhd -k 'ctrl - 4'; echo 'fn + shift - 4: send to desktop 4 and follow focus'
+shift + fn - 5 : yabai -m window --space 5;  skhd -k 'ctrl - 5'; echo 'fn + shift - 5: send to desktop 5 and follow focus'
+shift + fn - 6 : yabai -m window --space 6;  skhd -k 'ctrl - 6'; echo 'fn + shift - 6: send to desktop 6 and follow focus'
+shift + fn - 7 : yabai -m window --space 7;  skhd -k 'ctrl - 7'; echo 'fn + shift - 7: send to desktop 7 and follow focus'
+shift + fn - 8 : yabai -m window --space 8;  skhd -k 'ctrl - 8'; echo 'fn + shift - 8: send to desktop 8 and follow focus'
+shift + fn - 9 : yabai -m window --space 9;  skhd -k 'ctrl - 9'; echo 'fn + shift - 9: send to desktop 9 and follow focus'
 
 # send window to monitor
-fn - z  : chunkc tiling::window --send-to-monitor 1; chunkc tiling::monitor -f 1 ; echo 'fn - z: send to monitor 1'
-fn - x  : chunkc tiling::window --send-to-monitor 2; chunkc tiling::monitor -f 2 ; echo 'fn - x: send to monitor 2'
+fn - z  : yabai -m window --display 1; chunkc tiling::monitor -f 1 ; echo 'fn - z: send to monitor 1'
+fn - x  : yabai -m window --display 2; chunkc tiling::monitor -f 2 ; echo 'fn - x: send to monitor 2'
 
 # resize window
-fn - a : chunkc tiling::window --use-temporary-ratio 0.05 --adjust-window-edge west; chunkc tiling::window --use-temporary-ratio -0.05 --adjust-window-edge east ; echo 'fn - a: move free edge west'
-fn - s : chunkc tiling::window --use-temporary-ratio 0.05 --adjust-window-edge south; chunkc tiling::window --use-temporary-ratio -0.05 --adjust-window-edge north ; echo 'fn - s: move free edge south'
-fn - w : chunkc tiling::window --use-temporary-ratio 0.05 --adjust-window-edge north; chunkc tiling::window --use-temporary-ratio -0.05 --adjust-window-edge south ; echo 'fn - w: move free edge north'
-fn - d : chunkc tiling::window --use-temporary-ratio 0.05 --adjust-window-edge east; chunkc tiling::window --use-temporary-ratio -0.05 --adjust-window-edge west ; echo 'fn - d: move free edge east'
+fn - a : yabai -m window --resize left:-20:0; echo 'fn - a: move free edge west'
+fn - s : yabai -m window --resize top:0:-20; echo 'fn - s: move free edge south'
+fn - w : yabai -m window --resize top:0:20; echo 'fn - w: move free edge north'
+fn - d : yabai -m window --resize left:20:0; echo 'fn - d: move free edge east'
 
 # rotate tree
 alt - r : chunkc tiling::desktop --rotate 90 ; echo 'alt - r: rotate tree'
@@ -239,13 +239,11 @@ alt - x : chunkc tiling::desktop --mirror horizontal ; echo 'alt - x: mirror x-a
 alt - a : chunkc tiling::desktop --toggle offset ; echo 'alt - a: toggle window offset'
 
 # toggle window fullscreen
-alt - f : chunkc tiling::window --toggle fullscreen ; echo 'alt - f: toggle current window full screen float'
-
-# toggle window native fullscreen
-shift + alt - f : chunkc tiling::window --toggle native-fullscreen ; echo 'alt + shift - f: toggle native fullscreen'
+#alt - f :  yabai -m window --toggle float; yabai -m window --grid 1:1:0:0:1:1 ; echo 'alt - f: toggle current window full screen float'
+alt -f : yabai -m window --toggle zoom-fullscreen ;  echo 'alt - f: toggle current window full screen float'
 
 # toggle window parent zoom
-alt - d : chunkc tiling::window --toggle parent ; echo 'alt - d: toggle window zoom to parent space'
+alt - d : yabai -m window --toggle zoom-parent ; echo 'alt - d: toggle window zoom to parent space'
 
 # toggle window split type
 alt - e : chunkc tiling::window --toggle split ; echo 'alt - e: switch area split direction'
@@ -254,15 +252,15 @@ alt - e : chunkc tiling::window --toggle split ; echo 'alt - e: switch area spli
 #alt - q : chunkc tiling::window --toggle fade
 
 # float / unfloat window and center on screen
-alt - t : chunkc tiling::window --toggle float;\
-          chunkc tiling::window --grid-layout 4:4:1:1:2:2 ; echo 'alt - t: float window center'
+alt - t : yabai -m window --toggle float ;\
+          yabai -m window --grid 4:4:1:1:2:2 ; echo 'alt - t: float window center'
 
 # toggle sticky
-alt - s : chunkc tiling::window --toggle sticky ; echo 'alt - s: toggle sticky window'
+alt - s : yabai -m window --toggle sticky ; echo 'alt - s: toggle sticky window'
 
 # toggle sticky, float and resize to picture-in-picture size
-alt - p : chunkc tiling::window --toggle sticky;\
-          chunkc tiling::window --grid-layout 5:5:4:0:1:1 ; echo 'alt - p: pic in pic top right'
+alt - p : yabai -m window --toggle sticky;\
+          yabai -m window --grid 5:5:4:0:1:1 ; echo 'alt - p: pic in pic top right'
 
 # change layout of desktop -- toggle three ways
 fn - m : M=$(chunkc tiling::query --desktop mode) ;\

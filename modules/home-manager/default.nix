@@ -43,7 +43,8 @@ let
     # network
     gping
     bandwhich # bandwidth monitor by process
-    bmon # bandwidth monitor by interface
+    # not building on m1 right now
+    #bmon # bandwidth monitor by interface
     caddy # local filesystem web server
     aria # cli downloader
     ncftp
@@ -90,11 +91,12 @@ let
     openssl # also needed by many things
   ];
   # sumneko-lua-language-server failing on darwin, so installing in home-linux and brew
-  luaPkgs = with pkgs.stable; [ luaformatter ];
+  luaPkgs = with pkgs; [ luaformatter ];
   # using unstable in my home profile for nix commands
   nixEditorPkgs = with pkgs; [ nix statix nixfmt nixpkgs-fmt rnix-lsp ];
   # live dangerously here with unstable
-  rustPkgs = with pkgs; [ cargo cargo-watch rustfmt rust-analyzer rustc ];
+  #rustPkgs = with pkgs; [ cargo cargo-watch rustfmt rust-analyzer rustc ];
+  rustPkgs = with pkgs; [ cargo rustfmt rust-analyzer rustc ];
   # live dangerously here with unstable
   typescriptPkgs = with pkgs.nodePackages;
     [
@@ -209,6 +211,9 @@ in {
     "\C-n":"cd ..\n"
     set editing-mode vi
   '';
+  home.file.".direnvrc".text = ''
+    source /run/current-system/sw/share/nix-direnv/direnvrc
+  '';
   home.file.".p10k.zsh".source = ./dotfiles/p10k.zsh;
   home.file.".config/nvim/lua/zmre/options.lua".source =
     ./dotfiles/nvim/lua/options.lua;
@@ -305,7 +310,7 @@ in {
     extraPython3Packages = (ps: with ps; [ pynvim tasklib six ]);
     extraPackages = with pkgs; [
       proselint
-      pkgs.zk # note finder
+      zk # note finder
     ];
     # make sure impatient is loaded before everything else to speed things up
     extraConfig = ''
@@ -638,9 +643,9 @@ in {
       hmswitch = ''
         nix-shell -p home-manager --run "home-manager switch --flake ~/.config/nixpkgs/.#$(hostname -s)"'';
       dwswitch =
-        "darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) --show-trace";
+        "pushd ~; darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) --show-trace; popd";
       noswitch =
-        "sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.# --show-trace";
+        "pushd ~; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.# --show-trace; popd";
     };
   };
 
