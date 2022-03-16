@@ -39,6 +39,7 @@
       "firefox"
       "gpg-suite"
       "imageoptim"
+      "istat-menus"
       "karabiner-elements"
       "little-snitch"
       "lockrattler"
@@ -83,6 +84,7 @@
     ];
 
     masApps = {
+      "Apple Configurator 2" = 1037126344;
       "Brother iPrint&Scan" = 1193539993;
       "Monodraw" = 920404675; # ASCII drawings
       "Yubico Authenticator" = 1497506650;

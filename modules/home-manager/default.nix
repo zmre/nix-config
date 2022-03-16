@@ -216,7 +216,7 @@ in {
     set editing-mode vi
   '';
   home.file.".direnvrc".text = ''
-    source /run/current-system/sw/share/nix-direnv/direnvrc
+    source ~/.config/direnv/direnvrc
   '';
   home.file.".p10k.zsh".source = ./dotfiles/p10k.zsh;
   home.file.".config/nvim/lua/zmre/options.lua".source =
