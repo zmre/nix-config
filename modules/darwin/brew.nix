@@ -21,15 +21,17 @@
 
     casks = [
       "adobe-creative-cloud"
-      "amethyst"
+      "amethyst" # for window tiling -- I miss chunkwm but it's successor, yabai, was unstable.
       "audio-hijack"
-      "backblaze"
-      "bartender"
+      # Backblaze just adds the Backblaze Installer to the caskroom. Doesn't link it. Worthless.
+      #"backblaze"
+      "bartender" # organize status bar
       "blockblock"
       "brave-browser"
       "canon-eos-utility"
       "canon-eos-webcam-utility"
-      "choosy"
+      "choosy" # multi-browser url launch selector
+      "dash" # offline developer docs
       "default-folder-x"
       "discord"
       "docker"
@@ -65,11 +67,13 @@
       "sync"
       "syncthing"
       "textexpander"
+      "ticktick"
       "tor-browser"
       "transmission"
       "webpquicklook"
       "wireshark-chmodbpf"
       "xbar"
+      "yubico-yubikey-manager"
       "zenmap"
       "zoom"
       # would be better to load these in a security shell, but nix versions don't build on mac
@@ -94,7 +98,8 @@
       "Tweetbot" = 1384080005;
       "Disk Speed Test" = 425264550;
       "Endel" = 1484348796;
-      "Wipr" = 1320666476;
+      #"Wipr" = 1320666476;
+      "Ghostery – Privacy Ad Blocker" = 1436953057;
       "Cardhop" = 1290358394;
       "Strongbox" = 1270075435;
       "Pocket" = 568494494;

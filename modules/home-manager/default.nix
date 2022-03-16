@@ -74,6 +74,10 @@ let
     procps
     pstree
     pkgs.gtm-okr
+    pkgs.babble-cli
+    yubikey-manager # cli for yubikey
+    pkgs.zk # cli for indexing markdown files
+    pastel # cli for color manipulation
 
     #pkgs.qutebrowser
   ];

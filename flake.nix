@@ -55,6 +55,8 @@
     sbhosts.url = "github:StevenBlack/hosts";
     gtm-okr.url = "github:zmre/gtm-okr";
     gtm-okr.inputs.nixpkgs.follows = "nixpkgs";
+    babble-cli.url = "github:zmre/babble-cli";
+    babble-cli.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs@{ self, nixpkgs, darwin, home-manager, nixos-hardware

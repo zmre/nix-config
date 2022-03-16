@@ -47,6 +47,7 @@
       #     [ prev.darwin.apple_sdk.frameworks.Security ]; #darwin.cctools
       # };
       gtm-okr = inputs.gtm-okr.packages.${final.system}.gtm-okr;
+      babble-cli = inputs.babble-cli.packages.${final.system}.babble-cli;
 
     })
     inputs.nur.overlay
