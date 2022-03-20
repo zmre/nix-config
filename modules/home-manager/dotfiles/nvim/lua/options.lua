@@ -137,7 +137,7 @@ M.gui = function()
     -- vim.opt.guifont = "Liga DejaVuSansMono Nerd Font:h16"
     -- vim.opt.guifont = "FiraCode Nerd Font:h16" -- no italics
     if vim.fn.has('mac') then
-        vim.opt.guifont = "Liga MesloLGS Nerd Font:h18"
+        vim.opt.guifont = "MesloLGS Nerd Font:h18"
     else
         vim.opt.guifont = "Hasklug Nerd Font:h9"
     end
