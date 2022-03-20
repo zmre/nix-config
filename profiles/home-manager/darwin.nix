@@ -1,6 +1,7 @@
-{ config, lib, pkgs, ... }:
-{
+{ config, lib, pkgs, ... }: {
   #home.packages = [ pkgs.docker ];
+  home.file."Library/Colors/IronCore-Branding-June-17.clr".source =
+    ./dotfiles/IronCore-Branding-June-17.clr;
 
   # programs.git = {
   #   userEmail = "kennan@case.edu";
