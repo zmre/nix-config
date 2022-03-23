@@ -71,6 +71,13 @@
       "ticktick"
       "tor-browser"
       "transmission"
+      "transmit" # for syncing folders with dropbox on-demand instead of using their broken software
+      # why broken, you ask? well, they're using deprecated APIs for one thing
+      # their sync service is constantly burning up CPU when nothing is touching their folder
+      # and they install quicklook plugins that aren't optional and the adobe illustrator one
+      # causes constant crashes whenever a folder or open/save dialog opens a folder with an 
+      # illustrator file in it. i reported it almost 3 years ago and there's a long thread of
+      # others complaining about the same problem. i'd be done with dropbox entirely if i could.
       "webpquicklook"
       "wireshark-chmodbpf"
       "xbar"

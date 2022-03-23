@@ -194,6 +194,7 @@ in {
     nerdfonts
     vegur
     noto-fonts
+    vistafonts # needed for msoffice
   ];
   nix.nixPath = [ "darwin=/etc/${config.environment.etc.darwin.target}" ];
   nix.extraOptions = ''
