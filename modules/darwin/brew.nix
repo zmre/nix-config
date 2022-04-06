@@ -37,6 +37,7 @@
       "docker"
       "dropbox"
       "firefox"
+      "fork"
       "gpg-suite"
       "imageoptim"
       "istat-menus"
@@ -79,7 +80,6 @@
       # illustrator file in it. i reported it almost 3 years ago and there's a long thread of
       # others complaining about the same problem. i'd be done with dropbox entirely if i could.
       "webpquicklook"
-      "wireshark-chmodbpf"
       "xbar"
       "yubico-yubikey-manager"
       "zenmap"
@@ -87,7 +87,7 @@
       # would be better to load these in a security shell, but nix versions don't build on mac
       "owasp-zap"
       "burp-suite"
-      #"paw"
+      "wireshark-chmodbpf"
     ];
 
     masApps = {
@@ -115,6 +115,7 @@
       "Slack" = 803453959;
       "Kindle" = 405399194;
       "Scrivener" = 1310686187;
+      "SQLPro Studio" = 985614903;
       "Keynote" = 409183694;
       "Vinegar" = 1591303229;
       "PeakHour" = 1241445112;

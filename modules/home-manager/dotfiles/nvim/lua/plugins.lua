@@ -515,7 +515,11 @@ M.diagnostics = function()
         capabilities = capabilities
     }
     lspconfig.rnix.setup {on_attach = attached, capabilities = capabilities}
-    lspconfig.cssls.setup {on_attach = attached, capabilities = capabilities}
+    lspconfig.cssls.setup {
+        on_attach = attached,
+        capabilities = capabilities,
+        settings = {css = {lint = {unknownAtRules = "ignore"}}}
+    }
     lspconfig.eslint.setup {on_attach = attached, capabilities = capabilities}
     lspconfig.html.setup {on_attach = attached, capabilities = capabilities}
     lspconfig.jsonls.setup {

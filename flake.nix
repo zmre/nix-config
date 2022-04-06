@@ -28,10 +28,6 @@
     gitstatus.flake = false;
     # gives me a prompt that is async and fast
     powerlevel10k.url = "github:romkatv/powerlevel10k";
-    powerlevel10k.flake = false;
-    # burke's cool command chooser script
-    comma.url = "github:nix-community/comma";
-    comma.flake = false;
     # I use the nur repo for firefox extensions
     nur.url = "github:nix-community/NUR";
     # My extra nvim plugins -- setup in overlays

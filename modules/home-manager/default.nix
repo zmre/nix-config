@@ -29,7 +29,8 @@ let
     sourceHighlight # for lf preview
     ffmpegthumbnailer # for lf preview
     pandoc # for lf preview
-    imagemagick # for lf preview
+    #TODO: uncomment. Not currently building on m1 mac, 2022-03-23
+    #imagemagick # for lf preview
     highlight # code coloring in lf
     poppler_utils # for pdf2text in lf
     mediainfo # used by lf

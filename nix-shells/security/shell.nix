@@ -27,10 +27,6 @@ mkShell {
     snmpcheck
     sslscan
     theharvester
-    # wireshark moved to nixos config
-    # pick one of wireshark or wireshark-cli
-    wireshark
-    #wireshark-cli
     #zmap # currently marked broken 2022-01-31
 
     # Passwords
@@ -46,7 +42,7 @@ mkShell {
     ettercap
     bettercap
     mitmproxy
-    wireshark
+    # wireshark moved below as it only builds on linux 2022-03-30
     ngrep
 
     # Web
@@ -87,6 +83,10 @@ mkShell {
     tcpflow
     p0f
     netsniff-ng
+    # wireshark moved to nixos config
+    # pick one of wireshark or wireshark-cli
+    wireshark
+    #wireshark-cli
     # Web
     burpsuite
     zap
