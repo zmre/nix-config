@@ -61,7 +61,7 @@
       "quicklookase"
       "reikey"
       "raycast"
-      "ricoh-ps-printers-vol4-exp-driver"
+      #"ricoh-ps-printers-vol4-exp-driver" # homebrew is years out of date; have to install manually
       "signal"
       "silentknight"
       "silnite"

@@ -17,10 +17,10 @@ echo "To garbage collect older than 30d:"
 echo "sudo nix-collect-garbage --delete-older-than 30d"
 echo
 echo "To remove duplicates:"
-echo "nix optimise-store"
-#echo
-#echo "To view vulnerable packages:"
-#echo "vulnix -S"
+echo "nix store optimise"
+echo
+echo "To view vulnerable packages:"
+echo "vulnix -S"
 #echo
 #echo "To update package sources:"
 #echo "nix flake update ~/.config/nixpkgs"
