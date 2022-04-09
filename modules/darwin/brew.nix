@@ -39,7 +39,6 @@
       "firefox"
       "fork"
       "gpg-suite"
-      "inkscape"
       "imageoptim"
       "istat-menus"
       "karabiner-elements"
@@ -93,39 +92,41 @@
     ];
 
     masApps = {
+      "Amphetamine" = 937984704;
       "Apple Configurator 2" = 1037126344;
-      "Brother iPrint&Scan" = 1193539993;
-      "Monodraw" = 920404675; # ASCII drawings
-      "Yubico Authenticator" = 1497506650;
-      "PCalc" = 403504866;
-      "WireGuard" = 1451685025; # VPN
-      "Forecast Bar" = 982710545;
-      "Kaleidoscope" = 587512244; # GUI 3-way merge
-      "iMovie" = 408981434;
       "Blurred" = 1497527363; # dim non-foreground windows
-      "Save to Pocket" = 1477385213;
-      "Fantastical" = 975937182;
+      "Boxy SVG" = 611658502; # nice code-oriented visual svg editor
+      "Brother iPrint&Scan" = 1193539993;
+      "Cardhop" = 1290358394; # contacts alternative
       "DaisyDisk" = 411643860;
-      "Tweetbot" = 1384080005;
       "Disk Speed Test" = 425264550;
       "Endel" = 1484348796;
-      #"Wipr" = 1320666476;
+      "Fantastical" = 975937182; # calendar alternative
+      "Forecast Bar" = 982710545;
       "Ghostery – Privacy Ad Blocker" = 1436953057;
-      "Cardhop" = 1290358394;
-      "Strongbox" = 1270075435;
-      "Pocket" = 568494494;
-      "Slack" = 803453959;
-      "Kindle" = 405399194;
-      "Scrivener" = 1310686187;
-      "SQLPro Studio" = 985614903;
+      "Gifox 2" = 1461845568; # For short animated gif screen caps
+      "Kaleidoscope" = 587512244; # GUI 3-way merge
       "Keynote" = 409183694;
-      "Vinegar" = 1591303229;
+      "Keyshape" = 1223341056; # animated svg editor
+      "Kindle" = 405399194;
+      "Monodraw" = 920404675; # ASCII drawings
+      "PCalc" = 403504866;
       "PeakHour" = 1241445112;
+      "Pocket" = 568494494;
+      "SQLPro Studio" = 985614903;
+      "Save to Pocket" = 1477385213;
+      "Scrivener" = 1310686187;
+      "Slack" = 803453959;
       "StopTheMadness" = 1376402589;
-      "Amphetamine" = 937984704;
+      "Strongbox" = 1270075435;
+      "Tweetbot" = 1384080005;
       "Vimari" = 1480933944;
+      "Vinegar" = 1591303229;
+      "WireGuard" = 1451685025; # VPN
       "Xcode" = 497799835;
-      "iStumbler" = 546033581;
+      "Yubico Authenticator" = 1497506650;
+      "iMovie" = 408981434;
+      #"Wipr" = 1320666476;
     };
     brews = [
       "pam-reattach"

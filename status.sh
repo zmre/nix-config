@@ -21,6 +21,10 @@ echo "nix store optimise"
 echo
 echo "To view vulnerable packages:"
 echo "vulnix -S"
+echo
+echo "To understand what uses a vulnerable package:"
+echo "nix-store -q --references /nix/store/ydgqhrcv25qzh76i191xd0p38iyk0h7h-curl-7.82.0.drv"
 #echo
 #echo "To update package sources:"
 #echo "nix flake update ~/.config/nixpkgs"
+
