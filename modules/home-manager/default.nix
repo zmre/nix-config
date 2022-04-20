@@ -27,6 +27,7 @@ let
     jq
     lynx
     sourceHighlight # for lf preview
+    ffmpeg.bin
     ffmpegthumbnailer # for lf preview
     pandoc # for lf preview
     #TODO: uncomment. Not currently building on m1 mac, 2022-03-23
@@ -143,7 +144,7 @@ in {
   home.packages = defaultPkgs ++ cPkgs ++ luaPkgs ++ nixEditorPkgs ++ rustPkgs
     ++ typescriptPkgs ++ guiPkgs ++ networkPkgs;
 
-  # TODO: comma, gnupg?, ffmpeg?
+  # TODO: comma, gnupg?
 
   home.sessionVariables = {
     LANG = "en_US.UTF-8";
@@ -544,7 +545,7 @@ in {
       zstyle ':completion:*:*:kill:*' menu yes select
       zstyle ':completion:*:kill:*'   force-list always
       # TODO: need to look this up as below is broken
-      zstyle -e ':completion:*:default' list-colors 'reply=("$${PREFIX:+=(#bi)($PREFIX:t)(?)*==34=34}:''${(s.:.)LS_COLORS}")'
+      zstyle -e ':completion:*:default' list-colors 'reply=("$''${PREFIX:+=(#bi)($PREFIX:t)(?)*==34=34}:''${(s.:.)LS_COLORS}")'
 
       # taskwarrior
       zstyle ':completion:*:*:task:*' verbose yes
