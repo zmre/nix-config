@@ -28,6 +28,9 @@ mkShell {
     sslscan
     theharvester
     #zmap # currently marked broken 2022-01-31
+    #cloudbrute
+    #sn0int
+    #sslsplit
 
     # Passwords
     fcrackzip
@@ -37,6 +40,10 @@ mkShell {
     rarcrack
     crunch # wordlist generator
     ncrack # network auth cracker
+    #brutespray
+    #chntpw
+    #crowbar
+    #hcxtools
 
     # Sniffing
     ettercap
@@ -64,7 +71,19 @@ mkShell {
     netcat
     pwncat # netcat on steroids
     capstone # cstool disassembly tool
+    #ddrescue
+    #ext4magic
+    #extundelete
+    #volatility
+    #elfutils
+    #jd
+    #jd-gui
+    #patchelf
+    #retdec
+    #snowman
+    #valgrind
     binwalk
+    ghidra-bin # NSA's free ida-pro, basically
 
     # misc
     faraday-cli

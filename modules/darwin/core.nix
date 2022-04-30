@@ -186,7 +186,7 @@ in {
     remapCapsLockToEscape = true;
   };
 
-  fonts.enableFontDir =
+  fonts.fontDir.enable =
     true; # if this is true, manually installed system fonts will be deleted!
   fonts.fonts = with pkgs; [
     powerline-fonts
