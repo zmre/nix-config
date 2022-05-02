@@ -139,6 +139,7 @@
       "feroxbuster" # dirbuster in rust; not in nixpkgs yet
       "findutils" # TODO: needed?
       "gdrive"
+      "netlify-cli"
       "ical-buddy"
       "ncspot"
       "chkrootkit"
