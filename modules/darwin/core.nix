@@ -5,6 +5,8 @@ in {
   environment = {
     loginShell = pkgs.zsh;
     pathsToLink = [ "/Applications" ];
+    # I exclusively control homebrew from here, but it's annoying to fully qualify the path to brew binaries
+    systemPath = [ /opt/homebrew/bin ];
     #backupFileExtension = "backup";
     etc = { darwin.source = "${inputs.darwin}"; };
     # Use a custom configuration.nix location.
