@@ -709,7 +709,7 @@ M.completions = function()
                 end
             end, {"i", "s"})
         },
-        documentation = true,
+        window = {documentation = "native"},
         sources = {
             {name = 'nvim_lsp'}, {name = 'buffer'}, {name = 'emoji'},
             {name = 'nvim_lua'}, {name = 'path'}, {name = "crates"},
