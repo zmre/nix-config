@@ -88,6 +88,7 @@
       # would be better to load these in a security shell, but nix versions don't build on mac
       "owasp-zap"
       "burp-suite"
+      "webex"
       "wireshark-chmodbpf"
     ];
 
