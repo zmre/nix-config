@@ -469,6 +469,33 @@ in {
     package = pkgs.gh;
     settings = { git_protocol = "ssh"; };
   };
+  programs.mpv = {
+    enable = true;
+    scripts = with pkgs.mpvScripts; [ thumbnail sponsorblock ];
+    config = {
+      # disable on-screen controller -- else I get a message saying I have to add this
+      osc = false;
+      # Use a large seekable RAM cache even for local input.
+      cache = true;
+      save-position-on-quit = false;
+      #x11-bypass-compositor = true;
+      #no-border = true;
+      msg-color = true;
+      pause = true;
+      #ytdl-format = "bestvideo+bestaudio";
+      # have mpv use yt-dlp instead of youtube-dl
+      script-opts-append = "ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp";
+      autofit-larger =
+        "100%x95%"; # resize window in case it's larger than W%xH% of the screen
+      input-media-keys = "yes"; # enable/disable OSX media keys
+      hls-bitrate = "max"; # use max quality for HLS streams
+
+      user-agent =
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:57.0) Gecko/20100101 Firefox/58.0";
+    };
+    defaultProfiles = [ "gpu-hq" ];
+  };
+
   programs.zsh = {
     enable = true;
     enableCompletion = true;

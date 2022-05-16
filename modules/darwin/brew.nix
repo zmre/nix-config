@@ -47,7 +47,7 @@
       "loopback"
       "marked"
       "microsoft-office"
-      "mpv"
+      #"mpv"
       "noun-project"
       "obs"
       "parallels"
