@@ -419,8 +419,9 @@ in {
   };
   home.file."${config.xdg.configHome}/nvim/parser/tsx.so".source =
     "${pkgs.tree-sitter.builtGrammars.tree-sitter-tsx}/parser";
-  home.file."${config.xdg.configHome}/nvim/parser/nix.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-nix}/parser";
+  # TODO: uncomment this when treesitter nix highlighting isn't so busted 2022-05-17
+  # home.file."${config.xdg.configHome}/nvim/parser/nix.so".source =
+  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-nix}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/vim.so".source =
     "${pkgs.tree-sitter.builtGrammars.tree-sitter-vim}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/lua.so".source =
