@@ -705,8 +705,10 @@ in {
       # StevenBlack list pulls from lots of sources; we also update our /etc/hosts
       # with this, but that only gets an update when we rebuild our nix system
       # whereas this should reload more often
-      content.blocking.hosts.lists =
-        [ "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts" ];
+      content.blocking.hosts.lists = [
+        "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
+        "https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters-2022.txt"
+      ];
 
       content.default_encoding = "utf-8";
       content.geolocation = false;
