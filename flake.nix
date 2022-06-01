@@ -13,8 +13,8 @@
     devshell.url = "github:numtide/devshell";
     flake-utils.url = "github:numtide/flake-utils";
     #nixos-hardware.url = "github:nixos/nixos-hardware";
-    darwin-stable.url = "github:nixos/nixpkgs/nixpkgs-21.11-darwin";
-    nixos-stable.url = "github:nixos/nixpkgs/nixos-21.11";
+    darwin-stable.url = "github:nixos/nixpkgs/nixpkgs-22.05-darwin";
+    nixos-stable.url = "github:nixos/nixpkgs/nixos-22.05";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     flake-compat.url = "github:edolstra/flake-compat";
@@ -31,6 +31,9 @@
     powerlevel10k.flake = false;
     # I use the nur repo for firefox extensions
     nur.url = "github:nix-community/NUR";
+    # Need fenix to specify rustc version -- specifically for hackernews-tui
+    fenix.url = "github:nix-community/fenix";
+    fenix.inputs.nixpkgs.follows = "nixpkgs";
     # My extra nvim plugins -- setup in overlays
     zk-nvim = {
       url = "github:mickael-menu/zk-nvim";

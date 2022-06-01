@@ -50,7 +50,9 @@
     networkmanager = {
       enable = true;
       wifi.backend = "iwd";
-      packages = with pkgs.stable; [ networkmanagerapplet ];
+      # getting error: ‘network-manager-applet-1.24.0’, is not a NetworkManager plug-in. Those need to have a ‘networkManagerPlugin’ attribute.
+      # just commenting for now 2022-05-30 
+      #packages = with pkgs.stable; [ networkmanagerapplet ];
       # don't use dhcp dns... use settings below instead
       dns = "none";
     };

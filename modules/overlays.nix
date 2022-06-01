@@ -8,7 +8,7 @@
         config.allowUnfree = true;
         config.allowBroken = true;
         config.allowUnsupportedSystem = true;
-        nix.package = inputs.nixos-stable.nix_2_4;
+        nix.package = inputs.nixos-stable.nix_2_8;
       };
       #trunk = import inputs.trunk { system = prev.system; };
       #small = import inputs.small { system = prev.system; };
@@ -32,7 +32,10 @@
           src = inputs.zk-nvim;
         };
       };
-      hackernews-tui = prev.rustPlatform.buildRustPackage {
+      # hackernews-tui = prev.rustPlatform.buildRustPackage {
+      hackernews-tui = (prev.makeRustPlatform {
+        inherit (inputs.fenix.packages.${prev.system}.minimal) cargo rustc;
+      }).buildRustPackage {
         name = "hackernews-tui";
         pname = "hackernews-tui";
         cargoLock = { lockFile = inputs.hackernews-tui + /Cargo.lock; };

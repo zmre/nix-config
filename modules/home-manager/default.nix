@@ -53,7 +53,7 @@ let
 
     # misc
     neofetch # display key software/version info in term
-    nodePackages.readability-cli # quick commandline website article read
+    #nodePackages.readability-cli # quick commandline website article read
     vimv # shell script to bulk rename
     pkgs.btop
     #youtube-dl replaced by yt-dlp

@@ -25,10 +25,10 @@
     readOnlyStore = true;
     nixPath = builtins.map
       (source: "${source}=/etc/${config.environment.etc.${source}.target}") [
-      "home-manager"
-      "nixpkgs"
-      "stable"
-    ];
+        "home-manager"
+        "nixpkgs"
+        "stable"
+      ];
 
     registry = {
       nixpkgs = {

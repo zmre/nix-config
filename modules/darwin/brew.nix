@@ -51,7 +51,7 @@
       "noun-project"
       "obs"
       "parallels"
-      "protonmail-bridge"
+      "protonmail-bridge" # TODO: nix version now installs and works -- move over
       #"qflipper" # TODO: add this back when their site is back up
       "qutebrowser"
       "qlmarkdown"
