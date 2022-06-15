@@ -42,6 +42,7 @@
       "imageoptim"
       "istat-menus"
       "karabiner-elements"
+      "kindavim"
       "little-snitch"
       "lockrattler"
       "loopback"
@@ -140,6 +141,7 @@
       "feroxbuster" # dirbuster in rust; not in nixpkgs yet
       "findutils" # TODO: needed?
       "gdrive"
+      "marp-cli" # convert markdown to html slides
       "netlify-cli"
       "ical-buddy"
       "ncspot"

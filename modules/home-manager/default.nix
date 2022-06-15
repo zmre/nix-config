@@ -487,7 +487,8 @@ in {
       davidanson.vscode-markdownlint
       pkief.material-icon-theme
       dracula-theme.theme-dracula
-      eamodio.gitlens
+      eamodio.gitlens # for git blame
+      marp-team.marp-vscode # for markdown slides
       # wishlist
       # ardenivanov.svelte-intellisense
       # cschleiden.vscode-github-actions
@@ -709,6 +710,7 @@ in {
       #"workbench.colorTheme" = "Dracula";
       "workbench.colorTheme" = "One Dark";
       "workbench.iconTheme" = "material-icon-theme";
+      "editor.accessibilitySupport" = "off";
       "oneDark.bold" = true;
       "window.zoomLevel" = 1;
       "window.menuBarVisibility" = "toggle";

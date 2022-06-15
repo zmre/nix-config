@@ -44,30 +44,38 @@ M.kind_icons = {
 M.ui = function()
   -- following options are the default
   -- each of these are documented in `:help nvim-tree.OPTION_NAME`
-  vim.g.nvim_tree_icons = {
-    default = "",
-    symlink = "",
-    git = {
-      unstaged = "",
-      staged = "S",
-      unmerged = "",
-      renamed = "➜",
-      deleted = "",
-      untracked = "U",
-      ignored = "◌"
-    },
-    folder = {
-      default = "",
-      open = "",
-      empty = "",
-      empty_open = "",
-      symlink = ""
-    }
-  }
   local nvim_tree_config = require("nvim-tree.config")
   local tree_cb = nvim_tree_config.nvim_tree_callback
-  vim.g.nvim_tree_respect_buf_cwd = 1
   require 'nvim-tree'.setup {
+    renderer = {
+      icons = {
+        webdev_colors = true,
+        git_placement = "before",
+        padding = " ",
+        symlink_arrow = " ➛ ",
+        show = { file = true, folder = true, folder_arrow = true, git = true },
+        glyphs = {
+          default = "",
+          symlink = "",
+          git = {
+            unstaged = "",
+            staged = "✓",
+            unmerged = "",
+            renamed = "➜",
+            deleted = "",
+            untracked = "U",
+            ignored = "◌"
+          },
+          folder = {
+            default = "",
+            open = "",
+            empty = "",
+            empty_open = "",
+            symlink = ""
+          }
+        }
+      }
+    },
     -- disables netrw completely
     disable_netrw = true,
     -- hijack netrw window on startup
@@ -884,7 +892,7 @@ M.notes = function()
   }
   -- Grammar stuff
   vim.cmd(
-  [[command StartGrammar2 lua require('zmre.plugins').grammar_check()]])
+    [[command StartGrammar2 lua require('zmre.plugins').grammar_check()]])
 end -- notes
 
 M.grammar_check = function()
