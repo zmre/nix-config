@@ -155,16 +155,17 @@
             }
             # Can't use networking.extraHosts outside of NixOS, so this hack:
             {
-              environment.etc.hosts.text = ''
-                127.0.0.1       dev1.ironcorelabs.com
-                127.0.0.1       dev1.scrambledbits.org
-
-                # Added by Docker Desktop
-                # To allow the same kube context to work on the host and the container:
-                127.0.0.1 kubernetes.docker.internal
-                # End of section
-
-              '' + builtins.readFile ("${sbhosts}/hosts");
+              environment.etc.hosts.source = "${sbhosts}/hosts";
+              #environment.etc.hosts.text = ''
+              #127.0.0.1       dev1.ironcorelabs.com
+              #127.0.0.1       dev1.scrambledbits.org
+              #
+              ## Added by Docker Desktop
+              ## To allow the same kube context to work on the host and the container:
+              #127.0.0.1 kubernetes.docker.internal
+              ## End of section
+              #
+              #''; # + builtins.readFile ("${sbhosts}/hosts");
             }
           ];
         };
@@ -264,7 +265,7 @@
           ];
         };
         nixBin = pkgs.writeShellScriptBin "nix" ''
-          ${pkgs.nix_2_4}/bin/nix --option experimental-features "nix-command flakes" "$@"
+          ${pkgs.nix_2_6}/bin/nix --option experimental-features "nix-command flakes" "$@"
         '';
       in {
         devShell = pkgs.devshell.mkShell {

@@ -53,7 +53,12 @@ M.ui = function()
         git_placement = "before",
         padding = " ",
         symlink_arrow = " ➛ ",
-        show = { file = true, folder = true, folder_arrow = true, git = true },
+        show = {
+          file = true,
+          folder = true,
+          folder_arrow = true,
+          git = true
+        },
         glyphs = {
           default = "",
           symlink = "",
@@ -479,12 +484,14 @@ M.diagnostics = function()
   local formatting = null_ls.builtins.formatting
   -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
   local diagnostics = null_ls.builtins.diagnostics
+  local codeactions = null_ls.builtins.code_actions
 
   null_ls.setup {
     debug = false,
     sources = {
-      formatting.lua_format, formatting.nixfmt,
-      formatting.prettier.with {
+      -- sumneko seems to also have formatting now
+      -- formatting.lua_format,
+      formatting.nixfmt, formatting.prettier.with {
         -- extra_args = {
         --     "--no-semi", "--single-quote", "--jsx-single-quote"
         -- },
@@ -495,7 +502,8 @@ M.diagnostics = function()
         args = {
           "-f", "json", "--stdin", "--stdin-filename", "$FILENAME"
         }
-      }
+      }, diagnostics.vale, diagnostics.proselint, codeactions.proselint,
+      null_ls.builtins.hover.dictionary
       -- removed formatting.rustfmt since rust_analyzer seems to do the same thing
     },
     on_attach = attached

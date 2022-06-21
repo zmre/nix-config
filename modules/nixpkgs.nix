@@ -4,11 +4,11 @@
     overlays = [ ];
   };
   nix = {
-    package = pkgs.stable.nix_2_4;
+    package = pkgs.stable.nix_2_6;
     extraOptions = ''
       keep-outputs = true
       keep-derivations = true
-      ${lib.optionalString (config.nix.package == pkgs.stable.nix_2_4)
+      ${lib.optionalString (config.nix.package == pkgs.stable.nix_2_6)
       "experimental-features = nix-command flakes"}
     '';
     useSandbox = true;

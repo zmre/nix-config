@@ -317,6 +317,7 @@ in {
     withPython3 = true;
     extraPython3Packages = (ps: with ps; [ pynvim tasklib six ]);
     extraPackages = with pkgs; [
+      vale # style checker for writing
       proselint
       zk # note finder
     ];
@@ -357,6 +358,7 @@ in {
       # nvim-lsp-ts-utils for inlays
       null-ls-nvim # formatting and linting via lsp system
       trouble-nvim # navigate all warnings and errors in quickfix-like window
+      copilot-vim # github copilot
 
       # UI #################################################
       #onedarkpro-nvim # colorscheme
@@ -454,6 +456,17 @@ in {
     "${pkgs.tree-sitter.builtGrammars.tree-sitter-markdown}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/svelte.so".source =
     "${pkgs.tree-sitter.builtGrammars.tree-sitter-svelte}/parser";
+  home.file.".vale.ini".text = ''
+    StylesPath = styles
+
+    MinAlertLevel = suggestion
+    Vocab = Base
+
+    Packages = Google, proselint
+
+    [*]
+    BasedOnStyles = Vale, Google, proselint
+  '';
 
   # treesitter has been throwing errors again and driving me nuts
   # so i'm going to experiment with hybrid vscode-neovim
@@ -692,6 +705,7 @@ in {
       "editor.minimap.enabled" = false;
       "[nix]"."editor.tabSize" = 2;
       "[svelte]"."editor.defaultFormatter" = "svelte.svelte-vscode";
+      "[jsonc]"."editor.defaultFormatter" = "esbenp.prettier-vscode";
       "extensions.ignoreRecommendations" = false;
       "files.insertFinalNewline" = true;
       "[scala]"."editor.tabSize" = 2;
@@ -1579,6 +1593,8 @@ in {
       n = "zk edit --interactive";
       hmswitch = ''
         nix-shell -p home-manager --run "home-manager switch --flake ~/.config/nixpkgs/.#$(hostname -s)"'';
+      dwupdate =
+        "pushd ~/.config/nixpkgs ; nix flake update ; /opt/homebrew/bin/brew update; popd ; pushd ~; darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) --show-trace; popd";
       dwswitch =
         "pushd ~; darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) --show-trace; popd";
       noswitch =

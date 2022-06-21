@@ -112,6 +112,7 @@
       "Keyshape" = 1223341056; # animated svg editor
       "Kindle" = 405399194;
       "Monodraw" = 920404675; # ASCII drawings
+      "NextDNS" = 1464122853;
       "PCalc" = 403504866;
       "PeakHour" = 1241445112;
       "Pocket" = 568494494;
@@ -142,7 +143,7 @@
       "findutils" # TODO: needed?
       "gdrive"
       "marp-cli" # convert markdown to html slides
-      "netlify-cli"
+      #"netlify-cli"
       "ical-buddy"
       "ncspot"
       "chkrootkit"
