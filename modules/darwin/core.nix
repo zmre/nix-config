@@ -181,8 +181,8 @@ in {
 
   # Just configure DNS for WiFi for now
   networking.knownNetworkServices = [ "Wi-Fi" ];
-  #networking.dns = [ "1.1.1.1" "1.0.0.1" ];
-  networking.dns = [ "127.0.0.1" "1.1.1.1" ];
+  networking.dns = [ "1.1.1.1" "1.0.0.1" ];
+  #networking.dns = [ "127.0.0.1" "1.1.1.1" ];
   # So the nextdns installed by nix is not signed and apple refuses to run it.
   # Switching to the version from the App store
   # services.nextdns = {
