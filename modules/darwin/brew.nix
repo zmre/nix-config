@@ -45,6 +45,7 @@
       "kindavim"
       "little-snitch"
       "lockrattler"
+      "logseq"
       "loopback"
       "marked"
       "microsoft-office"
@@ -86,6 +87,7 @@
       "yubico-yubikey-manager"
       "zenmap"
       "zoom"
+      "zotero"
       # would be better to load these in a security shell, but nix versions don't build on mac
       "owasp-zap"
       "burp-suite"
