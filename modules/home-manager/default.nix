@@ -57,7 +57,8 @@ let
     vimv # shell script to bulk rename
     pkgs.btop
     #youtube-dl replaced by yt-dlp
-    pkgs.yt-dlp
+    ## TODO: uncomment ASAP
+    #pkgs.yt-dlp
     vulnix # check for live nix apps that are listed in NVD
     tickrs # track stocks
     taskwarrior-tui
@@ -389,6 +390,7 @@ in {
       vim-rsi # brings keyline bindings to editing (like ctrl-e for end of line when in insert mode)
       vim-visualstar # press * or # on a word to find it
       kommentary # code commenter
+      nvim-ts-context-commentstring # makes kommentary contextual for embedded languages
       vim-eunuch # brings cp/mv type commands. :Rename and :Move are particularly handy
 
       # Autocompletion
@@ -455,7 +457,7 @@ in {
   home.file."${config.xdg.configHome}/nvim/parser/markdown.so".source =
     "${pkgs.tree-sitter.builtGrammars.tree-sitter-markdown}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/svelte.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-scala}/parser";
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-svelte}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/regex.so".source =
     "${pkgs.tree-sitter.builtGrammars.tree-sitter-regex}/parser";
   # Prose linting
@@ -1390,34 +1392,35 @@ in {
     package = pkgs.gh;
     settings = { git_protocol = "ssh"; };
   };
-  programs.mpv = {
-    enable = true;
-    scripts = with pkgs.mpvScripts; [ thumbnail sponsorblock ];
-    config = {
-      # disable on-screen controller -- else I get a message saying I have to add this
-      osc = false;
-      # Use a large seekable RAM cache even for local input.
-      cache = true;
-      save-position-on-quit = false;
-      #x11-bypass-compositor = true;
-      #no-border = true;
-      msg-color = true;
-      pause = true;
-      # This will force use of h264 instead vp8/9 so hardware acceleration works
-      ytdl-format = "bv*[ext=mp4]+ba/b";
-      #ytdl-format = "bestvideo+bestaudio";
-      # have mpv use yt-dlp instead of youtube-dl
-      script-opts-append = "ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp";
-      autofit-larger =
-        "100%x95%"; # resize window in case it's larger than W%xH% of the screen
-      input-media-keys = "yes"; # enable/disable OSX media keys
-      hls-bitrate = "max"; # use max quality for HLS streams
+  # TODO: uncomment this!
+  # programs.mpv = {
+  #   enable = true;
+  #   scripts = with pkgs.mpvScripts; [ thumbnail sponsorblock ];
+  #   config = {
+  #     # disable on-screen controller -- else I get a message saying I have to add this
+  #     osc = false;
+  #     # Use a large seekable RAM cache even for local input.
+  #     cache = true;
+  #     save-position-on-quit = false;
+  #     #x11-bypass-compositor = true;
+  #     #no-border = true;
+  #     msg-color = true;
+  #     pause = true;
+  #     # This will force use of h264 instead vp8/9 so hardware acceleration works
+  #     ytdl-format = "bv*[ext=mp4]+ba/b";
+  #     #ytdl-format = "bestvideo+bestaudio";
+  #     # have mpv use yt-dlp instead of youtube-dl
+  #     script-opts-append = "ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp";
+  #     autofit-larger =
+  #       "100%x95%"; # resize window in case it's larger than W%xH% of the screen
+  #     input-media-keys = "yes"; # enable/disable OSX media keys
+  #     hls-bitrate = "max"; # use max quality for HLS streams
 
-      user-agent =
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:57.0) Gecko/20100101 Firefox/58.0";
-    };
-    defaultProfiles = [ "gpu-hq" ];
-  };
+  #     user-agent =
+  #       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:57.0) Gecko/20100101 Firefox/58.0";
+  #   };
+  #   defaultProfiles = [ "gpu-hq" ];
+  # };
 
   programs.zsh = {
     enable = true;
