@@ -14,6 +14,23 @@
       #small = import inputs.small { system = prev.system; };
       # from malob's config
 
+      # Aborted attempt to fix https://github.com/NixOS/nixpkgs/pull/179159
+      # python3Packages = (prev.python3.override {
+      #   packageOverrides = _:
+      #     { urllib3, ... }: {
+      #       urllib3 = urllib3.overrideAttrs
+      #         ({ passthru, propagatedBuildInputs, ... }: {
+      #           passthru = passthru // {
+      #             optional-dependencies =
+      #               prev.lib.filterAttrs (n: _v: n != "secure")
+      #               (passthru.optional-dependencies or [ ]);
+      #           };
+      #           propagatedBuildInputs = propagatedBuildInputs
+      #             // (passthru.optional-dependencies.brotli or [ ]);
+      #         });
+      #     };
+      # }).pkgs;
+
       # Overlay that adds some additional Neovim plugins
       vimPlugins = prev.vimPlugins // {
         vim-roam-task = prev.vimUtils.buildVimPluginFrom2Nix {

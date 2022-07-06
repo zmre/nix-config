@@ -455,7 +455,10 @@ in {
   home.file."${config.xdg.configHome}/nvim/parser/markdown.so".source =
     "${pkgs.tree-sitter.builtGrammars.tree-sitter-markdown}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/svelte.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-svelte}/parser";
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-scala}/parser";
+  home.file."${config.xdg.configHome}/nvim/parser/regex.so".source =
+    "${pkgs.tree-sitter.builtGrammars.tree-sitter-regex}/parser";
+  # Prose linting
   home.file.".vale.ini".text = ''
     StylesPath = styles
 
@@ -468,9 +471,11 @@ in {
     BasedOnStyles = Vale, Google, proselint
   '';
 
-  # treesitter has been throwing errors again and driving me nuts
-  # so i'm going to experiment with hybrid vscode-neovim
-
+  # I really don't use VSCode. I try it now and then to see what I think.
+  # My setup uses Neovim in the background whenever you go to Normal mode.
+  # But it is a little bit buggy and though it's slightly prettier, not
+  # currently worth it. I'm still keeping it in because of pair programming
+  # stuff for that rare occasion.
   programs.vscode = {
     enable = true;
     mutableExtensionsDir =
