@@ -68,7 +68,20 @@
       # };
       gtm-okr = inputs.gtm-okr.packages.${final.system}.gtm-okr;
       babble-cli = inputs.babble-cli.packages.${final.system}.babble-cli;
-
+      # Damnit, switching to brew 2022-07-11
+      # zk-latest = (prev.buildGoModule rec {
+      #   name = "zk-latest";
+      #   pname = "zk-latest";
+      #   src = inputs.zk-latest;
+      #   # Use below to get real value then paste below. I'm trying to find a workaround.
+      #   #vendorSha256 = nixpkgs.lib.fakeSha256;
+      #   #vendorSha256 = null; # not working :-(
+      #   vendorSha256 = "sha256-11GzI3aEhKKTiULoWq9uIc66E3YCrW/HJQUYXRhCaek=";
+      #   doCheck = false;
+      #   buildInputs = [ prev.icu ];
+      #   CGO_ENABLED = 1;
+      #   ldflags = [ "-s" "-w" ]; # "-X=main.Build=${version}" ];
+      # });
     })
     inputs.nur.overlay
   ];

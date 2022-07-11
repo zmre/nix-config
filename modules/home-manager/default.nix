@@ -78,7 +78,10 @@ let
     pkgs.gtm-okr
     pkgs.babble-cli
     yubikey-manager # cli for yubikey
-    pkgs.zk # cli for indexing markdown files
+    # failing to build latest myself; official is 7 months behind
+    # moving this to brew 2022-07-11 :-(
+    #pkgs.zk-latest # cli for indexing markdown files
+    #pkgs.zk # cli for indexing markdown files
     pastel # cli for color manipulation
     kopia # deduping backup
 

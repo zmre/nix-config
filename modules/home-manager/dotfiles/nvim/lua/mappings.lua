@@ -1,60 +1,60 @@
 -- We use which-key in mappings, which is loaded before plugins, so set up here
 local which_key = require("which-key")
 which_key.setup({
-    plugins = {
-        -- TODO: re-enable both of these when it's working again 2022-05-17
-        marks = false, -- shows a list of your marks on ' and `
-        registers = false, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
-        spelling = {
-            enabled = true, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
-            suggestions = 20 -- how many suggestions should be shown in the list?
-        },
-        -- the presets plugin, adds help for a bunch of default keybindings in Neovim
-        -- No actual key bindings are created
-        presets = {
-            operators = false, -- adds help for operators like d, y, ... and registers them for motion / text object completion
-            motions = false, -- adds help for motions
-            text_objects = false, -- help for text objects triggered after entering an operator
-            -- TODO: re-enable all of these when it works right again 2022-05-17
-            windows = false, -- default bindings on <c-w>
-            nav = false, -- misc bindings to work with windows
-            z = false, -- bindings for folds, spelling and others prefixed with z
-            g = false -- bindings for prefixed with g
-        }
+  plugins = {
+    -- TODO: re-enable both of these when it's working again 2022-05-17
+    marks = false, -- shows a list of your marks on ' and `
+    registers = false, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
+    spelling = {
+      enabled = true, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
+      suggestions = 20 -- how many suggestions should be shown in the list?
     },
-    icons = {
-        breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
-        separator = "➜", -- symbol used between a key and it's label
-        group = "+" -- symbol prepended to a group
-    },
-    popup_mappings = {
-        scroll_down = "<c-d>", -- binding to scroll down inside the popup
-        scroll_up = "<c-u>" -- binding to scroll up inside the popup
-    },
-    window = {
-        border = "rounded", -- none, single, double, shadow
-        position = "bottom", -- bottom, top
-        margin = {1, 0, 1, 0}, -- extra window margin [top, right, bottom, left]
-        padding = {2, 2, 2, 2}, -- extra window padding [top, right, bottom, left]
-        winblend = 0
-    },
-    layout = {
-        height = {min = 4, max = 25}, -- min and max height of the columns
-        width = {min = 20, max = 50}, -- min and max width of the columns
-        spacing = 3, -- spacing between columns
-        align = "left" -- align columns left, center or right
-    },
-    ignore_missing = true, -- enable this to hide mappings for which you didn't specify a label
-    hidden = {
-        "<silent>", "<CMD>", "<cmd>", "<Cmd>", "<cr>", "<CR>", "call", "lua",
-        "^:", "^ "
-    }, -- hide mapping boilerplate
-    show_help = true, -- show help message on the command line when the popup is visible
-    triggers = "auto" -- automatically setup triggers
-    -- triggers = {"<leader>"} -- or specify a list manually
+    -- the presets plugin, adds help for a bunch of default keybindings in Neovim
+    -- No actual key bindings are created
+    presets = {
+      operators = false, -- adds help for operators like d, y, ... and registers them for motion / text object completion
+      motions = false, -- adds help for motions
+      text_objects = false, -- help for text objects triggered after entering an operator
+      -- TODO: re-enable all of these when it works right again 2022-05-17
+      windows = false, -- default bindings on <c-w>
+      nav = false, -- misc bindings to work with windows
+      z = false, -- bindings for folds, spelling and others prefixed with z
+      g = false -- bindings for prefixed with g
+    }
+  },
+  icons = {
+    breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
+    separator = "➜", -- symbol used between a key and it's label
+    group = "+" -- symbol prepended to a group
+  },
+  popup_mappings = {
+    scroll_down = "<c-d>", -- binding to scroll down inside the popup
+    scroll_up = "<c-u>" -- binding to scroll up inside the popup
+  },
+  window = {
+    border = "rounded", -- none, single, double, shadow
+    position = "bottom", -- bottom, top
+    margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
+    padding = { 2, 2, 2, 2 }, -- extra window padding [top, right, bottom, left]
+    winblend = 0
+  },
+  layout = {
+    height = { min = 4, max = 25 }, -- min and max height of the columns
+    width = { min = 20, max = 50 }, -- min and max width of the columns
+    spacing = 3, -- spacing between columns
+    align = "left" -- align columns left, center or right
+  },
+  ignore_missing = true, -- enable this to hide mappings for which you didn't specify a label
+  hidden = {
+    "<silent>", "<CMD>", "<cmd>", "<Cmd>", "<cr>", "<CR>", "call", "lua",
+    "^:", "^ "
+  }, -- hide mapping boilerplate
+  show_help = true, -- show help message on the command line when the popup is visible
+  triggers = "auto" -- automatically setup triggers
+  -- triggers = {"<leader>"} -- or specify a list manually
 })
 -- This file is for mappings that will work regardless of filetype. Always available.
-local options = {noremap = true, silent = true}
+local options = { noremap = true, silent = true }
 
 -- Make F1 act like escape for accidental hits
 vim.api.nvim_set_keymap('', '#1', '<Esc>', options)
@@ -76,13 +76,13 @@ vim.api.nvim_set_keymap('', '-', '<cmd>NvimTreeFindFile<CR>', options)
 vim.api
     .nvim_set_keymap('', '<c-p>', ':silent Telescope find_files<CR>', options)
 vim.api.nvim_set_keymap('!', '<c-p>', '<ESC>:silent Telescope find_files<CR>',
-                        options)
+  options)
 
 -- Make F4 toggle showing invisible characters
 vim.api
-    .nvim_set_keymap('', '_z', ':set list<CR>:map #4 _Z<CR>', {silent = true})
+    .nvim_set_keymap('', '_z', ':set list<CR>:map #4 _Z<CR>', { silent = true })
 vim.api.nvim_set_keymap('', '_Z', ':set nolist<CR>:map #4 _z<CR>',
-                        {silent = true})
+  { silent = true })
 vim.api.nvim_set_keymap('', '#4', '_Z', {})
 
 -- Enter the date on F8
@@ -100,124 +100,124 @@ vim.api
 
 -- Have ctrl-l continue to do what it did, but also temp clear search match highlighting
 vim.api.nvim_set_keymap('', '<C-l>', ':<C-u>nohlsearch<CR><C-l>',
-                        {silent = true})
+  { silent = true })
 -- Yank to end of line using more familiar method
 vim.api.nvim_set_keymap('', 'Y', 'y$', options)
 
 local global_leader_opts = {
-    mode = "n", -- NORMAL mode
-    prefix = "<leader>",
-    buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
-    silent = true, -- use `silent` when creating keymaps
-    noremap = true, -- use `noremap` when creating keymaps
-    nowait = true -- use `nowait` when creating keymaps
+  mode = "n", -- NORMAL mode
+  prefix = "<leader>",
+  buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+  silent = true, -- use `silent` when creating keymaps
+  noremap = true, -- use `noremap` when creating keymaps
+  nowait = true -- use `nowait` when creating keymaps
 }
 local global_leader_opts_visual = {
-    mode = "v", -- VISUAL mode
-    prefix = "<leader>",
-    buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
-    silent = true, -- use `silent` when creating keymaps
-    noremap = true, -- use `noremap` when creating keymaps
-    nowait = true -- use `nowait` when creating keymaps
+  mode = "v", -- VISUAL mode
+  prefix = "<leader>",
+  buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+  silent = true, -- use `silent` when creating keymaps
+  noremap = true, -- use `noremap` when creating keymaps
+  nowait = true -- use `nowait` when creating keymaps
 }
 
 local leader_mappings = {
-    ["e"] = {"<cmd>NvimTreeToggle<cr>", "Explorer"},
-    ["b"] = {
-        "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>",
-        "Buffers"
+  ["e"] = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
+  ["b"] = {
+    "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>",
+    "Buffers"
+  },
+  ["/"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
+  ["x"] = { "<cmd>Bdelete!<CR>", "Close Buffer" },
+  ["q"] = {
+    [["<cmd>".(get(getqflist({"winid": 1}), "winid") != 0? "cclose" : "botright copen")."<cr>"]],
+    "Toggle Quicklist"
+  },
+  f = {
+    name = "Find",
+    f = { "<cmd>lua require('telescope.builtin').find_files()<CR>", "Files" },
+    g = { "<cmd>lua require('telescope.builtin').live_grep()<CR>", "Grep" },
+    b = {
+      "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>",
+      "Buffers"
     },
-    ["/"] = {"<cmd>nohlsearch<CR>", "No Highlight"},
-    ["x"] = {"<cmd>Bdelete!<CR>", "Close Buffer"},
-    ["q"] = {
-        [["<cmd>".(get(getqflist({"winid": 1}), "winid") != 0? "cclose" : "botright copen")."<cr>"]],
-        "Toggle Quicklist"
+    h = { "<cmd>lua require('telescope.builtin').oldfiles()<cr>", "History" },
+    q = { "<cmd>lua require('telescope.builtin').quickfix()<cr>", "Quickfix" },
+    l = { "<cmd>lua require('telescope.builtin').loclist()<cr>", "Loclist" },
+    p = { "<cmd>Telescope projects<cr>", "Projects" },
+    k = { "<cmd>Telescope keymaps<cr>", "Keymaps" }
+  },
+  -- Quickly change indent defaults in a file
+  i = {
+    name = "Indent",
+    ["1"] = { "<cmd>lua require('zmre.options').tabindent()<CR>", "Tab" },
+    ["2"] = {
+      "<cmd>lua require('zmre.options').twospaceindent()<CR>", "Two Space"
     },
-    f = {
-        name = "Find",
-        f = {"<cmd>lua require('telescope.builtin').find_files()<CR>", "Files"},
-        g = {"<cmd>lua require('telescope.builtin').live_grep()<CR>", "Grep"},
-        b = {
-            "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>",
-            "Buffers"
-        },
-        h = {"<cmd>lua require('telescope.builtin').oldfiles()<cr>", "History"},
-        q = {"<cmd>lua require('telescope.builtin').quickfix()<cr>", "Quickfix"},
-        l = {"<cmd>lua require('telescope.builtin').loclist()<cr>", "Loclist"},
-        p = {"<cmd>Telescope projects<cr>", "Projects"},
-        k = {"<cmd>Telescope keymaps<cr>", "Keymaps"}
+    ["4"] = {
+      "<cmd>lua require('zmre.options').fourspaceindent()<CR>",
+      "Four Space"
+    }
+  },
+  g = {
+    name = "Git",
+    s = { "<cmd>lua require('telescope.builtin').git_status()<cr>", "Status" },
+    b = {
+      "<cmd>lua require('telescope.builtin').git_branches()<cr>",
+      "Branches"
     },
-    -- Quickly change indent defaults in a file
-    i = {
-        name = "Indent",
-        ["1"] = {"<cmd>lua require('zmre.options').tabindent()<CR>", "Tab"},
-        ["2"] = {
-            "<cmd>lua require('zmre.options').twospaceindent()<CR>", "Two Space"
-        },
-        ["4"] = {
-            "<cmd>lua require('zmre.options').fourspaceindent()<CR>",
-            "Four Space"
-        }
+    c = {
+      "<cmd>lua require('telescope.builtin').git_commits()<cr>", "Commits"
     },
+    ["-"] = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
+    ["+"] = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" }
+  },
+  n = {
+    name = "Notes",
     g = {
-        name = "Git",
-        s = {"<cmd>lua require('telescope.builtin').git_status()<cr>", "Status"},
-        b = {
-            "<cmd>lua require('telescope.builtin').git_branches()<cr>",
-            "Branches"
-        },
-        c = {
-            "<cmd>lua require('telescope.builtin').git_commits()<cr>", "Commits"
-        },
-        ["-"] = {"<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk"},
-        ["+"] = {"<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk"}
+      "<cmd>lua require('zmre.plugins').grammar_check()<cr>",
+      "Check Grammar"
     },
     n = {
-        name = "Notes",
-        g = {
-            "<cmd>lua require('zmre.plugins').grammar_check()<cr>",
-            "Check Grammar"
-        },
-        n = {
-            "<Cmd>ZkNew { dir = vim.fn.input('Folder: ',vim.env.ZK_NOTEBOOK_DIR .. '/wiki','dir'), title = vim.fn.input('Title: ') }<CR>",
-            "New"
-        },
-        o = {"<cmd>ZkNotes<CR>", "Open"},
-        t = {"<cmd>ZkTags<CR>", "Open by tag"},
-        f = {"<Cmd>ZkNotes { match = vim.fn.input('Search: ') }<CR>", "Find"},
-        m = {
-            "<cmd>lua require('zk.commands').get('ZkNew')({ dir = vim.fn.input('Folder: ',vim.env.ZK_NOTEBOOK_DIR .. '/meetings','dir'), title = vim.fn.input('Title: ') })<CR>",
-            "New meeting"
-        },
-        d = {
-            "<cmd>ZkNew { dir = vim.env.ZK_NOTEBOOK_DIR .. '/wiki/diary', title = os.date('%Y-%m-%d') }<CR>",
-            "New diary"
-        },
-        h = {"<cmd>edit ~/Notes/wiki/HotSheet.md<CR>", "Open HotSheet"}
-        -- in open note:
-        -- p: new peer note
-        -- l: show outbound links
-        -- r: show outbound links
-        -- i: info preview
-    }
+      "<Cmd>ZkNew { dir = vim.fn.input('Folder: ',vim.env.ZK_NOTEBOOK_DIR .. '/wiki','dir'), title = vim.fn.input('Title: ') }<CR>",
+      "New"
+    },
+    o = { "<cmd>ZkNotes<CR>", "Open" },
+    t = { "<cmd>ZkTags<CR>", "Open by tag" },
+    f = { "<Cmd>ZkNotes { match = vim.fn.input('Search: ') }<CR>", "Find" },
+    m = {
+      "<cmd>lua require('zk.commands').get('ZkNew')({ dir = vim.fn.input('Folder: ',vim.env.ZK_NOTEBOOK_DIR .. '/meetings','dir'), title = vim.fn.input('Title: ') })<CR>",
+      "New meeting"
+    },
+    d = {
+      "<cmd>ZkNew { dir = vim.env.ZK_NOTEBOOK_DIR .. '/wiki/diary', title = os.date('%Y-%m-%d') }<CR>",
+      "New diary"
+    },
+    h = { "<cmd>edit ~/Notes/wiki/HotSheet.md<CR>", "Open HotSheet" }
+    -- in open note (defined in plugins.lua as local-only shortcuts):
+    -- p: new peer note
+    -- l: show outbound links
+    -- r: show outbound links
+    -- i: info preview
+  }
 }
 local leader_visual_mappings = {
-    n = {f = {":'<,'>ZkMatch<CR>", "Find Selected"}}
+  n = { f = { ":'<,'>ZkMatch<CR>", "Find Selected" } }
 }
 
 which_key.register(leader_mappings, global_leader_opts)
 which_key.register(leader_visual_mappings, global_leader_opts_visual)
 
 vim.api.nvim_set_keymap('', '<leader>fd',
-                        ':silent Telescope lsp_document_symbols<CR>', options)
+  ':silent Telescope lsp_document_symbols<CR>', options)
 
 -- Set cwd to current file's dir
 vim.api.nvim_set_keymap('', '<leader>cd', ':cd %:h<CR>', options)
 vim.api.nvim_set_keymap('', '<leader>lcd', ':lcd %:h<CR>', options)
 -- Debug syntax files
 vim.api.nvim_set_keymap('', '<leader>sd',
-                        [[:echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')<CR>]],
-                        options)
+  [[:echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')<CR>]],
+  options)
 
 -- """"""""" Global Shortcuts """""""""""""
 
@@ -263,12 +263,12 @@ vim.api.nvim_set_keymap('c', '%%', "expand('%:h').'/'", options)
 -- not using netrw, it doesn't work right. Or maybe it's just me
 -- but anyway this command works great.
 vim.api.nvim_set_keymap('', 'gx',
-                        ":!open \"<c-r><c-a><cr>\" || xdg-open \"<c-r><c-a><cr>\"",
-                        options)
+  ":!open \"<c-r><c-a><cr>\" || xdg-open \"<c-r><c-a><cr>\"",
+  options)
 
 -- open/close folds with space bar
 vim.api.nvim_set_keymap('', '<Space>',
-                        [[@=(foldlevel('.')?'za':"\<Space>")<CR>]], options)
+  [[@=(foldlevel('.')?'za':"\<Space>")<CR>]], options)
 
 -- Make nvim terminal more sane
 vim.api.nvim_set_keymap('t', '<Esc>', [[<C-\><C-n>]], options)
@@ -317,9 +317,9 @@ vim.api.nvim_set_keymap('!', '<D-q>', '<ESC>:q<CR>', options)
 
 -- cmd-o to open
 vim.api.nvim_set_keymap('', '<D-o>', ':Telescope file_browser cmd=%:h<CR>',
-                        options)
+  options)
 vim.api.nvim_set_keymap('!', '<D-o>',
-                        '<ESC>:Telescope file_browser cmd=%:h<CR>', options)
+  '<ESC>:Telescope file_browser cmd=%:h<CR>', options)
 
 -- TODO:
 -- Use ctrl-x, ctrl-u to complete :emoji: symbols, then use
@@ -330,35 +330,35 @@ vim.api.nvim_set_keymap('!', '<D-o>',
 
 -- Setup tpope unimpaired-like forward/backward shortcuts
 which_key.register({
-    ["[a"] = "Prev file arg",
-    ["]a"] = "Next file arg",
-    ["[b"] = {'<Cmd>BufferLineCyclePrev<CR>', "Prev buffer"},
-    ["]b"] = {'<Cmd>BufferLineCycleNext<CR>', "Next buffer"},
-    ["[c"] = "Prev git hunk",
-    ["]c"] = "Next git hunk",
-    ["[l"] = "Prev loclist item",
-    ["]l"] = "Next loclist item",
-    ["[q"] = "Prev quicklist item",
-    ["]q"] = "Next quicklist item",
-    ["[t"] = {'<Cmd>tabprevious', "Prev tab"},
-    ["[T"] = {'<Cmd>tabprevious', "First tab"},
-    ["]t"] = {'<Cmd>tabnext', "Next tab"},
-    ["]T"] = {'<Cmd>tablast', "Last tab"},
-    ["[n"] = "Prev conflict",
-    ["]n"] = "Next conflict",
-    ["[ "] = "Add blank line before",
-    ["] "] = "Add blank line after",
-    ["[e"] = "Swap line with previous",
-    ["]e"] = "Swap line with next",
-    ["[x"] = "XML encode",
-    ["]x"] = "XML decode",
-    ["[u"] = "URL encode",
-    ["]u"] = "URL decode",
-    ["[y"] = "C escape",
-    ["]y"] = "C unescape",
-    ["[d"] = {"<cmd>lua vim.diagnostic.goto_prev()<CR>", "Prev diagnostic"},
-    ["]d"] = {"<cmd>lua vim.diagnostic.goto_next()<CR>", "Next diagnostic"}
-}, {mode = 'n'})
+  ["[a"] = "Prev file arg",
+  ["]a"] = "Next file arg",
+  ["[b"] = { '<Cmd>BufferLineCyclePrev<CR>', "Prev buffer" },
+  ["]b"] = { '<Cmd>BufferLineCycleNext<CR>', "Next buffer" },
+  ["[c"] = "Prev git hunk",
+  ["]c"] = "Next git hunk",
+  ["[l"] = "Prev loclist item",
+  ["]l"] = "Next loclist item",
+  ["[q"] = "Prev quicklist item",
+  ["]q"] = "Next quicklist item",
+  ["[t"] = { '<Cmd>tabprevious', "Prev tab" },
+  ["[T"] = { '<Cmd>tabprevious', "First tab" },
+  ["]t"] = { '<Cmd>tabnext', "Next tab" },
+  ["]T"] = { '<Cmd>tablast', "Last tab" },
+  ["[n"] = "Prev conflict",
+  ["]n"] = "Next conflict",
+  ["[ "] = "Add blank line before",
+  ["] "] = "Add blank line after",
+  ["[e"] = "Swap line with previous",
+  ["]e"] = "Swap line with next",
+  ["[x"] = "XML encode",
+  ["]x"] = "XML decode",
+  ["[u"] = "URL encode",
+  ["]u"] = "URL decode",
+  ["[y"] = "C escape",
+  ["]y"] = "C unescape",
+  ["[d"] = { "<cmd>lua vim.diagnostic.goto_prev()<CR>", "Prev diagnostic" },
+  ["]d"] = { "<cmd>lua vim.diagnostic.goto_next()<CR>", "Next diagnostic" }
+}, { mode = 'n' })
 
 -- Move to previous/next
 vim.api.nvim_set_keymap('', '<S-h>', ':BufferLineCyclePrev<CR>', options)
@@ -398,8 +398,8 @@ vim.api.nvim_set_keymap('', '[\\', ':BufferPick<CR>', options)
 vim.api.nvim_set_keymap('', ']\\', ':BufferPick<CR>', options)
 
 -- Pane navigation integrated with tmux
-vim.api.nvim_set_keymap('', '<c-h>', ':TmuxNavigateLeft<cr>', {silent = true})
-vim.api.nvim_set_keymap('', '<c-j>', ':TmuxNavigateDown<cr>', {silent = true})
-vim.api.nvim_set_keymap('', '<c-k>', ':TmuxNavigateUp<cr>', {silent = true})
-vim.api.nvim_set_keymap('', '<c-l>', ':TmuxNavigateRight<cr>', {silent = true})
+vim.api.nvim_set_keymap('', '<c-h>', ':TmuxNavigateLeft<cr>', { silent = true })
+vim.api.nvim_set_keymap('', '<c-j>', ':TmuxNavigateDown<cr>', { silent = true })
+vim.api.nvim_set_keymap('', '<c-k>', ':TmuxNavigateUp<cr>', { silent = true })
+vim.api.nvim_set_keymap('', '<c-l>', ':TmuxNavigateRight<cr>', { silent = true })
 -- add mapping for :TmuxNavigatePrevious ? c-\, the default, used by toggleterm

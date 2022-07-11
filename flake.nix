@@ -34,6 +34,12 @@
     # Need fenix to specify rustc version -- specifically for hackernews-tui
     fenix.url = "github:nix-community/fenix";
     fenix.inputs.nixpkgs.follows = "nixpkgs";
+    # Maintainers aren't keeping zk up to date
+    # But I'm failing to build the latest, so moving to brew
+    # zk-latest = {
+    #   url = "github:mickael-menu/zk";
+    #   flake = false;
+    # };
     # My extra nvim plugins -- setup in overlays
     zk-nvim = {
       url = "github:mickael-menu/zk-nvim";

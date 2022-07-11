@@ -35,7 +35,7 @@
       "default-folder-x"
       "discord"
       "docker"
-      "dropbox"
+      #"dropbox"
       "firefox"
       "fork"
       "gpg-suite"
@@ -49,7 +49,7 @@
       "loopback"
       "marked"
       "microsoft-office"
-      # TODO: COMMENT THIS OUT
+      # TODO: COMMENT THIS OUT when support is back for darwin in nix
       "mpv"
       "noun-project"
       "obs"
@@ -157,6 +157,7 @@
       "hashcat" # the nix one only builds on linux
       "hydra" # the nix one only builds on linux
       "yt-dlp" # TODO: comment this back out
+      "zk" # TODO: move this back to a vim dependency when nix updates
     ];
   };
 }
