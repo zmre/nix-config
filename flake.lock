@@ -453,6 +453,7 @@
         "nur": "nur",
         "powerlevel10k": "powerlevel10k",
         "sbhosts": "sbhosts",
+        "surround-nvim": "surround-nvim",
         "telescope-media-files": "telescope-media-files",
         "vim-roam-task": "vim-roam-task",
         "zk-nvim": "zk-nvim"
@@ -510,6 +511,22 @@
       "original": {
         "owner": "StevenBlack",
         "repo": "hosts",
+        "type": "github"
+      }
+    },
+    "surround-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1657732779,
+        "narHash": "sha256-Q6+G2oEXY5OlHDHE+w2umSGmAxkGLil/vQ3uo87rzOM=",
+        "owner": "kylechui",
+        "repo": "nvim-surround",
+        "rev": "0624c8777b69ea5d9d76c24bc2b97a8092ed9ae2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "kylechui",
+        "repo": "nvim-surround",
         "type": "github"
       }
     },

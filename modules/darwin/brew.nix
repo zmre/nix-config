@@ -40,6 +40,7 @@
       "fork"
       "gpg-suite"
       "imageoptim"
+      "insta360-studio"
       "istat-menus"
       "karabiner-elements"
       "kindavim"

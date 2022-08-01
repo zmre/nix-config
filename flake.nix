@@ -45,6 +45,12 @@
       url = "github:mickael-menu/zk-nvim";
       flake = false;
     };
+    # nixpkgs already has this, but they aren't keeping it up-to-date
+    # actually, they have some other one. i'm changing to my preferred
+    surround-nvim = {
+      url = "github:kylechui/nvim-surround";
+      flake = false;
+    };
     telescope-media-files = {
       url = "github:nvim-telescope/telescope-media-files.nvim";
       flake = false;

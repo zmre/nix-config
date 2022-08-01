@@ -88,7 +88,7 @@ M.ui = function()
     -- open the tree when running this setup function
     open_on_setup = false,
     update_cwd = true,
-    update_to_buf_dir = { enable = true, auto_open = true },
+    -- update_to_buf_dir = { enable = true, auto_open = true },
     update_focused_file = { enable = true, update_cwd = true },
     -- show lsp diagnostics in the signcolumn
     diagnostics = {
@@ -100,7 +100,7 @@ M.ui = function()
       height = 30,
       hide_root_folder = false,
       side = "left",
-      auto_resize = true,
+      -- auto_resize = true,
       mappings = {
         custom_only = false,
         list = {
@@ -118,6 +118,8 @@ M.ui = function()
     vim.fn.sign_define(sign.name,
       { texthl = sign.name, text = sign.text, numhl = "" })
   end
+
+  require("nvim-surround").setup({})
 
   require("gitsigns").setup {
     signs = {

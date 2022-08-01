@@ -387,7 +387,8 @@ in {
 
       # Editor Features ####################################
       vim-abolish # better abbreviations / spelling fixer
-      vim-surround # most important plugin for quickly handling brackets
+      #vim-surround # most important plugin for quickly handling brackets
+      surround-nvim # .... updated lua-based alternative to tpope's surround
       vim-unimpaired # bunch of convenient navigation key mappings
       vim-repeat # supports all of the above so you can use .
       vim-rsi # brings keyline bindings to editing (like ctrl-e for end of line when in insert mode)

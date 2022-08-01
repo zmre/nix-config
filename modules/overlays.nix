@@ -48,6 +48,11 @@
           pname = "zk-nvim";
           src = inputs.zk-nvim;
         };
+        surround-nvim = prev.vimUtils.buildVimPlugin {
+          name = "surround.nvim";
+          pname = "surround.nvim";
+          src = inputs.surround-nvim;
+        };
       };
       # hackernews-tui = prev.rustPlatform.buildRustPackage {
       hackernews-tui = (prev.makeRustPlatform {
