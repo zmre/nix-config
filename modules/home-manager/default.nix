@@ -362,11 +362,14 @@ in {
       # nvim-lsp-ts-utils for inlays
       null-ls-nvim # formatting and linting via lsp system
       trouble-nvim # navigate all warnings and errors in quickfix-like window
-      copilot-vim # github copilot
+      lspsaga-nvim
+      todo-comments-nvim
+      #copilot-vim # github copilot
 
       # UI #################################################
-      #onedarkpro-nvim # colorscheme
-      onedark-vim # colorscheme
+      onedarkpro-nvim # colorscheme
+      #onedark-vim # colorscheme
+      zephyr-nvim # alternate colorscheme
       telescope-nvim # da best popup fuzzy finder
       telescope-fzy-native-nvim # but fzy gives better results
       telescope-frecency-nvim # and frecency comes in handy too
@@ -434,8 +437,8 @@ in {
   home.file."${config.xdg.configHome}/nvim/parser/tsx.so".source =
     "${pkgs.tree-sitter.builtGrammars.tree-sitter-tsx}/parser";
   # TODO: uncomment this when treesitter nix highlighting isn't so busted 2022-05-17
-  # home.file."${config.xdg.configHome}/nvim/parser/nix.so".source =
-  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-nix}/parser";
+  #home.file."${config.xdg.configHome}/nvim/parser/nix.so".source =
+  #"${pkgs.tree-sitter.builtGrammars.tree-sitter-nix}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/vim.so".source =
     "${pkgs.tree-sitter.builtGrammars.tree-sitter-vim}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/lua.so".source =
@@ -466,7 +469,7 @@ in {
     "${pkgs.tree-sitter.builtGrammars.tree-sitter-regex}/parser";
   # Prose linting
   home.file.".vale.ini".text = ''
-    StylesPath = styles
+    StylesPath = .styles
 
     MinAlertLevel = suggestion
     Vocab = Base
