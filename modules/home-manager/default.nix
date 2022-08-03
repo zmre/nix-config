@@ -57,8 +57,7 @@ let
     vimv # shell script to bulk rename
     pkgs.btop
     #youtube-dl replaced by yt-dlp
-    ## TODO: uncomment ASAP
-    #pkgs.yt-dlp
+    pkgs.yt-dlp
     vulnix # check for live nix apps that are listed in NVD
     tickrs # track stocks
     taskwarrior-tui
@@ -322,7 +321,7 @@ in {
     extraPython3Packages = (ps: with ps; [ pynvim tasklib six ]);
     extraPackages = with pkgs; [
       vale # style checker for writing
-      proselint
+      proselint # style checker for writing
       zk # note finder
     ];
     # make sure impatient is loaded before everything else to speed things up
@@ -386,7 +385,10 @@ in {
       bufferline-nvim
       indent-blankline-nvim # visual indent
       toggleterm-nvim # better terminal management
-      pkgs.stable.vimPlugins.nvim-treesitter # better code coloring
+      nvim-treesitter # better code coloring
+      playground # treesitter playground
+      nvim-treesitter-textobjects
+      nvim-treesitter-context # keep current block header (func defn or whatever) on first line
 
       # Editor Features ####################################
       vim-abolish # better abbreviations / spelling fixer
@@ -436,7 +438,7 @@ in {
   };
   home.file."${config.xdg.configHome}/nvim/parser/tsx.so".source =
     "${pkgs.tree-sitter.builtGrammars.tree-sitter-tsx}/parser";
-  # TODO: uncomment this when treesitter nix highlighting isn't so busted 2022-05-17
+  # TODO: uncomment this when treesitter nix highlighting isn't so busted 2022-05-17, 2022-08-02
   #home.file."${config.xdg.configHome}/nvim/parser/nix.so".source =
   #"${pkgs.tree-sitter.builtGrammars.tree-sitter-nix}/parser";
   home.file."${config.xdg.configHome}/nvim/parser/vim.so".source =
@@ -1399,35 +1401,34 @@ in {
     package = pkgs.gh;
     settings = { git_protocol = "ssh"; };
   };
-  # TODO: uncomment this!
-  # programs.mpv = {
-  #   enable = true;
-  #   scripts = with pkgs.mpvScripts; [ thumbnail sponsorblock ];
-  #   config = {
-  #     # disable on-screen controller -- else I get a message saying I have to add this
-  #     osc = false;
-  #     # Use a large seekable RAM cache even for local input.
-  #     cache = true;
-  #     save-position-on-quit = false;
-  #     #x11-bypass-compositor = true;
-  #     #no-border = true;
-  #     msg-color = true;
-  #     pause = true;
-  #     # This will force use of h264 instead vp8/9 so hardware acceleration works
-  #     ytdl-format = "bv*[ext=mp4]+ba/b";
-  #     #ytdl-format = "bestvideo+bestaudio";
-  #     # have mpv use yt-dlp instead of youtube-dl
-  #     script-opts-append = "ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp";
-  #     autofit-larger =
-  #       "100%x95%"; # resize window in case it's larger than W%xH% of the screen
-  #     input-media-keys = "yes"; # enable/disable OSX media keys
-  #     hls-bitrate = "max"; # use max quality for HLS streams
+  programs.mpv = {
+    enable = true;
+    scripts = with pkgs.mpvScripts; [ thumbnail sponsorblock ];
+    config = {
+      # disable on-screen controller -- else I get a message saying I have to add this
+      osc = false;
+      # Use a large seekable RAM cache even for local input.
+      cache = true;
+      save-position-on-quit = false;
+      #x11-bypass-compositor = true;
+      #no-border = true;
+      msg-color = true;
+      pause = true;
+      # This will force use of h264 instead vp8/9 so hardware acceleration works
+      ytdl-format = "bv*[ext=mp4]+ba/b";
+      #ytdl-format = "bestvideo+bestaudio";
+      # have mpv use yt-dlp instead of youtube-dl
+      script-opts-append = "ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp";
+      autofit-larger =
+        "100%x95%"; # resize window in case it's larger than W%xH% of the screen
+      input-media-keys = "yes"; # enable/disable OSX media keys
+      hls-bitrate = "max"; # use max quality for HLS streams
 
-  #     user-agent =
-  #       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:57.0) Gecko/20100101 Firefox/58.0";
-  #   };
-  #   defaultProfiles = [ "gpu-hq" ];
-  # };
+      user-agent =
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:57.0) Gecko/20100101 Firefox/58.0";
+    };
+    defaultProfiles = [ "gpu-hq" ];
+  };
 
   programs.zsh = {
     enable = true;

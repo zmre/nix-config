@@ -263,13 +263,19 @@ M.ui = function()
     }
   }
   require 'nvim-treesitter.configs'.setup {
-    highlight = { enable = true, additional_vim_regex_highlighting = true },
+    highlight = { enable = true, additional_vim_regex_highlighting = { "markdown" } },
     indent = { enable = true, disable = { "yaml" } },
     context_commentstring = {
       enable = true,
       enable_autocmd = false -- per directions for kommentary integration https://github.com/joosepalviste/nvim-ts-context-commentstring/
     }
   }
+  require 'treesitter-context'.setup {
+    patterns = {
+      markdown = { "atx_heading" }
+    },
+  }
+
   require 'bufferline'.setup {
     options = {
       numbers = "none", -- | "ordinal" | "buffer_id" | "both" | function({ ordinal, id, lower, raise }): string,
@@ -589,7 +595,8 @@ M.diagnostics = function()
   lspconfig.svelte.setup { on_attach = attached, capabilities = capabilities }
   lspconfig.tailwindcss.setup {
     on_attach = attached,
-    capabilities = capabilities
+    capabilities = capabilities,
+    settings = { files = { exclude = { "**/.git/**", "**/node_modules/**", "**/*.md" } } }
   }
   lspconfig.rnix.setup { on_attach = attached, capabilities = capabilities }
   lspconfig.cssls.setup {
@@ -660,16 +667,17 @@ M.diagnostics = function()
     capabilities = capabilities
   }
 
-  -- TODO: temporarily disabled due to bugs editing nix files 2021-12
   require 'lspsaga'.init_lsp_saga({
-    code_action_lightbulb = {
-      enable = false,
-      sign = true,
-      enable_in_insert = true,
-      sign_priority = 20,
-      virtual_text = false,
-    },
+    -- TODO: re-enable this at next update - getting error 2022-08-02
+    --code_action_lightbulb = {
+    --enable = false,
+    --sign = true,
+    --enable_in_insert = true,
+    --sign_priority = 20,
+    --virtual_text = false,
+    --},
   })
+
   require('rust-tools').setup({
     server = { on_attach = attached },
     tools = { autoSetHints = true, inlay_hints = { only_current_line = true } }
@@ -709,24 +717,59 @@ M.telescope = function()
   end
 
   require('telescope').setup {
-    file_ignore_patterns = { "*.bak" },
+    file_ignore_patterns = { "*.bak", ".git/", "node_modules" },
     prompt_prefix = " ",
     selection_caret = " ",
     path_display = { "smart" },
     defaults = {
       mappings = {
         n = {
-          ["<C-p>"] = paste_selected_entry,
+          --["<C-p>"] = paste_selected_entry,
           ["<C-y>"] = yank_selected_entry,
-          ["<C-o>"] = system_open_selected_entry
+          ["<C-o>"] = system_open_selected_entry,
+          ["q"] = require("telescope.actions").close
         },
         i = {
-          ["<C-p>"] = paste_selected_entry,
+          --["<C-p>"] = paste_selected_entry,
           ["<C-y>"] = yank_selected_entry,
           ["<C-o>"] = system_open_selected_entry
         }
       }
     },
+    vimgrep_arguments = {
+      "rg",
+      "--color=never",
+      "--no-heading",
+      "--with-filename",
+      "--line-number",
+      "--column",
+      "--smart-case",
+    },
+    -- Telescope smart history
+    history = {
+      path = '~/.local/share/nvim/databases/telescope_history.sqlite3',
+      limit = 100,
+    },
+    layout_strategy = "flex",
+    layout_config = {
+      horizontal = {
+        prompt_position = "top",
+        preview_width = 0.55,
+        results_width = 0.8,
+      },
+      vertical = {
+        mirror = false,
+      },
+      width = 0.87,
+      height = 0.80,
+      preview_cutoff = 1,
+    },
+    color_devicons = true,
+    set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
+    file_previewer = require("telescope.previewers").vim_buffer_cat.new,
+    grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
+    qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
+
     extensions = {
       fzy_native = {
         override_generic_sorter = true,
@@ -735,6 +778,7 @@ M.telescope = function()
     }
   }
   require 'telescope'.load_extension('fzy_native')
+  require("telescope").load_extension("zk")
   if vim.fn.has('mac') ~= 1 then
     -- doesn't currently work on mac
     require 'telescope'.load_extension('media_files')

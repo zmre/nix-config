@@ -50,8 +50,7 @@
       "loopback"
       "marked"
       "microsoft-office"
-      # TODO: COMMENT THIS OUT when support is back for darwin in nix
-      "mpv"
+      #"mpv"
       "noun-project"
       "obs"
       "parallels"
@@ -157,8 +156,6 @@
       "p0f" # the nix one only builds on linux
       "hashcat" # the nix one only builds on linux
       "hydra" # the nix one only builds on linux
-      "yt-dlp" # TODO: comment this back out
-      "zk" # TODO: move this back to a vim dependency when nix updates
     ];
   };
 }

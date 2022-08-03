@@ -112,27 +112,76 @@ M.defaults = function()
   vim.o.termguicolors = true
   vim.o.background = "dark"
 
+  -- Wiki syntax additions
+  vim.api.nvim_exec([[
+      " markdownWikiLink is a new region
+      syn region markdownWikiLink matchgroup=markdownLinkDelimiter start="\[\[" end="\]\]" contains=markdownUrl keepend oneline concealends
+      " markdownLinkText is copied from runtime files with 'concealends' appended
+      syn region markdownLinkText matchgroup=markdownLinkTextDelimiter start="!\=\[\%(\%(\_[^][]\|\[\_[^][]*\]\)*]\%( \=[[(]\)\)\@=" end="\]\%( \=[[(]\)\@=" nextgroup=markdownLink,markdownId skipwhite contains=@markdownInline,markdownLineStart concealends
+      " markdownLink is copied from runtime files with 'conceal' appended
+      syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")" contains=markdownUrl keepend contained conceal
+    ]], false)
+
+
   --vim.cmd('runtime vim/colors.vim')
   require("onedarkpro").setup({
     dark_theme = "onedark",
     light_theme = "onelight",
     hlgroups = {
-      mkdLink               = { fg = "${blue}", style = "underline" },
-      markdownAutomaticLink = { fg = "${blue}", style = "underline" },
-      markdownUrl           = { fg = "${blue}", style = "underline" },
-      markdownLinktext      = { fg = "${blue}", style = "underline" },
-      markdownH1            = { fg = "${cyan}", style = "bold" },
-      markdownH2            = { fg = "${cyan}", style = "bold" },
-      markdownH3            = { fg = "${cyan}" },
-      markdownH4            = { fg = "${green}", style = "italic" },
-      markdownH5            = { fg = "${green}", style = "italic" },
-      markdownH6            = { fg = "${green}", style = "italic" },
-      htmlH1                = { fg = "${cyan}", style = "bold" },
-      htmlH2                = { fg = "${cyan}", style = "bold" },
-      htmlH3                = { fg = "${cyan}" },
-      htmlH4                = { fg = "${green}", style = "italic" },
-      htmlH5                = { fg = "${green}", style = "italic" },
-      htmlH6                = { fg = "${green}", style = "italic" }
+      mkdLink                = { fg = "${blue}", style = "underline" },
+      mkdURL                 = { fg = "${green}", style = "underline" },
+      mkdInlineURL           = { fg = "${blue}", style = "underline" },
+      TSURI                  = { fg = "${blue}", style = "underline" },
+      TSPunctSpecial         = { fg = "{$red}" },
+      markdownTSTitle        = { fg = "${cyan}", style = "bold" },
+      markdownAutomaticLink  = { fg = "${blue}", style = "underline" },
+      markdownLink           = { fg = "${green}", style = "underline" },
+      markdownLinkText       = { fg = "${blue}", style = "underline" },
+      markdownUrl            = { fg = "${green}", style = "underline" },
+      markdownWikiLink       = { fg = "${blue}", style = "underline" },
+      markdownH1             = { fg = "${cyan}", style = "bold" },
+      markdownH2             = { fg = "${cyan}", style = "bold" },
+      markdownH3             = { fg = "${cyan}" },
+      markdownH4             = { fg = "${green}", style = "italic" },
+      markdownH5             = { fg = "${green}", style = "italic" },
+      markdownH6             = { fg = "${green}", style = "italic" },
+      htmlH1                 = { fg = "${cyan}", style = "bold" },
+      htmlH2                 = { fg = "${cyan}", style = "bold" },
+      htmlH3                 = { fg = "${cyan}" },
+      htmlH4                 = { fg = "${green}", style = "italic" },
+      htmlH5                 = { fg = "${green}", style = "italic" },
+      htmlH6                 = { fg = "${green}", style = "italic" },
+      TelescopeBorder        = {
+        fg = "${telescope_results}",
+        bg = "${telescope_results}",
+      },
+      TelescopePromptBorder  = {
+        fg = "${telescope_prompt}",
+        bg = "${telescope_prompt}",
+      },
+      TelescopePromptCounter = { fg = "${fg}" },
+      TelescopePromptNormal  = { fg = "${fg}", bg = "${telescope_prompt}" },
+      TelescopePromptPrefix  = {
+        fg = "${purple}",
+        bg = "${telescope_prompt}",
+      },
+      TelescopePromptTitle   = {
+        fg = "${telescope_prompt}",
+        bg = "${purple}",
+      },
+
+      TelescopePreviewTitle = {
+        fg = "${telescope_results}",
+        bg = "${green}",
+      },
+      TelescopeResultsTitle = {
+        fg = "${telescope_results}",
+        bg = "${telescope_results}",
+      },
+
+      TelescopeMatching = { fg = "${blue}" },
+      TelescopeNormal = { bg = "${telescope_results}" },
+      TelescopeSelection = { bg = "${telescope_prompt}" },
     },
     styles = { -- Choose from "bold,italic,underline"
       virtual_text = "italic", -- Style that is applied to virtual text
@@ -146,21 +195,20 @@ M.defaults = function()
       transparency = false,
       terminal_colors = true,
       window_unfocussed_color = true
-    }
+    },
+    colors = {
+      onedark = {
+        telescope_prompt = "#2e323a",
+        telescope_results = "#21252d",
+      },
+      onelight = {
+        telescope_prompt = "#f5f5f5",
+        telescope_results = "#eeeeee",
+      },
+    },
   })
   vim.cmd('colorscheme onedarkpro')
   vim.cmd('syntax on')
-
-  -- Wiki syntax additions
-  vim.api.nvim_exec([[
-      " markdownWikiLink is a new region
-      syn region markdownWikiLink matchgroup=markdownLinkDelimiter start="\[\[" end="\]\]" contains=markdownUrl keepend oneline concealends
-      " markdownLinkText is copied from runtime files with 'concealends' appended
-      syn region markdownLinkText matchgroup=markdownLinkTextDelimiter start="!\=\[\%(\%(\_[^][]\|\[\_[^][]*\]\)*]\%( \=[[(]\)\)\@=" end="\]\%( \=[[(]\)\@=" nextgroup=markdownLink,markdownId skipwhite contains=@markdownInline,markdownLineStart concealends
-      " markdownLink is copied from runtime files with 'conceal' appended
-      syn region markdownLink matchgroup=markdownLinkDelimiter start="(" end=")" contains=markdownUrl keepend contained conceal
-    ]], false)
-
   -- Brief highlight on yank
   vim.api.nvim_exec([[
     augroup YankHighlight
