@@ -734,41 +734,46 @@ M.telescope = function()
           ["<C-y>"] = yank_selected_entry,
           ["<C-o>"] = system_open_selected_entry
         }
-      }
-    },
-    vimgrep_arguments = {
-      "rg",
-      "--color=never",
-      "--no-heading",
-      "--with-filename",
-      "--line-number",
-      "--column",
-      "--smart-case",
-    },
-    -- Telescope smart history
-    history = {
-      path = '~/.local/share/nvim/databases/telescope_history.sqlite3',
-      limit = 100,
-    },
-    layout_strategy = "flex",
-    layout_config = {
-      horizontal = {
-        prompt_position = "top",
-        preview_width = 0.55,
-        results_width = 0.8,
       },
-      vertical = {
-        mirror = false,
+      vimgrep_arguments = {
+        "rg",
+        "--color=never",
+        "--no-heading",
+        "--with-filename",
+        "--line-number",
+        "--column",
+        "--smart-case",
       },
-      width = 0.87,
-      height = 0.80,
-      preview_cutoff = 1,
+      -- Telescope smart history
+      history = {
+        path = '~/.local/share/nvim/databases/telescope_history.sqlite3',
+        limit = 100,
+      },
+      layout_strategy = "flex",
+      layout_config = {
+        horizontal = {
+          prompt_position = "top",
+          preview_width = 0.55,
+          results_width = 0.8,
+        },
+        vertical = {
+          mirror = false,
+        },
+        width = 0.87,
+        height = 0.80,
+        preview_cutoff = 1,
+      },
+      color_devicons = true,
+      set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
+      -- following are better choices, but currently detecting some text files as binary and not
+      -- syntax highlighting markdown files, so going with external previewers (bat) for now. 2022-08-03
+      --file_previewer = require("telescope.previewers").vim_buffer_cat.new,
+      --grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
+      --qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
+      file_previewer = require("telescope.previewers").cat.new,
+      grep_previewer = require("telescope.previewers").vimgrep.new,
+      qflist_previewer = require("telescope.previewers").qflist.new,
     },
-    color_devicons = true,
-    set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
-    file_previewer = require("telescope.previewers").vim_buffer_cat.new,
-    grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
-    qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
 
     extensions = {
       fzy_native = {
