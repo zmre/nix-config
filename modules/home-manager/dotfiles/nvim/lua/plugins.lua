@@ -754,7 +754,6 @@ M.telescope = function()
         horizontal = {
           prompt_position = "top",
           preview_width = 0.55,
-          results_width = 0.8,
         },
         vertical = {
           mirror = false,
