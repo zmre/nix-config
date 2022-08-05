@@ -61,7 +61,7 @@
     interfaces.wlan0.useDHCP = true;
 
     # use local dns server that uses privacy preserving dns over tls
-    nameservers = [ "127.0.0.1" "::1" ];
+    nameservers = [ "127.0.0.1" "::1" "1.1.1.1" ];
     resolvconf.useLocalResolver = true;
     firewall.enable = true;
     firewall.checkReversePath = false; # disable rpfilter so wireguard works
