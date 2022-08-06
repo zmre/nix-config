@@ -47,7 +47,10 @@
   # suggest install package if cmd missing
   programs.command-not-found.enable = true;
 
-  hm = { pkgs, ... }: { imports = [ ../home-manager/home-linux.nix ]; };
+  hm = { pkgs, ... }: {
+    imports =
+      [ ../home-manager/home-linux.nix ../home-manager/home-security.nix ];
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users = {

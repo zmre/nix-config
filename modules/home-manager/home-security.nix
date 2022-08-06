@@ -20,7 +20,7 @@
       masscan
       nikto
       onesixtyone
-      nmap-graphical
+      nmap # -graphical
       rustscan
       snmpcheck
       sslscan
