@@ -433,6 +433,7 @@ in {
       FixCursorHold-nvim # remove this when neovim #12587 is resolved
       impatient-nvim # speeds startup times by caching lua bytecode
       which-key-nvim
+      direnv-vim # auto-execute nix direnv setups
       #nvim-whichkey-setup-lua
     ];
   };

@@ -116,6 +116,7 @@
       "Kindle" = 405399194;
       "Monodraw" = 920404675; # ASCII drawings
       "NextDNS" = 1464122853;
+      "NotePlan - Agenda & Notes" = 1505432629;
       "PCalc" = 403504866;
       "PeakHour" = 1241445112;
       "Pocket" = 568494494;

@@ -224,17 +224,17 @@ M.gui = function()
   -- vim.opt.guifont = "Liga DejaVuSansMono Nerd Font:h16"
   -- vim.opt.guifont = "FiraCode Nerd Font:h16" -- no italics
   if vim.fn.has('mac') then
-    vim.opt.guifont = "MesloLGS Nerd Font:h18"
+    vim.opt.guifont = "Hasklug Nerd Font:h18"
   else
     vim.opt.guifont = "Hasklug Nerd Font:h9"
   end
   if vim.g.neovide ~= nil then
-    vim.g.neovide_transparency = 0.8
+    vim.g.neovide_transparency = 0.92
     vim.g.neovide_cursor_animation_length = 0.01
     vim.g.neovide_cursor_trail_length = 0.1
     vim.g.neovide_cursor_antialiasing = true
     -- Needed so Neovide can find rustfmt and probably other rust tools
-    vim.env.PATH = vim.env.PATH .. ':/Users/pwalsh/.cargo/bin'
+    -- vim.env.PATH = vim.env.PATH .. ':/Users/pwalsh/.cargo/bin'
   end
   vim.opt.mouse = "nv" -- only use mouse in normal and visual modes (notably not insert and command)
   vim.opt.mousemodel = "popup_setpos"
