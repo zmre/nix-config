@@ -42,7 +42,7 @@
       "imageoptim"
       "insta360-studio"
       "istat-menus"
-      "karabiner-elements"
+      #"karabiner-elements"
       "kindavim"
       "little-snitch"
       "lockrattler"

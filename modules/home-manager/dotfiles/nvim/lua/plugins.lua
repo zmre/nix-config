@@ -271,6 +271,7 @@ M.ui = function()
     }
   }
   require 'treesitter-context'.setup {
+    max_lines = 0, -- no max window height
     patterns = {
       markdown = { "atx_heading" }
     },
@@ -717,7 +718,7 @@ M.telescope = function()
   end
 
   require('telescope').setup {
-    file_ignore_patterns = { "*.bak", ".git/", "node_modules" },
+    file_ignore_patterns = { "*.bak", ".git/", "node_modules", ".zk/", "Caches/" },
     prompt_prefix = " ",
     selection_caret = " ",
     path_display = { "smart" },

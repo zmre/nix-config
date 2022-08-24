@@ -724,7 +724,7 @@ in {
       content.pdfjs = true;
       content.autoplay = false;
       # Disable smooth scrolling on mac because of https://github.com/qutebrowser/qutebrowser/issues/6840
-      scrolling.smooth = if pkgs.stdenvNoCC.isDarwin then false else true;
+      scrolling.smooth = if stdenv.isDarwin then false else true;
       auto_save.session = true; # remember open tabs
       session.lazy_restore = true;
       # if input is focused on tab load, allow typing
