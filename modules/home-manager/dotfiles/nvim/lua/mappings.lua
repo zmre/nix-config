@@ -167,6 +167,7 @@ local leader_mappings = {
     c = {
       "<cmd>lua require('telescope.builtin').git_commits()<cr>", "Commits"
     },
+    h = { "<cmd>lua require 'gitsigns'.toggle_current_line_blame", "Toggle Blame" },
     ["-"] = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
     ["+"] = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" }
   },
