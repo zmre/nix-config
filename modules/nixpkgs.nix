@@ -11,13 +11,13 @@
       ${lib.optionalString (config.nix.package == pkgs.stable.nix_2_6)
       "experimental-features = nix-command flakes"}
     '';
-    #settings = {
-    #useSandbox = true;
-    #allowedUsers = [ "@wheel" ];
-    #trustedUsers = [ "${config.user.name}" "root" "@admin" "@wheel" ];
-    #maxJobs = 8;
-    #buildCores = 0; # use them all
-    #};
+    settings = {
+      sandbox = true;
+      trusted-users = [ "${config.user.name}" "root" "@admin" "@wheel" ];
+      max-jobs = 8;
+      cores = 0; # use them all
+      allowed-users = [ "@wheel" ];
+    };
     #autoOptimiseStore = true;
     #optimise.automatic = true;
     gc = {
