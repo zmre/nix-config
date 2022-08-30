@@ -1665,8 +1665,9 @@ in {
       # Purpose of this is to allow for opening multiple selected files. Default only works on one.
       # Default will use data from mimetype associations.
       # Note: this gets overridden when in selection-path (file dialog) mode
-      open = ''
-        &{{ for f in $fx; do xdg-open "$f" 2>&1 > /dev/null || open "$f" 2>&1 > /dev/null" ; done }}'';
+      # Fancy command isn't working; let the default go to work
+      #open = ''
+      #&{{ for f in $fx; do xdg-open "$f" 2>&1 > /dev/null || open "$f" 2>&1 > /dev/null" ; done }}'';
 
       # for use as file chooser
       printfx = "\${{echo $fx}}";

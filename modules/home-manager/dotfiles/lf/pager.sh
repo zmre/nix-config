@@ -2,6 +2,11 @@
 
 # I use fairly exhaustive extension lists in order to avoid the hit from checking the mimetype if possible
 
+if [[ $OSTYPE == 'darwin'* ]]; then
+  qlmanage -x -p "$1"
+  exit
+fi
+
 case "$1" in
   *.tar*|*.tgz) tar tf "$1" |less;;
   *.zip) unzip -l "$1" |less;;
