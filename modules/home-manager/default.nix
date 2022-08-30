@@ -80,7 +80,7 @@ let
     # failing to build latest myself; official is 7 months behind
     # moving this to brew 2022-07-11 :-(
     #pkgs.zk-latest # cli for indexing markdown files
-    #pkgs.zk # cli for indexing markdown files
+    pkgs.zk # cli for indexing markdown files
     pastel # cli for color manipulation
     kopia # deduping backup
 
@@ -322,7 +322,7 @@ in {
     extraPackages = with pkgs; [
       vale # style checker for writing
       proselint # style checker for writing
-      zk # note finder
+      #zk # note finder -- moved this to global location
     ];
     # make sure impatient is loaded before everything else to speed things up
     extraConfig = ''
