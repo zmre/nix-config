@@ -127,7 +127,7 @@ M.defaults = function()
   require("onedarkpro").setup({
     dark_theme = "onedark",
     light_theme = "onelight",
-    hlgroups = {
+    highlights = {
       mkdLink                = { fg = "${blue}", style = "underline" },
       mkdURL                 = { fg = "${green}", style = "underline" },
       mkdInlineURL           = { fg = "${blue}", style = "underline" },
@@ -194,7 +194,7 @@ M.defaults = function()
       cursorline = true,
       transparency = false,
       terminal_colors = true,
-      window_unfocussed_color = true
+      window_unfocused_color = true
     },
     colors = {
       onedark = {

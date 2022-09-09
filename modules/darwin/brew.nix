@@ -1,13 +1,13 @@
 { inputs, config, pkgs, ... }: {
   homebrew = {
     enable = true;
-    autoUpdate = true;
-    cleanup =
-      "uninstall"; # should maybe be "zap" - remove anything not listed here
-    global = {
-      brewfile = true;
-      noLock = true;
+    onActivation = {
+      autoUpdate = true;
+      upgrade = true;
+      cleanup =
+        "uninstall"; # should maybe be "zap" - remove anything not listed here
     };
+    global = { brewfile = true; };
 
     taps = [
       "homebrew/bundle"

@@ -54,10 +54,10 @@
       # auto show and hide dock
       autohide = true;
       # remove delay for showing dock
-      autohide-delay = "0.0";
+      autohide-delay = 0.0;
       # how fast is the dock showing animation
-      autohide-time-modifier = "0.2";
-      expose-animation-duration = "0.2";
+      autohide-time-modifier = 0.2;
+      expose-animation-duration = 0.2;
       tilesize = 48;
       launchanim = false;
       static-only = false;
@@ -84,12 +84,12 @@
       # auto switch between light/dark mode
       AppleInterfaceStyleSwitchesAutomatically = false;
       "com.apple.sound.beep.feedback" = 1;
-      "com.apple.sound.beep.volume" = "0.6065307"; # 50%
+      "com.apple.sound.beep.volume" = 0.6065307; # 50%
       "com.apple.mouse.tapBehavior" = 1; # tap to click
       "com.apple.swipescrolldirection" = true; # "natural" scrolling
       "com.apple.keyboard.fnState" = true;
       "com.apple.springing.enabled" = false;
-      "com.apple.trackpad.scaling" = "3"; # fast
+      "com.apple.trackpad.scaling" = 3.0; # fast
       "com.apple.trackpad.enableSecondaryClick" = true;
       # enable full keyboard control
       AppleKeyboardUIMode = 3;
@@ -112,7 +112,7 @@
       NSNavPanelExpandedStateForSaveMode2 = true;
       NSDocumentSaveNewDocumentsToCloud = false;
       # speed up animation on open/save boxes (default:0.2)
-      NSWindowResizeTime = "0.1";
+      NSWindowResizeTime = 0.1;
       PMPrintingExpandedStateForPrint = true;
       PMPrintingExpandedStateForPrint2 = true;
     };
