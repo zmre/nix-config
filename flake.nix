@@ -55,10 +55,10 @@
       url = "github:nvim-telescope/telescope-media-files.nvim";
       flake = false;
     };
-    vim-roam-task = {
-      url = "github:samgriesemer/vim-roam-task";
-      flake = false;
-    };
+    # vim-roam-task = {
+    #   url = "github:samgriesemer/vim-roam-task";
+    #   flake = false;
+    # };
     hackernews-tui = {
       url = "github:aome510/hackernews-TUI";
       flake = false;

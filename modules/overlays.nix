@@ -33,11 +33,11 @@
 
       # Overlay that adds some additional Neovim plugins
       vimPlugins = prev.vimPlugins // {
-        vim-roam-task = prev.vimUtils.buildVimPluginFrom2Nix {
-          name = "vim-roam-task";
-          pname = "vim-roam-task";
-          src = inputs.vim-roam-task;
-        };
+        # vim-roam-task = prev.vimUtils.buildVimPluginFrom2Nix {
+        #   name = "vim-roam-task";
+        #   pname = "vim-roam-task";
+        #   src = inputs.vim-roam-task;
+        # };
         telescope-media-files = prev.vimUtils.buildVimPlugin {
           name = "telescope-media-files";
           pname = "telescope-media-files";

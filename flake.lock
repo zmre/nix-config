@@ -454,7 +454,6 @@
         "sbhosts": "sbhosts",
         "surround-nvim": "surround-nvim",
         "telescope-media-files": "telescope-media-files",
-        "vim-roam-task": "vim-roam-task",
         "zk-nvim": "zk-nvim"
       }
     },
@@ -557,22 +556,6 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "vim-roam-task": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1641879988,
-        "narHash": "sha256-fjp9FJevZbcic4zVb9gbHDxeAxqrEEIpQfdhNzrD7K0=",
-        "owner": "samgriesemer",
-        "repo": "vim-roam-task",
-        "rev": "ee293dee7daf220cbcf86fb1c8c39b7daaccf1aa",
-        "type": "github"
-      },
-      "original": {
-        "owner": "samgriesemer",
-        "repo": "vim-roam-task",
         "type": "github"
       }
     },

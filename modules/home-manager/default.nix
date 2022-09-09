@@ -316,9 +316,9 @@ in {
     enable = true;
     viAlias = true;
     vimAlias = true;
-    # solely needed for taskwiki/vim-roam-task
-    withPython3 = true;
-    extraPython3Packages = (ps: with ps; [ pynvim tasklib six ]);
+    # solely needed for taskwiki/vim-roam-task; now commented as removing
+    #withPython3 = true;
+    #extraPython3Packages = (ps: with ps; [ pynvim tasklib six ]);
     extraPackages = with pkgs; [
       vale # style checker for writing
       proselint # style checker for writing
@@ -417,7 +417,11 @@ in {
       friendly-snippets # actual library of snippets used by luasnip
 
       # Notes
-      vim-roam-task # a clone of taskwiki that doesn't require vimwiki
+      # 2022-08-30 I have quite liked taskwiki and vim-roam-task, but both use a #ab12ff
+      # style of tagging tasks that confuses the hell out of markdown editors
+      # that are tag aware. As I'm using NotePlan now to collect tasks, I'm
+      # removing this. 
+      #vim-roam-task # a clone of taskwiki that doesn't require vimwiki
       zk-nvim # lsp for a folder of notes for searching/linking/etc.
       goyo-vim # distraction free, width constrained writing mode
       limelight-vim # pairs with goyo for typewriter mode dimming inactive paragraphs
