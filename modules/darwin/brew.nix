@@ -74,7 +74,7 @@
       "sync"
       "syncthing"
       "textexpander"
-      "ticktick"
+      #"ticktick"
       "tor-browser"
       "transmission"
       "transmit" # for syncing folders with dropbox on-demand instead of using their broken software
