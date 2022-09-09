@@ -58,9 +58,10 @@
       #"qflipper" # TODO: add this back when their site is back up
       "qutebrowser"
       "qlmarkdown"
-      "qlprettypatch"
+      "qlstephen"
+      #"qlprettypatch" # not updated in 9 years
       "qlvideo"
-      "quicklookase"
+      #"quicklookase" # not updated in 6 years
       "reikey"
       "raycast"
       #"ricoh-ps-printers-vol4-exp-driver" # homebrew is years out of date; have to install manually
@@ -83,7 +84,7 @@
       # causes constant crashes whenever a folder or open/save dialog opens a folder with an 
       # illustrator file in it. i reported it almost 3 years ago and there's a long thread of
       # others complaining about the same problem. i'd be done with dropbox entirely if i could.
-      "webpquicklook"
+      #"webpquicklook" # not updated in 5 years
       "xbar"
       "yubico-yubikey-manager"
       "zenmap"
