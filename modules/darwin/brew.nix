@@ -53,6 +53,7 @@
       #"mpv"
       "noun-project"
       "obs"
+      "orion" # just trying out the Orion browser
       "parallels"
       "protonmail-bridge" # TODO: nix version now installs and works -- move over
       #"qflipper" # TODO: add this back when their site is back up
@@ -115,9 +116,13 @@
       "Keynote" = 409183694;
       "Keyshape" = 1223341056; # animated svg editor
       "Kindle" = 405399194;
+      "Microsoft Excel" = 462058435;
+      "Microsoft Word" = 462054704;
+      "Microsoft PowerPoint" = 462062816;
       "Monodraw" = 920404675; # ASCII drawings
       "NextDNS" = 1464122853;
-      "NotePlan - Agenda & Notes" = 1505432629;
+      "NotePlan 3" = 1505432629;
+      "OneDrive" = 823766827;
       "PCalc" = 403504866;
       "PeakHour" = 1241445112;
       "Pocket" = 568494494;

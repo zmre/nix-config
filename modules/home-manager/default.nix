@@ -1389,6 +1389,8 @@ in {
     enable = true;
     enableZshIntegration = true;
     tmux.enableShellIntegration = true;
+    defaultCommand = "fd --type f --hidden --exclude .git";
+    fileWidgetCommand = "fd --type f"; # for when ctrl-t is pressed
   };
   programs.ssh = {
     enable = true;
@@ -1531,19 +1533,23 @@ in {
 
       # Customize fzf plugin to use fd
       # Should default to ignore anything in ~/.gitignore
-      export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+      #export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
       # Use fd (https://github.com/sharkdp/fd) instead of the default find
       # command for listing path candidates.
       # - The first argument to the function ($1) is the base path to start traversal
       # - See the source code (completion.{bash,zsh}) for the details.
-      _fzf_compgen_path() {
-        \fd --hidden --follow . "$1"
-      }
+      #_fzf_compgen_path() {
+        #\fd --hidden --follow . "$1"
+      #}
 
       # Use fd to generate the list for directory completion
-      _fzf_compgen_dir() {
-        \fd --type d --hidden --follow . "$1"
-      }
+      #_fzf_compgen_dir() {
+        #\fd --type d --hidden --follow . "$1"
+      #}
+
+      # Per https://github.com/junegunn/fzf/wiki/Configuring-fuzzy-completion
+      # Since fzf init comes before this, and we setopt vi, we need to reassign:
+      bindkey '^I' fzf-completion
 
       # Needed for lf to be pretty
       . ~/.config/lf/lficons.sh
