@@ -221,6 +221,8 @@ in {
   system.stateVersion = 4;
 
   # allow touchid to auth sudo -- this comes from pam.nix, which needs to be loaded before this
-  security.pam.enableSudoTouchIdAuth = true;
+  # it's now standard to nix-darwin, but without the special sauch needed for tmux, so we
+  # will continue using our custom script
+  security.pam.enableCustomSudoTouchIdAuth = true;
 
 }

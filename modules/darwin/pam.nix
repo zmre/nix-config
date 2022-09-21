@@ -3,12 +3,16 @@
 
 with lib;
 
+# The PR https://github.com/LnL7/nix-darwin/pull/228 theoretically makes this file standard
+# BUT... they didn't add the pam_reattach stuff, which means it doesn't work in tmux, which
+# means I need to keep this in place until someone makes it better. So changing the name
+# to avoid conflicts.
 let
   cfg = config.security.pam;
   mkSudoTouchIdAuthScript = isEnabled:
     let
       file = "/etc/pam.d/sudo";
-      option = "security.pam.enableSudoTouchIdAuth";
+      option = "security.pam.enableCustomSudoTouchIdAuth";
     in ''
       ${if isEnabled then ''
         # Enable sudo Touch ID authentication, if not already enabled
@@ -28,7 +32,7 @@ let
 
 in {
   options = {
-    security.pam.enableSudoTouchIdAuth = mkEnableOption ''
+    security.pam.enableCustomSudoTouchIdAuth = mkEnableOption ''
       Enable sudo authentication with Touch ID
       When enabled, this option adds the following line to /etc/pam.d/sudo:
           auth       optional     /opt/homebrew/lib/pam/pam_reattach.so
@@ -43,7 +47,7 @@ in {
     system.activationScripts.extraActivation.text = ''
       # PAM settings
       echo >&2 "setting up pam..."
-      ${mkSudoTouchIdAuthScript cfg.enableSudoTouchIdAuth}
+      ${mkSudoTouchIdAuthScript cfg.enableCustomSudoTouchIdAuth}
     '';
   };
 }
