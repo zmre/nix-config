@@ -22,7 +22,7 @@
     casks = [
       "adobe-creative-cloud"
       "amethyst" # for window tiling -- I miss chunkwm but it's successor, yabai, was unstable.
-      "audio-hijack"
+      #"audio-hijack"
       # Backblaze just adds the Backblaze Installer to the caskroom. Doesn't link it. Worthless.
       #"backblaze"
       "bartender" # organize status bar
@@ -30,7 +30,7 @@
       "brave-browser"
       "canon-eos-utility"
       "canon-eos-webcam-utility"
-      "choosy" # multi-browser url launch selector
+      "choosy" # multi-browser url launch selector; see also https://github.com/johnste/finicky
       "dash" # offline developer docs
       "default-folder-x"
       "discord"
@@ -46,17 +46,17 @@
       "kindavim"
       "little-snitch"
       "lockrattler"
-      "logseq"
-      "loopback"
+      #"logseq"
+      #"loopback" -- haven't been using this of late
       "marked"
-      "microsoft-office"
+      #"microsoft-office" -- moved this to apple app store
       #"mpv"
       "noun-project"
       "obs"
       "orion" # just trying out the Orion browser
       "parallels"
       "protonmail-bridge" # TODO: nix version now installs and works -- move over
-      #"qflipper" # TODO: add this back when their site is back up
+      "qflipper"
       "qutebrowser"
       "qlmarkdown"
       "qlstephen"
@@ -71,7 +71,7 @@
       "silnite"
       "skype"
       "spotify"
-      "superhuman"
+      #"superhuman" # mail client
       "sync"
       "syncthing"
       "textexpander"
@@ -86,12 +86,13 @@
       # illustrator file in it. i reported it almost 3 years ago and there's a long thread of
       # others complaining about the same problem. i'd be done with dropbox entirely if i could.
       #"webpquicklook" # not updated in 5 years
-      "xbar"
+      #"xbar"
+      #"yattee" # private youtube
       "yubico-yubikey-manager"
       "zenmap"
       "zoom"
       "zotero"
-      # would be better to load these in a security shell, but nix versions don't build on mac
+      # would be better to load  hese in a security shell, but nix versions don't build on mac
       "owasp-zap"
       "burp-suite"
       "webex"
