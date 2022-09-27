@@ -88,8 +88,8 @@ vim.api.nvim_set_keymap('', '#8', '"=strftime("%Y-%m-%d")<CR>P', options)
 vim.api.nvim_set_keymap('!', '#8', '<C-R>=strftime("%Y-%m-%d")<CR>', options)
 
 -- Make F9 toggle distraction-free writing setup
-vim.api.nvim_set_keymap('', '#9', ':Goyo<CR>', options)
-vim.api.nvim_set_keymap('!', '#9', '<ESC>:Goyo<CR>i', options)
+vim.api.nvim_set_keymap('', '#9', ':TZAtaraxis<CR>', options)
+vim.api.nvim_set_keymap('!', '#9', ':TZAtaraxis<CR>', options)
 
 -- Make F12 restart highlighting
 vim.api.nvim_set_keymap('', '<F12>', ':syntax sync fromstart<CR>', options)

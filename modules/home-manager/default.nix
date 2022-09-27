@@ -423,8 +423,8 @@ in {
       # removing this. 
       #vim-roam-task # a clone of taskwiki that doesn't require vimwiki
       zk-nvim # lsp for a folder of notes for searching/linking/etc.
-      goyo-vim # distraction free, width constrained writing mode
-      limelight-vim # pairs with goyo for typewriter mode dimming inactive paragraphs
+      true-zen-nvim # distraction free, width constrained writing mode
+      twilight-nvim # dim text outside of current scope
       {
         plugin = vim-grammarous; # grammar check
         optional = true; # don't want it to load unless it's needed

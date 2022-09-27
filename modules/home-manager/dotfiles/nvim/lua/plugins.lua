@@ -914,7 +914,7 @@ M.completions = function()
 end -- completions
 
 ----------------------- NOTES --------------------------------
--- zk (zettelkasten lsp), taskwiki, goyo, grammar
+-- zk (zettelkasten lsp), taskwiki, focus mode, grammar
 M.notes = function()
   vim.g.taskwiki_disable_concealcursor = 'yes'
   vim.g.taskwiki_markdown_syntax = 'markdown'
@@ -1022,33 +1022,113 @@ M.notes = function()
     }
   })
 
-  -- Focus mode
-  -- Color name (:help cterm-colors) or ANSI code
-  vim.g.limelight_conceal_ctermfg = 240
-  vim.g.limelight_conceal_guifg = '#777777'
+  -- Focus mode dimming of text out of current block
+  require("twilight").setup {
+    dimming = {
+      alpha = 0.25, -- amount of dimming
+      -- we try to get the foreground from the highlight groups or fallback color
+      color = { "Normal", "#ffffff" },
+      term_bg = "#000000", -- if guibg=NONE, this will be used to calculate text color
+      inactive = true, -- when true, other windows will be fully dimmed (unless they contain the same buffer)
+    },
+    context = 12, -- amount of lines we will try to show around the current line
+    treesitter = true, -- use treesitter when available for the filetype
+    -- treesitter is used to automatically expand the visible text,
+    -- but you can further control the types of nodes that should always be fully expanded
+    expand = { -- for treesitter, we we always try to expand to the top-most ancestor with these types
+      "function",
+      "method",
+      "table",
+      "if_statement",
+    },
+    exclude = {}, -- exclude these filetypes
+  }
 
-  -- Number of preceding/following paragraphs to include (default: 0)
-  vim.g.limelight_paragraph_span = 1
-  -- Max width for writing
-  vim.g.goyo_width = 100
-
-  function Goyo_enter()
-    -- Keep cursor roughly centered on the screen in typewriter mode
-    vim.opt.scrolloff = 999
-    local ft = vim.api.nvim_buf_get_option(0, "filetype")
-    if ft == "vimwiki" or ft == "markdown" then
-      vim.cmd("Limelight") -- Turn on dimmimng of non-active paragraph
-    end
-  end
-
-  function Goyo_leave()
-    -- Keep cursor roughly centered on the screen in typewriter mode
-    vim.opt.scrolloff = 8
-    vim.cmd("Limelight!") -- Turn off dimmimng unconditionally
-  end
-
-  vim.cmd('autocmd! User GoyoEnter nested lua Goyo_enter()')
-  vim.cmd('autocmd! User GoyoLeave nested lua Goyo_leave()')
+  -- Focus mode / centering
+  require("true-zen").setup {
+    -- your config goes here
+    -- or just leave it empty :)
+    modes = { -- configurations per mode
+      ataraxis = {
+        shade = "dark", -- if `dark` then dim the padding windows, otherwise if it's `light` it'll brighten said windows
+        backdrop = 0, -- percentage by which padding windows should be dimmed/brightened. Must be a number between 0 and 1. Set to 0 to keep the same background color
+        minimum_writing_area = { -- minimum size of main window
+          width = 70,
+          height = 44,
+        },
+        quit_untoggles = true, -- type :q or :qa to quit Ataraxis mode
+        padding = { -- padding windows
+          left = 52,
+          right = 52,
+          top = 0,
+          bottom = 0,
+        },
+        callbacks = { -- run functions when opening/closing Ataraxis mode
+          open_pre = function()
+            vim.opt.scrolloff = 999
+          end,
+          open_pos = nil,
+          close_pre = nil,
+          close_pos = function()
+            vim.opt.scrolloff = 8
+          end
+        },
+      },
+      minimalist = {
+        ignored_buf_types = { "nofile" }, -- save current options from any window except ones displaying these kinds of buffers
+        options = { -- options to be disabled when entering Minimalist mode
+          number = false,
+          relativenumber = false,
+          showtabline = 0,
+          signcolumn = "no",
+          statusline = "",
+          cmdheight = 1,
+          laststatus = 0,
+          showcmd = false,
+          showmode = false,
+          ruler = false,
+          numberwidth = 1
+        },
+        callbacks = { -- run functions when opening/closing Minimalist mode
+          open_pre = nil,
+          open_pos = nil,
+          close_pre = nil,
+          close_pos = nil
+        },
+      },
+      narrow = {
+        --- change the style of the fold lines. Set it to:
+        --- `informative`: to get nice pre-baked folds
+        --- `invisible`: hide them
+        --- function() end: pass a custom func with your fold lines. See :h foldtext
+        folds_style = "informative",
+        run_ataraxis = true, -- display narrowed text in a Ataraxis session
+        callbacks = { -- run functions when opening/closing Narrow mode
+          open_pre = nil,
+          open_pos = nil,
+          close_pre = nil,
+          close_pos = nil
+        },
+      },
+      focus = {
+        callbacks = { -- run functions when opening/closing Focus mode
+          open_pre = nil,
+          open_pos = nil,
+          close_pre = nil,
+          close_pos = nil
+        },
+      }
+    },
+    integrations = {
+      tmux = false, -- hide tmux status bar in (minimalist, ataraxis)
+      kitty = { -- increment font size in Kitty. Note: you must set `allow_remote_control socket-only` and `listen_on unix:/tmp/kitty` in your personal config (ataraxis)
+        enabled = false,
+        font = "+3"
+      },
+      twilight = true, -- enable twilight (ataraxis)
+      lualine = false -- hide nvim-lualine (ataraxis)
+    },
+  }
 
   -- Grammar
   vim.g["grammarous#disabled_rules"] = {
