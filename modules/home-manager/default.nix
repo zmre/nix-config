@@ -60,7 +60,7 @@ let
     pkgs.yt-dlp
     vulnix # check for live nix apps that are listed in NVD
     tickrs # track stocks
-    taskwarrior-tui
+    #taskwarrior-tui
     aspell # spell checker
     kalker # cli calculator; alt. to bc and calc
     nix-tree # explore dependencies
@@ -127,6 +127,7 @@ let
   networkPkgs = with pkgs.stable; [ mtr iftop ];
   guiPkgs = with pkgs;
     [
+      element-desktop
       # 22-01-29 currently fails on mac with "could not compile futures-util" :(
       #neovide
     ];
