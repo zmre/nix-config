@@ -614,7 +614,7 @@ M.diagnostics = function()
         args = {
           "-f", "json", "--stdin", "--stdin-filename", "$FILENAME"
         }
-      }, diagnostics.proselint, codeactions.proselint, -- diagnostics.vale
+      }, diagnostics.vale,
       null_ls.builtins.hover.dictionary
       -- removed formatting.rustfmt since rust_analyzer seems to do the same thing
     },

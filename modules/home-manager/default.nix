@@ -323,7 +323,7 @@ in {
     # solely needed for taskwiki/vim-roam-task; now commented as removing
     #withPython3 = true;
     #extraPython3Packages = (ps: with ps; [ pynvim tasklib six ]);
-    extraPackages = with pkgs; [
+    extraPackages = with pkgs; [ # unstable
       vale # style checker for writing
       proselint # style checker for writing
       #zk # note finder -- moved this to global location
@@ -479,16 +479,33 @@ in {
   home.file."${config.xdg.configHome}/nvim/parser/regex.so".source =
     "${pkgs.tree-sitter.builtGrammars.tree-sitter-regex}/parser";
   # Prose linting
+  home.file."${config.xdg.configHome}/proselint/config.json".text = ''
+    {
+      "checks": {
+        "typography.symbols.curly_quotes": false,
+        "typography.symbols.ellipsis": false
+      }
+    }
+  '';
+  home.file.".styles".source = ./dotfiles/vale-styles;
   home.file.".vale.ini".text = ''
     StylesPath = .styles
 
     MinAlertLevel = suggestion
-    Vocab = Base
 
-    Packages = Google, proselint
+    Packages = Google, proselint, alex, Readability
 
     [*]
     BasedOnStyles = Vale, Google, proselint
+    IgnoredScopes = code, tt
+    SkippedScopes = script, style, pre, figure
+    Google.FirstPerson = NO
+    Google.We = NO
+    Google.Acronyms = NO
+    Google.Units = NO
+    Google.Spacing = NO
+    proselint.Typography = NO
+    Vale.Spelling = NO
   '';
 
   # I really don't use VSCode. I try it now and then to see what I think.
