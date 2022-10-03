@@ -497,6 +497,8 @@ M.diagnostics = function()
       nowait = true -- use `nowait` when creating keymaps
     }
 
+    require("symbols-outline").setup()
+
     local leader_mappings = {
       ["q"] = { "<cmd>TroubleToggle<CR>", "Show Trouble list" },
       l = {
@@ -929,7 +931,7 @@ M.notes = function()
     picker = "telescope",
     -- automatically attach buffers in a zk notebook that match the given filetypes
     lsp = {
-      auto_attach = { enabled = true, filetypes = { "markdown", "vimwiki" } },
+      auto_attach = { enabled = true, filetypes = { "markdown", "vimwiki", "md" } },
       config = {
         on_attach = function(_, bufnr)
           print("ZK attached")
@@ -1017,6 +1019,8 @@ M.notes = function()
           vim.api.nvim_buf_set_keymap(bufnr, "", "K",
             "<Cmd>lua vim.lsp.buf.hover()<CR>",
             opts)
+
+          require('zmre.options').tabindent()
         end
       }
     }
@@ -1065,7 +1069,7 @@ M.notes = function()
         },
         callbacks = { -- run functions when opening/closing Ataraxis mode
           open_pre = function()
-            vim.opt.scrolloff = 999
+            vim.opt.scrolloff = 999 -- keep cursor in vertical middle of screen
           end,
           open_pos = nil,
           close_pre = nil,
@@ -1125,7 +1129,7 @@ M.notes = function()
         enabled = false,
         font = "+3"
       },
-      twilight = true, -- enable twilight (ataraxis)
+      twilight = false, -- enable twilight text dimming outside cursor block
       lualine = false -- hide nvim-lualine (ataraxis)
     },
   }

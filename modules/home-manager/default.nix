@@ -176,7 +176,10 @@ in {
     TERMINAL = "alacritty";
     HOMEBREW_NO_AUTO_UPDATE = 1;
     #LIBVA_DRIVER_NAME="iHD";
-    ZK_NOTEBOOK_DIR = "${config.home.homeDirectory}/Notes";
+    ZK_NOTEBOOK_DIR = if pkgs.stdenvNoCC.isDarwin then
+      "${config.home.homeDirectory}/Library/Containers/co.noteplan.NotePlan3/Data/Library/Application Support/co.noteplan.NotePlan3"
+    else
+      "${config.home.homeDirectory}/Notes";
   };
 
   home.file.".inputrc".text = ''

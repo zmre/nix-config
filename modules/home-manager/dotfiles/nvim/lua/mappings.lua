@@ -178,21 +178,21 @@ local leader_mappings = {
       "Check Grammar"
     },
     n = {
-      "<Cmd>ZkNew { dir = vim.fn.input('Folder: ',vim.env.ZK_NOTEBOOK_DIR .. '/wiki','dir'), title = vim.fn.input('Title: ') }<CR>",
+      "<Cmd>ZkNew { dir = vim.fn.input('Folder: ',vim.env.ZK_NOTEBOOK_DIR .. '/Notes','dir'), title = vim.fn.input('Title: ') }<CR>",
       "New"
     },
     o = { "<cmd>ZkNotes<CR>", "Open" },
     t = { "<cmd>ZkTags<CR>", "Open by tag" },
     f = { "<Cmd>ZkNotes { match = vim.fn.input('Search: ') }<CR>", "Find" },
     m = {
-      "<cmd>lua require('zk.commands').get('ZkNew')({ dir = vim.fn.input('Folder: ',vim.env.ZK_NOTEBOOK_DIR .. '/meetings','dir'), title = vim.fn.input('Title: ') })<CR>",
+      "<cmd>lua require('zk.commands').get('ZkNew')({ dir = vim.fn.input('Folder: ',vim.env.ZK_NOTEBOOK_DIR .. '/Notes/meetings','dir'), title = vim.fn.input('Title: ') })<CR>",
       "New meeting"
     },
     d = {
-      "<cmd>ZkNew { dir = vim.env.ZK_NOTEBOOK_DIR .. '/wiki/diary', title = os.date('%Y-%m-%d') }<CR>",
+      "<cmd>ZkNew { dir = vim.env.ZK_NOTEBOOK_DIR .. '/Calendar', title = os.date('%Y-%m-%d') }<CR>",
       "New diary"
     },
-    h = { "<cmd>edit ~/Notes/wiki/HotSheet.md<CR>", "Open HotSheet" }
+    h = { "<cmd>edit ~/Notes/Notes/HotSheet.md<CR>", "Open HotSheet" }
     -- in open note (defined in plugins.lua as local-only shortcuts):
     -- p: new peer note
     -- l: show outbound links
