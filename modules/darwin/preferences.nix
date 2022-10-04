@@ -31,14 +31,6 @@
       ActuationStrength = 0;
       # enable tap to click
       Clicking = true;
-      # firmness level, 0 = lightest, 2 = heaviest
-      #FirstClickThreshold = 1;
-      # firmness level for force touch
-      #SecondClickThreshold = 1;
-      # don't allow positional right click
-      #TrackpadRightClick = false;
-      # three finger drag for space switching
-      # TrackpadThreeFingerDrag = true;
     };
 
     # firewall settings
@@ -69,11 +61,6 @@
       # mouse in top right corner will (5) start screensaver
       wvous-tr-corner = 5;
     };
-
-    # universalaccess = {
-    # get rid of extra transparency in menu bar and elsewhere
-    # reduceTransparency = false;
-    # };
 
     NSGlobalDomain = {
       # 2 = heavy font smoothing; if text looks blurry, back this down to 1
