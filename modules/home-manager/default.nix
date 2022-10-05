@@ -504,6 +504,11 @@ in {
     Google.Acronyms = NO
     Google.Units = NO
     Google.Spacing = NO
+    Google.Exclamation = NO
+    Google.Headings = NO
+    Google.Parens = NO
+    Google.DateFormat = NO
+    Google.Ellipses = NO
     proselint.Typography = NO
     Vale.Spelling = NO
   '';
