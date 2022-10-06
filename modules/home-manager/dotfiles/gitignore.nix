@@ -253,4 +253,5 @@
   "~/.config/pianobar/config"
   "~/.gitignore"
   ".cargo"
+  ".direnv"
 ]

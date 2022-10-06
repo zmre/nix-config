@@ -104,7 +104,6 @@ let
   # using unstable in my home profile for nix commands
   nixEditorPkgs = with pkgs; [ nix statix nixfmt nixpkgs-fmt rnix-lsp ];
   # live dangerously here with unstable
-  #rustPkgs = with pkgs; [ cargo cargo-watch rustfmt rust-analyzer rustc ];
   rustPkgs = with pkgs; [ cargo rustfmt rust-analyzer rustc ];
   # live dangerously here with unstable
   typescriptPkgs = with pkgs.nodePackages;
