@@ -88,23 +88,26 @@ let
   ];
   # below is to make compiling tools/projects without dedicated nix environments more likely to succeed
   cPkgs = with pkgs.stable; [
-    automake
-    autoconf
+    #automake
+    #autoconf
     gcc
-    gnumake
-    cmake
+    #gnumake
+    #cmake
     pkg-config
-    glib
     libtool
-    libiconv # so many things fail to compile without this
-    openssl # also needed by many things
+    # Putting the below in global scope doesn't really do anything unless you do a `nix-shell -p`, and then
+    # they show up in that shell. But at that point, I might as well specify them in a flake or the nix-shell
+    # command.
+    #glib
+    #libiconv # so many things fail to compile without this
+    #openssl # also needed by many things
   ];
   # sumneko-lua-language-server failing on darwin, so installing in home-linux and brew
   luaPkgs = with pkgs; [ luaformatter ];
   # using unstable in my home profile for nix commands
   nixEditorPkgs = with pkgs; [ nix statix nixfmt nixpkgs-fmt rnix-lsp ];
   # live dangerously here with unstable
-  rustPkgs = with pkgs; [ cargo rustfmt rust-analyzer rustc ];
+  #rustPkgs = with pkgs; [ cargo rustfmt rust-analyzer rustc ];
   # live dangerously here with unstable
   typescriptPkgs = with pkgs.nodePackages;
     [
@@ -144,10 +147,8 @@ in {
   # the Home Manager release notes for a list of state version
   # changes in each release.
   home.stateVersion = "20.09";
-  home.packages = defaultPkgs ++ cPkgs ++ luaPkgs ++ nixEditorPkgs ++ rustPkgs
+  home.packages = defaultPkgs ++ cPkgs ++ luaPkgs ++ nixEditorPkgs # ++ rustPkgs
     ++ typescriptPkgs ++ guiPkgs ++ networkPkgs;
-
-  # TODO: comma, gnupg?
 
   home.sessionVariables = {
     LANG = "en_US.UTF-8";
