@@ -54,6 +54,7 @@ mkShell {
 
     # Web
     dirb
+    feroxbuster
     gobuster
     wfuzz
     wpscan

@@ -43,11 +43,9 @@
       "imageoptim"
       "insta360-studio"
       "istat-menus"
-      #"karabiner-elements"
       "kindavim"
       "little-snitch"
       "lockrattler"
-      #"logseq"
       #"loopback" -- haven't been using this of late
       "marked"
       #"microsoft-office" -- moved this to apple app store
@@ -151,7 +149,6 @@
       "dashing" # generate dash docs from html
       "ddcctl"
       "ansiweather"
-      "feroxbuster" # dirbuster in rust; not in nixpkgs yet
       "findutils" # TODO: needed?
       "gdrive"
       "marp-cli" # convert markdown to html slides
