@@ -55,6 +55,7 @@
       url = "github:nvim-telescope/telescope-media-files.nvim";
       flake = false;
     };
+    ironhide.url = "git+ssh://git@github.com/IronCoreLabs/ironhide-rs?ref=main";
     # vim-roam-task = {
     #   url = "github:samgriesemer/vim-roam-task";
     #   flake = false;

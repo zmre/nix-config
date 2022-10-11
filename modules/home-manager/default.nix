@@ -52,6 +52,7 @@ let
     hostname
 
     # misc
+    pkgs.ironhide # rust version of IronCore's ironhide
     neofetch # display key software/version info in term
     #nodePackages.readability-cli # quick commandline website article read
     vimv # shell script to bulk rename
