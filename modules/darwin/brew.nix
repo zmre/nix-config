@@ -112,6 +112,7 @@
       "Forecast Bar" = 982710545;
       "Ghostery – Privacy Ad Blocker" = 1436953057;
       "Gifox 2" = 1461845568; # For short animated gif screen caps
+      "Kagi, Inc." = 1622835804; # Paid private search engine plugin for Safari
       "Kaleidoscope" = 587512244; # GUI 3-way merge
       "Keynote" = 409183694;
       "Keyshape" = 1223341056; # animated svg editor
