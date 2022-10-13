@@ -473,8 +473,8 @@ M.diagnostics = function()
     local opts = { noremap = true, silent = false }
     if client.name == "tsserver" or client.name == "jsonls" or client.name ==
         "rnix" or client.name == "eslint" or client.name == "html" then
-      client.resolved_capabilities.document_formatting = false
-      client.resolved_capabilities.document_range_formatting = false
+      client.server_capabilities.document_formatting = false
+      client.server_capabilities.document_range_formatting = false
     end
 
     print("LSP attached " .. client.name)
@@ -547,7 +547,7 @@ M.diagnostics = function()
     buf_set_keymap('!', 'C-]', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
 
     -- Set some keybinds conditional on server capabilities
-    if client.resolved_capabilities.document_formatting then
+    if client.server_capabilities.document_formatting then
       which_key.register({
         l = {
           ["="] = {
@@ -562,7 +562,7 @@ M.diagnostics = function()
             augroup END
             ]])
     end
-    if client.resolved_capabilities.implementation then
+    if client.server_capabilities.implementation then
       which_key.register({
         l = {
           ["I"] = {
@@ -572,7 +572,7 @@ M.diagnostics = function()
         }
       }, local_leader_opts)
     end
-    if client.resolved_capabilities.document_range_formatting then
+    if client.server_capabilities.document_range_formatting then
       which_key.register({
         l = {
           ["="] = {
@@ -582,7 +582,7 @@ M.diagnostics = function()
         }
       }, local_leader_opts_visual)
     end
-    if client.resolved_capabilities.rename then
+    if client.server_capabilities.rename then
       which_key.register({
         l = { ["R"] = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename" } }
       }, local_leader_opts)
