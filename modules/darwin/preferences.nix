@@ -84,7 +84,7 @@
       # auto switch between light/dark mode
       AppleInterfaceStyleSwitchesAutomatically = false;
       "com.apple.sound.beep.feedback" = 1;
-      "com.apple.sound.beep.volume" = 0.6065307; # 50%
+      "com.apple.sound.beep.volume" = 0.606531; # 50%
       "com.apple.mouse.tapBehavior" = 1; # tap to click
       "com.apple.swipescrolldirection" = true; # "natural" scrolling
       "com.apple.keyboard.fnState" = true;

@@ -62,7 +62,7 @@
         pname = "hackernews-tui";
         cargoLock = { lockFile = inputs.hackernews-tui + /Cargo.lock; };
         buildDependencies = [ prev.glib ];
-        buildInputs = [ prev.pkg-config ]
+        buildInputs = [ prev.pkg-config prev.libiconv ]
           ++ prev.lib.optionals prev.stdenv.isDarwin
           [ prev.darwin.apple_sdk.frameworks.Security ];
         src = inputs.hackernews-tui;

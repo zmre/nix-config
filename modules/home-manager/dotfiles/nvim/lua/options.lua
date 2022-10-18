@@ -132,7 +132,7 @@ M.defaults = function()
       mkdURL                 = { fg = "${green}", style = "underline" },
       mkdInlineURL           = { fg = "${blue}", style = "underline" },
       TSURI                  = { fg = "${blue}", style = "underline" },
-      TSPunctSpecial         = { fg = "{$red}" },
+      TSPunctSpecial         = { fg = "${red}" },
       markdownTSTitle        = { fg = "${cyan}", style = "bold" },
       markdownAutomaticLink  = { fg = "${blue}", style = "underline" },
       markdownLink           = { fg = "${green}", style = "underline" },
