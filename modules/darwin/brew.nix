@@ -37,6 +37,7 @@
       "discord"
       "docker"
       #"dropbox"
+      "espanso" # text expander functionality (but open source donationware, x-platform, rust-based)
       "firefox"
       "fork"
       "gpg-suite"
@@ -73,7 +74,7 @@
       #"superhuman" # mail client
       "sync"
       "syncthing"
-      "textexpander"
+      #"textexpander"
       #"ticktick"
       "tor-browser"
       "transmission"

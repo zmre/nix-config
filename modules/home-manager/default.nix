@@ -35,7 +35,6 @@ let
     poppler_utils # for pdf2text in lf
     mediainfo # used by lf
     exiftool # used by lf
-    mediainfo
     exif
     glow # view markdown file or dir
     mdcat # colorize markdown
@@ -259,6 +258,52 @@ in {
     selection_background = "#4a4c4c"
     selection_foreground = "#d8dad6"
   '';
+  home.file."Library/Preferences/espanso/match/base.yml".text = pkgs.lib.generators.toYAML {} {
+      matches = [
+        { trigger = "icphone"; replace = "415.968.9607"; }
+        { trigger = ":checkbox:"; replace = "⬜️"; }
+        { trigger = ":checked:"; replace = "✅"; }
+        { trigger = ":checkmark:"; replace = "✓"; }
+        { trigger = "acmlink"; replace = "https://dl.acm.org/citation.cfm?id=3201602"; }
+        { trigger = "icaddr1"; replace = "1750 30th Street #500"; }
+        { trigger = "icaddr2"; replace = "Boulder, CO 80301-1029"; }
+        { trigger = "icoffice1"; replace = "1919 14th Street, 7th Floor"; }
+        { trigger = "icoffice2"; replace = "Boulder, CO 80302"; }
+        { trigger = "..p"; replace = "..Patrick"; }
+        { trigger = "myskype"; replace = "303.731.3155"; }
+        { trigger = "-icc"; replace = "ironcorelabs.com"; }
+        { trigger = "-icl"; replace = "IronCore Labs"; }
+        { trigger = ".zsg"; replace = ".zmre@spamgourmet.com"; }
+        { trigger = "mycal"; replace = "https://app.hubspot.com/meetings/patrick-walsh"; }
+        { trigger = "--sig"; replace = ''
+-- 
+Patrick Walsh  ●  CEO
+patrick.walsh@ironcorelabs.com  ●  @zmre
+
+IronCore Labs
+Strategic privacy for modern SaaS. 
+https://ironcorelabs.com  ●  @ironcorelabs  ●  415.968.9607
+          '';}
+        { # Dates
+          trigger = "ddate";
+          replace = "{{mydate}}";
+          vars = [{
+            name = "mydate";
+            type = "date";
+            params = { format = "%Y-%m-%d"; };
+          }];
+        }
+        { # Shell commands example
+          trigger = ":shell";
+          replace = "{{output}}";
+          vars = [{
+            name = "output";
+            type = "shell";
+            params = { cmd = "echo Hello from your shell"; };
+          }];
+        }
+      ];
+  };
 
   programs.bat = {
     enable = true;
