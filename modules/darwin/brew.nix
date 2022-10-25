@@ -63,6 +63,7 @@
       #"qlprettypatch" # not updated in 9 years
       "qlvideo"
       #"quicklookase" # not updated in 6 years
+      #"ripcord" # native (non-electron) desktop client for Slack + Discord -- try again in 2023
       "reikey"
       "raycast"
       #"ricoh-ps-printers-vol4-exp-driver" # homebrew is years out of date; have to install manually
