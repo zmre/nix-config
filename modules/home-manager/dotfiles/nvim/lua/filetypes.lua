@@ -40,6 +40,8 @@ M.config = function()
       autocmd FileType svelte lua require('zmre.options').programming()
       autocmd FileType css lua require('zmre.options').programming()
       autocmd FileType xml lua require('zmre.filetypes').lua()
+
+      autocmd TermOpen * setlocal nospell
     augroup END
   ]], false)
 end
