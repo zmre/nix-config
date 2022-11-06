@@ -473,8 +473,11 @@ M.diagnostics = function()
     local opts = { noremap = true, silent = false }
     if client.name == "tsserver" or client.name == "jsonls" or client.name ==
         "rnix" or client.name == "eslint" or client.name == "html" then
-      client.server_capabilities.document_formatting = false
-      client.server_capabilities.document_range_formatting = false
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
+    else
+      client.server_capabilities.documentFormattingProvider = true
+      client.server_capabilities.documentRangeFormattingProvider = true
     end
 
     print("LSP attached " .. client.name)
@@ -587,6 +590,7 @@ M.diagnostics = function()
         l = { ["R"] = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename" } }
       }, local_leader_opts)
     end
+    require("lsp-format").on_attach(client)
   end
 
   -- LSP stuff - minimal with defaults for now
@@ -598,12 +602,15 @@ M.diagnostics = function()
   local diagnostics = null_ls.builtins.diagnostics
   local codeactions = null_ls.builtins.code_actions
 
+  require("lsp-format").setup {}
+
   null_ls.setup {
     debug = false,
     sources = {
       -- sumneko seems to also have formatting now
       -- formatting.lua_format,
-      formatting.nixfmt, formatting.prettier.with {
+      formatting.nixfmt,
+      formatting.prettier.with {
         -- extra_args = {
         --     "--no-semi", "--single-quote", "--jsx-single-quote"
         -- },
@@ -614,7 +621,7 @@ M.diagnostics = function()
         args = {
           "-f", "json", "--stdin", "--stdin-filename", "$FILENAME"
         }
-      }, diagnostics.vale,
+      }, -- diagnostics.vale,
       null_ls.builtins.hover.dictionary
       -- removed formatting.rustfmt since rust_analyzer seems to do the same thing
     },

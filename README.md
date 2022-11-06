@@ -29,5 +29,4 @@ And a direct build looks something like:
 
 ```bash
 nix --extra-experimental-features 'nix-command flakes' build './#darwinConfigurations.attolia.system' --log-format raw --verbose --show-trace
-
 ```

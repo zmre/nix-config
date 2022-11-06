@@ -153,7 +153,7 @@ in {
   home.sessionVariables = {
     LANG = "en_US.UTF-8";
     LC_ALL = "en_US.UTF-8";
-    TERM = "xterm-256color";
+    #TERM = "xterm-256color";
     KEYTIMEOUT = 1;
     EDITOR = "nvim";
     VISUAL = "nvim";
@@ -242,8 +242,6 @@ in {
     ./dotfiles/nvim/lua/plugins.lua;
   home.file.".config/nvim/lua/zmre/vscode.lua".source =
     ./dotfiles/nvim/lua/vscode.lua;
-  home.file.".config/nvim/vim/colors.vim".source =
-    ./dotfiles/nvim/vim/colors.vim;
   home.file.".wallpaper.jpg".source = ./wallpaper/castle2.jpg;
   home.file.".lockpaper.png".source = ./wallpaper/kali.png;
   #home.file.".tmux.conf".source =
@@ -258,32 +256,81 @@ in {
     selection_background = "#4a4c4c"
     selection_foreground = "#d8dad6"
   '';
-  home.file."Library/Preferences/espanso/match/base.yml".text = pkgs.lib.generators.toYAML {} {
+  home.file."Library/Preferences/espanso/match/base.yml".text =
+    pkgs.lib.generators.toYAML { } {
       matches = [
-        { trigger = "icphone"; replace = "415.968.9607"; }
-        { trigger = ":checkbox:"; replace = "⬜️"; }
-        { trigger = ":checked:"; replace = "✅"; }
-        { trigger = ":checkmark:"; replace = "✓"; }
-        { trigger = "acmlink"; replace = "https://dl.acm.org/citation.cfm?id=3201602"; }
-        { trigger = "icaddr1"; replace = "1750 30th Street #500"; }
-        { trigger = "icaddr2"; replace = "Boulder, CO 80301-1029"; }
-        { trigger = "icoffice1"; replace = "1919 14th Street, 7th Floor"; }
-        { trigger = "icoffice2"; replace = "Boulder, CO 80302"; }
-        { trigger = "..p"; replace = "..Patrick"; }
-        { trigger = "myskype"; replace = "303.731.3155"; }
-        { trigger = "-icc"; replace = "ironcorelabs.com"; }
-        { trigger = "-icl"; replace = "IronCore Labs"; }
-        { trigger = ".zsg"; replace = ".zmre@spamgourmet.com"; }
-        { trigger = "mycal"; replace = "https://app.hubspot.com/meetings/patrick-walsh"; }
-        { trigger = "--sig"; replace = ''
--- 
-Patrick Walsh  ●  CEO
-patrick.walsh@ironcorelabs.com  ●  @zmre
+        {
+          trigger = "icphone";
+          replace = "415.968.9607";
+        }
+        {
+          trigger = ":checkbox:";
+          replace = "⬜️";
+        }
+        {
+          trigger = ":checked:";
+          replace = "✅";
+        }
+        {
+          trigger = ":checkmark:";
+          replace = "✓";
+        }
+        {
+          trigger = "acmlink";
+          replace = "https://dl.acm.org/citation.cfm?id=3201602";
+        }
+        {
+          trigger = "icaddr1";
+          replace = "1750 30th Street #500";
+        }
+        {
+          trigger = "icaddr2";
+          replace = "Boulder, CO 80301-1029";
+        }
+        {
+          trigger = "icoffice1";
+          replace = "1919 14th Street, 7th Floor";
+        }
+        {
+          trigger = "icoffice2";
+          replace = "Boulder, CO 80302";
+        }
+        {
+          trigger = "..p";
+          replace = "..Patrick";
+        }
+        {
+          trigger = "myskype";
+          replace = "303.731.3155";
+        }
+        {
+          trigger = "-icc";
+          replace = "ironcorelabs.com";
+        }
+        {
+          trigger = "-icl";
+          replace = "IronCore Labs";
+        }
+        {
+          trigger = ".zsg";
+          replace = ".zmre@spamgourmet.com";
+        }
+        {
+          trigger = "mycal";
+          replace = "https://app.hubspot.com/meetings/patrick-walsh";
+        }
+        {
+          trigger = "--sig";
+          replace = ''
+            -- 
+            Patrick Walsh  ●  CEO
+            patrick.walsh@ironcorelabs.com  ●  @zmre
 
-IronCore Labs
-Strategic privacy for modern SaaS. 
-https://ironcorelabs.com  ●  @ironcorelabs  ●  415.968.9607
-          '';}
+            IronCore Labs
+            Strategic privacy for modern SaaS. 
+            https://ironcorelabs.com  ●  @ironcorelabs  ●  415.968.9607
+          '';
+        }
         { # Dates
           trigger = "ddate";
           replace = "{{mydate}}";
@@ -303,7 +350,7 @@ https://ironcorelabs.com  ●  @ironcorelabs  ●  415.968.9607
           }];
         }
       ];
-  };
+    };
 
   programs.bat = {
     enable = true;
@@ -412,12 +459,12 @@ https://ironcorelabs.com  ●  @ironcorelabs  ●  415.968.9607
       null-ls-nvim # formatting and linting via lsp system
       trouble-nvim # navigate all warnings and errors in quickfix-like window
       lspsaga-nvim
+      lsp-format-nvim
       todo-comments-nvim
       #copilot-vim # github copilot
 
       # UI #################################################
       onedarkpro-nvim # colorscheme
-      #onedark-vim # colorscheme
       zephyr-nvim # alternate colorscheme
       telescope-nvim # da best popup fuzzy finder
       telescope-fzy-native-nvim # but fzy gives better results
@@ -430,7 +477,6 @@ https://ironcorelabs.com  ●  @ironcorelabs  ●  415.968.9607
       gitsigns-nvim # git status in gutter
       symbols-outline-nvim # navigate the current file better
       lualine-nvim # nice status bar at bottom
-      #barbar-nvim # nice buffers (tabs) bar at top
       vim-bbye # fix bdelete buffer stuff needed with bufferline
       bufferline-nvim
       indent-blankline-nvim # visual indent
@@ -488,7 +534,6 @@ https://ironcorelabs.com  ●  @ironcorelabs  ●  415.968.9607
       impatient-nvim # speeds startup times by caching lua bytecode
       which-key-nvim
       direnv-vim # auto-execute nix direnv setups
-      #nvim-whichkey-setup-lua
     ];
   };
   home.file."${config.xdg.configHome}/nvim/parser/tsx.so".source =
@@ -539,10 +584,10 @@ https://ironcorelabs.com  ●  @ironcorelabs  ●  415.968.9607
 
     MinAlertLevel = suggestion
 
-    Packages = Google, proselint, alex, Readability
+    Packages = proselint, alex, Readability
 
     [*]
-    BasedOnStyles = Vale, Google, proselint
+    BasedOnStyles = Vale, proselint
     IgnoredScopes = code, tt
     SkippedScopes = script, style, pre, figure
     Google.FirstPerson = NO
@@ -1946,8 +1991,65 @@ https://ironcorelabs.com  ●  @ironcorelabs  ●  415.968.9607
     ];
   };
 
+  # 2022-11-06 going to try kitty for a bit
+  programs.kitty = {
+    enable = true;
+    keybindings = {
+      "super+equal" = "increase_font_size";
+      "super+minus" = "decrease_font_size";
+      "super+0" = "restore_font_size";
+      "cmd+c" = "copy_to_clipboard";
+      "cmd+v" = "paste_from_clipboard";
+      # cmd-[ and cmd-] switch tmux windows
+      "cmd+[" =
+        "send_text all \\x02h"; # \x02 is ctrl-b so sequence below is ctrl-b, h
+      "cmd+]" = "send_text all \\x02l";
+    };
+    font = {
+      #name = "MesloLGS Nerd Font Mono"; # no ligatures :(
+      name = "Hasklug Nerd Font Medium"; # regular is too thin
+      #name = "Inconsolata Nerd Font"; # no italic
+      #name = "SpaceMono Nerd Font Mono";
+      #name = "VictorMono Nerd Font";
+      #name = "FiraCode Nerd Font"; # missing italic
+      size = (if pkgs.stdenvNoCC.isDarwin then 17 else 12);
+    };
+    settings = {
+      scrollback_lines = 3000;
+      enable_audio_bell = false;
+      update_check_interval = 0;
+      macos_option_as_alt = "both";
+      macos_quit_when_last_window_closed = true;
+      adjust_line_height = "105%";
+      disable_ligatures = "cursor"; # disable ligatures when cursor is on them
+
+      # Window layout
+      hide_window_decorations = "titlebar-only";
+      window_padding_width = "5";
+
+      # Tab bar
+      tab_bar_edge = "bottom";
+      tab_bar_style = "powerline";
+      tab_title_template = "{index}: {title}";
+      active_tab_font_style = "bold";
+      inactive_tab_font_style = "normal";
+      active_tab_foreground = "#ffffff";
+      active_tab_background = "#2233ff";
+      tab_activity_symbol = " ";
+      bold_font = "Hasklug Nerd Font Bold"; # "auto";
+      italic_font = "auto";
+      bold_italic_font = "Hasklug Nerd Font Bold Italic";
+      allow_remote_control = "yes";
+      visual_bell_duration = "0.1";
+      background_opacity = "0.95";
+    };
+    theme =
+      "One Half Dark"; # or Dracula or OneDark see https://github.com/kovidgoyal/kitty-themes/tree/master/themes
+  };
   programs.alacritty = {
     enable = true;
+    package =
+      pkgs.alacritty; # switching to unstable so i get 0.11 with undercurl support
     settings = {
       window.decorations = "full";
       window.dynamic_title = true;
