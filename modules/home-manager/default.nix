@@ -1747,7 +1747,7 @@ in {
   };
 
   programs.exa.enable = true;
-  # my prefered file explorer; mnemonic: list files
+  # my preferred file explorer; mnemonic: list files
   programs.lf = {
     enable = true;
     settings = {

@@ -616,12 +616,17 @@ M.diagnostics = function()
         -- },
         -- Disable markdown because formatting on save conflicts in weird ways
         -- with the taskwiki (roam-task) stuff.
+        filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "css", "scss", "less",
+          "html", "json", "jsonc", "yaml", "graphql", "handlebars", "svelte" },
         disabled_filetypes = { "markdown" }
       }, diagnostics.eslint_d.with {
         args = {
           "-f", "json", "--stdin", "--stdin-filename", "$FILENAME"
         }
       }, -- diagnostics.vale,
+      codeactions.eslint_d,
+      codeactions.gitsigns,
+      codeactions.statix,
       null_ls.builtins.hover.dictionary
       -- removed formatting.rustfmt since rust_analyzer seems to do the same thing
     },
