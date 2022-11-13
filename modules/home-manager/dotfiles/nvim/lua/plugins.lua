@@ -472,12 +472,15 @@ M.diagnostics = function()
 
     local opts = { noremap = true, silent = false }
     if client.name == "tsserver" or client.name == "jsonls" or client.name ==
-        "rnix" or client.name == "eslint" or client.name == "html" then
+        "rnix" or client.name == "eslint" or client.name == "html" or client.name == "cssls" or
+        client.name == "tailwindcss" then
+      -- Most of these are being turned off because prettier handles the use case better
       client.server_capabilities.documentFormattingProvider = false
       client.server_capabilities.documentRangeFormattingProvider = false
     else
       client.server_capabilities.documentFormattingProvider = true
       client.server_capabilities.documentRangeFormattingProvider = true
+      require("lsp-format").on_attach(client)
     end
 
     print("LSP attached " .. client.name)
@@ -558,12 +561,12 @@ M.diagnostics = function()
           }
         }
       }, local_leader_opts)
-      vim.cmd([[
-            augroup LspFormatting
-                autocmd! * <buffer>
-                autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
-            augroup END
-            ]])
+      -- vim.cmd([[
+      --       augroup LspFormatting
+      --           autocmd! * <buffer>
+      --           autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+      --       augroup END
+      --       ]])
     end
     if client.server_capabilities.implementation then
       which_key.register({
@@ -590,7 +593,6 @@ M.diagnostics = function()
         l = { ["R"] = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename" } }
       }, local_leader_opts)
     end
-    require("lsp-format").on_attach(client)
   end
 
   -- LSP stuff - minimal with defaults for now
@@ -611,13 +613,14 @@ M.diagnostics = function()
       -- formatting.lua_format,
       formatting.nixfmt,
       formatting.prettier.with {
+
         -- extra_args = {
-        --     "--no-semi", "--single-quote", "--jsx-single-quote"
+        --     "--use-tabs", "--single-quote", "--jsx-single-quote"
         -- },
         -- Disable markdown because formatting on save conflicts in weird ways
         -- with the taskwiki (roam-task) stuff.
-        filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "css", "scss", "less",
-          "html", "json", "jsonc", "yaml", "graphql", "handlebars", "svelte" },
+        filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "scss", "less",
+          "html", "css", "json", "jsonc", "yaml", "graphql", "handlebars", "svelte" },
         disabled_filetypes = { "markdown" }
       }, diagnostics.eslint_d.with {
         args = {
@@ -725,13 +728,13 @@ M.diagnostics = function()
 
   require 'lspsaga'.init_lsp_saga({
     -- TODO: re-enable this at next update - getting error 2022-08-02
-    --code_action_lightbulb = {
-    --enable = false,
-    --sign = true,
-    --enable_in_insert = true,
-    --sign_priority = 20,
-    --virtual_text = false,
-    --},
+    -- code_action_lightbulb = {
+    -- enable = false,
+    -- sign = true,
+    -- enable_in_insert = true,
+    -- sign_priority = 20,
+    -- virtual_text = false,
+    -- },
   })
 
   require('rust-tools').setup({
@@ -866,8 +869,7 @@ M.completions = function()
       -- allow completions in command mode
       if vim.api.nvim_get_mode().mode == 'c' then return true end
       -- forbid completions in comments
-      return not context.in_treesitter_capture("comment") and
-          not context.in_syntax_group("Comment")
+      return not (context.in_treesitter_capture("comment") or context.in_syntax_group("Comment"))
     end,
     mapping = {
       ['<C-p>'] = cmp.mapping.select_prev_item(),
@@ -996,11 +998,12 @@ M.notes = function()
                 "Info preview"
               },
               f = {
-                "<cmd>Telescope lsp_code_actions theme=cursor<CR>",
+                "<cmd>Lspsaga code_action<CR>",
                 "Fix Code Actions"
               },
               e = {
-                "<cmd>lua vim.diagnostic.open_float()<CR>",
+                --"<cmd>lua vim.diagnostic.open_float()<CR>",
+                "<cmd>Lspsaga show_cursor_diagnostics",
                 "Show Line Diags"
               }
             }

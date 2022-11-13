@@ -7,8 +7,8 @@ let
     ripgrep
     du-dust
     fzy
-    tree-sitter # need unstable to get new markdown parser
-    tree-sitter-grammars.tree-sitter-markdown
+    #pkgs.tree-sitter # need unstable to get new markdown parser
+    #pkgs.tree-sitter-grammars.tree-sitter-markdown
     curl
     duf # df alternative showing free disk space
     fswatch
@@ -76,7 +76,8 @@ let
     procps
     pstree
     pkgs.gtm-okr
-    pkgs.babble-cli
+    pkgs.babble-cli # twitter tui
+    pkgs.toot # mastodon tui
     yubikey-manager # cli for yubikey
     # failing to build latest myself; official is 7 months behind
     # moving this to brew 2022-07-11 :-(
@@ -133,7 +134,8 @@ let
       element-desktop
       # 22-01-29 currently fails on mac with "could not compile futures-util" :(
       #neovide
-    ];
+    ] ++ lib.optionals stdenv.isDarwin
+    [ utm ]; # utm is a qemu wrapper for mac only
 
 in {
   programs.home-manager.enable = true;
@@ -482,7 +484,8 @@ in {
       bufferline-nvim
       indent-blankline-nvim # visual indent
       toggleterm-nvim # better terminal management
-      nvim-treesitter # better code coloring
+      #nvim-treesitter # better code coloring
+      nvim-treesitter.withAllGrammars
       playground # treesitter playground
       nvim-treesitter-textobjects
       nvim-treesitter-context # keep current block header (func defn or whatever) on first line
@@ -537,39 +540,39 @@ in {
       direnv-vim # auto-execute nix direnv setups
     ];
   };
-  home.file."${config.xdg.configHome}/nvim/parser/tsx.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-tsx}/parser";
+  #home.file."${config.xdg.configHome}/nvim/parser/tsx.so".source =
+  #"${pkgs.tree-sitter.builtGrammars.tree-sitter-tsx}/parser";
   # TODO: uncomment this when treesitter nix highlighting isn't so busted 2022-05-17, 2022-08-02
   #home.file."${config.xdg.configHome}/nvim/parser/nix.so".source =
   #"${pkgs.tree-sitter.builtGrammars.tree-sitter-nix}/parser";
-  home.file."${config.xdg.configHome}/nvim/parser/vim.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-vim}/parser";
-  home.file."${config.xdg.configHome}/nvim/parser/lua.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-lua}/parser";
-  home.file."${config.xdg.configHome}/nvim/parser/css.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-css}/parser";
-  home.file."${config.xdg.configHome}/nvim/parser/yaml.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-yaml}/parser";
-  home.file."${config.xdg.configHome}/nvim/parser/toml.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-toml}/parser";
-  home.file."${config.xdg.configHome}/nvim/parser/rust.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-rust}/parser";
-  home.file."${config.xdg.configHome}/nvim/parser/json.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-json}/parser";
-  home.file."${config.xdg.configHome}/nvim/parser/typescript.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-typescript}/parser";
-  home.file."${config.xdg.configHome}/nvim/parser/javascript.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-javascript}/parser";
-  home.file."${config.xdg.configHome}/nvim/parser/bash.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-bash}/parser";
-  home.file."${config.xdg.configHome}/nvim/parser/scala.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-scala}/parser";
-  home.file."${config.xdg.configHome}/nvim/parser/markdown.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-markdown}/parser";
-  home.file."${config.xdg.configHome}/nvim/parser/svelte.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-svelte}/parser";
-  home.file."${config.xdg.configHome}/nvim/parser/regex.so".source =
-    "${pkgs.tree-sitter.builtGrammars.tree-sitter-regex}/parser";
+  # home.file."${config.xdg.configHome}/nvim/parser/vim.so".source =
+  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-vim}/parser";
+  # home.file."${config.xdg.configHome}/nvim/parser/lua.so".source =
+  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-lua}/parser";
+  # home.file."${config.xdg.configHome}/nvim/parser/css.so".source =
+  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-css}/parser";
+  # home.file."${config.xdg.configHome}/nvim/parser/yaml.so".source =
+  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-yaml}/parser";
+  # home.file."${config.xdg.configHome}/nvim/parser/toml.so".source =
+  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-toml}/parser";
+  # home.file."${config.xdg.configHome}/nvim/parser/rust.so".source =
+  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-rust}/parser";
+  # home.file."${config.xdg.configHome}/nvim/parser/json.so".source =
+  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-json}/parser";
+  # home.file."${config.xdg.configHome}/nvim/parser/typescript.so".source =
+  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-typescript}/parser";
+  # home.file."${config.xdg.configHome}/nvim/parser/javascript.so".source =
+  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-javascript}/parser";
+  # home.file."${config.xdg.configHome}/nvim/parser/bash.so".source =
+  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-bash}/parser";
+  # home.file."${config.xdg.configHome}/nvim/parser/scala.so".source =
+  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-scala}/parser";
+  # home.file."${config.xdg.configHome}/nvim/parser/markdown.so".source =
+  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-markdown}/parser";
+  # home.file."${config.xdg.configHome}/nvim/parser/svelte.so".source =
+  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-svelte}/parser";
+  # home.file."${config.xdg.configHome}/nvim/parser/regex.so".source =
+  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-regex}/parser";
   # Prose linting
   home.file."${config.xdg.configHome}/proselint/config.json".text = ''
     {
@@ -1739,9 +1742,9 @@ in {
       hmswitch = ''
         nix-shell -p home-manager --run "home-manager switch --flake ~/.config/nixpkgs/.#$(hostname -s)"'';
       dwupdate =
-        "pushd ~/.config/nixpkgs ; nix flake update ; /opt/homebrew/bin/brew update; popd ; pushd ~; darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) --show-trace; /opt/homebrew/bin/brew upgrade ; /opt/homebrew/bin/brew upgrade --cask; popd";
+        "pushd ~/.config/nixpkgs ; nix flake update ; /opt/homebrew/bin/brew update; popd ; pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) --show-trace; /opt/homebrew/bin/brew upgrade ; /opt/homebrew/bin/brew upgrade --cask; popd";
       dwswitch =
-        "pushd ~; darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) --show-trace; popd";
+        "pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) --show-trace; popd";
       noswitch =
         "pushd ~; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.# --show-trace; popd";
     };

@@ -7,6 +7,8 @@
   nixConfig = {
     bash-prompt = "";
     bash-prompt-suffix = "(nixflake)#";
+    # Because macos sandbox can create issues https://github.com/NixOS/nix/issues/4119
+    sandbox = false;
     substituters = [
       "https://cache.nixos.org"
       "https://nix-community.cachix.org"

@@ -1,9 +1,10 @@
 { inputs, config, pkgs, ... }: {
   homebrew = {
     enable = true;
+    caskArgs.no_quarantine = true;
     onActivation = {
-      autoUpdate = true;
-      upgrade = true;
+      autoUpdate = false;
+      upgrade = false;
       cleanup =
         "uninstall"; # should maybe be "zap" - remove anything not listed here
     };
@@ -96,6 +97,7 @@
       # would be better to load  hese in a security shell, but nix versions don't build on mac
       "owasp-zap"
       "burp-suite"
+      #"warp" # 2022-11-10 testing some crazy new rust-based terminal
       "webex"
       "wireshark-chmodbpf"
     ];

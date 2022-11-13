@@ -12,7 +12,8 @@
       "experimental-features = nix-command flakes"}
     '';
     settings = {
-      sandbox = true;
+      # Because macos sandbox can create issues https://github.com/NixOS/nix/issues/4119
+      sandbox = (!pkgs.stdenv.isDarwin);
       trusted-users = [ "${config.user.name}" "root" "@admin" "@wheel" ];
       max-jobs = 8;
       cores = 0; # use them all
