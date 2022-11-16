@@ -38,21 +38,21 @@
         #   pname = "vim-roam-task";
         #   src = inputs.vim-roam-task;
         # };
-        telescope-media-files = prev.vimUtils.buildVimPlugin {
-          name = "telescope-media-files";
-          pname = "telescope-media-files";
-          src = inputs.telescope-media-files;
-        };
-        zk-nvim = prev.vimUtils.buildVimPlugin {
-          name = "zk-nvim";
-          pname = "zk-nvim";
-          src = inputs.zk-nvim;
-        };
-        surround-nvim = prev.vimUtils.buildVimPlugin {
-          name = "surround.nvim";
-          pname = "surround.nvim";
-          src = inputs.surround-nvim;
-        };
+        # telescope-media-files = prev.vimUtils.buildVimPlugin {
+        #   name = "telescope-media-files";
+        #   pname = "telescope-media-files";
+        #   src = inputs.telescope-media-files;
+        # };
+        # zk-nvim = prev.vimUtils.buildVimPlugin {
+        #   name = "zk-nvim";
+        #   pname = "zk-nvim";
+        #   src = inputs.zk-nvim;
+        # };
+        # surround-nvim = prev.vimUtils.buildVimPlugin {
+        #   name = "surround.nvim";
+        #   pname = "surround.nvim";
+        #   src = inputs.surround-nvim;
+        # };
       };
       # hackernews-tui = prev.rustPlatform.buildRustPackage {
       hackernews-tui = (prev.makeRustPlatform {
@@ -73,7 +73,8 @@
       # };
       gtm-okr = inputs.gtm-okr.packages.${final.system}.gtm-okr;
       babble-cli = inputs.babble-cli.packages.${final.system}.babble-cli;
-      ironhide = inputs.ironhide.packages.${final.system}.ironhide-rs;
+      ironhide = inputs.ironhide.packages.${final.system}.ironhide;
+      pwnvim = inputs.pwnvim.packages.${final.system}.pwnvim;
       # Damnit, switching to brew 2022-07-11
       # zk-latest = (prev.buildGoModule rec {
       #   name = "zk-latest";

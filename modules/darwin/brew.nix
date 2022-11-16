@@ -25,8 +25,6 @@
       "adobe-creative-cloud"
       "amethyst" # for window tiling -- I miss chunkwm but it's successor, yabai, was unstable.
       #"audio-hijack"
-      # Backblaze just adds the Backblaze Installer to the caskroom. Doesn't link it. Worthless.
-      #"backblaze"
       "bartender" # organize status bar
       "blockblock"
       "brave-browser"
@@ -67,17 +65,13 @@
       #"ripcord" # native (non-electron) desktop client for Slack + Discord -- try again in 2023
       "reikey"
       "raycast"
-      #"ricoh-ps-printers-vol4-exp-driver" # homebrew is years out of date; have to install manually
       "signal"
       "silentknight"
       "silnite"
       "skype"
       "spotify"
-      #"superhuman" # mail client
       "sync"
       "syncthing"
-      #"textexpander"
-      #"ticktick"
       "tor-browser"
       "transmission"
       "transmit" # for syncing folders with dropbox on-demand instead of using their broken software

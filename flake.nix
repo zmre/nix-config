@@ -53,22 +53,9 @@
     #   url = "github:mickael-menu/zk";
     #   flake = false;
     # };
-    # My extra nvim plugins -- setup in overlays
-    zk-nvim = {
-      url = "github:mickael-menu/zk-nvim";
-      flake = false;
-    };
-    # nixpkgs already has this, but they aren't keeping it up-to-date
-    # actually, they have some other one. i'm changing to my preferred
-    surround-nvim = {
-      url = "github:kylechui/nvim-surround";
-      flake = false;
-    };
-    telescope-media-files = {
-      url = "github:nvim-telescope/telescope-media-files.nvim";
-      flake = false;
-    };
-    ironhide.url = "git+ssh://git@github.com/IronCoreLabs/ironhide-rs?ref=main";
+    pwnvim.url = "github:zmre/pwnvim";
+
+    ironhide.url = "github:IronCoreLabs/ironhide?ref=main";
     # vim-roam-task = {
     #   url = "github:samgriesemer/vim-roam-task";
     #   flake = false;

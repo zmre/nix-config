@@ -7,8 +7,6 @@ let
     ripgrep
     du-dust
     fzy
-    #pkgs.tree-sitter # need unstable to get new markdown parser
-    #pkgs.tree-sitter-grammars.tree-sitter-markdown
     curl
     duf # df alternative showing free disk space
     fswatch
@@ -22,6 +20,7 @@ let
     zip
 
     # file viewers
+    pkgs.pwnvim # moved my neovim config to its own repo for atomic management and install
     less
     file
     jq
@@ -56,7 +55,7 @@ let
     neofetch # display key software/version info in term
     #nodePackages.readability-cli # quick commandline website article read
     vimv # shell script to bulk rename
-    pkgs.btop
+    pkgs.btop # currently like this better than bottom and htop
     #youtube-dl replaced by yt-dlp
     pkgs.yt-dlp
     vulnix # check for live nix apps that are listed in NVD
@@ -79,54 +78,13 @@ let
     pkgs.babble-cli # twitter tui
     pkgs.toot # mastodon tui
     yubikey-manager # cli for yubikey
-    # failing to build latest myself; official is 7 months behind
-    # moving this to brew 2022-07-11 :-(
-    #pkgs.zk-latest # cli for indexing markdown files
     pkgs.zk # cli for indexing markdown files
     pastel # cli for color manipulation
     kopia # deduping backup
-
     #pkgs.qutebrowser
   ];
-  # below is to make compiling tools/projects without dedicated nix environments more likely to succeed
-  cPkgs = with pkgs.stable; [
-    #automake
-    #autoconf
-    gcc
-    #gnumake
-    #cmake
-    pkg-config
-    libtool
-    # Putting the below in global scope doesn't really do anything unless you do a `nix-shell -p`, and then
-    # they show up in that shell. But at that point, I might as well specify them in a flake or the nix-shell
-    # command.
-    #glib
-    #libiconv # so many things fail to compile without this
-    #openssl # also needed by many things
-  ];
-  # sumneko-lua-language-server failing on darwin, so installing in home-linux and brew
-  luaPkgs = with pkgs; [ luaformatter ];
   # using unstable in my home profile for nix commands
-  nixEditorPkgs = with pkgs; [ nix statix nixfmt nixpkgs-fmt rnix-lsp ];
-  # live dangerously here with unstable
-  #rustPkgs = with pkgs; [ cargo rustfmt rust-analyzer rustc ];
-  # live dangerously here with unstable
-  typescriptPkgs = with pkgs.nodePackages;
-    [
-      typescript
-      typescript-language-server
-      yarn
-      diagnostic-languageserver
-      eslint_d
-      prettier
-      vscode-langservers-extracted # lsp servers for json, html, css
-      tailwindcss
-      pnpm
-      svelte-language-server
-    ] ++ [
-      # weird hack to allow for funky package name
-      pkgs.nodePackages."@tailwindcss/language-server"
-    ];
+  nixEditorPkgs = with pkgs; [ nix statix ];
 
   networkPkgs = with pkgs.stable; [ mtr iftop ];
   guiPkgs = with pkgs;
@@ -150,8 +108,7 @@ in {
   # the Home Manager release notes for a list of state version
   # changes in each release.
   home.stateVersion = "20.09";
-  home.packages = defaultPkgs ++ cPkgs ++ luaPkgs ++ nixEditorPkgs # ++ rustPkgs
-    ++ typescriptPkgs ++ guiPkgs ++ networkPkgs;
+  home.packages = defaultPkgs ++ nixEditorPkgs ++ guiPkgs ++ networkPkgs;
 
   home.sessionVariables = {
     LANG = "en_US.UTF-8";
@@ -231,20 +188,20 @@ in {
     source ~/.config/direnv/direnvrc
   '';
   home.file.".p10k.zsh".source = ./dotfiles/p10k.zsh;
-  home.file.".config/nvim/lua/zmre/options.lua".source =
-    ./dotfiles/nvim/lua/options.lua;
-  home.file.".config/nvim/lua/zmre/abbreviations.lua".source =
-    ./dotfiles/nvim/lua/abbreviations.lua;
-  home.file.".config/nvim/lua/zmre/filetypes.lua".source =
-    ./dotfiles/nvim/lua/filetypes.lua;
-  home.file.".config/nvim/lua/zmre/mappings.lua".source =
-    ./dotfiles/nvim/lua/mappings.lua;
-  home.file.".config/nvim/lua/zmre/tools.lua".source =
-    ./dotfiles/nvim/lua/tools.lua;
-  home.file.".config/nvim/lua/zmre/plugins.lua".source =
-    ./dotfiles/nvim/lua/plugins.lua;
-  home.file.".config/nvim/lua/zmre/vscode.lua".source =
-    ./dotfiles/nvim/lua/vscode.lua;
+  # home.file.".config/nvim/lua/zmre/options.lua".source =
+  #   ./dotfiles/nvim/lua/options.lua;
+  # home.file.".config/nvim/lua/zmre/abbreviations.lua".source =
+  #   ./dotfiles/nvim/lua/abbreviations.lua;
+  # home.file.".config/nvim/lua/zmre/filetypes.lua".source =
+  #   ./dotfiles/nvim/lua/filetypes.lua;
+  # home.file.".config/nvim/lua/zmre/mappings.lua".source =
+  #   ./dotfiles/nvim/lua/mappings.lua;
+  # home.file.".config/nvim/lua/zmre/tools.lua".source =
+  #   ./dotfiles/nvim/lua/tools.lua;
+  # home.file.".config/nvim/lua/zmre/plugins.lua".source =
+  #   ./dotfiles/nvim/lua/plugins.lua;
+  # home.file.".config/nvim/lua/zmre/vscode.lua".source =
+  #   ./dotfiles/nvim/lua/vscode.lua;
   home.file.".wallpaper.jpg".source = ./wallpaper/castle2.jpg;
   home.file.".lockpaper.png".source = ./wallpaper/kali.png;
   #home.file.".tmux.conf".source =
@@ -311,7 +268,7 @@ in {
           replace = "ironcorelabs.com";
         }
         {
-          trigger = "-icl";
+          trigger = "--icl";
           replace = "IronCore Labs";
         }
         {
@@ -321,6 +278,14 @@ in {
         {
           trigger = "mycal";
           replace = "https://app.hubspot.com/meetings/patrick-walsh";
+        }
+        {
+          trigger = "p@i";
+          replace = "patrick.walsh@ironcorelabs.com";
+        }
+        {
+          trigger = "p@w";
+          replace = "pwalsh@well.com";
         }
         {
           trigger = "--sig";
@@ -412,167 +377,6 @@ in {
     };
   };
 
-  programs.neovim = {
-    enable = true;
-    viAlias = true;
-    vimAlias = true;
-    # solely needed for taskwiki/vim-roam-task; now commented as removing
-    #withPython3 = true;
-    #extraPython3Packages = (ps: with ps; [ pynvim tasklib six ]);
-    extraPackages = with pkgs; [ # unstable
-      vale # style checker for writing
-      proselint # style checker for writing
-      #zk # note finder -- moved this to global location
-    ];
-    # make sure impatient is loaded before everything else to speed things up
-    extraConfig = ''
-      lua << EOF
-          require('impatient')
-          require('impatient').enable_profile()
-          require('zmre.options').defaults()
-          require('zmre.options').gui()
-          require('zmre.mappings')
-          require('zmre.abbreviations')
-          if vim.g.vscode ~= nil then
-            require('zmre.vscode')
-          else
-            require('zmre.filetypes').config()
-            require('zmre.plugins').ui()
-            require('zmre.plugins').diagnostics()
-            require('zmre.plugins').telescope()
-            require('zmre.plugins').completions()
-            require('zmre.plugins').notes()
-            require('zmre.plugins').misc()
-          end
-      EOF
-    '';
-
-    # going unstable here; living dangerously
-    plugins = with pkgs.vimPlugins; [
-      # Common dependencies of other plugins
-      popup-nvim # dependency of some other plugins
-      plenary-nvim # Library for lua plugins; used by many plugins here
-
-      # Syntax / Language Support ##########################
-      vim-polyglot # lazy load all the syntax plugins for all the languages
-      rust-tools-nvim # lsp stuff and more for rust
-      crates-nvim # inline intelligence for Cargo.toml
-      nvim-lspconfig # setup LSP for intelligent coding
-      # nvim-lsp-ts-utils for inlays
-      null-ls-nvim # formatting and linting via lsp system
-      trouble-nvim # navigate all warnings and errors in quickfix-like window
-      lspsaga-nvim
-      lsp-format-nvim
-      todo-comments-nvim
-      #copilot-vim # github copilot
-
-      # UI #################################################
-      onedarkpro-nvim # colorscheme
-      zephyr-nvim # alternate colorscheme
-      telescope-nvim # da best popup fuzzy finder
-      telescope-fzy-native-nvim # but fzy gives better results
-      telescope-frecency-nvim # and frecency comes in handy too
-      telescope-media-files # only works on linux, but image preview
-      dressing-nvim # dresses up vim.ui.input and vim.ui.select and uses telescope
-      nvim-colorizer-lua # color over CSS like #00ff00
-      nvim-web-devicons # makes things pretty; used by many plugins below
-      nvim-tree-lua # file navigator
-      gitsigns-nvim # git status in gutter
-      symbols-outline-nvim # navigate the current file better
-      lualine-nvim # nice status bar at bottom
-      vim-bbye # fix bdelete buffer stuff needed with bufferline
-      bufferline-nvim
-      indent-blankline-nvim # visual indent
-      toggleterm-nvim # better terminal management
-      #nvim-treesitter # better code coloring
-      nvim-treesitter.withAllGrammars
-      playground # treesitter playground
-      nvim-treesitter-textobjects
-      nvim-treesitter-context # keep current block header (func defn or whatever) on first line
-
-      # Editor Features ####################################
-      vim-abolish # better abbreviations / spelling fixer
-      #vim-surround # most important plugin for quickly handling brackets
-      surround-nvim # .... updated lua-based alternative to tpope's surround
-      vim-unimpaired # bunch of convenient navigation key mappings
-      vim-repeat # supports all of the above so you can use .
-      vim-rsi # brings keyline bindings to editing (like ctrl-e for end of line when in insert mode)
-      vim-visualstar # press * or # on a word to find it
-      kommentary # code commenter
-      nvim-ts-context-commentstring # makes kommentary contextual for embedded languages
-      vim-eunuch # brings cp/mv type commands. :Rename and :Move are particularly handy
-
-      # Autocompletion
-      nvim-cmp # generic autocompleter
-      cmp-nvim-lsp # use lsp as source for completions
-      cmp-nvim-lua # makes vim config editing better with completions
-      cmp-buffer # any text in open buffers
-      cmp-path # complete paths
-      cmp-cmdline # completing in :commands
-      cmp-emoji # complete :emojis:
-      nvim-autopairs # balances parens as you type
-      vim-emoji # TODO: redundant now?
-      luasnip # snippets driver
-      cmp_luasnip # snippets completion
-      friendly-snippets # actual library of snippets used by luasnip
-
-      # Notes
-      # 2022-08-30 I have quite liked taskwiki and vim-roam-task, but both use a #ab12ff
-      # style of tagging tasks that confuses the hell out of markdown editors
-      # that are tag aware. As I'm using NotePlan now to collect tasks, I'm
-      # removing this. 
-      #vim-roam-task # a clone of taskwiki that doesn't require vimwiki
-      zk-nvim # lsp for a folder of notes for searching/linking/etc.
-      true-zen-nvim # distraction free, width constrained writing mode
-      twilight-nvim # dim text outside of current scope
-      {
-        plugin = vim-grammarous; # grammar check
-        optional = true; # don't want it to load unless it's needed
-      }
-
-      # Misc
-      vim-fugitive # git management
-      project-nvim
-      vim-tmux-navigator # navigate vim and tmux panes together
-      FixCursorHold-nvim # remove this when neovim #12587 is resolved
-      impatient-nvim # speeds startup times by caching lua bytecode
-      which-key-nvim
-      direnv-vim # auto-execute nix direnv setups
-    ];
-  };
-  #home.file."${config.xdg.configHome}/nvim/parser/tsx.so".source =
-  #"${pkgs.tree-sitter.builtGrammars.tree-sitter-tsx}/parser";
-  # TODO: uncomment this when treesitter nix highlighting isn't so busted 2022-05-17, 2022-08-02
-  #home.file."${config.xdg.configHome}/nvim/parser/nix.so".source =
-  #"${pkgs.tree-sitter.builtGrammars.tree-sitter-nix}/parser";
-  # home.file."${config.xdg.configHome}/nvim/parser/vim.so".source =
-  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-vim}/parser";
-  # home.file."${config.xdg.configHome}/nvim/parser/lua.so".source =
-  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-lua}/parser";
-  # home.file."${config.xdg.configHome}/nvim/parser/css.so".source =
-  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-css}/parser";
-  # home.file."${config.xdg.configHome}/nvim/parser/yaml.so".source =
-  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-yaml}/parser";
-  # home.file."${config.xdg.configHome}/nvim/parser/toml.so".source =
-  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-toml}/parser";
-  # home.file."${config.xdg.configHome}/nvim/parser/rust.so".source =
-  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-rust}/parser";
-  # home.file."${config.xdg.configHome}/nvim/parser/json.so".source =
-  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-json}/parser";
-  # home.file."${config.xdg.configHome}/nvim/parser/typescript.so".source =
-  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-typescript}/parser";
-  # home.file."${config.xdg.configHome}/nvim/parser/javascript.so".source =
-  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-javascript}/parser";
-  # home.file."${config.xdg.configHome}/nvim/parser/bash.so".source =
-  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-bash}/parser";
-  # home.file."${config.xdg.configHome}/nvim/parser/scala.so".source =
-  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-scala}/parser";
-  # home.file."${config.xdg.configHome}/nvim/parser/markdown.so".source =
-  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-markdown}/parser";
-  # home.file."${config.xdg.configHome}/nvim/parser/svelte.so".source =
-  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-svelte}/parser";
-  # home.file."${config.xdg.configHome}/nvim/parser/regex.so".source =
-  #   "${pkgs.tree-sitter.builtGrammars.tree-sitter-regex}/parser";
   # Prose linting
   home.file."${config.xdg.configHome}/proselint/config.json".text = ''
     {
