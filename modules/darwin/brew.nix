@@ -29,7 +29,7 @@
       "blockblock"
       "brave-browser"
       "canon-eos-utility"
-      "canon-eos-webcam-utility"
+      #"canon-eos-webcam-utility"
       "choosy" # multi-browser url launch selector; see also https://github.com/johnste/finicky
       "dash" # offline developer docs
       "default-folder-x"
@@ -65,6 +65,7 @@
       #"ripcord" # native (non-electron) desktop client for Slack + Discord -- try again in 2023
       "reikey"
       "raycast"
+      "screenflow"
       "signal"
       "silentknight"
       "silnite"
