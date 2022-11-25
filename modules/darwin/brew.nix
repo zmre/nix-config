@@ -44,6 +44,7 @@
       "insta360-studio"
       "istat-menus"
       "kindavim"
+      "knockknock"
       "little-snitch"
       "lockrattler"
       #"loopback" -- haven't been using this of late
@@ -152,12 +153,9 @@
       "findutils" # TODO: needed?
       "gdrive"
       "marp-cli" # convert markdown to html slides
-      #"netlify-cli"
       "ical-buddy"
       "ncspot"
       "chkrootkit"
-      # because the nix recipe isn't compiling on darwin
-      "lua-language-server"
       "trippy" # an mtr alternative
       # would rather load these as part of a security shell, but...
       "p0f" # the nix one only builds on linux

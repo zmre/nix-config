@@ -46,11 +46,6 @@ in {
 
     chkrootkit # scan for breaches
 
-    # doesn't compile on darwin as of Jan 2022
-    sumneko-lua-language-server
-    # doesn't compile on darwin as of Jan 2022
-    neovide
-
     traceroute
 
     # media center

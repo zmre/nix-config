@@ -21,6 +21,7 @@ let
 
     # file viewers
     pkgs.pwnvim # moved my neovim config to its own repo for atomic management and install
+    pkgs.pwneovide # wrapper makes a macos app for launching (and ensures it calls pwnvim)
     less
     file
     jq

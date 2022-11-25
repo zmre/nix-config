@@ -54,6 +54,7 @@
     #   flake = false;
     # };
     pwnvim.url = "github:zmre/pwnvim";
+    pwneovide.url = "github:zmre/pwneovide";
 
     ironhide.url = "github:IronCoreLabs/ironhide?ref=main";
     # vim-roam-task = {
