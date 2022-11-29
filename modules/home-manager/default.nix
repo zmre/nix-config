@@ -64,6 +64,7 @@ let
     #taskwarrior-tui
     aspell # spell checker
     kalker # cli calculator; alt. to bc and calc
+    rink # calculator for unit conversions
     nix-tree # explore dependencies
     asciinema # terminal screencast
     ctags
@@ -82,6 +83,8 @@ let
     pkgs.zk # cli for indexing markdown files
     pastel # cli for color manipulation
     kopia # deduping backup
+    pkgs.nps # quick nix packages search
+    gnugrep # TODO: PR this to nps; needed only there
     #pkgs.qutebrowser
   ];
   # using unstable in my home profile for nix commands

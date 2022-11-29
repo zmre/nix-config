@@ -71,6 +71,9 @@
     gtm-okr.inputs.nixpkgs.follows = "nixpkgs";
     babble-cli.url = "github:zmre/babble-cli";
     babble-cli.inputs.nixpkgs.follows = "nixpkgs";
+    nps.url =
+      "github:OleMussmann/Nix-Package-Search"; # use nps to quick search packages - requires gnugrep though
+    nps.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs@{ self, nixpkgs, darwin, home-manager, nixos-hardware

@@ -76,6 +76,7 @@
       ironhide = inputs.ironhide.packages.${final.system}.ironhide;
       pwnvim = inputs.pwnvim.packages.${final.system}.pwnvim;
       pwneovide = inputs.pwneovide.packages.${final.system}.pwneovide;
+      nps = inputs.nps.defaultPackage.${final.system};
       # Damnit, switching to brew 2022-07-11
       # zk-latest = (prev.buildGoModule rec {
       #   name = "zk-latest";
