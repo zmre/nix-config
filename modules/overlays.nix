@@ -10,50 +10,7 @@
         config.allowUnsupportedSystem = true;
         nix.package = inputs.nixos-stable.nix_2_8;
       };
-      #trunk = import inputs.trunk { system = prev.system; };
-      #small = import inputs.small { system = prev.system; };
-      # from malob's config
 
-      # Aborted attempt to fix https://github.com/NixOS/nixpkgs/pull/179159
-      # python3Packages = (prev.python3.override {
-      #   packageOverrides = _:
-      #     { urllib3, ... }: {
-      #       urllib3 = urllib3.overrideAttrs
-      #         ({ passthru, propagatedBuildInputs, ... }: {
-      #           passthru = passthru // {
-      #             optional-dependencies =
-      #               prev.lib.filterAttrs (n: _v: n != "secure")
-      #               (passthru.optional-dependencies or [ ]);
-      #           };
-      #           propagatedBuildInputs = propagatedBuildInputs
-      #             // (passthru.optional-dependencies.brotli or [ ]);
-      #         });
-      #     };
-      # }).pkgs;
-
-      # Overlay that adds some additional Neovim plugins
-      vimPlugins = prev.vimPlugins // {
-        # vim-roam-task = prev.vimUtils.buildVimPluginFrom2Nix {
-        #   name = "vim-roam-task";
-        #   pname = "vim-roam-task";
-        #   src = inputs.vim-roam-task;
-        # };
-        # telescope-media-files = prev.vimUtils.buildVimPlugin {
-        #   name = "telescope-media-files";
-        #   pname = "telescope-media-files";
-        #   src = inputs.telescope-media-files;
-        # };
-        # zk-nvim = prev.vimUtils.buildVimPlugin {
-        #   name = "zk-nvim";
-        #   pname = "zk-nvim";
-        #   src = inputs.zk-nvim;
-        # };
-        # surround-nvim = prev.vimUtils.buildVimPlugin {
-        #   name = "surround.nvim";
-        #   pname = "surround.nvim";
-        #   src = inputs.surround-nvim;
-        # };
-      };
       # hackernews-tui = prev.rustPlatform.buildRustPackage {
       hackernews-tui = (prev.makeRustPlatform {
         inherit (inputs.fenix.packages.${prev.system}.minimal) cargo rustc;

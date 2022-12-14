@@ -117,6 +117,7 @@
       "Keynote" = 409183694;
       "Keyshape" = 1223341056; # animated svg editor
       "Kindle" = 405399194;
+      "Mastonaut" = 1450757574; # mastodon client i'm trying
       "Microsoft Excel" = 462058435;
       "Microsoft Word" = 462054704;
       "Microsoft PowerPoint" = 462062816;
