@@ -60,7 +60,7 @@ let
     #youtube-dl replaced by yt-dlp
     pkgs.yt-dlp
     vulnix # check for live nix apps that are listed in NVD
-    tickrs # track stocks
+    pkgs.tickrs # track stocks
     #taskwarrior-tui
     aspell # spell checker
     kalker # cli calculator; alt. to bc and calc

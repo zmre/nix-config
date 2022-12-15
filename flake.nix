@@ -26,8 +26,8 @@
     devshell.url = "github:numtide/devshell";
     flake-utils.url = "github:numtide/flake-utils";
     #nixos-hardware.url = "github:nixos/nixos-hardware";
-    darwin-stable.url = "github:nixos/nixpkgs/nixpkgs-22.05-darwin";
-    nixos-stable.url = "github:nixos/nixpkgs/nixos-22.05";
+    darwin-stable.url = "github:nixos/nixpkgs/nixpkgs-22.11-darwin";
+    nixos-stable.url = "github:nixos/nixpkgs/nixos-22.11";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     flake-compat.url = "github:edolstra/flake-compat";
@@ -56,7 +56,7 @@
     pwnvim.url = "github:zmre/pwnvim";
     pwneovide.url = "github:zmre/pwneovide";
 
-    ironhide.url = "github:IronCoreLabs/ironhide?ref=main";
+    ironhide.url = "github:IronCoreLabs/ironhide?ref=1.0.5";
     # vim-roam-task = {
     #   url = "github:samgriesemer/vim-roam-task";
     #   flake = false;

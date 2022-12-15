@@ -28,6 +28,10 @@
       #   nativeBuildInputs = prev.qutebrowser.nativeBuildInputs ++ prev.lib.optionals prev.stdenv.isDarwin
       #     [ prev.darwin.apple_sdk.frameworks.Security ]; #darwin.cctools
       # };
+      tickrs = prev.tickrs.overrideAttrs (oldAttrs: rec {
+        buildInputs = oldAttrs.buildInputs
+          ++ [ prev.darwin.apple_sdk.frameworks.SystemConfiguration ];
+      });
       gtm-okr = inputs.gtm-okr.packages.${final.system}.gtm-okr;
       babble-cli = inputs.babble-cli.packages.${final.system}.babble-cli;
       ironhide = inputs.ironhide.packages.${final.system}.ironhide;
