@@ -203,12 +203,14 @@ in {
   # tic -xe alacritty,alacritty-direct,kitty,kitty-direct,tmux-256color -o terminfo terminfo.src
   # I'm not sure if this is OS dependent. For now, only doing this on Darwin. Possibly I should generate
   # on each local system first in a derivation
-  home.file.".terminfo/61/alacritty" = ./dotfiles/terminfo/61/alacritty;
-  home.file.".terminfo/61/alacritty-direct" =
+  home.file.".terminfo/61/alacritty".source = ./dotfiles/terminfo/61/alacritty;
+  home.file.".terminfo/61/alacritty-direct".source =
     ./dotfiles/terminfo/61/alacritty-direct;
-  home.file.".terminfo/6b/kitty" = ./dotfiles/terminfo/6b/kitty;
-  home.file.".terminfo/6b/kitty-direct" = ./dotfiles/terminfo/6b/kitty-direct;
-  home.file.".terminfo/74/tmux-256color" = ./dotfiles/terminfo/74/tmux-256color;
+  home.file.".terminfo/6b/kitty".source = ./dotfiles/terminfo/6b/kitty;
+  home.file.".terminfo/6b/kitty-direct".source =
+    ./dotfiles/terminfo/6b/kitty-direct;
+  home.file.".terminfo/74/tmux-256color".source =
+    ./dotfiles/terminfo/74/tmux-256color;
 
   # Config for hackernews-tui to make it darker
   home.file.".config/hn-tui.toml".text = ''
