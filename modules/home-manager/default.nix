@@ -135,6 +135,7 @@ in {
     # Add colors to man pages
     MANPAGER = "less -R --use-color -Dd+r -Du+b +Gg -M -s";
     SYSTEMD_COLORS = "true";
+    COLORTERM = "truecolor";
     FZF_CTRL_R_OPTS = "--sort --exact";
     BROWSER = "qutebrowser";
     TERMINAL = "alacritty";
@@ -192,26 +193,23 @@ in {
     source ~/.config/direnv/direnvrc
   '';
   home.file.".p10k.zsh".source = ./dotfiles/p10k.zsh;
-  # home.file.".config/nvim/lua/zmre/options.lua".source =
-  #   ./dotfiles/nvim/lua/options.lua;
-  # home.file.".config/nvim/lua/zmre/abbreviations.lua".source =
-  #   ./dotfiles/nvim/lua/abbreviations.lua;
-  # home.file.".config/nvim/lua/zmre/filetypes.lua".source =
-  #   ./dotfiles/nvim/lua/filetypes.lua;
-  # home.file.".config/nvim/lua/zmre/mappings.lua".source =
-  #   ./dotfiles/nvim/lua/mappings.lua;
-  # home.file.".config/nvim/lua/zmre/tools.lua".source =
-  #   ./dotfiles/nvim/lua/tools.lua;
-  # home.file.".config/nvim/lua/zmre/plugins.lua".source =
-  #   ./dotfiles/nvim/lua/plugins.lua;
-  # home.file.".config/nvim/lua/zmre/vscode.lua".source =
-  #   ./dotfiles/nvim/lua/vscode.lua;
   home.file.".wallpaper.jpg".source = ./wallpaper/castle2.jpg;
   home.file.".lockpaper.png".source = ./wallpaper/kali.png;
-  #home.file.".tmux.conf".source =
-  #"${config.home-manager-files}/.config/tmux/tmux.conf";
-  #home.file.".gitignore".source =
-  #"${config.home-manager-files}/.config/git/ignore";
+
+  # terminfo to allow rich handling of italics, 256 colors, etc.
+  # these files were generated from the dotfiles dir which has a terminfo.src
+  # downloaded from https://invisible-island.net/datafiles/current/terminfo.src.gz
+  # the terminfo definitions were created with the command:
+  # tic -xe alacritty,alacritty-direct,kitty,kitty-direct,tmux-256color -o terminfo terminfo.src
+  # I'm not sure if this is OS dependent. For now, only doing this on Darwin. Possibly I should generate
+  # on each local system first in a derivation
+  home.file.".terminfo/61/alacritty" = ./dotfiles/terminfo/61/alacritty;
+  home.file.".terminfo/61/alacritty-direct" =
+    ./dotfiles/terminfo/61/alacritty-direct;
+  home.file.".terminfo/6b/kitty" = ./dotfiles/terminfo/6b/kitty;
+  home.file.".terminfo/6b/kitty-direct" = ./dotfiles/terminfo/6b/kitty-direct;
+  home.file.".terminfo/74/tmux-256color" = ./dotfiles/terminfo/74/tmux-256color;
+
   # Config for hackernews-tui to make it darker
   home.file.".config/hn-tui.toml".text = ''
     [theme.palette]
