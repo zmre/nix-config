@@ -198,9 +198,22 @@ in {
   fonts.fontDir.enable =
     true; # if this is true, manually installed system fonts will be deleted!
   fonts.fonts = with pkgs; [
-    powerline-fonts
-    source-code-pro
-    nerdfonts
+    # powerline-fonts
+    # source-code-pro
+    (nerdfonts.override {
+      # holy hell it can take a long time to install everything; strip down
+      fonts = [
+        "FiraCode"
+        "Hasklig"
+        "DroidSansMono"
+        "DejaVuSansMono"
+        "iA-Writer"
+        "JetBrainsMono"
+        "Meslo"
+        "SourceCodePro"
+        "Inconsolata"
+      ];
+    })
     vegur
     noto-fonts
     vistafonts # needed for msoffice
