@@ -1079,13 +1079,17 @@ in {
       "cmd+c" = "copy_to_clipboard";
       "cmd+v" = "paste_from_clipboard";
       # cmd-[ and cmd-] switch tmux windows
-      "cmd+[" =
-        "send_text all \\x02h"; # \x02 is ctrl-b so sequence below is ctrl-b, h
-      "cmd+]" = "send_text all \\x02l";
+      # "cmd+[" =
+      # "send_text all \\x02h"; # \x02 is ctrl-b so sequence below is ctrl-b, h
+      # "cmd+]" = "send_text all \\x02l";
+      "ctrl+h" = "neighboring_window left";
+      "ctrl+j" = "neighboring_window down";
+      "ctrl+k" = "neighboring_window up";
+      "ctrl+l" = "neighboring_window right";
     };
     font = {
-      #name = "MesloLGS Nerd Font Mono"; # no ligatures :(
-      name = "Hasklug Nerd Font Medium"; # regular is too thin
+      name = "Hasklug Nerd Font Mono Medium";
+      #name = "Hasklug Nerd Font Medium"; # regular is too thin
       #name = "Inconsolata Nerd Font"; # no italic
       #name = "SpaceMono Nerd Font Mono";
       #name = "VictorMono Nerd Font";
@@ -1114,16 +1118,34 @@ in {
       active_tab_foreground = "#ffffff";
       active_tab_background = "#2233ff";
       tab_activity_symbol = " ";
-      bold_font = "Hasklug Nerd Font Bold"; # "auto";
-      italic_font = "auto";
-      bold_italic_font = "Hasklug Nerd Font Bold Italic";
+      bold_font = "Hasklug Nerd Font Mono Bold"; # "auto";
+      italic_font = "Hasklug Nerd Font Mono Italic";
+      bold_italic_font = "Hasklug Nerd Font Mono Bold Italic";
       allow_remote_control = "yes";
       visual_bell_duration = "0.1";
       background_opacity = "0.95";
+      startup_session = "~/.config/kitty/startup.session";
     };
     theme =
       "One Half Dark"; # or Dracula or OneDark see https://github.com/kovidgoyal/kitty-themes/tree/master/themes
+    # extraConfig = "\n";
   };
+  home.file.".config/kitty/startup.session".text = ''
+    new_tab
+    cd ~
+    launch zsh
+    new_tab notes
+    cd ~/Library/Containers/co.noteplan.NotePlan3/Data/Library/Application Support/co.noteplan.NotePlan3
+    launch zsh
+    new_tab news
+    layout grid
+    launch zsh -i -c tickrs
+    launch zsh -i -c "babble-cli -s list --name daily"
+    launch zsh -i -c "watch -n 120 -c \"/opt/homebrew/bin/icalBuddy -tf %H:%M -n -f -eep notes -ec 'Outschool Schedule,HomeAW,Contacts,Birthdays,Found in Natural Language' eventsToday\""
+    launch zsh -i -c hackernews_tui
+    new_tab svelte
+    cd ~/src/icl/website/website-svelte-branch
+  '';
   programs.alacritty = {
     enable = true;
     package =
