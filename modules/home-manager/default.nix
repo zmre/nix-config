@@ -83,8 +83,9 @@ let
     pkgs.zk # cli for indexing markdown files
     pastel # cli for color manipulation
     kopia # deduping backup
-    pkgs.nps # quick nix packages search
-    gnugrep # TODO: PR this to nps; needed only there
+    # 2022-12-18 commenting out because apparently it is packaging its own rg and that conflicts with ripgrep
+    #pkgs.nps # quick nix packages search
+    #gnugrep # TODO: PR this to nps; needed only there
     #pkgs.qutebrowser
   ];
   # using unstable in my home profile for nix commands
@@ -201,6 +202,9 @@ in {
   # downloaded from https://invisible-island.net/datafiles/current/terminfo.src.gz
   # the terminfo definitions were created with the command:
   # tic -xe alacritty,alacritty-direct,kitty,kitty-direct,tmux-256color -o terminfo terminfo.src
+  # Also did this for xterm-kitty (from within kitty so TERMINFO is set)
+  # tic -x -o ~/.terminfo $TERMINFO/kitty.terminfo
+  # Then copied out the resulting ~/.terminfo/78/xterm-kitty file
   # I'm not sure if this is OS dependent. For now, only doing this on Darwin. Possibly I should generate
   # on each local system first in a derivation
   home.file.".terminfo/61/alacritty".source = ./dotfiles/terminfo/61/alacritty;
@@ -211,6 +215,10 @@ in {
     ./dotfiles/terminfo/6b/kitty-direct;
   home.file.".terminfo/74/tmux-256color".source =
     ./dotfiles/terminfo/74/tmux-256color;
+  home.file.".terminfo/78/xterm-kitty".source =
+    ./dotfiles/terminfo/78/xterm-kitty;
+  home.file.".terminfo/x/xterm-kitty".source =
+    ./dotfiles/terminfo/78/xterm-kitty;
 
   # Config for hackernews-tui to make it darker
   home.file.".config/hn-tui.toml".text = ''
@@ -819,6 +827,8 @@ in {
         "pushd ~/.config/nixpkgs ; nix flake update ; /opt/homebrew/bin/brew update; popd ; pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; /opt/homebrew/bin/brew upgrade ; /opt/homebrew/bin/brew upgrade --cask --greedy; popd";
       dwswitch =
         "pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
+      dwclean =
+        "pushd ~; sudo nix-env --delete-generations +7 --profile /nix/var/nix/profiles/system; sudo nix-collect-garbage --delete-older-than 30d ; nix store optimise ; popd";
       noswitch =
         "pushd ~; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.# ; popd";
     };
@@ -1079,9 +1089,9 @@ in {
       "cmd+c" = "copy_to_clipboard";
       "cmd+v" = "paste_from_clipboard";
       # cmd-[ and cmd-] switch tmux windows
-      # "cmd+[" =
-      # "send_text all \\x02h"; # \x02 is ctrl-b so sequence below is ctrl-b, h
-      # "cmd+]" = "send_text all \\x02l";
+      # \x02 is ctrl-b so sequence below is ctrl-b, h
+      "cmd+[" = "send_text all \\x02h";
+      "cmd+]" = "send_text all \\x02l";
       "ctrl+h" = "neighboring_window left";
       "ctrl+j" = "neighboring_window down";
       "ctrl+k" = "neighboring_window up";
@@ -1106,8 +1116,9 @@ in {
       disable_ligatures = "cursor"; # disable ligatures when cursor is on them
 
       # Window layout
-      hide_window_decorations = "titlebar-only";
+      #hide_window_decorations = "titlebar-only";
       window_padding_width = "5";
+      macos_show_window_title_in = "window";
 
       # Tab bar
       tab_bar_edge = "bottom";
@@ -1134,13 +1145,15 @@ in {
     new_tab
     cd ~
     launch zsh
+
     new_tab notes
     cd ~/Library/Containers/co.noteplan.NotePlan3/Data/Library/Application Support/co.noteplan.NotePlan3
     launch zsh
+
     new_tab news
     layout grid
     launch zsh -i -c tickrs
-    launch zsh -i -c "babble-cli -s list --name daily"
+    launch zsh
     launch zsh -i -c "watch -n 120 -c \"/opt/homebrew/bin/icalBuddy -tf %H:%M -n -f -eep notes -ec 'Outschool Schedule,HomeAW,Contacts,Birthdays,Found in Natural Language' eventsToday\""
     launch zsh -i -c hackernews_tui
     new_tab svelte
