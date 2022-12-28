@@ -35,10 +35,12 @@ let
     poppler_utils # for pdf2text in lf
     mediainfo # used by lf
     exiftool # used by lf
+    rich-cli # used by lf (experimenting with mdcat replacement)
     exif
-    glow # view markdown file or dir
+    glow # browse markdown dirs
     mdcat # colorize markdown
     html2text
+    #pkgs.ctpv
 
     # network
     gping
@@ -85,7 +87,7 @@ let
     kopia # deduping backup
     # 2022-12-18 commenting out because apparently it is packaging its own rg and that conflicts with ripgrep
     #pkgs.nps # quick nix packages search
-    #gnugrep # TODO: PR this to nps; needed only there
+    gnugrep
     #pkgs.qutebrowser
   ];
   # using unstable in my home profile for nix commands
@@ -835,6 +837,21 @@ in {
   };
 
   programs.exa.enable = true;
+  programs.pistol = {
+    # I've gone back to my pv.sh script for now
+    enable = false;
+    associations = [
+      {
+        mime = "text/*";
+        command = "bat --paging=never --color=always %pistol-filename%";
+      }
+      {
+        mime = "image/*";
+        command =
+          "kitty +kitten icat --silent --transfer-mode=stream --stdin=no %pistol-filename%";
+      }
+    ];
+  };
   # my preferred file explorer; mnemonic: list files
   programs.lf = {
     enable = true;
@@ -852,9 +869,14 @@ in {
       set incfilter
       set mouse
       set truncatechar ⋯
-      set cleaner ~/.config/lf/cls.sh
-      set previewer ~/.config/lf/pv.sh
+      set cleaner ${./dotfiles/lf/cls.sh}
     '';
+    previewer = {
+      keybinding = "i";
+      source = ./dotfiles/lf/pv.sh;
+      # source = "${pkgs.pistol}/bin/pistol";
+      # source = ./dotfiles/lf/lf_kitty_preview;
+    };
     # NOTE: some weird syntax below. let me explain. if you have a ${} inside a quote, you escape this way:
     # "\${escaped}"
     # ''blah''${escaped}blah''
@@ -905,9 +927,10 @@ in {
     };
     keybindings = {
       "." = "set hidden!";
-      i = "!~/.config/lf/pager.sh $f"; # mnemonic: info
+      #i = "!~/.config/lf/pager.sh $f"; # mnemonic: info
       # use the system open command
       o = "open";
+      I = "!/usr/bin/qlmanage -p $f";
       "<c-z>" = "$ kill -STOP $PPID";
       "gr" = "fzf_search"; # ripgrep search
       "gd" = "fd_dir"; # mnemonic: go find dir
@@ -916,10 +939,10 @@ in {
       "R" = "vi-rename";
       "<enter>" = ":printfx; quit";
     };
-    #set previewer ~/.config/lf/previewer.sh
-
   };
   home.file.".config/lf/lfimg".source = ./dotfiles/lf/lfimg;
+  home.file.".config/lf/lf_kitty_preview".source =
+    ./dotfiles/lf/lf_kitty_preview;
   home.file.".config/lf/pv.sh".source = ./dotfiles/lf/pv.sh;
   home.file.".config/lf/cls.sh".source = ./dotfiles/lf/cls.sh;
   #home.file.".config/lf/previewer.sh".source = ./dotfiles/lf/previewer.sh;
@@ -977,14 +1000,20 @@ in {
       core.commitGraph = true;
       gc.writeCommitGraph = true;
     };
+    # Really nice looking diffs
     delta = {
-      enable = true;
+      enable = false;
       options = {
         syntax-theme = "Monokai Extended";
         line-numbers = true;
         navigate = true;
         side-by-side = true;
       };
+    };
+    # intelligent diffs that are syntax parse tree aware per language
+    difftastic = {
+      enable = true;
+      background = "dark";
     };
     #ignores = [ ".cargo" ];
     ignores = import ./dotfiles/gitignore.nix;
@@ -1092,10 +1121,10 @@ in {
       # \x02 is ctrl-b so sequence below is ctrl-b, h
       "cmd+[" = "send_text all \\x02h";
       "cmd+]" = "send_text all \\x02l";
-      "ctrl+h" = "neighboring_window left";
-      "ctrl+j" = "neighboring_window down";
-      "ctrl+k" = "neighboring_window up";
-      "ctrl+l" = "neighboring_window right";
+      "ctrl+shift+h" = "neighboring_window left";
+      "ctrl+shift+j" = "neighboring_window down";
+      "ctrl+shift+k" = "neighboring_window up";
+      "ctrl+shift+l" = "neighboring_window right";
     };
     font = {
       name = "Hasklug Nerd Font Mono Medium";
@@ -1104,7 +1133,7 @@ in {
       #name = "SpaceMono Nerd Font Mono";
       #name = "VictorMono Nerd Font";
       #name = "FiraCode Nerd Font"; # missing italic
-      size = (if pkgs.stdenvNoCC.isDarwin then 17 else 12);
+      size = if pkgs.stdenvNoCC.isDarwin then 17 else 12;
     };
     settings = {
       scrollback_lines = 3000;
@@ -1114,6 +1143,12 @@ in {
       macos_quit_when_last_window_closed = true;
       adjust_line_height = "105%";
       disable_ligatures = "cursor"; # disable ligatures when cursor is on them
+      shell_integration = "enabled";
+
+      # Fonts
+      bold_font = "Hasklug Nerd Font Mono Bold"; # "auto";
+      italic_font = "Hasklug Nerd Font Mono Italic";
+      bold_italic_font = "Hasklug Nerd Font Mono Bold Italic";
 
       # Window layout
       #hide_window_decorations = "titlebar-only";
@@ -1124,15 +1159,17 @@ in {
       tab_bar_edge = "bottom";
       tab_bar_style = "powerline";
       tab_title_template = "{index}: {title}";
+
+      # Colors
       active_tab_font_style = "bold";
       inactive_tab_font_style = "normal";
       active_tab_foreground = "#ffffff";
       active_tab_background = "#2233ff";
       tab_activity_symbol = " ";
-      bold_font = "Hasklug Nerd Font Mono Bold"; # "auto";
-      italic_font = "Hasklug Nerd Font Mono Italic";
-      bold_italic_font = "Hasklug Nerd Font Mono Bold Italic";
-      allow_remote_control = "yes";
+
+      # Misc
+      allow_remote_control = "socket-only";
+      #listen_on = "unix:/tmp/kitty-sock";
       visual_bell_duration = "0.1";
       background_opacity = "0.95";
       startup_session = "~/.config/kitty/startup.session";

@@ -2,16 +2,22 @@
 
 # This script and related image scripts originally came from:
 # https://github.com/neeshy/lfimg
+# Modified to add lf_kitty_preview
 
 draw() {
-  path="$(printf '%s' "$1" | sed 's/\\/\\\\/g;s/"/\\"/g')"
-  printf '{"action": "add", "identifier": "preview", "x": %d, "y": %d, "width": %d, "height": %d, "scaler": "contain", "scaling_position_x": 0.5, "scaling_position_y": 0.5, "path": "%s"}\n' \
-    "$x" "$y" "$width" "$height" "$path" >"$FIFO_UEBERZUG"
+  if [ -n "$FIFO_UEBERZUG" ]; then
+    path="$(printf '%s' "$1" | sed 's/\\/\\\\/g;s/"/\\"/g')"
+    printf '{"action": "add", "identifier": "preview", "x": %d, "y": %d, "width": %d, "height": %d, "scaler": "contain", "scaling_position_x": 0.5, "scaling_position_y": 0.5, "path": "%s"}\n' \
+      "$x" "$y" "$width" "$height" "$path" >"$FIFO_UEBERZUG"
+  elif [ -n "$KITTY_INSTALLATION_DIR" ]; then
+    kitty +icat --silent --transfer-mode file --place "${width}x${height}@${x}x${y}" "$1"
+  fi
   exit 1
 }
 
 hash() {
-  printf '%s/.cache/lf/%s' "$HOME" \
+  mkdir -p /tmp/lfcache
+  printf '/tmp/lfcache/%s' \
     "$(stat --printf '%n\0%i\0%F\0%s\0%W\0%Y' -- "$(readlink -f "$1")" | sha256sum | awk '{print $1}')"
 }
 
@@ -46,9 +52,14 @@ case "$1" in
     man -- "$1" | col -b
     exit 0
     ;;
-  README.md|*.md) mdcat "$1";;
+  # mdcat will inline images in terminal, but not in lf
+  # glow doesn't have an option to force color/style so looks bad in lf
+  # rich is decent but messes up things like tables
+  # grrrrrrr
+  README|*.md) mdcat "$1"; exit 0;;
+  *.csv) rich -j --force-terminal "$1"; exit 0;;
   *.pdf)
-    if [ -n "$FIFO_UEBERZUG" ]; then
+    if [ -n "$FIFO_UEBERZUG" ] || [ -n "$KITTY_INSTALLATION_DIR" ]; then
       cache="$(hash "$1")"
       cache "$cache.jpg"
       pdftoppm -f 1 -l 1 \
@@ -64,7 +75,7 @@ case "$1" in
     fi
     ;;
   *.djvu|*.djv)
-    if [ -n "$FIFO_UEBERZUG" ]; then
+    if [ -n "$FIFO_UEBERZUG" ] || [ -n "$KITTY_INSTALLATION_DIR" ]; then
       cache="$(hash "$1").tiff"
       cache "$cache"
       ddjvu -format=tiff -quality=90 -page=1 -size="${default_x}x${default_y}" \
@@ -84,7 +95,7 @@ case "$1" in
     exit 0
     ;;
   *.svg)
-    if [ -n "$FIFO_UEBERZUG" ]; then
+    if [ -n "$FIFO_UEBERZUG" ] || [ -n "$KITTY_INSTALLATION_DIR" ]; then
       cache="$(hash "$1").jpg"
       cache "$cache"
       convert -- "$1" "$cache"
@@ -92,13 +103,13 @@ case "$1" in
     fi
     ;;
   # specifying extensions is faster than relying on mime-type below
-  README.*|CONTRIBUTING|*.c|*.cc|*.cpp|*.css|*.go|*.h|*.hh|*.hpp|*.hs|*.html|*.java|*.js|*.json|*.lua|*.php|*.py|*.rb|*.scala|*.ts|*.jsx|*.tsx|*.sh|*.pl|*.rs|*.json|*.toml|*.conf|*.vim|*.bash|*.zsh|*.nix) 
+  README.*|CONTRIBUTING|*.c|*.cc|*.cpp|*.css|*.go|*.h|*.hh|*.hpp|*.hs|*.java|*.js|*.lua|*.php|*.py|*.rb|*.scala|*.ts|*.jsx|*.tsx|*.sh|*.pl|*.rs|*.json|*.toml|*.conf|*.vim|*.bash|*.zsh|*.nix) 
     source-highlight -q --outlang-def=esc.outlang --style-file=esc.style -i "$1" || bat --color=always --paging=never "$1"
     exit 0
     ;;
   # specifying extensions is faster than relying on mime-type below
   *.jpg|*.jpeg|*.gif|*.bmp|*.tif|*.tiff|*.png) 
-    if [ -n "$FIFO_UEBERZUG" ]; then
+    if [ -n "$FIFO_UEBERZUG" ] || [ -n "$KITTY_INSTALLATION_DIR" ]; then
       orientation="$(identify -format '%[EXIF:Orientation]\n' -- "$1")"
       if [ -n "$orientation" ] && [ "$orientation" != 1 ]; then
         cache="$(hash "$1").jpg"
@@ -110,11 +121,12 @@ case "$1" in
       fi
     else
       exiftool "$1"
+      exit 0
     fi
     ;;
   # specifying extensions is faster than relying on mime-type below
-  *.mjpg|*.mjpeg|*.pbm|*.pgm|*.ppm|*.tga|*.xbm|*.xpm|*.svg|*.svgz|*.mng|*.pcx|*.mov|*.mpg|*.mpeg|*.m2v|*.mkv|*.webm|*.ogm|*.mp4|*.m4v|*.mp4v|*.vob|*.qt|*.nuv|*.wmv|*.asf|*.rm|*.rmvb|*.flc|*.avi|*.fli|*.flv|*.gl|*.dl|*.xcf|*.xwd|*.yuv|*.cgm|*.emf|*.ogv|*.ogx|*.aac|*.au|*.flac|*.m4a|*.mid|*.midi|*.mka|*.mp3|*.mpc|*.ogg|*.ra|*.wav|*.oga|*.opus|*.spx|*.xspf) 
-    if [ -n "$FIFO_UEBERZUG" ]; then
+  *.mjpg|*.mjpeg|*.pbm|*.pgm|*.ppm|*.tga|*.xbm|*.xpm|*.svgz|*.mng|*.pcx|*.mov|*.mpg|*.mpeg|*.m2v|*.mkv|*.webm|*.ogm|*.mp4|*.m4v|*.mp4v|*.vob|*.qt|*.nuv|*.wmv|*.asf|*.rm|*.rmvb|*.flc|*.avi|*.fli|*.flv|*.gl|*.dl|*.xcf|*.xwd|*.yuv|*.cgm|*.emf|*.ogv|*.ogx|*.aac|*.au|*.flac|*.m4a|*.mid|*.midi|*.mka|*.mp3|*.mpc|*.ogg|*.ra|*.wav|*.oga|*.opus|*.spx|*.xspf) 
+    if [ -n "$FIFO_UEBERZUG" ] || [ -n "$KITTY_INSTALLATION_DIR" ]; then
       cache="$(hash "$1").jpg"
       cache "$cache"
       ffmpegthumbnailer -i "$1" -o "$cache" -s 0
@@ -135,7 +147,7 @@ case "$(file -Lb --mime-type -- "$1")" in
     exit 0
     ;;
   image/*)
-    if [ -n "$FIFO_UEBERZUG" ]; then
+    if [ -n "$FIFO_UEBERZUG" ] || [ -n "$KITTY_INSTALLATION_DIR" ]; then
       orientation="$(identify -format '%[EXIF:Orientation]\n' -- "$1")"
       if [ -n "$orientation" ] && [ "$orientation" != 1 ]; then
         cache="$(hash "$1").jpg"
@@ -151,7 +163,7 @@ case "$(file -Lb --mime-type -- "$1")" in
     fi
     ;;
   video/*)
-    if [ -n "$FIFO_UEBERZUG" ]; then
+    if [ -n "$FIFO_UEBERZUG" ] || [ -n "$KITTY_INSTALLATION_DIR" ]; then
       cache="$(hash "$1").jpg"
       cache "$cache"
       ffmpegthumbnailer -i "$1" -o "$cache" -s 0

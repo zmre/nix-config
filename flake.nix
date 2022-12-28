@@ -74,6 +74,8 @@
     nps.url =
       "github:OleMussmann/Nix-Package-Search"; # use nps to quick search packages - requires gnugrep though
     nps.inputs.nixpkgs.follows = "nixpkgs";
+    #ctpv.url = "github:NikitaIvanovV/ctpv/master";
+    #ctpv.flake = false;
   };
 
   outputs = inputs@{ self, nixpkgs, darwin, home-manager, nixos-hardware
@@ -87,7 +89,7 @@
 
       mkLib = nixpkgs: nixpkgs.lib.extend (final: prev: home-manager.lib);
 
-      lib = (mkLib nixpkgs);
+      lib = mkLib nixpkgs;
 
       isDarwin = system: (builtins.elem system lib.platforms.darwin);
       homePrefix = system: if isDarwin system then "/Users" else "/home";
@@ -204,7 +206,7 @@
                 127.0.0.1 kubernetes.docker.internal
                 # End of section
 
-              '' + builtins.readFile ("${sbhosts}/hosts");
+              '' + builtins.readFile "${sbhosts}/hosts";
             }
           ];
         };
@@ -273,7 +275,7 @@
             (final: prev: {
               # expose stable packages via pkgs.stable
               stable = import inputs.nixos-stable {
-                system = prev.system;
+                inherit (prev) system;
                 config.allowUnfree = true;
                 config.allowBroken = true;
                 config.allowUnsupportedSystem = true;
