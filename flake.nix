@@ -1,10 +1,11 @@
 {
   description = "zmre nix cross-platform system configurations";
 
-  inputs = rec {
+  inputs = {
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-22.11";
-    nixpkgs = nixpkgs-stable; # default
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    #nixpkgs = nixpkgs-stable; # default
 
     darwin.url = "github:lnl7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -24,7 +25,7 @@
 
     # Need fenix to specify rustc version -- specifically for hackernews-tui
     fenix.url = "github:nix-community/fenix";
-    fenix.inputs.nixpkgs.follows = "nixpkgs";
+    fenix.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     pwnvim.url = "github:zmre/pwnvim";
     pwneovide.url = "github:zmre/pwneovide";
@@ -38,14 +39,14 @@
 
     # command line tool for gtm-hub
     gtm-okr.url = "github:zmre/gtm-okr";
-    gtm-okr.inputs.nixpkgs.follows = "nixpkgs";
+    gtm-okr.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     # twitter cli
     babble-cli.url = "github:zmre/babble-cli";
-    babble-cli.inputs.nixpkgs.follows = "nixpkgs";
+    babble-cli.inputs.nixpkgs.follows = "nixpkgs-unstable";
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-stable, nixpkgs-unstable, darwin
+  outputs = inputs@{ self, nixpkgs-stable, nixpkgs-unstable, darwin
     , home-manager, sbhosts, ... }:
     let
       inherit (home-manager.lib) homeManagerConfiguration;
@@ -53,22 +54,22 @@
       # homePrefix = system: if isDarwin system then "/Users" else "/home";
 
       mkPkgs = system:
-        import nixpkgs {
+        import nixpkgs-unstable {
           inherit system;
           inherit (import ./modules/overlays.nix {
-            inherit inputs nixpkgs-stable;
+            inherit inputs nixpkgs-unstable nixpkgs-stable;
           })
             overlays;
           config = import ./config.nix;
         };
 
-      mkHome = modules: {
+      mkHome = username: modules: {
         home-manager = {
           useGlobalPkgs = true;
           useUserPackages = true;
           backupFileExtension = "bak";
           extraSpecialArgs = { inherit inputs; };
-          users.demo.imports = modules;
+          users."${username}".imports = modules;
         };
       };
 
@@ -86,7 +87,7 @@
             ./modules/darwin
             home-manager.darwinModules.home-manager
             { homebrew.brewPrefix = "/opt/homebrew/bin"; }
-            (mkHome [
+            (mkHome "pwalsh" [
               ./modules/home-manager
               ./modules/home-manager/home-darwin.nix
               # ./modules/home-manager/home-security.nix
@@ -96,7 +97,7 @@
       };
 
       nixosConfigurations = {
-        volantis = nixpkgs.lib.nixosSystem {
+        volantis = nixpkgs-unstable.lib.nixosSystem {
           system = "x86_64-linux";
           pkgs = mkPkgs "x86_64-linux";
           specialArgs = {
@@ -111,14 +112,14 @@
             ./profiles/zmre.nix
             sbhosts.nixosModule
             { networking.stevenBlackHosts.enable = true; }
-            (mkHome [
+            (mkHome "zmre" [
               ./modules/home-manager
               ./modules/home-manager/home-linux.nix
               ./modules/home-manager/home-security.nix
             ])
           ];
         };
-        nixos-pw-vm = nixpkgs.lib.nixosSystem {
+        nixos-pw-vm = nixpkgs-unstable.lib.nixosSystem {
           system = "x86_64-linux";
           pkgs = mkPkgs "x86_64-linux";
           specialArgs = {
@@ -132,7 +133,7 @@
             ./modules/hardware/parallels.nix
             sbhosts.nixosModule
             { networking.stevenBlackHosts.enable = true; }
-            (mkHome [
+            (mkHome "zmre" [
               ./modules/home-manager
               ./modules/home-manager/home-linux.nix
             ])

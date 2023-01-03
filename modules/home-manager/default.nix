@@ -356,7 +356,7 @@ in {
     enableZshIntegration = true;
   };
   programs.taskwarrior = {
-    enable = true;
+    enable = false;
     colorTheme = "dark-256";
     dataLocation = "~/.task";
     config = {
