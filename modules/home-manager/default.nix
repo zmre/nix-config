@@ -336,6 +336,7 @@ in {
 
   programs.bat = {
     enable = true;
+    #extraPackages = with pkgs.bat-extras; [ batman batgrep ];
     config = {
       theme = "TwoDark";
       italic-text = "always";

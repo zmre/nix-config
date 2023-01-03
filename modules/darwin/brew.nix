@@ -27,17 +27,18 @@
       #"audio-hijack"
       "bartender" # organize status bar
       "blockblock"
-      "brave-browser"
+      "brave-browser" # TODO: move to home-manager when it builds
       "canon-eos-utility"
       #"canon-eos-webcam-utility"
       "choosy" # multi-browser url launch selector; see also https://github.com/johnste/finicky
       "dash" # offline developer docs
       "default-folder-x"
       "discord"
-      "docker"
+      "docker" # TODO: move to home-manager
       #"dropbox"
+      # TODO: move espanso to home-manager
       "espanso" # text expander functionality (but open source donationware, x-platform, rust-based)
-      "firefox"
+      "firefox" # TODO: firefox build is broken on ARM; check to see if fixed
       "fork"
       "gpg-suite"
       "imageoptim"
@@ -52,12 +53,12 @@
       #"microsoft-office" -- moved this to apple app store
       #"mpv"
       "noun-project"
-      "obs"
+      "obs" # TODO: move to nix version obs-studio when not broken
       "orion" # just trying out the Orion browser
       "parallels"
       "protonmail-bridge" # TODO: nix version now installs and works -- move over
       "qflipper"
-      "qutebrowser"
+      "qutebrowser" # TODO: move over when it builds on arm64 darwin
       "qlmarkdown"
       "qlstephen"
       #"qlprettypatch" # not updated in 9 years
@@ -67,14 +68,14 @@
       "reikey"
       "raycast"
       "screenflow"
-      "signal"
+      "signal" # TODO: move to home-manager (signal-desktop) when not broken
       "silentknight"
       "silnite"
       "skype"
-      "spotify"
+      "spotify" # TODO: move to home-manager when not broken
       "sync"
-      "syncthing"
-      "tor-browser"
+      "syncthing" # TODO: move to home-manager
+      "tor-browser" # TODO: move to home-manager (tor-browser-bundle-bin) when it builds
       "transmission"
       "transmit" # for syncing folders with dropbox on-demand instead of using their broken software
       # why broken, you ask? well, they're using deprecated APIs for one thing
@@ -86,13 +87,13 @@
       #"webpquicklook" # not updated in 5 years
       #"xbar"
       #"yattee" # private youtube
-      "yubico-yubikey-manager"
+      "yubico-yubikey-manager" # TODO: move to home-manager (yubikey-manager or yubikey-manager-qt)
       "zenmap"
-      "zoom"
-      "zotero"
+      "zoom" # TODO: move to home-manager (zoom-us)
+      "zotero" # TODO: move to home-manager?
       # would be better to load  hese in a security shell, but nix versions don't build on mac
-      "owasp-zap"
-      "burp-suite"
+      "owasp-zap" # TODO: move to home-manager?
+      "burp-suite" # TODO: move to home-manager?
       #"warp" # 2022-11-10 testing some crazy new rust-based terminal
       "webex"
       "wireshark-chmodbpf"
@@ -155,8 +156,8 @@
       "gdrive"
       "marp-cli" # convert markdown to html slides
       "ical-buddy"
-      "ncspot"
-      "chkrootkit"
+      "ncspot" # TODO: move to home-manager
+      "chkrootkit" # TODO: move to home-manager
       "trippy" # an mtr alternative
       # would rather load these as part of a security shell, but...
       "p0f" # the nix one only builds on linux

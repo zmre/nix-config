@@ -178,6 +178,7 @@ in {
       defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
     '';
   };
+  documentation.enable = true;
 
   # Just configure DNS for WiFi for now
   networking.knownNetworkServices = [ "Wi-Fi" ];
