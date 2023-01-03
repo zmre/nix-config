@@ -1,6 +1,5 @@
 { inputs, config, pkgs, ... }:
 let
-  homeDir = config.home.homeDirectory;
   defaultPkgs = with pkgs.stable; [
     # filesystem
     fd
@@ -91,7 +90,7 @@ let
     #pkgs.qutebrowser
   ];
   # using unstable in my home profile for nix commands
-  nixEditorPkgs = with pkgs; [ nix statix ];
+  # nixEditorPkgs = with pkgs; [ nix statix ];
 
   networkPkgs = with pkgs.stable; [ mtr iftop ];
   guiPkgs = with pkgs;
@@ -115,9 +114,11 @@ in {
   # the Home Manager release notes for a list of state version
   # changes in each release.
   home.stateVersion = "20.09";
-  home.packages = defaultPkgs ++ nixEditorPkgs ++ guiPkgs ++ networkPkgs;
+  home.packages = defaultPkgs ++ guiPkgs ++ networkPkgs;
 
   home.sessionVariables = {
+    NIX_PATH =
+      "nixpkgs=${inputs.nixpkgs-unstable}:stable=${inputs.nixpkgs-stable}\${NIX_PATH:+:}$NIX_PATH";
     LANG = "en_US.UTF-8";
     LC_ALL = "en_US.UTF-8";
     #TERM = "xterm-256color";

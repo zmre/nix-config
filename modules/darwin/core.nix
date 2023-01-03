@@ -8,7 +8,10 @@ in {
     # I exclusively control homebrew from here, but it's annoying to fully qualify the path to brew binaries
     systemPath = [ "/opt/homebrew/bin" ];
     #backupFileExtension = "backup";
-    etc = { darwin.source = "${inputs.darwin}"; };
+    etc = {
+      darwin.source = "${inputs.darwin}";
+      hosts.source = "${inputs.sbhosts}/hosts";
+    };
     # Use a custom configuration.nix location.
     # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
 
@@ -67,7 +70,7 @@ in {
        defaults write com.apple.screensaver askForPassword -int 1
        defaults write com.apple.screensaver askForPasswordDelay -int 0
       # Save screenshots to the desktop
-      defaults write com.apple.screencapture location -string "/Users/${config.user.name}/Desktop"
+      defaults write com.apple.screencapture location -string "~/Desktop"
       # Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
       defaults write com.apple.screencapture type -string "png"
       # Show icons for hard drives, servers, and removable media on the desktop
