@@ -5,7 +5,6 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-22.11";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    #nixpkgs = nixpkgs-stable; # default
 
     darwin.url = "github:lnl7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -50,8 +49,6 @@
     , home-manager, sbhosts, ... }:
     let
       inherit (home-manager.lib) homeManagerConfiguration;
-
-      # homePrefix = system: if isDarwin system then "/Users" else "/home";
 
       mkPkgs = system:
         import nixpkgs-unstable {
