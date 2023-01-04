@@ -20,8 +20,10 @@
     pathsToLink = [ "/libexec" ];
   };
 
+  nixpkgs.config = import ../config.nix;
+
   nix = {
-    package = pkgs.nixVersions.nix_2_8;
+    package = pkgs.nixVersions.nix_2_11;
     extraOptions = ''
       keep-outputs = true
       keep-derivations = true
@@ -29,7 +31,7 @@
     '';
     settings = {
       # Because macos sandbox can create issues https://github.com/NixOS/nix/issues/4119
-      sandbox = !pkgs.stdenv.isDarwin;
+      sandbox = false; # !pkgs.stdenv.isDarwin;
       #trusted-users = [ "${config.user.name}" "root" "@admin" "@wheel" ];
       trusted-users = [ "${username}" "root" "@admin" "@wheel" ];
       auto-optimise-store = true;

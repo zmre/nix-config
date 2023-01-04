@@ -43,15 +43,17 @@
     # twitter cli
     babble-cli.url = "github:zmre/babble-cli";
     babble-cli.inputs.nixpkgs.follows = "nixpkgs-unstable";
+
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
 
-  outputs = inputs@{ self, nixpkgs-stable, nixpkgs-unstable, darwin
-    , home-manager, sbhosts, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-stable, nixpkgs-unstable, darwin
+    , home-manager, sbhosts, nixos-hardware, ... }:
     let
       inherit (home-manager.lib) homeManagerConfiguration;
 
       mkPkgs = system:
-        import nixpkgs-unstable {
+        import nixpkgs {
           inherit system;
           inherit (import ./modules/overlays.nix {
             inherit inputs nixpkgs-unstable nixpkgs-stable;
@@ -98,21 +100,21 @@
           system = "x86_64-linux";
           pkgs = mkPkgs "x86_64-linux";
           specialArgs = {
-            inherit inputs;
+            inherit sbhosts inputs nixpkgs nixpkgs-stable nixpkgs-unstable;
             username = "zmre";
           };
           modules = [
-            home-manager.nixosModules.home-manager
-            ./modules/nixos
             ./modules/hardware/framework-volantis.nix
             ./modules/hardware/volantis.nix
-            ./profiles/zmre.nix
+            nixos-hardware.nixosModules.framework
+            ./modules/nixos
             sbhosts.nixosModule
             { networking.stevenBlackHosts.enable = true; }
+            home-manager.nixosModules.home-manager
             (mkHome "zmre" [
               ./modules/home-manager
               ./modules/home-manager/home-linux.nix
-              ./modules/home-manager/home-security.nix
+              #./modules/home-manager/home-security.nix
             ])
           ];
         };

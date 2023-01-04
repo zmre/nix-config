@@ -6,7 +6,7 @@
       stable = import nixpkgs-stable {
         inherit (prev) system;
         config = import ../config.nix;
-        nix.package = inputs.nixos-stable.nixVersions.nix_2_8;
+        nix.package = inputs.nixos-stable.nixVersions.nix_2_11;
       };
     })
     (final: prev: {
@@ -31,7 +31,8 @@
       # };
       tickrs = prev.tickrs.overrideAttrs (oldAttrs: rec {
         buildInputs = oldAttrs.buildInputs
-          ++ [ prev.darwin.apple_sdk.frameworks.SystemConfiguration ];
+          ++ prev.lib.optionals prev.stdenv.isDarwin
+          [ prev.darwin.apple_sdk.frameworks.SystemConfiguration ];
       });
     })
     (final: prev: {

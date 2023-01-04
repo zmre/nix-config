@@ -74,7 +74,7 @@
       corkscrew # tunnel ssh through http proxies
       pwntools
     ] ++ lib.optionals
-    (!stdenv.isDarwin) [ # Things that only build on Linux go here
+    (!pkgs.stdenv.isDarwin) [ # Things that only build on Linux go here
       # Recon
       enum4linux-ng # local privesc finder
       ike-scan

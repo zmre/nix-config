@@ -98,7 +98,7 @@ let
       element-desktop
       # 22-01-29 currently fails on mac with "could not compile futures-util" :(
       #neovide
-    ] ++ lib.optionals stdenv.isDarwin
+    ] ++ lib.optionals pkgs.stdenv.isDarwin
     [ utm ]; # utm is a qemu wrapper for mac only
 
 in {
