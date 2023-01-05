@@ -89,7 +89,7 @@
             (mkHome "pwalsh" [
               ./modules/home-manager
               ./modules/home-manager/home-darwin.nix
-              # ./modules/home-manager/home-security.nix
+              ./modules/home-manager/home-security.nix
             ])
           ];
         };

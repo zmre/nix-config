@@ -11,6 +11,7 @@
   boot.initrd.kernelModules = [ "i915" ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+  boot.readOnlyNixStore = true;
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/4430cd85-50db-467e-a58f-14f6255847da";

@@ -698,6 +698,7 @@ in {
         "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
         "https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters-2022.txt"
       ];
+      content.blocking.whitelist = [ "https://*.reddit.com/*" ];
 
       content.default_encoding = "utf-8";
       content.geolocation = false;
@@ -793,13 +794,13 @@ in {
       aw = "https://wiki.archlinux.org/?search={}";
       nw = "https://nixos.wiki/index.php?search={}";
       np =
-        "https://search.nixos.org/packages?channel=21.11&from=0&size=100&sort=relevance&type=packages&query={}";
+        "https://search.nixos.org/packages?channel=22.11&from=0&size=100&sort=relevance&type=packages&query={}";
       nu =
         "https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query={}";
       no =
-        "https://search.nixos.org/options?channel=21.11&from=0&size=50&sort=relevance&type=packages&query={}";
+        "https://search.nixos.org/options?channel=22.11&from=0&size=50&sort=relevance&type=packages&query={}";
       nf =
-        "https://search.nixos.org/flakes?channel=21.11&from=0&size=50&sort=relevance&type=packages&query={}";
+        "https://search.nixos.org/flakes?channel=22.11&from=0&size=50&sort=relevance&type=packages&query={}";
       g = "https://www.google.com/search?hl=en&q={}";
       gh = "https://github.com/?q={}";
       yt = "https://www.youtube.com/results?search_query={}";

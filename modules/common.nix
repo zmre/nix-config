@@ -1,5 +1,4 @@
 { inputs, username, lib, pkgs, ... }: {
-  # imports = [ ./nixpkgs.nix ];
 
   time.timeZone = "America/Denver";
   programs.zsh = {
@@ -56,7 +55,6 @@
       automatic = true;
       options = "--delete-older-than 30d";
     };
-    readOnlyStore = true;
   };
 
 }

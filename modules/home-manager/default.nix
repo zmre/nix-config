@@ -825,14 +825,16 @@ in {
       # search for a note and with ctrl-n, create it if not found
       # add subdir as needed like "n meetings" or "n wiki"
       n = "zk edit --interactive";
-      hmswitch = ''
-        nix-shell -p home-manager --run "home-manager switch --flake ~/.config/nixpkgs/.#$(hostname -s)"'';
+    } // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
       dwupdate =
         "pushd ~/.config/nixpkgs ; nix flake update ; /opt/homebrew/bin/brew update; popd ; pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; /opt/homebrew/bin/brew upgrade ; /opt/homebrew/bin/brew upgrade --cask --greedy; popd";
       dwswitch =
         "pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
       dwclean =
         "pushd ~; sudo nix-env --delete-generations +7 --profile /nix/var/nix/profiles/system; sudo nix-collect-garbage --delete-older-than 30d ; nix store optimise ; popd";
+    } // pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
+      hmswitch = ''
+        nix-shell -p home-manager --run "home-manager switch --flake ~/.config/nixpkgs/.#$(hostname -s)"'';
       noswitch =
         "pushd ~; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.# ; popd";
     };
