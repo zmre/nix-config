@@ -1,4 +1,4 @@
-{ inputs, config, pkgs, ... }:
+{ inputs, config, pkgs, username, ... }:
 let
   defaultPkgs = with pkgs.stable; [
     # filesystem
@@ -146,9 +146,9 @@ in {
     HOMEBREW_NO_AUTO_UPDATE = 1;
     #LIBVA_DRIVER_NAME="iHD";
     ZK_NOTEBOOK_DIR = if pkgs.stdenvNoCC.isDarwin then
-      "${config.home.homeDirectory}/Library/Containers/co.noteplan.NotePlan3/Data/Library/Application Support/co.noteplan.NotePlan3"
+      "/Users/${username}/Library/Containers/co.noteplan.NotePlan3/Data/Library/Application Support/co.noteplan.NotePlan3"
     else
-      "${config.home.homeDirectory}/Notes";
+      "/home/${username}/Notes";
   };
 
   home.file.".inputrc".text = ''

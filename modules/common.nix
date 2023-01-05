@@ -19,8 +19,6 @@
     pathsToLink = [ "/libexec" ];
   };
 
-  nixpkgs.config = import ../config.nix;
-
   nix = {
     package = pkgs.nixVersions.nix_2_11;
     extraOptions = ''

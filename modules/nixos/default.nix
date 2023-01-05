@@ -29,6 +29,8 @@
 
   i18n.defaultLocale = "en_US.UTF-8";
 
+  nixpkgs.config = import ../config.nix;
+
   services.locate = {
     enable = true; # periodically update locate db
     localuser = null;

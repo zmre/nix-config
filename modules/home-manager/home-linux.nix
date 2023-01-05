@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, username, ... }:
 let
   browser = [ "org.qutebrowser.qutebrowser.desktop" ];
   associations = {
@@ -714,6 +714,7 @@ in {
       content.pdfjs = true;
       content.autoplay = false;
       # Disable smooth scrolling on mac because of https://github.com/qutebrowser/qutebrowser/issues/6840
+      # Note: this is in home-linux so this if is pointless, but I'm hoping qutebrowser will build on mac soon and this can move
       scrolling.smooth = if pkgs.stdenv.isDarwin then false else true;
       auto_save.session = true; # remember open tabs
       session.lazy_restore = true;
@@ -721,7 +722,10 @@ in {
       input.insert_mode.auto_load = true;
       # exit insert mode if clicking on non editable item
       input.insert_mode.auto_leave = true;
-      downloads.location.directory = "${config.home.homeDirectory}/Downloads";
+      downloads.location.directory = "${
+          if pkgs.stdenv.isDarwin then "/Users/" else "/home/"
+        }${username}/Downloads";
+
       downloads.location.prompt = false;
       downloads.position = "bottom";
       downloads.remove_finished = 10000;

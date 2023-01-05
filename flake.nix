@@ -67,26 +67,26 @@
           useGlobalPkgs = true;
           useUserPackages = true;
           backupFileExtension = "bak";
-          extraSpecialArgs = { inherit inputs; };
+          extraSpecialArgs = { inherit inputs username; };
           users."${username}".imports = modules;
         };
       };
 
     in {
 
-      darwinConfigurations = {
+      darwinConfigurations = let username = "pwalsh";
+      in {
         attolia = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
           pkgs = mkPkgs "aarch64-darwin";
           specialArgs = {
-            inherit sbhosts inputs nixpkgs-stable nixpkgs-unstable;
-            username = "pwalsh";
+            inherit sbhosts inputs nixpkgs-stable nixpkgs-unstable username;
           };
           modules = [
             ./modules/darwin
             home-manager.darwinModules.home-manager
             { homebrew.brewPrefix = "/opt/homebrew/bin"; }
-            (mkHome "pwalsh" [
+            (mkHome username [
               ./modules/home-manager
               ./modules/home-manager/home-darwin.nix
               ./modules/home-manager/home-security.nix
@@ -95,13 +95,14 @@
         };
       };
 
-      nixosConfigurations = {
+      nixosConfigurations = let username = "zmre";
+      in {
         volantis = nixpkgs-unstable.lib.nixosSystem {
           system = "x86_64-linux";
           pkgs = mkPkgs "x86_64-linux";
           specialArgs = {
-            inherit sbhosts inputs nixpkgs nixpkgs-stable nixpkgs-unstable;
-            username = "zmre";
+            inherit sbhosts inputs nixpkgs nixpkgs-stable nixpkgs-unstable
+              username;
           };
           modules = [
             ./modules/hardware/framework-volantis.nix
@@ -111,7 +112,7 @@
             sbhosts.nixosModule
             { networking.stevenBlackHosts.enable = true; }
             home-manager.nixosModules.home-manager
-            (mkHome "zmre" [
+            (mkHome username [
               ./modules/home-manager
               ./modules/home-manager/home-linux.nix
               #./modules/home-manager/home-security.nix
@@ -121,10 +122,7 @@
         nixos-pw-vm = nixpkgs-unstable.lib.nixosSystem {
           system = "x86_64-linux";
           pkgs = mkPkgs "x86_64-linux";
-          specialArgs = {
-            inherit inputs;
-            username = "zmre";
-          };
+          specialArgs = { inherit inputs username; };
           modules = [
             home-manager.nixosModules.home-manager
             ./modules/nixos
@@ -132,7 +130,7 @@
             ./modules/hardware/parallels.nix
             sbhosts.nixosModule
             { networking.stevenBlackHosts.enable = true; }
-            (mkHome "zmre" [
+            (mkHome username [
               ./modules/home-manager
               ./modules/home-manager/home-linux.nix
             ])
