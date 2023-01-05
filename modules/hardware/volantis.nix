@@ -167,6 +167,8 @@
 
   #services.touchegg.enable = true; # multi-touch gestures
 
+  #virtualisation.docker.rootless.enable = true;
+  #virtualisation.docker.rootless.setSocketVariable = true;
   virtualisation.docker = {
     enable = true;
     autoPrune.enable = true;
