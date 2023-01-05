@@ -47,10 +47,6 @@ in {
     chkrootkit # scan for breaches
 
     traceroute
-
-    # media center
-    #(pkgs.kodi.passthru.withPackages
-    #(kodiPkgs: with kodiPkgs; [ netflix youtube pvr-hdhomerun ]))
   ];
   gtk = {
     enable = true;
@@ -68,8 +64,6 @@ in {
     theme = {
       package = pkgs.matcha-gtk-theme;
       name = "Matcha-dark-azul";
-      #name = "Adwaita-dark";
-      #
     };
   };
   xdg.mimeApps.enable = true;

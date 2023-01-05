@@ -11,15 +11,11 @@
     supportedFilesystems = [ "btrfs" ];
     cleanTmpDir = true;
     tmpOnTmpfs = true;
-    extraModprobeConfig = ''
-      options snd-hda-intel model=dell-headset-multi
-    '';
   };
 
   environment.sessionVariables = {
-    GDK_DPI_SCALE = "1.5";
-    QT_SCALE_FACTOR = "1.5";
-    VDPAU_DRIVER = "va_gl";
+    #GDK_DPI_SCALE = "1.5";
+    #QT_SCALE_FACTOR = "1.5";
   };
 
   system = {
@@ -111,9 +107,7 @@
 
   hardware = {
     enableAllFirmware = true;
-    acpilight.enable = true;
-    sensor.iio.enable = true; # let wm manage screen brightness
-    #video.hidpi.enable = true;
+    video.hidpi.enable = true;
     cpu.intel.updateMicrocode = true;
     opengl = {
       enable = true;
@@ -121,10 +115,7 @@
       driSupport32Bit = true;
       extraPackages = with pkgs; [
         # mesa.drivers
-        # vaapiIntel
         # vaapiVdpau
-        # libvdpau-va-gl
-        # intel-media-driver
         vaapiIntel
         libvdpau-va-gl
         intel-media-driver
@@ -141,8 +132,7 @@
   sound.enable = true;
   security.rtkit.enable = true; # bring in audio
   services.blueman.enable = true;
-  #services.xserver.dpi = 200; # fix font sizes in x
-  services.fstrim.enable = true;
+  services.xserver.dpi = 160; # fix font sizes in x
 
   # pipewire brings better audio/video handling
   services.pipewire = {
