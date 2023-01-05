@@ -89,7 +89,7 @@
             (mkHome username [
               ./modules/home-manager
               ./modules/home-manager/home-darwin.nix
-              ./modules/home-manager/home-security.nix
+              # ./modules/home-manager/home-security.nix
             ])
           ];
         };
@@ -115,7 +115,7 @@
             (mkHome username [
               ./modules/home-manager
               ./modules/home-manager/home-linux.nix
-              #./modules/home-manager/home-security.nix
+              ./modules/home-manager/home-security.nix
             ])
           ];
         };
