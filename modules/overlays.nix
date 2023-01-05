@@ -6,7 +6,8 @@
       stable = import nixpkgs-stable {
         inherit (prev) system;
         config = import ../config.nix;
-        nix.package = inputs.nixos-stable.nixVersions.nix_2_11;
+        #nix.package = inputs.nixos-stable.nixVersions.nix_2_11;
+        nix.package = inputs.nixos-unstable.nix;
       };
     })
     (final: prev: {

@@ -20,7 +20,8 @@
   };
 
   nix = {
-    package = pkgs.nixVersions.nix_2_11;
+    # package = pkgs.nixVersions.nix_2_11;
+    package = pkgs.nix;
     extraOptions = ''
       keep-outputs = true
       keep-derivations = true
