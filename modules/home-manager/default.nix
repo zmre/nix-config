@@ -1,6 +1,5 @@
-{ inputs, config, pkgs, ... }:
+{ inputs, config, pkgs, username, ... }:
 let
-  homeDir = config.home.homeDirectory;
   defaultPkgs = with pkgs.stable; [
     # filesystem
     fd
@@ -91,7 +90,7 @@ let
     #pkgs.qutebrowser
   ];
   # using unstable in my home profile for nix commands
-  nixEditorPkgs = with pkgs; [ nix statix ];
+  # nixEditorPkgs = with pkgs; [ nix statix ];
 
   networkPkgs = with pkgs.stable; [ mtr iftop ];
   guiPkgs = with pkgs;
@@ -99,7 +98,7 @@ let
       element-desktop
       # 22-01-29 currently fails on mac with "could not compile futures-util" :(
       #neovide
-    ] ++ lib.optionals stdenv.isDarwin
+    ] ++ lib.optionals pkgs.stdenv.isDarwin
     [ utm ]; # utm is a qemu wrapper for mac only
 
 in {
@@ -115,9 +114,11 @@ in {
   # the Home Manager release notes for a list of state version
   # changes in each release.
   home.stateVersion = "20.09";
-  home.packages = defaultPkgs ++ nixEditorPkgs ++ guiPkgs ++ networkPkgs;
+  home.packages = defaultPkgs ++ guiPkgs ++ networkPkgs;
 
   home.sessionVariables = {
+    NIX_PATH =
+      "nixpkgs=${inputs.nixpkgs-unstable}:stable=${inputs.nixpkgs-stable}\${NIX_PATH:+:}$NIX_PATH";
     LANG = "en_US.UTF-8";
     LC_ALL = "en_US.UTF-8";
     #TERM = "xterm-256color";
@@ -145,9 +146,9 @@ in {
     HOMEBREW_NO_AUTO_UPDATE = 1;
     #LIBVA_DRIVER_NAME="iHD";
     ZK_NOTEBOOK_DIR = if pkgs.stdenvNoCC.isDarwin then
-      "${config.home.homeDirectory}/Library/Containers/co.noteplan.NotePlan3/Data/Library/Application Support/co.noteplan.NotePlan3"
+      "/Users/${username}/Library/Containers/co.noteplan.NotePlan3/Data/Library/Application Support/co.noteplan.NotePlan3"
     else
-      "${config.home.homeDirectory}/Notes";
+      "/home/${username}/Notes";
   };
 
   home.file.".inputrc".text = ''
@@ -355,7 +356,7 @@ in {
     enableZshIntegration = true;
   };
   programs.taskwarrior = {
-    enable = true;
+    enable = false;
     colorTheme = "dark-256";
     dataLocation = "~/.task";
     config = {
@@ -824,14 +825,16 @@ in {
       # search for a note and with ctrl-n, create it if not found
       # add subdir as needed like "n meetings" or "n wiki"
       n = "zk edit --interactive";
-      hmswitch = ''
-        nix-shell -p home-manager --run "home-manager switch --flake ~/.config/nixpkgs/.#$(hostname -s)"'';
+    } // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
       dwupdate =
         "pushd ~/.config/nixpkgs ; nix flake update ; /opt/homebrew/bin/brew update; popd ; pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; /opt/homebrew/bin/brew upgrade ; /opt/homebrew/bin/brew upgrade --cask --greedy; popd";
       dwswitch =
         "pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
       dwclean =
         "pushd ~; sudo nix-env --delete-generations +7 --profile /nix/var/nix/profiles/system; sudo nix-collect-garbage --delete-older-than 30d ; nix store optimise ; popd";
+    } // pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
+      hmswitch = ''
+        nix-shell -p home-manager --run "home-manager switch --flake ~/.config/nixpkgs/.#$(hostname -s)"'';
       noswitch =
         "pushd ~; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.# ; popd";
     };

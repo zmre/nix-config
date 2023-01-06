@@ -6,7 +6,7 @@
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
     kernelPackages = pkgs.linuxPackages_latest;
-    kernelParams = [ "mem_sleep_default=deep" "net.ifnames=0" ];
+    kernelParams = [ "mem_sleep_default=deep" "nvme.noacpi=1" "net.ifnames=0" ];
     initrd.checkJournalingFS = false;
     supportedFilesystems = [ "btrfs" ];
     cleanTmpDir = true;
@@ -33,10 +33,11 @@
 
   powerManagement = {
     enable = true;
-    powertop.enable = true;
+    #powertop.enable = true;
   };
   # an alternative to above? is this needed?
-  services.auto-cpufreq.enable = true;
+  #services.auto-cpufreq.enable = true;
+  services.fwupd.enable = true; # firmware update; run: sudo fwupdmgr update
   # Quick suspend if power button pushed
   #services.logind.extraConfig = ''
   #HandlePowerKey=suspend
@@ -106,14 +107,16 @@
 
   hardware = {
     enableAllFirmware = true;
+    video.hidpi.enable = true;
+    cpu.intel.updateMicrocode = true;
     opengl = {
       enable = true;
       driSupport = true;
       driSupport32Bit = true;
       extraPackages = with pkgs; [
-        mesa_drivers
+        # mesa.drivers
+        # vaapiVdpau
         vaapiIntel
-        vaapiVdpau
         libvdpau-va-gl
         intel-media-driver
       ];
@@ -129,6 +132,7 @@
   sound.enable = true;
   security.rtkit.enable = true; # bring in audio
   services.blueman.enable = true;
+  #services.xserver.dpi = 160; # fix font sizes in x
 
   # pipewire brings better audio/video handling
   services.pipewire = {
@@ -151,8 +155,12 @@
     })
   '';
 
+  services.cachix-agent.enable = true;
+
   #services.touchegg.enable = true; # multi-touch gestures
 
+  #virtualisation.docker.rootless.enable = true;
+  #virtualisation.docker.rootless.setSocketVariable = true;
   virtualisation.docker = {
     enable = true;
     autoPrune.enable = true;

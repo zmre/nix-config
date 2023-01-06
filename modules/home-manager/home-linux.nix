@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, username, ... }:
 let
   browser = [ "org.qutebrowser.qutebrowser.desktop" ];
   associations = {
@@ -47,10 +47,6 @@ in {
     chkrootkit # scan for breaches
 
     traceroute
-
-    # media center
-    #(pkgs.kodi.passthru.withPackages
-    #(kodiPkgs: with kodiPkgs; [ netflix youtube pvr-hdhomerun ]))
   ];
   gtk = {
     enable = true;
@@ -68,8 +64,6 @@ in {
     theme = {
       package = pkgs.matcha-gtk-theme;
       name = "Matcha-dark-azul";
-      #name = "Adwaita-dark";
-      #
     };
   };
   xdg.mimeApps.enable = true;
@@ -704,6 +698,7 @@ in {
         "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
         "https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters-2022.txt"
       ];
+      content.blocking.whitelist = [ "https://*.reddit.com/*" ];
 
       content.default_encoding = "utf-8";
       content.geolocation = false;
@@ -719,14 +714,18 @@ in {
       content.pdfjs = true;
       content.autoplay = false;
       # Disable smooth scrolling on mac because of https://github.com/qutebrowser/qutebrowser/issues/6840
-      scrolling.smooth = if stdenv.isDarwin then false else true;
+      # Note: this is in home-linux so this if is pointless, but I'm hoping qutebrowser will build on mac soon and this can move
+      scrolling.smooth = if pkgs.stdenv.isDarwin then false else true;
       auto_save.session = true; # remember open tabs
       session.lazy_restore = true;
       # if input is focused on tab load, allow typing
       input.insert_mode.auto_load = true;
       # exit insert mode if clicking on non editable item
       input.insert_mode.auto_leave = true;
-      downloads.location.directory = "${config.home.homeDirectory}/Downloads";
+      downloads.location.directory = "${
+          if pkgs.stdenv.isDarwin then "/Users/" else "/home/"
+        }${username}/Downloads";
+
       downloads.location.prompt = false;
       downloads.position = "bottom";
       downloads.remove_finished = 10000;
@@ -799,13 +798,13 @@ in {
       aw = "https://wiki.archlinux.org/?search={}";
       nw = "https://nixos.wiki/index.php?search={}";
       np =
-        "https://search.nixos.org/packages?channel=21.11&from=0&size=100&sort=relevance&type=packages&query={}";
+        "https://search.nixos.org/packages?channel=22.11&from=0&size=100&sort=relevance&type=packages&query={}";
       nu =
         "https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query={}";
       no =
-        "https://search.nixos.org/options?channel=21.11&from=0&size=50&sort=relevance&type=packages&query={}";
+        "https://search.nixos.org/options?channel=22.11&from=0&size=50&sort=relevance&type=packages&query={}";
       nf =
-        "https://search.nixos.org/flakes?channel=21.11&from=0&size=50&sort=relevance&type=packages&query={}";
+        "https://search.nixos.org/flakes?channel=22.11&from=0&size=50&sort=relevance&type=packages&query={}";
       g = "https://www.google.com/search?hl=en&q={}";
       gh = "https://github.com/?q={}";
       yt = "https://www.youtube.com/results?search_query={}";

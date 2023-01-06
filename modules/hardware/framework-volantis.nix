@@ -4,13 +4,14 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+  # imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   boot.initrd.availableKernelModules =
     [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "uas" "sd_mod" ];
   boot.initrd.kernelModules = [ "i915" ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+  boot.readOnlyNixStore = true;
 
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/4430cd85-50db-467e-a58f-14f6255847da";
@@ -29,7 +30,7 @@
   swapDevices =
     [{ device = "/dev/disk/by-uuid/5f7d629f-d1a7-485b-8223-c1f13af96ed6"; }];
 
-  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+  # powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   # high-resolution display
   hardware.video.hidpi.enable = lib.mkDefault true;
 }

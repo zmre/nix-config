@@ -1,4 +1,4 @@
-{ config, pkgs, stable, ... }: {
+{ config, username, pkgs, stable, ... }: {
   # bundles essential nixos modules
   imports = [ ../common.nix ];
 
@@ -29,6 +29,8 @@
 
   i18n.defaultLocale = "en_US.UTF-8";
 
+  nixpkgs.config = import ../config.nix;
+
   services.locate = {
     enable = true; # periodically update locate db
     localuser = null;
@@ -42,22 +44,17 @@
   security.sudo.enable = true;
   security.sudo.execWheelOnly = true;
   security.sudo.extraConfig = ''
-    Defaults   timestamp_timeout=-1 
+    Defaults   timestamp_timeout=-1
   '';
   # suggest install package if cmd missing
   programs.command-not-found.enable = true;
-
-  hm = { pkgs, ... }: {
-    imports =
-      [ ../home-manager/home-linux.nix ../home-manager/home-security.nix ];
-  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users = {
     defaultUserShell = pkgs.zsh;
     #mutableUsers = false;
     users = {
-      "${config.user.name}" = {
+      "${username}" = {
         isNormalUser = true;
         createHome = true;
         useDefaultShell = true;
@@ -91,7 +88,7 @@
   location.latitude = 38.0;
   location.longitude = -105.0;
   # Used to automatically adjust brightness and temperature of the screen
-  services.clight.enable = true;
+  #services.clight.enable = true;
 
   system.stateVersion = "21.11";
 
@@ -103,7 +100,20 @@
     fonts = with pkgs; [
       powerline-fonts
       source-code-pro
-      nerdfonts
+      (nerdfonts.override {
+        # holy hell it can take a long time to install everything; strip down
+        fonts = [
+          "FiraCode"
+          "Hasklig"
+          "DroidSansMono"
+          "DejaVuSansMono"
+          "iA-Writer"
+          "JetBrainsMono"
+          "Meslo"
+          "SourceCodePro"
+          "Inconsolata"
+        ];
+      })
       vegur
       noto-fonts
     ];
