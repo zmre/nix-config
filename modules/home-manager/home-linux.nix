@@ -596,23 +596,6 @@ in {
     };
   };
 
-  # programs.mpv = {
-  #   enable = true;
-  #   scripts = with pkgs.mpvScripts; [ thumbnail sponsorblock ];
-  #   config = {
-  #     # disable on-screen controller -- else I get a message saying I have to add this
-  #     osc = false;
-  #     # Use a large seekable RAM cache even for local input.
-  #     cache = true;
-  #     save-position-on-quit = false;
-  #     x11-bypass-compositor = true;
-  #     #ytdl-format = "bestvideo+bestaudio";
-  #     # have mpv use yt-dlp instead of youtube-dl
-  #     script-opts-append = "ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp";
-  #   };
-  #   defaultProfiles = [ "gpu-hq" ];
-  # };
-
   # Backup browser for when Qutebrowser doesn't work as expected
   # currently fails to compile on darwin
   programs.firefox = {
@@ -620,7 +603,7 @@ in {
     # turns out you have to setup a profile (below) for extensions to install
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
       ublock-origin
-      https-everywhere
+      #https-everywhere
       noscript
       vimium
     ];

@@ -9,6 +9,7 @@
 
   # environment setup
   environment = {
+    systemPackages = [ pkgs.cachix ];
     etc = {
       home-manager.source = "${inputs.home-manager}";
       nixpkgs-unstable.source = "${inputs.nixpkgs-unstable}";

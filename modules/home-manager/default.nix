@@ -52,7 +52,6 @@ let
     hostname
 
     # misc
-    pkgs.cachix
     pkgs.ironhide # rust version of IronCore's ironhide
     neofetch # display key software/version info in term
     #nodePackages.readability-cli # quick commandline website article read
@@ -827,7 +826,7 @@ in {
       n = "zk edit --interactive";
     } // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
       dwupdate =
-        "pushd ~/.config/nixpkgs ; nix flake update ; /opt/homebrew/bin/brew update; popd ; pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; /opt/homebrew/bin/brew upgrade ; /opt/homebrew/bin/brew upgrade --cask --greedy; popd";
+        "pushd ~/.config/nixpkgs ; nix flake update ; /opt/homebrew/bin/brew update; popd ; dwswitch ; /opt/homebrew/bin/brew upgrade ; /opt/homebrew/bin/brew upgrade --cask --greedy; popd";
       dwswitch =
         "pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
       dwclean =
@@ -835,8 +834,9 @@ in {
     } // pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
       hmswitch = ''
         nix-shell -p home-manager --run "home-manager switch --flake ~/.config/nixpkgs/.#$(hostname -s)"'';
+      noupdate = "pushd ~/.config/nixpkgs; nix flake update; popd; noswitch";
       noswitch =
-        "pushd ~; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.# ; popd";
+        "pushd ~; sudo cachix watch-exec zmre nixos-rebuild -- switch --flake ~/.config/nixpkgs/.# ; popd";
     };
   };
 

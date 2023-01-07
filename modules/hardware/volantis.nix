@@ -155,7 +155,7 @@
     })
   '';
 
-  services.cachix-agent.enable = true;
+  services.cachix-agent.enable = false;
 
   #services.touchegg.enable = true; # multi-touch gestures
 
@@ -169,4 +169,9 @@
     enableOnBoot = false;
   };
 
+  virtualisation.libvirtd = {
+    enable = true;
+    onBoot = "start";
+    qemu.package = pkgs.qemu_kvm;
+  };
 }

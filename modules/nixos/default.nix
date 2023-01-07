@@ -29,7 +29,7 @@
 
   i18n.defaultLocale = "en_US.UTF-8";
 
-  nixpkgs.config = import ../config.nix;
+  nixpkgs.config = import ../../config.nix;
 
   services.locate = {
     enable = true; # periodically update locate db
@@ -52,7 +52,6 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users = {
     defaultUserShell = pkgs.zsh;
-    #mutableUsers = false;
     users = {
       "${username}" = {
         isNormalUser = true;
