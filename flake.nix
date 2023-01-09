@@ -45,6 +45,10 @@
     babble-cli.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
+    nps.url =
+      "github:OleMussmann/Nix-Package-Search"; # use nps to quick search packages - requires gnugrep though
+    nps.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-stable, nixpkgs-unstable, darwin

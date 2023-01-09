@@ -107,6 +107,7 @@
       "Brother iPrint&Scan" = 1193539993;
       "Cardhop" = 1290358394; # contacts alternative
       "DaisyDisk" = 411643860;
+      "Disk Decipher" = 516538625;
       "Disk Speed Test" = 425264550;
       "Endel" = 1484348796;
       "Fantastical" = 975937182; # calendar alternative

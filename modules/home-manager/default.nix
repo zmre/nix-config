@@ -84,7 +84,7 @@ let
     pastel # cli for color manipulation
     kopia # deduping backup
     # 2022-12-18 commenting out because apparently it is packaging its own rg and that conflicts with ripgrep
-    #pkgs.nps # quick nix packages search
+    pkgs.nps # quick nix packages search
     gnugrep
     #pkgs.qutebrowser
   ];

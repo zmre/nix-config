@@ -42,6 +42,7 @@
       inherit (inputs.ironhide.packages.${final.system}) ironhide;
       inherit (inputs.pwnvim.packages.${final.system}) pwnvim;
       inherit (inputs.pwneovide.packages.${final.system}) pwneovide;
+      inherit (inputs.nps.packages.${final.system}) nps;
     })
     inputs.nur.overlay
   ];
