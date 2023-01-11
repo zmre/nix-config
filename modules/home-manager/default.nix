@@ -50,6 +50,7 @@ let
     aria # cli downloader
     ncftp
     hostname
+    xh # rust version of httpie / better curl
 
     # misc
     pkgs.ironhide # rust version of IronCore's ironhide
@@ -825,6 +826,10 @@ in {
       # add subdir as needed like "n meetings" or "n wiki"
       n = "zk edit --interactive";
     } // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
+      # Figure out the uniform type identifiers and uri schemes of a file (must specify the file)
+      # for use in SwiftDefaultApps
+      checktype =
+        "mdls -name kMDItemContentType -name kMDItemContentTypeTree -name kMDItemKind";
       dwupdate =
         "pushd ~/.config/nixpkgs ; nix flake update ; /opt/homebrew/bin/brew update; popd ; dwswitch ; /opt/homebrew/bin/brew upgrade ; /opt/homebrew/bin/brew upgrade --cask --greedy; popd";
       dwswitch =
