@@ -20,7 +20,7 @@
     # file viewer settings
     finder = {
       AppleShowAllExtensions = true;
-      FXEnableExtensionChangeWarning = true;
+      FXEnableExtensionChangeWarning = false;
       QuitMenuItem = true;
       _FXShowPosixPathInTitle = true;
     };
@@ -92,6 +92,7 @@
       "com.apple.trackpad.scaling" = 3.0; # fast
       "com.apple.trackpad.enableSecondaryClick" = true;
       # enable full keyboard control
+      # (e.g. enable Tab in modal dialogs)
       AppleKeyboardUIMode = 3;
       AppleMeasurementUnits = "Inches";
       # no popup menus when holding down letters
