@@ -40,6 +40,7 @@
       "espanso" # text expander functionality (but open source donationware, x-platform, rust-based)
       "firefox" # TODO: firefox build is broken on ARM; check to see if fixed
       "fork"
+      "gitify"
       "gpg-suite"
       "imageoptim"
       "insta360-studio"
@@ -73,6 +74,7 @@
       "silnite"
       "skype"
       "spotify" # TODO: move to home-manager when not broken
+      "swiftdefaultappsprefpane"
       "sync"
       "syncthing" # TODO: move to home-manager
       "tor-browser" # TODO: move to home-manager (tor-browser-bundle-bin) when it builds
