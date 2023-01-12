@@ -40,7 +40,6 @@
       "espanso" # text expander functionality (but open source donationware, x-platform, rust-based)
       "firefox" # TODO: firefox build is broken on ARM; check to see if fixed
       "fork"
-      "gitify"
       "gpg-suite"
       "imageoptim"
       "insta360-studio"
