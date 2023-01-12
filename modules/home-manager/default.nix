@@ -22,6 +22,7 @@ let
     pkgs.pwnvim # moved my neovim config to its own repo for atomic management and install
     pkgs.pwneovide # wrapper makes a macos app for launching (and ensures it calls pwnvim)
     less
+    page # like less, but uses nvim, which is handy for selecting out text and such
     file
     jq
     lynx
@@ -135,7 +136,7 @@ in {
       "--raw-control-chars -FXRadeqs -P--Less--?e?x(Next file: %x):(END).:?pB%pB%.";
     CLICOLOR = 1;
     CLICOLOR_FORCE = "yes";
-    PAGER = "less";
+    PAGER = "page -WfC -q 90000 -c NONE";
     # Add colors to man pages
     MANPAGER = "less -R --use-color -Dd+r -Du+b +Gg -M -s";
     SYSTEMD_COLORS = "true";
@@ -340,6 +341,7 @@ in {
     #extraPackages = with pkgs.bat-extras; [ batman batgrep ];
     config = {
       theme = "TwoDark";
+      pager = "less -FR";
       italic-text = "always";
       style =
         "plain"; # no line numbers, git status, etc... more like cat with colors
