@@ -73,6 +73,8 @@
     #firewall.allowedUDPPorts = [ ];
   };
 
+  services.tailscale.enable =
+    true; # p2p mesh vpn with my hosts -- does it override dnscrypt-proxy?
   services.dnscrypt-proxy2 = {
     enable = true;
     settings = {
