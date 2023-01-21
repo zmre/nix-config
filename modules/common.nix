@@ -33,7 +33,10 @@
       sandbox = false; # !pkgs.stdenv.isDarwin;
       #trusted-users = [ "${config.user.name}" "root" "@admin" "@wheel" ];
       trusted-users = [ "${username}" "root" "@admin" "@wheel" ];
-      auto-optimise-store = true;
+      # TODO: turn this back on
+      # disabled 2023-01-21 because of "cannot link" errors as described here:
+      # https://github.com/NixOS/nix/issues/7273
+      auto-optimise-store = false;
       max-jobs = 8;
       cores = 0; # use them all
       allowed-users = [ "@wheel" ];
