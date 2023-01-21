@@ -25,6 +25,9 @@
       "adobe-creative-cloud"
       "amethyst" # for window tiling -- I miss chunkwm but it's successor, yabai, was unstable.
       #"audio-hijack"
+      # chrome based browser https://arc.net getting a lot of buzz. just curious to try it.
+      # i'm on the waitlist
+      #"arc" 
       "bartender" # organize status bar
       "blockblock"
       "brave-browser" # TODO: move to home-manager when it builds
@@ -136,8 +139,9 @@
       "Scrivener" = 1310686187;
       "Slack" = 803453959;
       "StopTheMadness" = 1376402589;
-      "Strongbox" = 1270075435;
-      "Tweetbot" = 1384080005;
+      "Strongbox" = 1270075435; # password manager
+      "Tailscale" = 1475387142; # P2P mesh VPN for my devices
+      #"Tweetbot" = 1384080005; # 2023-01-18: no point after Elon death rayed it
       "Vimari" = 1480933944;
       "Vinegar" = 1591303229;
       "WireGuard" = 1451685025; # VPN

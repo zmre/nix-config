@@ -340,7 +340,8 @@ in {
     enable = true;
     #extraPackages = with pkgs.bat-extras; [ batman batgrep ];
     config = {
-      theme = "TwoDark";
+      theme =
+        "Dracula"; # I like the TwoDark colors better, but want bold/italic in markdown docs
       pager = "less -FR";
       italic-text = "always";
       style =
@@ -659,18 +660,33 @@ in {
       ignoreSpace = true;
       save = 10000; # save 10,000 lines of history
     };
-    initExtraBeforeCompInit = ''
-      source ${inputs.gitstatus.outPath}/gitstatus.plugin.zsh
-      source ${inputs.powerlevel10k.outPath}/powerlevel10k.zsh-theme
+    defaultKeymap = "viins";
+    # things to add to .zshenv
+    envExtra = ''
+      # don't use global env as it will slow us down
+      skip_global_compinit=1
     '';
+    #initExtraBeforeCompInit = "";
     completionInit = ''
-      autoload -U compinit
+      # only update compinit once each day
+      # better solution would be to pre-build zcompdump with compinit call then link it in
+      # and never recalculate
+      autoload -Uz compinit
+      for dump in ~/.zcompdump(N.mh+24); do
+        compinit
+      done
+      compinit -C
+    '';
+    initExtraFirst = ''
+      #zmodload zsh/zprof
+      source ${./dotfiles/p10k.zsh}
+      source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+      # Prompt stuff
+      #if [[ -r "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh" ]]; then
+        #source "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh"
+      #fi
     '';
     initExtra = ''
-      if [[ -r "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh" ]]; then
-        source "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh"
-      fi
-
       set -o vi
       bindkey -v
 
@@ -766,32 +782,21 @@ in {
       # Setup zoxide
       eval "$(zoxide init zsh)"
 
-      # Prompt stuff
-      source ${./dotfiles/p10k.zsh}
+      #source ${./dotfiles/p10k.zsh}
+
+      #zprof
     '';
     sessionVariables = { };
-    plugins = [
-      {
-        name = "powerlevel10k";
-        src = inputs.powerlevel10k;
-      }
-      {
-        name = "powerlevel10k-config";
-        src = ./dotfiles/p10k.zsh;
-        file = "p10k.zsh";
-      }
-      {
-        # lets me use zsh as the shell in a nix-shell environment
-        name = "zsh-nix-shell";
-        file = "nix-shell.plugin.zsh";
-        src = pkgs.fetchFromGitHub {
-          owner = "chisui";
-          repo = "zsh-nix-shell";
-          rev = "v0.4.0";
-          sha256 = "037wz9fqmx0ngcwl9az55fgkipb745rymznxnssr3rx9irb6apzg";
-        };
-      }
-    ];
+    plugins = [{
+      name = "zsh-nix-shell";
+      file = "nix-shell.plugin.zsh";
+      src = pkgs.fetchFromGitHub {
+        owner = "chisui";
+        repo = "zsh-nix-shell";
+        rev = "v0.5.0";
+        sha256 = "0za4aiwwrlawnia4f29msk822rj9bgcygw6a8a6iikiwzjjz0g91";
+      };
+    }];
     # oh-my-zsh.enable = true;
     # oh-my-zsh.plugins = [
     #   "sudo"
@@ -836,6 +841,8 @@ in {
         "pushd ~/.config/nixpkgs ; nix flake update ; /opt/homebrew/bin/brew update; popd ; dwswitch ; /opt/homebrew/bin/brew upgrade ; /opt/homebrew/bin/brew upgrade --cask --greedy; popd";
       dwswitch =
         "pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
+      dwswitchx =
+        "pushd ~; darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
       dwclean =
         "pushd ~; sudo nix-env --delete-generations +7 --profile /nix/var/nix/profiles/system; sudo nix-collect-garbage --delete-older-than 30d ; nix store optimise ; popd";
     } // pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
@@ -1146,8 +1153,9 @@ in {
       #name = "FiraCode Nerd Font"; # missing italic
       size = if pkgs.stdenvNoCC.isDarwin then 17 else 12;
     };
+    darwinLaunchOptions = [ "--single-instance" ];
     settings = {
-      scrollback_lines = 3000;
+      scrollback_lines = 10000;
       enable_audio_bell = false;
       update_check_interval = 0;
       macos_option_as_alt = "both";
@@ -1179,11 +1187,14 @@ in {
       tab_activity_symbol = " ";
 
       # Misc
-      allow_remote_control = "socket-only";
+      # I forget why I was allowing remote control now. I had a reason, but I don't think
+      # I'm using it now. We'll see what breaks. It seems to be slowing down new windows. 2023-01-21
+      #allow_remote_control = "socket-only";
       #listen_on = "unix:/tmp/kitty-sock";
       visual_bell_duration = "0.1";
       background_opacity = "0.95";
       startup_session = "~/.config/kitty/startup.session";
+      shell = "${pkgs.zsh}/bin/zsh --login --interactive";
     };
     theme =
       "One Half Dark"; # or Dracula or OneDark see https://github.com/kovidgoyal/kitty-themes/tree/master/themes

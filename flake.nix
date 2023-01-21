@@ -11,14 +11,6 @@
     home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
-    # gitstatus is required by powerlevel10k
-    gitstatus.url = "github:romkatv/gitstatus";
-    gitstatus.flake = false;
-
-    # gives me a prompt that is async and fast
-    powerlevel10k.url = "github:romkatv/powerlevel10k";
-    powerlevel10k.flake = false;
-
     # I use the nur repo for firefox extensions
     nur.url = "github:nix-community/NUR";
 
