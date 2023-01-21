@@ -136,7 +136,7 @@ in {
       "--raw-control-chars -FXRadeqs -P--Less--?e?x(Next file: %x):(END).:?pB%pB%.";
     CLICOLOR = 1;
     CLICOLOR_FORCE = "yes";
-    PAGER = "page -WfC -q 90000 -c NONE";
+    PAGER = "page -WO -q 90000";
     # Add colors to man pages
     MANPAGER = "less -R --use-color -Dd+r -Du+b +Gg -M -s";
     SYSTEMD_COLORS = "true";
@@ -342,7 +342,8 @@ in {
     config = {
       theme =
         "Dracula"; # I like the TwoDark colors better, but want bold/italic in markdown docs
-      pager = "less -FR";
+      #pager = "less -FR";
+      pager = "page -WO -q 90000";
       italic-text = "always";
       style =
         "plain"; # no line numbers, git status, etc... more like cat with colors
@@ -459,6 +460,7 @@ in {
       naumovs.color-highlight
       mikestead.dotenv
       mskelton.one-dark-theme
+      prisma.prisma
       asvetliakov.vscode-neovim
       brettm12345.nixfmt-vscode
       davidanson.vscode-markdownlint
