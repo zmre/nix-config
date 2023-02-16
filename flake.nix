@@ -36,6 +36,9 @@
     babble-cli.url = "github:zmre/babble-cli";
     babble-cli.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
+    # devenv tool to simplify (?) project shells https://devenv.sh
+    devenv.url = "github:cachix/devenv/v0.5";
+
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     nps.url =

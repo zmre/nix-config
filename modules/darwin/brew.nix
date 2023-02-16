@@ -1,14 +1,18 @@
-{ inputs, config, pkgs, ... }: {
+{
+  inputs,
+  config,
+  pkgs,
+  ...
+}: {
   homebrew = {
     enable = true;
     caskArgs.no_quarantine = true;
     onActivation = {
       autoUpdate = false;
       upgrade = false;
-      cleanup =
-        "uninstall"; # should maybe be "zap" - remove anything not listed here
+      cleanup = "uninstall"; # should maybe be "zap" - remove anything not listed here
     };
-    global = { brewfile = true; };
+    global = {brewfile = true;};
 
     taps = [
       "homebrew/bundle"
@@ -27,7 +31,7 @@
       #"audio-hijack"
       # chrome based browser https://arc.net getting a lot of buzz. just curious to try it.
       # i'm on the waitlist
-      #"arc" 
+      "arc"
       "bartender" # organize status bar
       "blockblock"
       "brave-browser" # TODO: move to home-manager when it builds
@@ -85,7 +89,7 @@
       # why broken, you ask? well, they're using deprecated APIs for one thing
       # their sync service is constantly burning up CPU when nothing is touching their folder
       # and they install quicklook plugins that aren't optional and the adobe illustrator one
-      # causes constant crashes whenever a folder or open/save dialog opens a folder with an 
+      # causes constant crashes whenever a folder or open/save dialog opens a folder with an
       # illustrator file in it. i reported it almost 3 years ago and there's a long thread of
       # others complaining about the same problem. i'd be done with dropbox entirely if i could.
       #"webpquicklook" # not updated in 5 years
@@ -172,7 +176,6 @@
     ];
   };
 }
-
 ############## to revisit
 #clamav
 #cocoapods
@@ -197,7 +200,6 @@
 #procs
 #proxmark3
 #recon-ng # not currently available on nix?
-
 ############### to examine
 #qpdf
 #qprint
