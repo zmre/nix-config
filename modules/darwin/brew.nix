@@ -95,6 +95,7 @@
       #"webpquicklook" # not updated in 5 years
       #"xbar"
       #"yattee" # private youtube
+      "veracrypt"
       "yubico-yubikey-manager" # TODO: move to home-manager (yubikey-manager or yubikey-manager-qt)
       "zenmap"
       "zoom" # TODO: move to home-manager (zoom-us)
