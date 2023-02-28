@@ -39,102 +39,121 @@
     # devenv tool to simplify (?) project shells https://devenv.sh
     devenv.url = "github:cachix/devenv/v0.5";
 
+    # Tool to make mac aliases without needing Finder scripting permissions for home-manager app linking
+    mkalias.url = "github:reckenrode/mkalias";
+    mkalias.inputs.nixpkgs.follows = "nixpkgs-unstable";
+
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    nps.url =
-      "github:OleMussmann/Nix-Package-Search"; # use nps to quick search packages - requires gnugrep though
+    nps.url = "github:OleMussmann/Nix-Package-Search"; # use nps to quick search packages - requires gnugrep though
     nps.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-stable, nixpkgs-unstable, darwin
-    , home-manager, sbhosts, nixos-hardware, ... }:
-    let
-      inherit (home-manager.lib) homeManagerConfiguration;
+  outputs = inputs @ {
+    self,
+    nixpkgs,
+    nixpkgs-stable,
+    nixpkgs-unstable,
+    darwin,
+    home-manager,
+    sbhosts,
+    nixos-hardware,
+    ...
+  }: let
+    inherit (home-manager.lib) homeManagerConfiguration;
 
-      mkPkgs = system:
-        import nixpkgs {
-          inherit system;
-          inherit (import ./modules/overlays.nix {
+    mkPkgs = system:
+      import nixpkgs {
+        inherit system;
+        inherit
+          (import ./modules/overlays.nix {
             inherit inputs nixpkgs-unstable nixpkgs-stable;
           })
-            overlays;
-          config = import ./config.nix;
-        };
-
-      mkHome = username: modules: {
-        home-manager = {
-          useGlobalPkgs = true;
-          useUserPackages = true;
-          backupFileExtension = "bak";
-          extraSpecialArgs = { inherit inputs username; };
-          users."${username}".imports = modules;
-        };
+          overlays
+          ;
+        config = import ./config.nix;
       };
 
-    in {
-
-      darwinConfigurations = let username = "pwalsh";
-      in {
-        attolia = darwin.lib.darwinSystem {
-          system = "aarch64-darwin";
-          pkgs = mkPkgs "aarch64-darwin";
-          specialArgs = {
-            inherit sbhosts inputs nixpkgs-stable nixpkgs-unstable username;
-          };
-          modules = [
-            ./modules/darwin
-            home-manager.darwinModules.home-manager
-            { homebrew.brewPrefix = "/opt/homebrew/bin"; }
-            (mkHome username [
-              ./modules/home-manager
-              ./modules/home-manager/home-darwin.nix
-              # ./modules/home-manager/home-security.nix
-            ])
-          ];
-        };
-      };
-
-      nixosConfigurations = let username = "zmre";
-      in {
-        volantis = nixpkgs-unstable.lib.nixosSystem {
-          system = "x86_64-linux";
-          pkgs = mkPkgs "x86_64-linux";
-          specialArgs = {
-            inherit sbhosts inputs nixpkgs nixpkgs-stable nixpkgs-unstable
-              username;
-          };
-          modules = [
-            ./modules/hardware/framework-volantis.nix
-            ./modules/hardware/volantis.nix
-            nixos-hardware.nixosModules.framework
-            ./modules/nixos
-            sbhosts.nixosModule
-            { networking.stevenBlackHosts.enable = true; }
-            home-manager.nixosModules.home-manager
-            (mkHome username [
-              ./modules/home-manager
-              ./modules/home-manager/home-linux.nix
-              ./modules/home-manager/home-security.nix
-            ])
-          ];
-        };
-        nixos-pw-vm = nixpkgs-unstable.lib.nixosSystem {
-          system = "x86_64-linux";
-          pkgs = mkPkgs "x86_64-linux";
-          specialArgs = { inherit inputs username; };
-          modules = [
-            home-manager.nixosModules.home-manager
-            ./modules/nixos
-            ./modules/hardware/parallels-hardware.nix
-            ./modules/hardware/parallels.nix
-            sbhosts.nixosModule
-            { networking.stevenBlackHosts.enable = true; }
-            (mkHome username [
-              ./modules/home-manager
-              ./modules/home-manager/home-linux.nix
-            ])
-          ];
-        };
+    mkHome = username: modules: {
+      home-manager = {
+        useGlobalPkgs = true;
+        useUserPackages = true;
+        backupFileExtension = "bak";
+        extraSpecialArgs = {inherit inputs username;};
+        users."${username}".imports = modules;
       };
     };
+  in {
+    darwinConfigurations = let
+      username = "pwalsh";
+    in {
+      attolia = darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        pkgs = mkPkgs "aarch64-darwin";
+        specialArgs = {
+          inherit sbhosts inputs nixpkgs-stable nixpkgs-unstable username;
+        };
+        modules = [
+          ./modules/darwin
+          home-manager.darwinModules.home-manager
+          {homebrew.brewPrefix = "/opt/homebrew/bin";}
+          (mkHome username [
+            ./modules/home-manager
+            ./modules/home-manager/home-darwin.nix
+            # ./modules/home-manager/home-security.nix
+          ])
+        ];
+      };
+    };
+
+    nixosConfigurations = let
+      username = "zmre";
+    in {
+      volantis = nixpkgs-unstable.lib.nixosSystem {
+        system = "x86_64-linux";
+        pkgs = mkPkgs "x86_64-linux";
+        specialArgs = {
+          inherit
+            sbhosts
+            inputs
+            nixpkgs
+            nixpkgs-stable
+            nixpkgs-unstable
+            username
+            ;
+        };
+        modules = [
+          ./modules/hardware/framework-volantis.nix
+          ./modules/hardware/volantis.nix
+          nixos-hardware.nixosModules.framework
+          ./modules/nixos
+          sbhosts.nixosModule
+          {networking.stevenBlackHosts.enable = true;}
+          home-manager.nixosModules.home-manager
+          (mkHome username [
+            ./modules/home-manager
+            ./modules/home-manager/home-linux.nix
+            ./modules/home-manager/home-security.nix
+          ])
+        ];
+      };
+      nixos-pw-vm = nixpkgs-unstable.lib.nixosSystem {
+        system = "x86_64-linux";
+        pkgs = mkPkgs "x86_64-linux";
+        specialArgs = {inherit inputs username;};
+        modules = [
+          home-manager.nixosModules.home-manager
+          ./modules/nixos
+          ./modules/hardware/parallels-hardware.nix
+          ./modules/hardware/parallels.nix
+          sbhosts.nixosModule
+          {networking.stevenBlackHosts.enable = true;}
+          (mkHome username [
+            ./modules/home-manager
+            ./modules/home-manager/home-linux.nix
+          ])
+        ];
+      };
+    };
+  };
 }
