@@ -42,7 +42,7 @@
       "default-folder-x"
       "discord"
       "docker" # TODO: move to home-manager
-      #"dropbox"
+      "dropbox"
       # TODO: move espanso to home-manager
       "espanso" # text expander functionality (but open source donationware, x-platform, rust-based)
       "firefox" # TODO: firefox build is broken on ARM; check to see if fixed
@@ -118,11 +118,13 @@
       "DaisyDisk" = 411643860;
       "Disk Decipher" = 516538625;
       "Disk Speed Test" = 425264550;
-      "Endel" = 1484348796;
       "Fantastical" = 975937182; # calendar alternative
       "Forecast Bar" = 982710545;
       "Ghostery – Privacy Ad Blocker" = 1436953057;
       "Gifox 2" = 1461845568; # For short animated gif screen caps
+      "Ice Cubes" = 6444915884;
+      "iMovie" = 408981434;
+      "iStumbler" = 546033581;
       "Kagi, Inc." = 1622835804; # Paid private search engine plugin for Safari
       "Kaleidoscope" = 587512244; # GUI 3-way merge
       "Keynote" = 409183694;
@@ -138,9 +140,8 @@
       #"OneDrive" = 823766827;
       "PCalc" = 403504866;
       "PeakHour" = 1241445112;
-      "Pocket" = 568494494;
       "SQLPro Studio" = 985614903;
-      "Save to Pocket" = 1477385213;
+      "Save to Reader" = 1640236961; # readwise reader (my pocket replacement)
       "Scrivener" = 1310686187;
       "Slack" = 803453959;
       "StopTheMadness" = 1376402589;
@@ -152,7 +153,6 @@
       "WireGuard" = 1451685025; # VPN
       "Xcode" = 497799835;
       "Yubico Authenticator" = 1497506650;
-      "iMovie" = 408981434;
       #"Wipr" = 1320666476;
     };
     brews = [
