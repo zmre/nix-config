@@ -97,6 +97,22 @@
         "type": "github"
       }
     },
+    "enola": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1677923754,
+        "narHash": "sha256-KBcQTelV7yB+9HFR8IzxA3pDajWhQm4B4Jx+OSlIiII=",
+        "owner": "TheYahya",
+        "repo": "enola",
+        "rev": "6daada8c928bdb4a9203541532ddcda2785f650d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "TheYahya",
+        "repo": "enola",
+        "type": "github"
+      }
+    },
     "fenix": {
       "inputs": {
         "nixpkgs": [
@@ -941,6 +957,7 @@
         "babble-cli": "babble-cli",
         "darwin": "darwin",
         "devenv": "devenv",
+        "enola": "enola",
         "fenix": "fenix",
         "gtm-okr": "gtm-okr",
         "hackernews-tui": "hackernews-tui",

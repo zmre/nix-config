@@ -15,6 +15,16 @@
       };
     })
     (final: prev: {
+      enola = prev.buildGoModule {
+        name = "enola";
+        pname = "enola";
+        src = inputs.enola;
+        # just have to manually update this each time it fails, I guess
+        # vendorSha256 = prev.lib.fakeSha256;
+        vendorSha256 = "sha256-UA4AoO9yDgufZrABJImo+580aaye4jp7qRevj3Efkrg=";
+      };
+    })
+    (final: prev: {
       # hackernews-tui = prev.rustPlatform.buildRustPackage {
       hackernews-tui =
         (prev.makeRustPlatform {
@@ -37,7 +47,7 @@
       #   nativeBuildInputs = prev.qutebrowser.nativeBuildInputs ++ prev.lib.optionals prev.stdenv.isDarwin
       #     [ prev.darwin.apple_sdk.frameworks.Security ]; #darwin.cctools
       # };
-      tickrs = prev.tickrs.overrideAttrs (oldAttrs: rec {
+      tickrs = prev.tickrs.overrideAttrs (oldAttrs: {
         buildInputs =
           oldAttrs.buildInputs
           ++ prev.lib.optionals prev.stdenv.isDarwin

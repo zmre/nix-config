@@ -91,9 +91,9 @@
     pkgs.zk # cli for indexing markdown files
     pastel # cli for color manipulation
     kopia # deduping backup
-    # 2022-12-18 commenting out because apparently it is packaging its own rg and that conflicts with ripgrep
     pkgs.nps # quick nix packages search
     gnugrep
+    pkgs.enola # sherlock-like tool
     #pkgs.qutebrowser
   ];
   # using unstable in my home profile for nix commands
@@ -483,11 +483,14 @@ in {
         # ZixuanChen.vitest-explorer
         # bettercomments ?
       ]
+      # TODO: manual work needed to update these. is there a way
+      # to use flake inputs instead?
       ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
         {
           name = "kubernetes-yaml-formatter"; # TODO: can I add this is a flake so the sha256 updates automatically over time?
           publisher = "kennylong";
           version = "1.1.0";
+          # sha256 = lib.fakeSha256;
           sha256 = "bAdMQxefeqedBdLiYqFBbuSN0auKAs4SKnrqK9/m65c=";
         }
       ];

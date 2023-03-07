@@ -22,6 +22,7 @@
     pwneovide.url = "github:zmre/pwneovide";
 
     ironhide.url = "github:IronCoreLabs/ironhide?ref=1.0.5";
+
     hackernews-tui.url = "github:aome510/hackernews-TUI";
     hackernews-tui.flake = false;
 
@@ -47,6 +48,9 @@
 
     nps.url = "github:OleMussmann/Nix-Package-Search"; # use nps to quick search packages - requires gnugrep though
     nps.inputs.nixpkgs.follows = "nixpkgs";
+
+    enola.url = "github:TheYahya/enola"; # sister to sherlock osint recon tool
+    enola.flake = false;
   };
 
   outputs = inputs @ {
