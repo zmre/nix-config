@@ -3,6 +3,7 @@
   config,
   pkgs,
   username,
+  lib,
   ...
 }: let
   defaultPkgs = with pkgs.stable; [
@@ -605,6 +606,20 @@ in {
       };
     };
   };
+  # VSCode whines like a ... I don't know, but a lot when the config file is read-only
+  # I want nix to govern the configs, but to let vscode edit it (ephemerally) if I change
+  # the zoom or whatever. This hack just copies the symlink to a normal file
+  home.activation.vscodeWritableConfig = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    code_dir="$(echo ~/Library)/Application Support/Code/User"
+    settings="$code_dir/settings.json"
+    settings_nix="$code_dir/settings.nix.json"
+
+    echo "activating $settings"
+
+    $DRY_RUN_CMD mv "$settings" "$settings_nix"
+    $DRY_RUN_CMD cp -H "$settings_nix" "$settings"
+    $DRY_RUN_CMD chmod u+w "$settings"
+  '';
 
   programs.fzf = {
     enable = true;

@@ -28,8 +28,8 @@
           readlink -f {} \;)
       do
         app_name=$(basename $app)
-        echo source = $app
-        echo destination = $app_path/$app_name
+        #echo source = $app
+        #echo destination = $app_path/$app_name
         $DRY_RUN_CMD ${pkgs.mkalias}/bin/mkalias "$app" "$app_path/$app_name"
       done
       IFS="$OIFS"
