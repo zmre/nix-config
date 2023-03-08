@@ -445,55 +445,44 @@ in {
     mutableExtensionsDir =
       true; # to allow vscode to install extensions not available via nix
     # package = pkgs.vscode-fhs; # or pkgs.vscodium or pkgs.vscode-with-extensions
-    extensions = with pkgs.vscode-extensions;
-      [
-        scala-lang.scala
-        svelte.svelte-vscode
-        redhat.vscode-yaml
-        jnoortheen.nix-ide
-        vspacecode.whichkey # ?
-        bungcip.better-toml
-        esbenp.prettier-vscode
-        timonwong.shellcheck
-        matklad.rust-analyzer
-        graphql.vscode-graphql
-        dbaeumer.vscode-eslint
-        codezombiech.gitignore
-        bierner.markdown-emoji
-        bradlc.vscode-tailwindcss
-        naumovs.color-highlight
-        mikestead.dotenv
-        mskelton.one-dark-theme
-        prisma.prisma
-        asvetliakov.vscode-neovim
-        brettm12345.nixfmt-vscode
-        davidanson.vscode-markdownlint
-        pkief.material-icon-theme
-        dracula-theme.theme-dracula
-        eamodio.gitlens # for git blame
-        marp-team.marp-vscode # for markdown slides
-        # live share not currently working via nix
-        #ms-vsliveshare.vsliveshare # live share coding with others
-        # wishlist
-        # ardenivanov.svelte-intellisense
-        # cschleiden.vscode-github-actions
-        # csstools.postcss
-        # stylelint.vscode-stylelint
-        # vunguyentuan.vscode-css-variables
-        # ZixuanChen.vitest-explorer
-        # bettercomments ?
-      ]
-      # TODO: manual work needed to update these. is there a way
-      # to use flake inputs instead?
-      ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-        {
-          name = "kubernetes-yaml-formatter"; # TODO: can I add this is a flake so the sha256 updates automatically over time?
-          publisher = "kennylong";
-          version = "1.1.0";
-          # sha256 = lib.fakeSha256;
-          sha256 = "bAdMQxefeqedBdLiYqFBbuSN0auKAs4SKnrqK9/m65c=";
-        }
-      ];
+    extensions = with pkgs.vscode-extensions; [
+      scala-lang.scala
+      svelte.svelte-vscode
+      redhat.vscode-yaml
+      jnoortheen.nix-ide
+      vspacecode.whichkey # ?
+      bungcip.better-toml
+      esbenp.prettier-vscode
+      timonwong.shellcheck
+      matklad.rust-analyzer
+      graphql.vscode-graphql
+      dbaeumer.vscode-eslint
+      codezombiech.gitignore
+      bierner.markdown-emoji
+      bradlc.vscode-tailwindcss
+      naumovs.color-highlight
+      mikestead.dotenv
+      mskelton.one-dark-theme
+      prisma.prisma
+      asvetliakov.vscode-neovim
+      brettm12345.nixfmt-vscode
+      davidanson.vscode-markdownlint
+      pkief.material-icon-theme
+      dracula-theme.theme-dracula
+      eamodio.gitlens # for git blame
+      marp-team.marp-vscode # for markdown slides
+      pkgs.kubernetes-yaml-formatter # format k8s; from overlays and flake input
+      # live share not currently working via nix
+      #ms-vsliveshare.vsliveshare # live share coding with others
+      # wishlist
+      # ardenivanov.svelte-intellisense
+      # cschleiden.vscode-github-actions
+      # csstools.postcss
+      # stylelint.vscode-stylelint
+      # vunguyentuan.vscode-css-variables
+      # ZixuanChen.vitest-explorer
+      # bettercomments ?
+    ];
     # starting point for bindings: https://github.com/LunarVim/LunarVim/blob/4625145d0278d4a039e55c433af9916d93e7846a/utils/vscode_config/keybindings.json
     keybindings = [
       {

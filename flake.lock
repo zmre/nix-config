@@ -507,6 +507,23 @@
         "type": "github"
       }
     },
+    "kubernetes-yaml-formatter": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1666200006,
+        "narHash": "sha256-1GjrsI13hWNV/KJhLko4Pcnl+QFSHF1YcbG6N/Qa3ZU=",
+        "owner": "longkai",
+        "repo": "kubernetes-yaml-formatter",
+        "rev": "d070038f4df6080b9968808776b10c2adaf37550",
+        "type": "github"
+      },
+      "original": {
+        "owner": "longkai",
+        "ref": "v1.1.0",
+        "repo": "kubernetes-yaml-formatter",
+        "type": "github"
+      }
+    },
     "lowdown-src": {
       "flake": false,
       "locked": {
@@ -963,6 +980,7 @@
         "hackernews-tui": "hackernews-tui",
         "home-manager": "home-manager",
         "ironhide": "ironhide",
+        "kubernetes-yaml-formatter": "kubernetes-yaml-formatter",
         "mkalias": "mkalias",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_7",

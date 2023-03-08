@@ -51,6 +51,10 @@
 
     enola.url = "github:TheYahya/enola"; # sister to sherlock osint recon tool
     enola.flake = false;
+
+    # VSCode extension built from github -- update version here and in ./modules/overlays.nix
+    kubernetes-yaml-formatter.url = "github:longkai/kubernetes-yaml-formatter/v1.1.0";
+    kubernetes-yaml-formatter.flake = false;
   };
 
   outputs = inputs @ {

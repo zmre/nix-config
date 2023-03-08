@@ -25,6 +25,16 @@
       };
     })
     (final: prev: {
+      kubernetes-yaml-formatter = prev.vscode-utils.buildVscodeExtension {
+        name = "kubernetes-yaml-formatter";
+        src = inputs.kubernetes-yaml-formatter;
+        vscodeExtUniqueId = "kennylong.kubernetes-yaml-formatter";
+        vscodeExtPublisher = "kennylong";
+        vscodeExtName = "kubernetes-yaml-formatter";
+        version = "1.1.0";
+      };
+    })
+    (final: prev: {
       # hackernews-tui = prev.rustPlatform.buildRustPackage {
       hackernews-tui =
         (prev.makeRustPlatform {
