@@ -605,12 +605,14 @@ in {
     code_dir="$(echo ~/Library)/Application Support/Code/User"
     settings="$code_dir/settings.json"
     settings_nix="$code_dir/settings.nix.json"
+    settings_bak="$settings.bak"
 
     echo "activating $settings"
 
     $DRY_RUN_CMD mv "$settings" "$settings_nix"
     $DRY_RUN_CMD cp -H "$settings_nix" "$settings"
     $DRY_RUN_CMD chmod u+w "$settings"
+    $DRY_RUN_CMD rm "$settings_bak"
   '';
 
   programs.fzf = {
