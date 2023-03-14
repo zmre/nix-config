@@ -51,7 +51,6 @@
       "imageoptim"
       "insta360-studio"
       "istat-menus"
-      "kindavim"
       "knockknock"
       "little-snitch"
       "lockrattler"
@@ -106,6 +105,11 @@
       #"warp" # 2022-11-10 testing some crazy new rust-based terminal
       "webex"
       "wireshark-chmodbpf"
+
+      # Keeping the next three together as they act in concert and are made by the same guy
+      "kindavim" # ctrl-esc allows you to control an input area as if in vim normal mode
+      "scrolla" # use vim commands to select scroll areas and scroll
+      "wooshy" # use cmd-shift-space to bring up search to select interface elements in current app
     ];
 
     masApps = {
