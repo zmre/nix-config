@@ -1015,23 +1015,30 @@ in {
       subpull = "submodule foreach git pull";
       subco = "submodule foreach git checkout master";
     };
-    extraConfig = {
-      github.user = "zmre";
-      color.ui = true;
-      pull.rebase = true;
-      merge.conflictstyle = "diff3";
-      init.defaultBranch = "main";
-      http.sslVerify = true;
-      commit.verbose = true;
-      credential.helper =
-        if pkgs.stdenvNoCC.isDarwin
-        then "osxkeychain"
-        else "cache --timeout=10000000";
-      diff.algorithm = "patience";
-      protocol.version = "2";
-      core.commitGraph = true;
-      gc.writeCommitGraph = true;
-    };
+    extraConfig =
+      {
+        github.user = "zmre";
+        color.ui = true;
+        pull.rebase = true;
+        merge.conflictstyle = "diff3";
+        init.defaultBranch = "main";
+        http.sslVerify = true;
+        commit.verbose = true;
+        credential.helper =
+          if pkgs.stdenvNoCC.isDarwin
+          then "osxkeychain"
+          else "cache --timeout=10000000";
+        diff.algorithm = "patience";
+        protocol.version = "2";
+        core.commitGraph = true;
+        gc.writeCommitGraph = true;
+      }
+      // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
+        # these should speed up vim nvim-tree and other things that watch git repos but
+        # only works on mac. see https://github.com/nvim-tree/nvim-tree.lua/wiki/Troubleshooting#git-fsmonitor-daemon
+        core.fsmonitor = true;
+        core.untrackedcache = true;
+      };
     # Really nice looking diffs
     delta = {
       enable = false;
