@@ -62,6 +62,9 @@
       "obs" # TODO: move to nix version obs-studio when not broken
       "orion" # just trying out the Orion browser
       "parallels"
+      #"pomatez" # pomodoro timer, but installs itself as startup item and doesn't
+      # give an option to disable that and doesn't ask you first. can
+      # kill that in other ways, but that's a real negative sign to me
       "protonmail-bridge" # TODO: nix version now installs and works -- move over
       "qflipper"
       "qutebrowser" # TODO: move over when it builds on arm64 darwin
@@ -123,10 +126,11 @@
       "Disk Decipher" = 516538625;
       "Disk Speed Test" = 425264550;
       "Fantastical" = 975937182; # calendar alternative
+      #"Focus" = 777233759; # pomodoro timer -- but they want monthly payments now. for a f'ing timer
       "Forecast Bar" = 982710545;
       "Ghostery – Privacy Ad Blocker" = 1436953057;
       "Gifox 2" = 1461845568; # For short animated gif screen caps
-      #"Ice Cubes" = 6444915884;
+      #"Ice Cubes" = 6444915884; # mastodon client
       "iMovie" = 408981434;
       "iStumbler" = 546033581;
       "Kagi, Inc." = 1622835804; # Paid private search engine plugin for Safari
@@ -134,7 +138,6 @@
       "Keynote" = 409183694;
       "Keyshape" = 1223341056; # animated svg editor
       "Kindle" = 405399194;
-      "Mastonaut" = 1450757574; # mastodon client i'm trying
       "Microsoft Excel" = 462058435;
       "Microsoft Word" = 462054704;
       "Microsoft PowerPoint" = 462062816;
@@ -151,7 +154,6 @@
       "StopTheMadness" = 1376402589;
       "Strongbox" = 1270075435; # password manager
       "Tailscale" = 1475387142; # P2P mesh VPN for my devices
-      #"Tweetbot" = 1384080005; # 2023-01-18: no point after Elon death rayed it
       "Vimari" = 1480933944;
       "Vinegar" = 1591303229;
       "WireGuard" = 1451685025; # VPN
