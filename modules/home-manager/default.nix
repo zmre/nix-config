@@ -873,7 +873,8 @@ in {
   };
 
   programs.exa.enable = true;
-  programs.pistol = {
+  /*
+     programs.pistol = {
     # I've gone back to my pv.sh script for now
     enable = false;
     associations = [
@@ -887,6 +888,7 @@ in {
       }
     ];
   };
+  */
   # my preferred file explorer; mnemonic: list files
   programs.lf = {
     enable = true;
@@ -1201,7 +1203,7 @@ in {
       # Tab bar
       tab_bar_edge = "bottom";
       tab_bar_style = "powerline";
-      tab_title_template = "{index}: {title}";
+      tab_title_template = "{title}"; # "{index}: {title}";
 
       # Colors
       active_tab_font_style = "bold";
@@ -1211,10 +1213,9 @@ in {
       tab_activity_symbol = " ";
 
       # Misc
-      # I forget why I was allowing remote control now. I had a reason, but I don't think
-      # I'm using it now. We'll see what breaks. It seems to be slowing down new windows. 2023-01-21
-      #allow_remote_control = "socket-only";
-      #listen_on = "unix:/tmp/kitty-sock";
+      # nvim true-zen kitty integration requires following two settings, but I've disabled due to bugs in true-zen
+      # allow_remote_control = "socket-only";
+      # listen_on = "unix:/tmp/kitty-sock";
       visual_bell_duration = "0.1";
       background_opacity = "0.95";
       startup_session = "~/.config/kitty/startup.session";
