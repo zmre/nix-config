@@ -97,7 +97,10 @@
       #"webpquicklook" # not updated in 5 years
       #"xbar"
       #"yattee" # private youtube
-      "veracrypt"
+      # veracrypt requires macfuse which requires unsafe kernel extensions that
+      # have to be enabled in recovery mode and... meh.
+      #"veracrypt"
+      #"macfuse" # needed by veracrypt
       "yubico-yubikey-manager" # TODO: move to home-manager (yubikey-manager or yubikey-manager-qt)
       "zenmap"
       "zoom" # TODO: move to home-manager (zoom-us)
