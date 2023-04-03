@@ -359,11 +359,13 @@ in {
   programs.direnv = {
     enable = true;
     enableZshIntegration = true;
+    enableNushellIntegration = true;
     nix-direnv.enable = true;
   };
   programs.zoxide = {
     enable = true;
     enableZshIntegration = true;
+    enableNushellIntegration = false;
   };
   programs.taskwarrior = {
     enable = false;
@@ -859,11 +861,13 @@ in {
         # Figure out the uniform type identifiers and uri schemes of a file (must specify the file)
         # for use in SwiftDefaultApps
         checktype = "mdls -name kMDItemContentType -name kMDItemContentTypeTree -name kMDItemKind";
-        dwupdate = "pushd ~/.config/nixpkgs ; nix flake update ; /opt/homebrew/bin/brew update; popd ; dwswitch ; /opt/homebrew/bin/brew upgrade ; /opt/homebrew/bin/brew upgrade --cask --greedy; popd";
+        dwupdate = "pushd ~/.config/nixpkgs ; nix flake update ; /opt/homebrew/bin/brew update; popd ; dwswitch ; /opt/homebrew/bin/brew upgrade ; /opt/homebrew/bin/brew upgrade --cask --greedy; dwshowupdates; popd";
         dwswitch = "pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
         dwswitchx = "pushd ~; darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
         dwclean = "pushd ~; sudo nix-env --delete-generations +7 --profile /nix/var/nix/profiles/system; sudo nix-collect-garbage --delete-older-than 30d ; nix store optimise ; popd";
         dwupcheck = "pushd ~/.config/nixpkgs ; nix flake update ; darwin-rebuild build --flake ~/.config/nixpkgs/.#$(hostname -s) && nix store diff-closures /nix/var/nix/profiles/system ~/.config/nixpkgs/result; popd"; # todo: prefer nvd?
+        # i use the zsh shell out in case anyone blindly copies this into their bash profile
+        dwshowupdates = "zsh -c \"nix store diff-closures /nix/var/nix/profiles/system-*-link(om[2]) /nix/var/nix/profiles/system-*-link(om[1])\"";
       }
       // pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
         hmswitch = ''
@@ -891,6 +895,110 @@ in {
   };
   */
   # my preferred file explorer; mnemonic: list files
+
+  programs.nushell = {
+    enable = true;
+    configFile.text = ''
+      let-env config = {
+        ls: {
+          use_ls_colors: true
+          clickable_links: true
+        }
+        rm: {
+          always_trash: false
+        }
+        use_grid_icons: true
+        footer_mode: "25" # always, never, number_of_rows, auto
+        float_precision: 2
+        use_ansi_coloring: true
+        filesize: {
+          metric: true # true => (KB, MB, GB), false => (KiB, MiB, GiB)
+          format: "auto" # b, kb, kib, mb, mib, gb, gib, tb, tib, pb, pib, eb, eib, zb, zib, auto
+        }
+        edit_mode: vi # emacs, vi
+        history: {
+          max_size: 10000 # Session has to be reloaded for this to take effect
+          file_format: "plaintext" # "sqlite" or "plaintext"
+          sync_on_enter: true # Enable to share the history between multiple sessions, else you have to close the session to persist history to file
+        }
+        shell_integration: true # enables terminal markers and a workaround to arrow keys stop working issue
+        cd: {
+          abbreviations: false # set to true to allow you to do things like cd s/o/f and nushell expand it to cd some/other/folder
+        }
+        completions: {
+          case_sensitive: false # set to true to enable case-sensitive completions
+          quick: true  # set this to false to prevent auto-selecting completions when only one remains
+          partial: true  # set this to false to prevent partial filling of the prompt
+          algorithm: "prefix"  # prefix, fuzzy
+          external: {
+            enable: true # set to false to prevent nushell looking into $env.PATH to find more suggestions, `false` recommended for WSL users as this look up my be very slow
+            max_results: 100 # setting it lower can improve completion performance at the cost of omitting some options
+          }
+        }
+        # A strategy of managing table view in case of limited space.
+        table: {
+          index_mode: auto # "always" show indexes, "never" show indexes, "auto" = show indexes when a table has "index" column
+          mode: none # basic, compact, compact_double, light, thin, with_love, rounded, reinforced, heavy, none, other
+          trim: {
+            methodology: wrapping, # truncating
+            # A strategy which will be used by 'wrapping' methodology
+            wrapping_try_keep_words: true,
+            # A suffix which will be used with 'truncating' methodology
+            # truncating_suffix: "..."
+          }
+        }
+        show_banner: false # true or false to enable or disable the banner
+      }
+      source ~/.zoxide.nu
+      #source ~/.cache/starship/init.nu
+    '';
+    envFile.text = ''
+      # The prompt indicators are environmental variables that represent
+      # the state of the prompt
+      #let-env PROMPT_INDICATOR = "❯ "
+      #let-env PROMPT_INDICATOR_VI_INSERT = "❯ "
+      #let-env PROMPT_INDICATOR_VI_NORMAL = "❮ "
+      #let-env PROMPT_MULTILINE_INDICATOR = ""
+
+      zoxide init nushell --hook prompt | save -f ~/.zoxide.nu
+      #mkdir ~/.cache/starship
+      #starship init nu | save -f ~/.cache/starship/init.nu
+    '';
+  };
+
+  programs.starship = {
+    enable = false;
+    enableNushellIntegration = false; # no good if we also want zoxide
+    settings = {
+      #format = ''$username$hostname$directory$git_branch$git_state$git_status$git_metrics$fill$nodejs$rust$nix_shell$cmd_duration$line_break$jobs$character'';
+      character = {
+        success_symbol = "[❯](purple)";
+        error_symbol = "[❯](red)";
+        vicmd_symbol = "[❮](green)";
+      };
+      scan_timeout = 30;
+      gcloud.disabled = true;
+      git_status.ahead = "";
+      git_status.behind = "";
+      git_status.untracked = "";
+      git_status.stashed = "";
+      git_metrics.disabled = true;
+      time.disabled = true;
+      directory.style = "blue"; # cyan
+      package.format = "version [$version](bold green) ";
+      nix_shell.symbol = " ";
+      rust.symbol = " ";
+      cmd_duration.format = "[$duration]($style)";
+      cmd_duration.style = "yellow";
+      jobs = {
+        symbol = "";
+        style = "bold red";
+        number_threshold = 1;
+        format = "[$symbol]($style)";
+      };
+    };
+  };
+
   programs.lf = {
     enable = true;
     settings = {
