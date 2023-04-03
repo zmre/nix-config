@@ -16,6 +16,7 @@
     duf # df alternative showing free disk space
     fswatch
     tree
+    chkrootkit
 
     # compression
     atool
@@ -80,6 +81,7 @@
     fortune
     ipcalc
     kondo # free disk space by cleaning project build dirs
+    ncspot # control spotify
     optipng
     pkgs.hackernews-tui
     procps
@@ -866,8 +868,8 @@ in {
         dwswitchx = "pushd ~; darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
         dwclean = "pushd ~; sudo nix-env --delete-generations +7 --profile /nix/var/nix/profiles/system; sudo nix-collect-garbage --delete-older-than 30d ; nix store optimise ; popd";
         dwupcheck = "pushd ~/.config/nixpkgs ; nix flake update ; darwin-rebuild build --flake ~/.config/nixpkgs/.#$(hostname -s) && nix store diff-closures /nix/var/nix/profiles/system ~/.config/nixpkgs/result; popd"; # todo: prefer nvd?
-        # i use the zsh shell out in case anyone blindly copies this into their bash profile
-        dwshowupdates = "zsh -c \"nix store diff-closures /nix/var/nix/profiles/system-*-link(om[2]) /nix/var/nix/profiles/system-*-link(om[1])\"";
+        # i use the zsh shell out in case anyone blindly copies this into their bash or fish profile since syntax is zsh specific
+        dwshowupdates = "zsh -c \"nix store diff-closures /nix/var/nix/profiles/system-*-link(om[2]) /nix/var/nix/profiles/system-*-link(om[1])\"; brew update >& /dev/null && brew upgrade -n -g";
       }
       // pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
         hmswitch = ''

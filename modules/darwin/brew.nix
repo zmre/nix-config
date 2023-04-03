@@ -130,7 +130,6 @@
       "Disk Decipher" = 516538625;
       "Disk Speed Test" = 425264550;
       "Fantastical" = 975937182; # calendar alternative
-      #"Focus" = 777233759; # pomodoro timer -- but they want monthly payments now. for a f'ing timer
       "Forecast Bar" = 982710545;
       "Ghostery – Privacy Ad Blocker" = 1436953057;
       "Gifox 2" = 1461845568; # For short animated gif screen caps
@@ -148,7 +147,6 @@
       "Monodraw" = 920404675; # ASCII drawings
       "NextDNS" = 1464122853;
       "NotePlan 3" = 1505432629;
-      #"OneDrive" = 823766827;
       "PCalc" = 403504866;
       "PeakHour" = 1241445112;
       "SQLPro Studio" = 985614903;
@@ -163,7 +161,6 @@
       "WireGuard" = 1451685025; # VPN
       "Xcode" = 497799835;
       "Yubico Authenticator" = 1497506650;
-      #"Wipr" = 1320666476;
     };
     brews = [
       "pam-reattach"
@@ -173,12 +170,9 @@
       "dashing" # generate dash docs from html
       "ddcctl"
       "ansiweather"
-      "findutils" # TODO: needed?
       "gdrive"
       "marp-cli" # convert markdown to html slides
       "ical-buddy"
-      "ncspot" # TODO: move to home-manager
-      "chkrootkit" # TODO: move to home-manager
       "trippy" # an mtr alternative
       # would rather load these as part of a security shell, but...
       "p0f" # the nix one only builds on linux
