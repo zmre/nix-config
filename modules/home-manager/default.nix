@@ -948,11 +948,61 @@ in {
           }
         }
         show_banner: false # true or false to enable or disable the banner
+        render_right_prompt_on_last_line: false
       }
-      source ~/.zoxide.nu
+      #source ~/.zoxide.nu
+
+      # Initialize hook to add new entries to the database.
+      if (not ($env | default false __zoxide_hooked | get __zoxide_hooked)) {
+        let-env __zoxide_hooked = true
+        let-env config = ($env | default {} config).config
+        let-env config = ($env.config | default {} hooks)
+        let-env config = ($env.config | update hooks ($env.config.hooks | default [] pre_prompt))
+        let-env config = ($env.config | update hooks.pre_prompt ($env.config.hooks.pre_prompt | append {||
+          zoxide add -- $env.PWD
+        }))
+      }
+
+      # Jump to a directory using only keywords.
+      def-env __zoxide_z [...rest:string] {
+        # `z -` does not work yet, see https://github.com/nushell/nushell/issues/4769
+        let arg0 = ($rest | append '~').0
+        let path = if (($rest | length) <= 1) and ($arg0 == '-' or ($arg0 | path expand | path type) == dir) {
+          $arg0
+        } else {
+          (zoxide query --exclude $env.PWD -- $rest | str trim -r -c "\n")
+        }
+        cd $path
+      }
+
+      # Jump to a directory using interactive search.
+      def-env __zoxide_zi  [...rest:string] {
+        cd $'(zoxide query -i -- $rest | str trim -r -c "\n")'
+      }
+
+      alias z = __zoxide_z
+      alias zi = __zoxide_zi
+
+      let-env STARSHIP_SHELL = "nu"
+      let-env STARSHIP_SESSION_KEY = (random chars -l 16)
+      let-env PROMPT_MULTILINE_INDICATOR = (^starship prompt --continuation)
+      let-env PROMPT_INDICATOR = ""
+      let-env PROMPT_INDICATOR_VI_INSERT = {|| "" }
+      let-env PROMPT_INDICATOR_VI_NORMAL = {|| "〉" }
+      let-env PROMPT_COMMAND = {||
+        # jobs are not supported
+        let width = (term size).columns
+        ^starship prompt $"--cmd-duration=($env.CMD_DURATION_MS)" $"--status=($env.LAST_EXIT_CODE)" $"--terminal-width=($width)"
+      }
+      let-env PROMPT_COMMAND_RIGHT = {||
+        let width = (term size).columns
+        ^starship prompt --right $"--cmd-duration=($env.CMD_DURATION_MS)" $"--status=($env.LAST_EXIT_CODE)" $"--terminal-width=($width)"
+      }
       #source ~/.cache/starship/init.nu
+      # Taken from the docs at https://www.nushell.sh/book/configuration.html#macos-keeping-usr-bin-open-as-open
       def nuopen [arg, --raw (-r)] { if $raw { open -r $arg } else { open $arg } }
       alias open = ^open
+
     '';
     envFile.text = ''
       # The prompt indicators are environmental variables that represent
@@ -961,20 +1011,107 @@ in {
       #let-env PROMPT_INDICATOR_VI_INSERT = "❯ "
       #let-env PROMPT_INDICATOR_VI_NORMAL = "❮ "
       #let-env PROMPT_MULTILINE_INDICATOR = ""
+
       let-env EDITOR = "nvim"
 
       zoxide init nushell --hook prompt | save -f ~/.zoxide.nu
+
       #mkdir ~/.cache/starship
       #starship init nu | save -f ~/.cache/starship/init.nu
     '';
   };
 
   programs.starship = {
-    enable = true; # enabled for now for experimentation primarily in Nushell 2023-04-05
-    enableNushellIntegration = false; # no good if we also want zoxide
-    enableZshIntegration = false; # currently happy with powerlevel10k
+    enable = true;
+    enableNushellIntegration = false; # I've manually integrated because of bugs 2023-04-05
+    enableZshIntegration = false; # nope. I'm happy with the smokin speed of powerlevel10k in zsh
+    enableBashIntegration = true;
     settings = {
-      #format = ''$username$hostname$directory$git_branch$git_state$git_status$git_metrics$fill$nodejs$rust$nix_shell$cmd_duration$line_break$jobs$character'';
+      format = pkgs.lib.concatStrings [
+        "$os"
+        "$username"
+        "$hostname"
+        "$singularity"
+        "$kubernetes"
+        "$directory"
+        "$vcsh"
+        "$fossil_branch"
+        "$git_branch"
+        "$git_commit"
+        "$git_state"
+        "$git_status"
+        "$git_metrics"
+        "$hg_branch"
+        "$pijul_channel"
+        "$sudo"
+        "$jobs"
+        "$line_break"
+        "$battery"
+        "$time"
+        "$status"
+        "$container"
+        "$shell"
+        "$character"
+      ];
+      right_format = pkgs.lib.concatStrings [
+        "$cmd_duration"
+        "$shlvl"
+        "$docker_context"
+        "$package"
+        "$c"
+        "$cmake"
+        "$daml"
+        "$dart"
+        "$deno"
+        "$dotnet"
+        "$elixir"
+        "$elm"
+        "$erlang"
+        "$fennel"
+        "$golang"
+        "$guix_shell"
+        "$haskell"
+        "$haxe"
+        "$helm"
+        "$java"
+        "$julia"
+        "$kotlin"
+        "$gradle"
+        "$lua"
+        "$nim"
+        "$nodejs"
+        "$ocaml"
+        "$opa"
+        "$perl"
+        "$php"
+        "$pulumi"
+        "$purescript"
+        "$python"
+        "$raku"
+        "$rlang"
+        "$red"
+        "$ruby"
+        "$rust"
+        "$scala"
+        "$swift"
+        "$terraform"
+        "$vlang"
+        "$vagrant"
+        "$zig"
+        "$buf"
+        "$nix_shell"
+        "$conda"
+        "$meson"
+        "$spack"
+        "$memory_usage"
+        "$aws"
+        "$gcloud"
+        "$openstack"
+        "$azure"
+        "$env_var"
+        "$crystal"
+        "$custom"
+      ];
       character = {
         success_symbol = "[❯](purple)";
         error_symbol = "[❯](red)";
@@ -984,24 +1121,41 @@ in {
       add_newline = true;
       gcloud.disabled = true;
       aws.disabled = true;
+      os.disabled = false;
+      os.symbols.Macos = "";
       kubernetes = {
         disabled = false;
         context_aliases = {
           "gke_.*_(?P<var_cluster>[\\w-]+)" = "$var_cluster";
         };
       };
-      git_status.ahead = "";
-      git_status.behind = "";
-      git_status.untracked = "";
-      git_status.stashed = "";
-      git_metrics.disabled = true;
+      git_status.style = "blue";
+      git_metrics.disabled = false;
+      git_branch.style = "bright-black";
+      git_branch.format = "[  ](bright-black)[$symbol$branch(:$remote_branch)]($style) ";
       time.disabled = true;
-      directory.style = "blue"; # cyan
+      directory = {
+        format = "[    ](bright-black)[$path]($style)[$read_only]($read_only_style) ";
+        truncation_length = 4;
+        truncation_symbol = "…/";
+        style = "bold blue"; # cyan
+        truncate_to_repo = false;
+      };
+      directory.substitutions = {
+        Documents = " ";
+        Downloads = " ";
+        Music = " ";
+        Pictures = " ";
+      };
+      package.disabled = true;
       package.format = "version [$version](bold green) ";
       nix_shell.symbol = " ";
       rust.symbol = " ";
-      cmd_duration.format = "[$duration]($style)";
-      cmd_duration.style = "yellow";
+      cmd_duration = {
+        format = "[$duration]($style)   ";
+        style = "bold yellow";
+        min_time_to_notify = 5000;
+      };
       jobs = {
         symbol = "";
         style = "bold red";
