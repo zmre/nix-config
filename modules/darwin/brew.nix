@@ -145,7 +145,7 @@
       "Microsoft Word" = 462054704;
       "Microsoft PowerPoint" = 462062816;
       "Monodraw" = 920404675; # ASCII drawings
-      "NextDNS" = 1464122853;
+      #"NextDNS" = 1464122853;
       "NotePlan 3" = 1505432629;
       "PCalc" = 403504866;
       "PeakHour" = 1241445112;
