@@ -707,9 +707,9 @@ in {
       source ${./dotfiles/p10k.zsh}
       source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
       # Prompt stuff
-      #if [[ -r "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh" ]]; then
-        #source "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh"
-      #fi
+      if [[ -r "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh" ]]; then
+        source "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh"
+      fi
     '';
     initExtra = ''
       set -o vi
@@ -807,8 +807,6 @@ in {
       # Setup zoxide
       eval "$(zoxide init zsh)"
 
-      #source ${./dotfiles/p10k.zsh}
-
       #zprof
     '';
     sessionVariables = {};
@@ -867,9 +865,9 @@ in {
         dwswitch = "pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
         dwswitchx = "pushd ~; darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
         dwclean = "pushd ~; sudo nix-env --delete-generations +7 --profile /nix/var/nix/profiles/system; sudo nix-collect-garbage --delete-older-than 30d ; nix store optimise ; popd";
-        dwupcheck = "pushd ~/.config/nixpkgs ; nix flake update ; darwin-rebuild build --flake ~/.config/nixpkgs/.#$(hostname -s) && nix store diff-closures /nix/var/nix/profiles/system ~/.config/nixpkgs/result; popd"; # todo: prefer nvd?
+        dwupcheck = "pushd ~/.config/nixpkgs ; nix flake update ; darwin-rebuild build --flake ~/.config/nixpkgs/.#$(hostname -s) && nix store diff-closures /nix/var/nix/profiles/system ~/.config/nixpkgs/result; brew update >& /dev/null && brew upgrade -n -g; popd"; # todo: prefer nvd?
         # i use the zsh shell out in case anyone blindly copies this into their bash or fish profile since syntax is zsh specific
-        dwshowupdates = "zsh -c \"nix store diff-closures /nix/var/nix/profiles/system-*-link(om[2]) /nix/var/nix/profiles/system-*-link(om[1])\"; brew update >& /dev/null && brew upgrade -n -g";
+        dwshowupdates = "zsh -c \"nix store diff-closures /nix/var/nix/profiles/system-*-link(om[2]) /nix/var/nix/profiles/system-*-link(om[1])\"";
       }
       // pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
         hmswitch = ''
@@ -953,6 +951,8 @@ in {
       }
       source ~/.zoxide.nu
       #source ~/.cache/starship/init.nu
+      def nuopen [arg, --raw (-r)] { if $raw { open -r $arg } else { open $arg } }
+      alias open = ^open
     '';
     envFile.text = ''
       # The prompt indicators are environmental variables that represent
@@ -961,6 +961,7 @@ in {
       #let-env PROMPT_INDICATOR_VI_INSERT = "❯ "
       #let-env PROMPT_INDICATOR_VI_NORMAL = "❮ "
       #let-env PROMPT_MULTILINE_INDICATOR = ""
+      let-env EDITOR = "nvim"
 
       zoxide init nushell --hook prompt | save -f ~/.zoxide.nu
       #mkdir ~/.cache/starship
@@ -969,8 +970,9 @@ in {
   };
 
   programs.starship = {
-    enable = false;
+    enable = true; # enabled for now for experimentation primarily in Nushell 2023-04-05
     enableNushellIntegration = false; # no good if we also want zoxide
+    enableZshIntegration = false; # currently happy with powerlevel10k
     settings = {
       #format = ''$username$hostname$directory$git_branch$git_state$git_status$git_metrics$fill$nodejs$rust$nix_shell$cmd_duration$line_break$jobs$character'';
       character = {
@@ -979,7 +981,15 @@ in {
         vicmd_symbol = "[❮](green)";
       };
       scan_timeout = 30;
+      add_newline = true;
       gcloud.disabled = true;
+      aws.disabled = true;
+      kubernetes = {
+        disabled = false;
+        context_aliases = {
+          "gke_.*_(?P<var_cluster>[\\w-]+)" = "$var_cluster";
+        };
+      };
       git_status.ahead = "";
       git_status.behind = "";
       git_status.untracked = "";
