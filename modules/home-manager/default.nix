@@ -1029,6 +1029,7 @@ in {
     settings = {
       format = pkgs.lib.concatStrings [
         "$os"
+        "$shell"
         "$username"
         "$hostname"
         "$singularity"
@@ -1050,7 +1051,6 @@ in {
         "$time"
         "$status"
         "$container"
-        "$shell"
         "$character"
       ];
       right_format = pkgs.lib.concatStrings [
@@ -1135,7 +1135,7 @@ in {
       git_branch.format = "[  ](bright-black)[$symbol$branch(:$remote_branch)]($style) ";
       time.disabled = true;
       directory = {
-        format = "[    ](bright-black)[$path]($style)[$read_only]($read_only_style) ";
+        format = "[    ](bright-black)[$path]($style)[$read_only]($read_only_style)";
         truncation_length = 4;
         truncation_symbol = "…/";
         style = "bold blue"; # cyan
@@ -1151,6 +1151,17 @@ in {
       package.format = "version [$version](bold green) ";
       nix_shell.symbol = " ";
       rust.symbol = " ";
+      shell = {
+        disabled = false;
+        format = "[$indicator]($style)";
+        style = "bright-black";
+        bash_indicator = " bsh";
+        nu_indicator = " nu";
+        fish_indicator = " ";
+        zsh_indicator = ""; # don't show when in my default shell type
+        unknown_indicator = " ?";
+        powershell_indicator = " _";
+      };
       cmd_duration = {
         format = "[$duration]($style)   ";
         style = "bold yellow";
