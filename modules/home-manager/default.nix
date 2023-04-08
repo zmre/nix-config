@@ -1,11 +1,5 @@
-{
-  inputs,
-  config,
-  pkgs,
-  username,
-  lib,
-  ...
-}: let
+{ inputs, config, pkgs, username, lib, ... }:
+let
   defaultPkgs = with pkgs.stable; [
     # filesystem
     fd
@@ -101,15 +95,14 @@
   # using unstable in my home profile for nix commands
   # nixEditorPkgs = with pkgs; [ nix statix ];
 
-  networkPkgs = with pkgs.stable; [mtr iftop];
+  networkPkgs = with pkgs.stable; [ mtr iftop ];
   guiPkgs = with pkgs;
     [
       element-desktop
       pkgs.pwneovide # wrapper makes a macos app for launching (and ensures it calls pwnvim)
       #dbeaver # database sql manager with er diagrams
-    ]
-    ++ lib.optionals pkgs.stdenv.isDarwin
-    [utm]; # utm is a qemu wrapper for mac only
+    ] ++ lib.optionals pkgs.stdenv.isDarwin
+    [ utm ]; # utm is a qemu wrapper for mac only
 in {
   programs.home-manager.enable = true;
   home.enableNixpkgsReleaseCheck = false;
@@ -126,7 +119,8 @@ in {
   home.packages = defaultPkgs ++ guiPkgs ++ networkPkgs;
 
   home.sessionVariables = {
-    NIX_PATH = "nixpkgs=${inputs.nixpkgs-unstable}:stable=${inputs.nixpkgs-stable}\${NIX_PATH:+:}$NIX_PATH";
+    NIX_PATH =
+      "nixpkgs=${inputs.nixpkgs-unstable}:stable=${inputs.nixpkgs-stable}\${NIX_PATH:+:}$NIX_PATH";
     LANG = "en_US.UTF-8";
     LC_ALL = "en_US.UTF-8";
     #TERM = "xterm-256color";
@@ -134,11 +128,13 @@ in {
     EDITOR = "nvim";
     VISUAL = "nvim";
     GIT_EDITOR = "nvim";
-    LS_COLORS = "no=00:fi=00:di=01;34:ln=35;40:pi=40;33:so=01;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=01;32:*.cmd=01;32:*.exe=01;32:*.com=01;32:*.btm=01;32:*.bat=01;32:";
+    LS_COLORS =
+      "no=00:fi=00:di=01;34:ln=35;40:pi=40;33:so=01;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:ex=01;32:*.cmd=01;32:*.exe=01;32:*.com=01;32:*.btm=01;32:*.bat=01;32:";
     LSCOLORS = "ExfxcxdxCxegedabagacad";
     FIGNORE = "*.o:~:Application Scripts:CVS:.git";
     TZ = "America/Denver";
-    LESS = "--raw-control-chars -FXRadeqs -P--Less--?e?x(Next file: %x):(END).:?pB%pB%.";
+    LESS =
+      "--raw-control-chars -FXRadeqs -P--Less--?e?x(Next file: %x):(END).:?pB%pB%.";
     CLICOLOR = 1;
     CLICOLOR_FORCE = "yes";
     PAGER = "page -WO -q 90000";
@@ -151,10 +147,10 @@ in {
     TERMINAL = "alacritty";
     HOMEBREW_NO_AUTO_UPDATE = 1;
     #LIBVA_DRIVER_NAME="iHD";
-    ZK_NOTEBOOK_DIR =
-      if pkgs.stdenvNoCC.isDarwin
-      then "/Users/${username}/Library/Containers/co.noteplan.NotePlan3/Data/Library/Application Support/co.noteplan.NotePlan3"
-      else "/home/${username}/Notes";
+    ZK_NOTEBOOK_DIR = if pkgs.stdenvNoCC.isDarwin then
+      "/Users/${username}/Library/Containers/co.noteplan.NotePlan3/Data/Library/Application Support/co.noteplan.NotePlan3"
+    else
+      "/home/${username}/Notes";
   };
 
   home.file.".inputrc".text = ''
@@ -237,124 +233,123 @@ in {
     selection_background = "#4a4c4c"
     selection_foreground = "#d8dad6"
   '';
-  home.file."Library/Preferences/espanso/match/base.yml".text = pkgs.lib.generators.toYAML {} {
-    matches = [
-      {
-        trigger = "icphone";
-        replace = "415.968.9607";
-      }
-      {
-        trigger = ":checkbox:";
-        replace = "⬜️";
-      }
-      {
-        trigger = ":checked:";
-        replace = "✅";
-      }
-      {
-        trigger = ":checkmark:";
-        replace = "✓";
-      }
-      {
-        trigger = "acmlink";
-        replace = "https://dl.acm.org/citation.cfm?id=3201602";
-      }
-      {
-        trigger = "icaddr1";
-        replace = "1750 30th Street #500";
-      }
-      {
-        trigger = "icaddr2";
-        replace = "Boulder, CO 80301-1029";
-      }
-      {
-        trigger = "icoffice1";
-        replace = "1919 14th Street, 7th Floor";
-      }
-      {
-        trigger = "icoffice2";
-        replace = "Boulder, CO 80302";
-      }
-      {
-        trigger = "..p";
-        replace = "..Patrick";
-      }
-      {
-        trigger = "myskype";
-        replace = "303.731.3155";
-      }
-      {
-        trigger = "-icc";
-        replace = "ironcorelabs.com";
-      }
-      {
-        trigger = "--icl";
-        replace = "IronCore Labs";
-      }
-      {
-        trigger = ".zsg";
-        replace = ".zmre@spamgourmet.com";
-      }
-      {
-        trigger = "mycal";
-        replace = "https://app.hubspot.com/meetings/patrick-walsh";
-      }
-      {
-        trigger = "p@i";
-        replace = "patrick.walsh@ironcorelabs.com";
-      }
-      {
-        trigger = "p@w";
-        replace = "pwalsh@well.com";
-      }
-      {
-        trigger = "--sig";
-        replace = ''
-          --
-          Patrick Walsh  ●  CEO
-          patrick.walsh@ironcorelabs.com  ●  @zmre
+  home.file."Library/Preferences/espanso/match/base.yml".text =
+    pkgs.lib.generators.toYAML { } {
+      matches = [
+        {
+          trigger = "icphone";
+          replace = "415.968.9607";
+        }
+        {
+          trigger = ":checkbox:";
+          replace = "⬜️";
+        }
+        {
+          trigger = ":checked:";
+          replace = "✅";
+        }
+        {
+          trigger = ":checkmark:";
+          replace = "✓";
+        }
+        {
+          trigger = "acmlink";
+          replace = "https://dl.acm.org/citation.cfm?id=3201602";
+        }
+        {
+          trigger = "icaddr1";
+          replace = "1750 30th Street #500";
+        }
+        {
+          trigger = "icaddr2";
+          replace = "Boulder, CO 80301-1029";
+        }
+        {
+          trigger = "icoffice1";
+          replace = "1919 14th Street, 7th Floor";
+        }
+        {
+          trigger = "icoffice2";
+          replace = "Boulder, CO 80302";
+        }
+        {
+          trigger = "..p";
+          replace = "..Patrick";
+        }
+        {
+          trigger = "myskype";
+          replace = "303.731.3155";
+        }
+        {
+          trigger = "-icc";
+          replace = "ironcorelabs.com";
+        }
+        {
+          trigger = "--icl";
+          replace = "IronCore Labs";
+        }
+        {
+          trigger = ".zsg";
+          replace = ".zmre@spamgourmet.com";
+        }
+        {
+          trigger = "mycal";
+          replace = "https://app.hubspot.com/meetings/patrick-walsh";
+        }
+        {
+          trigger = "p@i";
+          replace = "patrick.walsh@ironcorelabs.com";
+        }
+        {
+          trigger = "p@w";
+          replace = "pwalsh@well.com";
+        }
+        {
+          trigger = "--sig";
+          replace = ''
+            --
+            Patrick Walsh  ●  CEO
+            patrick.walsh@ironcorelabs.com  ●  @zmre
 
-          IronCore Labs
-          Strategic privacy for modern SaaS.
-          https://ironcorelabs.com  ●  @ironcorelabs  ●  415.968.9607
-        '';
-      }
-      {
-        # Dates
-        trigger = "ddate";
-        replace = "{{mydate}}";
-        vars = [
-          {
+            IronCore Labs
+            Strategic privacy for modern SaaS.
+            https://ironcorelabs.com  ●  @ironcorelabs  ●  415.968.9607
+          '';
+        }
+        {
+          # Dates
+          trigger = "ddate";
+          replace = "{{mydate}}";
+          vars = [{
             name = "mydate";
             type = "date";
-            params = {format = "%Y-%m-%d";};
-          }
-        ];
-      }
-      {
-        # Shell commands example
-        trigger = ":shell";
-        replace = "{{output}}";
-        vars = [
-          {
+            params = { format = "%Y-%m-%d"; };
+          }];
+        }
+        {
+          # Shell commands example
+          trigger = ":shell";
+          replace = "{{output}}";
+          vars = [{
             name = "output";
             type = "shell";
-            params = {cmd = "echo Hello from your shell";};
-          }
-        ];
-      }
-    ];
-  };
+            params = { cmd = "echo Hello from your shell"; };
+          }];
+        }
+      ];
+    };
 
   programs.bat = {
     enable = true;
     #extraPackages = with pkgs.bat-extras; [ batman batgrep ];
     config = {
-      theme = "Dracula"; # I like the TwoDark colors better, but want bold/italic in markdown docs
+      theme =
+        "Dracula"; # I like the TwoDark colors better, but want bold/italic in markdown docs
       #pager = "less -FR";
       pager = "page -WO -q 90000";
       italic-text = "always";
-      style = "plain"; # no line numbers, git status, etc... more like cat with colors
+      style =
+        "plain"; # no line numbers, git status, etc... more like cat with colors
     };
   };
   programs.nix-index.enable = true;
@@ -377,10 +372,12 @@ in {
       urgency.user.tag.networking.coefficient = -10.0;
       uda.reviewed.type = "date";
       uda.reviewed.label = "Reviewed";
-      report._reviewed.description = "Tasksh review report.  Adjust the filter to your needs.";
+      report._reviewed.description =
+        "Tasksh review report.  Adjust the filter to your needs.";
       report._reviewed.columns = "uuid";
       report._reviewed.sort = "reviewed+,modified+";
-      report._reviewed.filter = "( reviewed.none: or reviewed.before:now-6days ) and ( +PENDING or +WAITING )";
+      report._reviewed.filter =
+        "( reviewed.none: or reviewed.before:now-6days ) and ( +PENDING or +WAITING )";
       search.case.sensitive = "no";
       # Shortcuts
       alias.dailystatus = "status:completed end.after:today all";
@@ -389,7 +386,8 @@ in {
 
       # task ready report default with custom columns
       default.command = "ready";
-      report.ready.columns = "id,start.active,depends.indicator,project,due.relative,description.desc";
+      report.ready.columns =
+        "id,start.active,depends.indicator,project,due.relative,description.desc";
       report.ready.labels = ",,Depends, Project, Due, Description";
       #if none of the tasks in a report have a particular column, it will not show in the report
 
@@ -504,7 +502,8 @@ in {
       "editor.fontLigatures" = true;
       "editor.guides.indentation" = false;
       "editor.insertSpaces" = true;
-      "editor.fontFamily" = "'Hasklug Nerd Font', 'JetBrainsMono Nerd Font', 'FiraCode Nerd Font','SF Mono', Menlo, Monaco, 'Courier New', monospace";
+      "editor.fontFamily" =
+        "'Hasklug Nerd Font', 'JetBrainsMono Nerd Font', 'FiraCode Nerd Font','SF Mono', Menlo, Monaco, 'Courier New', monospace";
       "editor.fontSize" = 12;
       "editor.formatOnSave" = true;
       "editor.suggestSelection" = "first";
@@ -525,7 +524,8 @@ in {
       "gitlens.codeLens.enabled" = false;
       "gitlens.currentLine.enabled" = false;
       "gitlens.hovers.currentLine.over" = "line";
-      "vsintellicode.modify.editor.suggestSelection" = "automaticallyOverrodeDefaultValue";
+      "vsintellicode.modify.editor.suggestSelection" =
+        "automaticallyOverrodeDefaultValue";
       "java.semanticHighlighting.enabled" = true;
       "workbench.editor.showTabs" = true;
       "workbench.list.automaticKeyboardNavigation" = false;
@@ -546,9 +546,8 @@ in {
 
       "vscode-neovim.neovimExecutablePaths.darwin" = "${pkgs.neovim}/bin/nvim";
       "vscode-neovim.neovimExecutablePaths.linux" = "${pkgs.neovim}/bin/nvim";
-      /*
-      "vscode-neovim.neovimInitVimPaths.darwin" = "$HOME/.config/nvim/init.vim";
-      "vscode-neovim.neovimInitVimPaths.linux" = "$HOME/.config/nvim/init.vim";
+      /* "vscode-neovim.neovimInitVimPaths.darwin" = "$HOME/.config/nvim/init.vim";
+         "vscode-neovim.neovimInitVimPaths.linux" = "$HOME/.config/nvim/init.vim";
       */
       "editor.tokenColorCustomizations" = {
         "textMateRules" = [
@@ -561,7 +560,7 @@ in {
               "entity.name.type.namespace"
               "keyword.other.important"
             ];
-            "settings" = {"fontStyle" = "bold";};
+            "settings" = { "fontStyle" = "bold"; };
           }
           {
             "name" = "One Dark italic";
@@ -576,7 +575,7 @@ in {
               "variable.language.super"
               "variable.language.this"
             ];
-            "settings" = {"fontStyle" = "italic";};
+            "settings" = { "fontStyle" = "italic"; };
           }
           {
             "name" = "One Dark italic reset";
@@ -591,12 +590,12 @@ in {
               "storage.type.java"
               "storage.type.primitive"
             ];
-            "settings" = {"fontStyle" = "";};
+            "settings" = { "fontStyle" = ""; };
           }
           {
             "name" = "One Dark bold italic";
-            "scope" = ["keyword.other.important"];
-            "settings" = {"fontStyle" = "bold italic";};
+            "scope" = [ "keyword.other.important" ];
+            "settings" = { "fontStyle" = "bold italic"; };
           }
         ];
       };
@@ -605,19 +604,22 @@ in {
   # VSCode whines like a ... I don't know, but a lot when the config file is read-only
   # I want nix to govern the configs, but to let vscode edit it (ephemerally) if I change
   # the zoom or whatever. This hack just copies the symlink to a normal file
-  home.activation.vscodeWritableConfig = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    code_dir="$(echo ~/Library)/Application Support/Code/User"
-    settings="$code_dir/settings.json"
-    settings_nix="$code_dir/settings.nix.json"
-    settings_bak="$settings.bak"
+  home.activation.vscodeWritableConfig =
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      code_dir="$(echo ~/Library)/Application Support/Code/User"
+      settings="$code_dir/settings.json"
+      settings_nix="$code_dir/settings.nix.json"
+      settings_bak="$settings.bak"
 
-    echo "activating $settings"
+      if [ -f "$settings" ] ; then
+        echo "activating $settings"
 
-    $DRY_RUN_CMD mv "$settings" "$settings_nix"
-    $DRY_RUN_CMD cp -H "$settings_nix" "$settings"
-    $DRY_RUN_CMD chmod u+w "$settings"
-    $DRY_RUN_CMD rm "$settings_bak"
-  '';
+        $DRY_RUN_CMD mv "$settings" "$settings_nix"
+        $DRY_RUN_CMD cp -H "$settings_nix" "$settings"
+        $DRY_RUN_CMD chmod u+w "$settings"
+        $DRY_RUN_CMD rm "$settings_bak"
+      fi
+    '';
 
   programs.fzf = {
     enable = true;
@@ -630,7 +632,7 @@ in {
     enable = true;
     compression = true;
     controlMaster = "auto";
-    includes = ["*.conf"];
+    includes = [ "*.conf" ];
     extraConfig = ''
       AddKeysToAgent yes
     '';
@@ -640,11 +642,11 @@ in {
     # stable is currently failing as of 2022-02-17
     # error: Could not find a version that satisfies the requirement tomlkit<0.8,>=0.7 (from remarshal)
     package = pkgs.gh;
-    settings = {git_protocol = "ssh";};
+    settings = { git_protocol = "ssh"; };
   };
   programs.mpv = {
     enable = true;
-    scripts = with pkgs.mpvScripts; [thumbnail sponsorblock];
+    scripts = with pkgs.mpvScripts; [ thumbnail sponsorblock ];
     config = {
       # disable on-screen controller -- else I get a message saying I have to add this
       osc = false;
@@ -660,13 +662,15 @@ in {
       #ytdl-format = "bestvideo+bestaudio";
       # have mpv use yt-dlp instead of youtube-dl
       script-opts-append = "ytdl_hook-ytdl_path=${pkgs.yt-dlp}/bin/yt-dlp";
-      autofit-larger = "100%x95%"; # resize window in case it's larger than W%xH% of the screen
+      autofit-larger =
+        "100%x95%"; # resize window in case it's larger than W%xH% of the screen
       input-media-keys = "yes"; # enable/disable OSX media keys
       hls-bitrate = "max"; # use max quality for HLS streams
 
-      user-agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:57.0) Gecko/20100101 Firefox/58.0";
+      user-agent =
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:57.0) Gecko/20100101 Firefox/58.0";
     };
-    defaultProfiles = ["gpu-hq"];
+    defaultProfiles = [ "gpu-hq" ];
   };
 
   programs.zsh = {
@@ -675,10 +679,7 @@ in {
     enableAutosuggestions = true;
     enableSyntaxHighlighting = true;
     # let's the terminal track current working dir but only builds on linux
-    enableVteIntegration =
-      if pkgs.stdenvNoCC.isDarwin
-      then false
-      else true;
+    enableVteIntegration = if pkgs.stdenvNoCC.isDarwin then false else true;
 
     history = {
       expireDuplicatesFirst = true;
@@ -809,19 +810,17 @@ in {
 
       #zprof
     '';
-    sessionVariables = {};
-    plugins = [
-      {
-        name = "zsh-nix-shell";
-        file = "nix-shell.plugin.zsh";
-        src = pkgs.fetchFromGitHub {
-          owner = "chisui";
-          repo = "zsh-nix-shell";
-          rev = "v0.5.0";
-          sha256 = "0za4aiwwrlawnia4f29msk822rj9bgcygw6a8a6iikiwzjjz0g91";
-        };
-      }
-    ];
+    sessionVariables = { };
+    plugins = [{
+      name = "zsh-nix-shell";
+      file = "nix-shell.plugin.zsh";
+      src = pkgs.fetchFromGitHub {
+        owner = "chisui";
+        repo = "zsh-nix-shell";
+        rev = "v0.5.0";
+        sha256 = "0za4aiwwrlawnia4f29msk822rj9bgcygw6a8a6iikiwzjjz0g91";
+      };
+    }];
     # oh-my-zsh.enable = true;
     # oh-my-zsh.plugins = [
     #   "sudo"
@@ -837,62 +836,68 @@ in {
     #   "vi-mode"
     #   "zoxide"
     # ];
-    shellAliases =
-      {
-        ls = "ls --color=auto -F";
-        l = "exa --icons --git-ignore --git -F --extended";
-        ll = "exa --icons --git-ignore --git -F --extended -l";
-        lt = "exa --icons --git-ignore --git -F --extended -T";
-        llt = "exa --icons --git-ignore --git -F --extended -l -T";
-        fd = "\\fd -H -t d"; # default search directories
-        f = "\\fd -H"; # default search this dir for files ignoring .gitignore etc
-        lf = "~/.config/lf/lfimg";
-        nixosedit = "nvim $(realpath /etc/nixos/configuration.nix) ; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.#";
-        nixedit = "nvim ~/.config/nixpkgs/home.nix ; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.#";
-        qp = ''
-          qutebrowser --temp-basedir --set content.private_browsing true --set colors.tabs.bar.bg "#552222" --config-py "$HOME/.config/qutebrowser/config.py" --qt-arg name "qp,qp"'';
-        calc = "kalker";
-        df = "duf";
-        # search for a note and with ctrl-n, create it if not found
-        # add subdir as needed like "n meetings" or "n wiki"
-        n = "zk edit --interactive";
-      }
-      // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
-        # Figure out the uniform type identifiers and uri schemes of a file (must specify the file)
-        # for use in SwiftDefaultApps
-        checktype = "mdls -name kMDItemContentType -name kMDItemContentTypeTree -name kMDItemKind";
-        dwupdate = "pushd ~/.config/nixpkgs ; nix flake update ; /opt/homebrew/bin/brew update; popd ; dwswitch ; /opt/homebrew/bin/brew upgrade ; /opt/homebrew/bin/brew upgrade --cask --greedy; dwshowupdates; popd";
-        dwswitch = "pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
-        dwswitchx = "pushd ~; darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
-        dwclean = "pushd ~; sudo nix-env --delete-generations +7 --profile /nix/var/nix/profiles/system; sudo nix-collect-garbage --delete-older-than 30d ; nix store optimise ; popd";
-        dwupcheck = "pushd ~/.config/nixpkgs ; nix flake update ; darwin-rebuild build --flake ~/.config/nixpkgs/.#$(hostname -s) && nix store diff-closures /nix/var/nix/profiles/system ~/.config/nixpkgs/result; brew update >& /dev/null && brew upgrade -n -g; popd"; # todo: prefer nvd?
-        # i use the zsh shell out in case anyone blindly copies this into their bash or fish profile since syntax is zsh specific
-        dwshowupdates = "zsh -c \"nix store diff-closures /nix/var/nix/profiles/system-*-link(om[2]) /nix/var/nix/profiles/system-*-link(om[1])\"";
-      }
-      // pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
-        hmswitch = ''
-          nix-shell -p home-manager --run "home-manager switch --flake ~/.config/nixpkgs/.#$(hostname -s)"'';
-        noupdate = "pushd ~/.config/nixpkgs; nix flake update; popd; noswitch";
-        noswitch = "pushd ~; sudo cachix watch-exec zmre nixos-rebuild -- switch --flake ~/.config/nixpkgs/.# ; popd";
-      };
+    shellAliases = {
+      ls = "ls --color=auto -F";
+      l = "exa --icons --git-ignore --git -F --extended";
+      ll = "exa --icons --git-ignore --git -F --extended -l";
+      lt = "exa --icons --git-ignore --git -F --extended -T";
+      llt = "exa --icons --git-ignore --git -F --extended -l -T";
+      fd = "\\fd -H -t d"; # default search directories
+      f = "\\fd -H"; # default search this dir for files ignoring .gitignore etc
+      lf = "~/.config/lf/lfimg";
+      nixosedit =
+        "nvim $(realpath /etc/nixos/configuration.nix) ; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.#";
+      nixedit =
+        "nvim ~/.config/nixpkgs/home.nix ; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.#";
+      qp = ''
+        qutebrowser --temp-basedir --set content.private_browsing true --set colors.tabs.bar.bg "#552222" --config-py "$HOME/.config/qutebrowser/config.py" --qt-arg name "qp,qp"'';
+      calc = "kalker";
+      df = "duf";
+      # search for a note and with ctrl-n, create it if not found
+      # add subdir as needed like "n meetings" or "n wiki"
+      n = "zk edit --interactive";
+    } // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
+      # Figure out the uniform type identifiers and uri schemes of a file (must specify the file)
+      # for use in SwiftDefaultApps
+      checktype =
+        "mdls -name kMDItemContentType -name kMDItemContentTypeTree -name kMDItemKind";
+      dwupdate =
+        "pushd ~/.config/nixpkgs ; nix flake update ; /opt/homebrew/bin/brew update; popd ; dwswitch ; /opt/homebrew/bin/brew upgrade ; /opt/homebrew/bin/brew upgrade --cask --greedy; dwshowupdates; popd";
+      dwswitch =
+        "pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
+      dwswitchx =
+        "pushd ~; darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
+      dwclean =
+        "pushd ~; sudo nix-env --delete-generations +7 --profile /nix/var/nix/profiles/system; sudo nix-collect-garbage --delete-older-than 30d ; nix store optimise ; popd";
+      dwupcheck =
+        "pushd ~/.config/nixpkgs ; nix flake update ; darwin-rebuild build --flake ~/.config/nixpkgs/.#$(hostname -s) && nix store diff-closures /nix/var/nix/profiles/system ~/.config/nixpkgs/result; brew update >& /dev/null && brew upgrade -n -g; popd"; # todo: prefer nvd?
+      # i use the zsh shell out in case anyone blindly copies this into their bash or fish profile since syntax is zsh specific
+      dwshowupdates = ''
+        zsh -c "nix store diff-closures /nix/var/nix/profiles/system-*-link(om[2]) /nix/var/nix/profiles/system-*-link(om[1])"'';
+    } // pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
+      hmswitch = ''
+        nix-shell -p home-manager --run "home-manager switch --flake ~/.config/nixpkgs/.#$(hostname -s)"'';
+      noupdate = "pushd ~/.config/nixpkgs; nix flake update; popd; noswitch";
+      noswitch =
+        "pushd ~; sudo cachix watch-exec zmre nixos-rebuild -- switch --flake ~/.config/nixpkgs/.# ; popd";
+    };
   };
 
   programs.exa.enable = true;
-  /*
-     programs.pistol = {
-    # I've gone back to my pv.sh script for now
-    enable = false;
-    associations = [
-      {
-        mime = "text/*";
-        command = "bat --paging=never --color=always %pistol-filename%";
-      }
-      {
-        mime = "image/*";
-        command = "kitty +kitten icat --silent --transfer-mode=stream --stdin=no %pistol-filename%";
-      }
-    ];
-  };
+  /* programs.pistol = {
+       # I've gone back to my pv.sh script for now
+       enable = false;
+       associations = [
+         {
+           mime = "text/*";
+           command = "bat --paging=never --color=always %pistol-filename%";
+         }
+         {
+           mime = "image/*";
+           command = "kitty +kitten icat --silent --transfer-mode=stream --stdin=no %pistol-filename%";
+         }
+       ];
+     };
   */
   # my preferred file explorer; mnemonic: list files
 
@@ -1023,8 +1028,10 @@ in {
 
   programs.starship = {
     enable = true;
-    enableNushellIntegration = false; # I've manually integrated because of bugs 2023-04-05
-    enableZshIntegration = false; # nope. I'm happy with the smokin speed of powerlevel10k in zsh
+    enableNushellIntegration =
+      false; # I've manually integrated because of bugs 2023-04-05
+    enableZshIntegration =
+      false; # nope. I'm happy with the smokin speed of powerlevel10k in zsh
     enableBashIntegration = true;
     settings = {
       format = pkgs.lib.concatStrings [
@@ -1132,10 +1139,12 @@ in {
       git_status.style = "blue";
       git_metrics.disabled = false;
       git_branch.style = "bright-black";
-      git_branch.format = "[  ](bright-black)[$symbol$branch(:$remote_branch)]($style) ";
+      git_branch.format =
+        "[  ](bright-black)[$symbol$branch(:$remote_branch)]($style) ";
       time.disabled = true;
       directory = {
-        format = "[    ](bright-black)[$path]($style)[$read_only]($read_only_style)";
+        format =
+          "[    ](bright-black)[$path]($style)[$read_only]($read_only_style)";
         truncation_length = 4;
         truncation_symbol = "…/";
         style = "bold blue"; # cyan
@@ -1185,7 +1194,8 @@ in {
       findlen = 2;
       scrolloff = 3;
       drawbox = true;
-      promptfmt = "\\033[1;38;5;51m[\\033[38;5;39m%u\\033[38;5;51m@\\033[38;5;39m%h\\033[38;5;51m] \\033[0;38;5;49m%w/\\033[38;5;48m%f\\033[0m";
+      promptfmt =
+        "\\033[1;38;5;51m[\\033[38;5;39m%u\\033[38;5;51m@\\033[38;5;39m%h\\033[38;5;51m] \\033[0;38;5;49m%w/\\033[38;5;48m%f\\033[0m";
     };
     extraConfig = ''
       set incfilter
@@ -1282,8 +1292,10 @@ in {
       br = "branch";
       st = "status -sb";
       wtf = "!git-wtf";
-      lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --topo-order --date=relative";
-      gl = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --topo-order --date=relative";
+      lg =
+        "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --topo-order --date=relative";
+      gl =
+        "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --topo-order --date=relative";
       lp = "log -p";
       lr = "reflog";
       ls = "ls-files";
@@ -1303,30 +1315,28 @@ in {
       subpull = "submodule foreach git pull";
       subco = "submodule foreach git checkout master";
     };
-    extraConfig =
-      {
-        github.user = "zmre";
-        color.ui = true;
-        pull.rebase = true;
-        merge.conflictstyle = "diff3";
-        init.defaultBranch = "main";
-        http.sslVerify = true;
-        commit.verbose = true;
-        credential.helper =
-          if pkgs.stdenvNoCC.isDarwin
-          then "osxkeychain"
-          else "cache --timeout=10000000";
-        diff.algorithm = "patience";
-        protocol.version = "2";
-        core.commitGraph = true;
-        gc.writeCommitGraph = true;
-      }
-      // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
-        # these should speed up vim nvim-tree and other things that watch git repos but
-        # only works on mac. see https://github.com/nvim-tree/nvim-tree.lua/wiki/Troubleshooting#git-fsmonitor-daemon
-        core.fsmonitor = true;
-        core.untrackedcache = true;
-      };
+    extraConfig = {
+      github.user = "zmre";
+      color.ui = true;
+      pull.rebase = true;
+      merge.conflictstyle = "diff3";
+      init.defaultBranch = "main";
+      http.sslVerify = true;
+      commit.verbose = true;
+      credential.helper = if pkgs.stdenvNoCC.isDarwin then
+        "osxkeychain"
+      else
+        "cache --timeout=10000000";
+      diff.algorithm = "patience";
+      protocol.version = "2";
+      core.commitGraph = true;
+      gc.writeCommitGraph = true;
+    } // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
+      # these should speed up vim nvim-tree and other things that watch git repos but
+      # only works on mac. see https://github.com/nvim-tree/nvim-tree.lua/wiki/Troubleshooting#git-fsmonitor-daemon
+      core.fsmonitor = true;
+      core.untrackedcache = true;
+    };
     # Really nice looking diffs
     delta = {
       enable = false;
@@ -1379,10 +1389,10 @@ in {
   programs.newsboat = {
     enable = true;
     autoReload = true;
-    browser =
-      if pkgs.stdenvNoCC.isDarwin
-      then "open"
-      else "${pkgs.xdg-utils}/bin/xdg-open";
+    browser = if pkgs.stdenvNoCC.isDarwin then
+      "open"
+    else
+      "${pkgs.xdg-utils}/bin/xdg-open";
     maxItems = 100;
     extraConfig = ''
       show-read-feeds  no
@@ -1393,42 +1403,42 @@ in {
     '';
     urls = [
       {
-        tags = ["security"];
+        tags = [ "security" ];
         title = "Cyberscoop";
         url = "https://www.cyberscoop.com/feed/";
       }
       {
-        tags = ["security"];
+        tags = [ "security" ];
         title = "Krebs on Security";
         url = "https://krebsonsecurity.com/feed/";
       }
       {
-        tags = ["security"];
+        tags = [ "security" ];
         title = "DefenseOne";
         url = "http://www.defenseone.com/rss/technology/ ";
       }
       {
-        tags = ["news"];
+        tags = [ "news" ];
         title = "NPR";
         url = "http://www.npr.org/rss/rss.php?id=1001";
       }
       {
-        tags = ["news"];
+        tags = [ "news" ];
         title = "Reuters Domestic";
         url = "http://feeds.reuters.com/Reuters/domesticNews";
       }
       {
-        tags = ["startup"];
+        tags = [ "startup" ];
         title = "TechCrunch";
         url = "https://techcrunch.com/feed/";
       }
       {
-        tags = ["tech"];
+        tags = [ "tech" ];
         title = "Reuters Tech";
         url = "http://feeds.reuters.com/reuters/technologyNews?format=xml";
       }
       {
-        tags = ["tech"];
+        tags = [ "tech" ];
         title = "EFF";
         url = "http://www.eff.org/rss/updates.xml";
       }
@@ -1460,12 +1470,9 @@ in {
       #name = "SpaceMono Nerd Font Mono";
       #name = "VictorMono Nerd Font";
       #name = "FiraCode Nerd Font"; # missing italic
-      size =
-        if pkgs.stdenvNoCC.isDarwin
-        then 17
-        else 12;
+      size = if pkgs.stdenvNoCC.isDarwin then 17 else 12;
     };
-    darwinLaunchOptions = ["--single-instance"];
+    darwinLaunchOptions = [ "--single-instance" ];
     settings = {
       scrollback_lines = 10000;
       enable_audio_bell = false;
@@ -1507,7 +1514,8 @@ in {
       startup_session = "~/.config/kitty/startup.session";
       shell = "${pkgs.zsh}/bin/zsh --login --interactive";
     };
-    theme = "One Half Dark"; # or Dracula or OneDark see https://github.com/kovidgoyal/kitty-themes/tree/master/themes
+    theme =
+      "One Half Dark"; # or Dracula or OneDark see https://github.com/kovidgoyal/kitty-themes/tree/master/themes
     # extraConfig = "\n";
   };
   home.file.".config/kitty/startup.session".text = ''
@@ -1544,10 +1552,7 @@ in {
       font.bold.style = "Bold";
       font.italic.style = "Italic";
       font.bold_italic.style = "Bold Italic";
-      font.size =
-        if pkgs.stdenvNoCC.isDarwin
-        then 16
-        else 9;
+      font.size = if pkgs.stdenvNoCC.isDarwin then 16 else 9;
       shell.program = "${pkgs.zsh}/bin/zsh";
       live_config_reload = true;
       cursor.vi_mode_style = "Underline";

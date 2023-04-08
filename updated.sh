@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/run/current-system/sw/bin/bash
 
 dwshowupdates() {
   local VERSIONS=($(ls -1dt '/nix/var/nix/profiles/system-*-link' |head -2))

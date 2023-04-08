@@ -88,7 +88,7 @@ in {
   services.polybar = rec {
     enable = true;
     package = pkgs.polybar.override {
-      i3GapsSupport = true;
+      # i3GapsSupport = true;
       pulseSupport = true;
     };
     script = "${package}/bin/polybar dracula &";
@@ -601,7 +601,7 @@ in {
   programs.firefox = {
     enable = true;
     # turns out you have to setup a profile (below) for extensions to install
-    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+    profiles.home.extensions = with pkgs.nur.repos.rycee.firefox-addons; [
       ublock-origin
       #https-everywhere
       noscript

@@ -1,14 +1,17 @@
-{ config, pkgs, lib, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   boot = {
     # Use the systemd-boot EFI boot loader.
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
     kernelPackages = pkgs.linuxPackages_latest;
-    kernelParams = [ "mem_sleep_default=deep" "nvme.noacpi=1" "net.ifnames=0" ];
+    kernelParams = ["mem_sleep_default=deep" "nvme.noacpi=1" "net.ifnames=0"];
     initrd.checkJournalingFS = false;
-    supportedFilesystems = [ "btrfs" ];
+    supportedFilesystems = ["btrfs"];
     cleanTmpDir = true;
     tmpOnTmpfs = true;
   };
@@ -46,13 +49,13 @@
   networking = {
     hostName = "volantis";
     #wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-    wireless.interfaces = [ "wlan0" ];
+    wireless.interfaces = ["wlan0"];
     wireless.iwd.enable = true;
     networkmanager = {
-      enable = true;
+      enable = false;
       wifi.backend = "iwd";
       # getting error: ‘network-manager-applet-1.24.0’, is not a NetworkManager plug-in. Those need to have a ‘networkManagerPlugin’ attribute.
-      # just commenting for now 2022-05-30 
+      # just commenting for now 2022-05-30
       #packages = with pkgs.stable; [ networkmanagerapplet ];
       # don't use dhcp dns... use settings below instead
       dns = "none";
@@ -62,7 +65,7 @@
     interfaces.wlan0.useDHCP = true;
 
     # use local dns server that uses privacy preserving dns over tls
-    nameservers = [ "127.0.0.1" "::1" "1.1.1.1" ];
+    nameservers = ["127.0.0.1" "::1" "1.1.1.1"];
     resolvconf.useLocalResolver = true;
     firewall.enable = true;
     firewall.checkReversePath = false; # disable rpfilter so wireguard works
@@ -78,14 +81,14 @@
   services.dnscrypt-proxy2 = {
     enable = true;
     settings = {
-      listen_addresses = [ "127.0.0.1:53" ];
+      listen_addresses = ["127.0.0.1:53"];
       ipv4_servers = true;
       ipv6_servers = false;
       require_dnssec = true;
       doh_servers = true;
       odoh_servers = true;
       require_nolog = true;
-      bootstrap_resolvers = [ "9.9.9.9:53" "8.8.8.8:53" ];
+      bootstrap_resolvers = ["9.9.9.9:53" "8.8.8.8:53"];
       cache = true;
 
       sources.public-resolvers = {
@@ -94,8 +97,7 @@
           "https://download.dnscrypt.info/resolvers-list/v3/public-resolvers.md"
         ];
         cache_file = "/var/lib/dnscrypt-proxy2/public-resolvers.md";
-        minisign_key =
-          "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
+        minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
       };
 
       # You can choose a specific set of servers from https://github.com/DNSCrypt/dnscrypt-resolvers/blob/master/v3/public-resolvers.md
@@ -109,7 +111,7 @@
 
   hardware = {
     enableAllFirmware = true;
-    video.hidpi.enable = true;
+    # video.hidpi.enable = true;
     cpu.intel.updateMicrocode = true;
     opengl = {
       enable = true;
