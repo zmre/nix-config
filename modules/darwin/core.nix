@@ -97,6 +97,8 @@
     	'{"enabled" = 0;"name" = "MENU_WEBSEARCH";}' \
     	'{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}'
 
+    # Following line should allow us to avoid a logout/login cycle
+    /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
   '';
 
   documentation.enable = true;

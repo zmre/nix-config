@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+_: {
   system.defaults = {
     #
     # `man configuration.nix` on mac is useful in seeing available options
@@ -39,14 +35,9 @@
       ActuationStrength = 0;
       # enable tap to click
       Clicking = true;
-      # firmness level, 0 = lightest, 2 = heaviest
-      #FirstClickThreshold = 1;
-      # firmness level for force touch
-      #SecondClickThreshold = 1;
-      # don't allow positional right click
-      #TrackpadRightClick = false;
-      # three finger drag for space switching disabled (four finger enabled)
-      TrackpadThreeFingerDrag = false;
+      Dragging = true; # tap and a half to drag
+      # three finger click and drag
+      TrackpadThreeFingerDrag = true;
     };
 
     # firewall settings
