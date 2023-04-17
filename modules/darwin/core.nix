@@ -96,7 +96,8 @@
     	'{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
     	'{"enabled" = 0;"name" = "MENU_WEBSEARCH";}' \
     	'{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}'
-
+  '';
+  system.activationScripts.postUserActivation.text = ''
     # Following line should allow us to avoid a logout/login cycle
     /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
   '';
