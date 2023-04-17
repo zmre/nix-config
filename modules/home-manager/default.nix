@@ -51,7 +51,7 @@
     # network
     gping
     bandwhich # bandwidth monitor by process
-    pkgs.sniffnet # x-platform gui traffic monitor (rust)
+    #pkgs.sniffnet # x-platform gui traffic monitor (rust)
     # not building on m1 right now
     #bmon # bandwidth monitor by interface
     caddy # local filesystem web server
