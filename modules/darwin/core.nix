@@ -137,6 +137,7 @@
         "Meslo"
         "SourceCodePro"
         "Inconsolata"
+        "NerdFontsSymbolsOnly" # for some apps, you can use this and then any unpatched font
       ];
     })
     vegur

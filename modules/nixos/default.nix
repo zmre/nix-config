@@ -1,6 +1,12 @@
-{ config, username, pkgs, stable, ... }: {
+{
+  config,
+  username,
+  pkgs,
+  stable,
+  ...
+}: {
   # bundles essential nixos modules
-  imports = [ ../common.nix ];
+  imports = [../common.nix];
 
   # Note: these vars are pam environment so set on login globally
   # as part of parent to shells. Starting new shells doesn't get the
@@ -111,15 +117,16 @@
           "Meslo"
           "SourceCodePro"
           "Inconsolata"
+          "NerdFontsSymbolsOnly" # for some apps, you can use this and then any unpatched font
         ];
       })
       vegur
       noto-fonts
     ];
     fontconfig.defaultFonts = {
-      monospace = [ "MesloLGS Nerd Font Mono" "Noto Mono" ];
-      sansSerif = [ "MesloLGS Nerd Font" "Noto Sans" ];
-      serif = [ "Noto Serif" ];
+      monospace = ["MesloLGS Nerd Font Mono" "Noto Mono"];
+      sansSerif = ["MesloLGS Nerd Font" "Noto Sans"];
+      serif = ["Noto Serif"];
     };
   };
 
@@ -179,5 +186,4 @@
       ];
     };
   };
-
 }
