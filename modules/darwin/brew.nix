@@ -35,7 +35,7 @@
       "bartender" # organize status bar
       "blockblock"
       "brave-browser" # TODO: move to home-manager when it builds
-      "canon-eos-utility"
+      #"canon-eos-utility"
       #"canon-eos-webcam-utility"
       "choosy" # multi-browser url launch selector; see also https://github.com/johnste/finicky
       "dash" # offline developer docs

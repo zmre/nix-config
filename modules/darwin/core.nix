@@ -138,9 +138,11 @@
         "Meslo"
         "SourceCodePro"
         "Inconsolata"
-        "NerdFontsSymbolsOnly" # for some apps, you can use this and then any unpatched font
+        "NerdFontsSymbolsOnly" # for some apps, you can use this with any unpatched font
       ];
     })
+    montserrat
+    raleway
     vegur
     noto-fonts
     vistafonts # needed for msoffice
