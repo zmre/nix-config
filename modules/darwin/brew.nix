@@ -52,6 +52,7 @@
       "imageoptim"
       "insta360-studio"
       "istat-menus"
+      "kopiaui" # ui for kopia dedupe backup
       "knockknock"
       "little-snitch"
       "lockrattler"

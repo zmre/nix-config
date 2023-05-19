@@ -93,7 +93,7 @@
     yubikey-manager # cli for yubikey
     pkgs.zk # cli for indexing markdown files
     pastel # cli for color manipulation
-    kopia # deduping backup
+    pkgs.kopia # deduping backup
     pkgs.nps # quick nix packages search
     gnugrep
     pkgs.enola # sherlock-like tool
