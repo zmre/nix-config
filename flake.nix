@@ -117,6 +117,26 @@
     nixosConfigurations = let
       username = "zmre";
     in {
+      nixos = nixpkgs-unstable.lib.nixosSystem {
+        system = "aarch64-linux";
+        pkgs = mkPkgs "aarch64-linux";
+        specialArgs = {inherit inputs username;};
+        modules = [
+          home-manager.nixosModules.home-manager
+          ./modules/hardware/parallels-arm.nix
+          {
+            networking.hostName = "nixos"; # Define your hostname.
+          }
+          ./modules/nixos
+          #./modules/hardware/parallels.nix
+          sbhosts.nixosModule
+          {networking.stevenBlackHosts.enable = true;}
+          (mkHome username [
+            ./modules/home-manager
+            ./modules/home-manager/home-linux.nix
+          ])
+        ];
+      };
       volantis = nixpkgs-unstable.lib.nixosSystem {
         system = "x86_64-linux";
         pkgs = mkPkgs "x86_64-linux";

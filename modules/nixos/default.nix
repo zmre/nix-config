@@ -42,10 +42,10 @@
     localuser = null;
     locate = pkgs.mlocate;
   };
-  services.timesyncd.enable = true;
+  #services.timesyncd.enable = true;
   services.printing.enable = true; # cupsd printing
   services.earlyoom.enable = true; # out of memory detection
-  services.thermald.enable = true; # enable thermal data
+  # services.thermald.enable = true; # enable thermal data
   services.autorandr.enable = true; # autodetect display config
   security.sudo.enable = true;
   security.sudo.execWheelOnly = true;

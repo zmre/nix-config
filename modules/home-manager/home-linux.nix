@@ -1,6 +1,11 @@
-{ config, lib, pkgs, username, ... }:
-let
-  browser = [ "org.qutebrowser.qutebrowser.desktop" ];
+{
+  config,
+  lib,
+  pkgs,
+  username,
+  ...
+}: let
+  browser = ["org.qutebrowser.qutebrowser.desktop"];
   associations = {
     "text/html" = browser;
     "x-scheme-handler/http" = browser;
@@ -16,38 +21,41 @@ let
     "application/x-extension-xhtml" = browser;
     "application/x-extension-xht" = browser;
 
-    "text/*" = [ "neovide.desktop" ];
-    "audio/*" = [ "mpv.desktop" ];
-    "video/*" = [ "mpv.dekstop" ];
-    "image/*" = [ "feh.desktop" ];
+    "text/*" = ["neovide.desktop"];
+    "audio/*" = ["mpv.desktop"];
+    "video/*" = ["mpv.dekstop"];
+    "image/*" = ["feh.desktop"];
     "application/json" = browser; # ".json"  JSON format
     "application/pdf" = browser; # ".pdf"  Adobe Portable Document Format (PDF)
   };
-
 in {
-  home.packages = with pkgs.stable; [
-    # wm support
-    xss-lock
-    syncthingtray-minimal
-    arandr
-    #i3-auto-layout # should change default split; not working
+  home.packages = with pkgs.stable;
+    [
+      # wm support
+      xss-lock
+      syncthingtray-minimal
+      arandr
+      #i3-auto-layout # should change default split; not working
 
-    # apps
-    keepassxc
-    spotify-qt
-    slack
-    discord
-    nomacs
+      # apps
+      keepassxc
+      spotify-qt
+      nomacs
 
-    # terminal linux-only apps
-    ueberzug # for terminal image previews
-    ytfzf # terminal youtube search/launch
-    djvulibre
+      # terminal linux-only apps
+      ueberzug # for terminal image previews
+      ytfzf # terminal youtube search/launch
+      djvulibre
 
-    chkrootkit # scan for breaches
+      chkrootkit # scan for breaches
 
-    traceroute
-  ];
+      traceroute
+    ]
+    ++ lib.optionals (!pkgs.stdenv.isAarch64) [
+      # apps
+      slack
+      discord
+    ];
   gtk = {
     enable = true;
 
@@ -173,7 +181,7 @@ in {
           };
           charging = {
             text = "<label-charging>";
-            prefix = { text = " "; };
+            prefix = {text = " ";};
           };
           discharging = {
             # 
@@ -230,7 +238,7 @@ in {
       };
       "module/xkeyboard" = {
         type = "internal/xkeyboard";
-        blacklist = [ "num lock" ];
+        blacklist = ["num lock"];
         format = {
           text = "<label-layout><label-indicator>";
           spacing = 0;
@@ -280,8 +288,7 @@ in {
       "module/temperature" = {
         type = "internal/temperature";
         interval = 10;
-        hwmon-path =
-          "/sys/devices/platform/coretemp.0/hwmon/hwmon4/temp1_input";
+        hwmon-path = "/sys/devices/platform/coretemp.0/hwmon/hwmon4/temp1_input";
         base-temperature = 20; # celsius
         warn-temperature = 60;
         units = true;
@@ -383,7 +390,7 @@ in {
           ]
         ];
       };
-      "settings" = { screenchange.reload = true; };
+      "settings" = {screenchange.reload = true;};
       "wm" = {
         margin = {
           top = 5;
@@ -405,15 +412,14 @@ in {
   xsession.windowManager.i3.config = {
     terminal = "${pkgs.alacritty}/bin/alacritty";
     modifier = "Mod4";
-    menu =
-      ''"${pkgs.rofi}/bin/rofi -modi drun -show drun -theme glue_pro_blue"'';
+    menu = ''"${pkgs.rofi}/bin/rofi -modi drun -show drun -theme glue_pro_blue"'';
     # need to use i3-gaps package to use these
     gaps.inner = 4;
     gaps.outer = 2;
     gaps.smartBorders = "on";
     gaps.smartGaps = true;
     fonts = {
-      names = [ "pango:SauceCodePro Nerd Font" ];
+      names = ["pango:SauceCodePro Nerd Font"];
       size = 6.0;
     };
     focus.newWindow = "focus";
@@ -429,55 +435,50 @@ in {
     keybindings = let
       mod = config.xsession.windowManager.i3.config.modifier;
       refresh = "killall -SIGUSR1 i3status-rs";
-    in lib.mkOptionDefault {
-      "${mod}+Return" = "exec alacritty";
-      "${mod}+j" = "focus left";
-      "${mod}+k" = "focus down";
-      "${mod}+l" = "focus up";
-      "${mod}+Tab" = ''
-        exec --no-startup-id "${pkgs.rofi}/bin/rofi -modi drun -show window -theme iggy"'';
-      "${mod}+semicolon" = "focus right";
-      "${mod}+Shift+j" = "move left";
-      "${mod}+Shift+k" = "move down";
-      "${mod}+Shift+l" = "move up";
-      "${mod}+Shift+semicolon" = "move right";
-      "${mod}+h" = "split h";
-      "${mod}+v" = "split v";
-      "${mod}+t" = "layout tabbed";
-      "${mod}+s" = "layout stacking";
-      "${mod}+w" = "layout default";
-      "${mod}+e" = "layout toggle split tabbed stacking splitv splith";
-      "${mod}+m" = "move scratchpad";
-      "${mod}+o" = "scratchpad show";
-      "${mod}+p" = "floating toggle";
-      "${mod}+Shift+p" = ''[class="KeePassXC"] scratchpad show'';
-      "${mod}+x" = "move workspace to output next";
-      "${mod}+Ctrl+Right" = "workspace next";
-      "${mod}+Ctrl+Left" = "workspace prev";
-      "${mod}+F9" = "exec i3lock --nofork -i ~/.lockpaper.png";
-      # Use pactl to adjust volume in PulseAudio.
-      "XF86AudioRaiseVolume" =
-        "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5% && ${refresh}";
-      "XF86AudioLowerVolume" =
-        "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5% && ${refresh}";
-      "XF86AudioMute" =
-        "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle && ${refresh}";
-      "XF86AudioMicMute" =
-        "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle && ${refresh}";
-      "XF86AudioPlay" = "exec ${pkgs.playerctl}/bin/playerctl play";
-      "XF86AudioPause" = "exec ${pkgs.playerctl}/bin/playerctl pause";
-      "XF86AudioNext" = "exec ${pkgs.playerctl}/bin/playerctl next";
-      "XF86AudioPrev" = "exec ${pkgs.playerctl}/bin/playerctl prev";
-      # backlight
-      "XF86MonBrightnessUp" =
-        "exec --no-startup-id ${pkgs.light}/bin/light -A 1";
-      "XF86MonBrightnessDown" =
-        "exec --no-startup-id ${pkgs.light}/bin/light -U 1";
-    };
+    in
+      lib.mkOptionDefault {
+        "${mod}+Return" = "exec alacritty";
+        "${mod}+j" = "focus left";
+        "${mod}+k" = "focus down";
+        "${mod}+l" = "focus up";
+        "${mod}+Tab" = ''
+          exec --no-startup-id "${pkgs.rofi}/bin/rofi -modi drun -show window -theme iggy"'';
+        "${mod}+semicolon" = "focus right";
+        "${mod}+Shift+j" = "move left";
+        "${mod}+Shift+k" = "move down";
+        "${mod}+Shift+l" = "move up";
+        "${mod}+Shift+semicolon" = "move right";
+        "${mod}+h" = "split h";
+        "${mod}+v" = "split v";
+        "${mod}+t" = "layout tabbed";
+        "${mod}+s" = "layout stacking";
+        "${mod}+w" = "layout default";
+        "${mod}+e" = "layout toggle split tabbed stacking splitv splith";
+        "${mod}+m" = "move scratchpad";
+        "${mod}+o" = "scratchpad show";
+        "${mod}+p" = "floating toggle";
+        "${mod}+Shift+p" = ''[class="KeePassXC"] scratchpad show'';
+        "${mod}+x" = "move workspace to output next";
+        "${mod}+Ctrl+Right" = "workspace next";
+        "${mod}+Ctrl+Left" = "workspace prev";
+        "${mod}+F9" = "exec i3lock --nofork -i ~/.lockpaper.png";
+        # Use pactl to adjust volume in PulseAudio.
+        "XF86AudioRaiseVolume" = "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ +5% && ${refresh}";
+        "XF86AudioLowerVolume" = "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-volume @DEFAULT_SINK@ -5% && ${refresh}";
+        "XF86AudioMute" = "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle && ${refresh}";
+        "XF86AudioMicMute" = "exec --no-startup-id ${pkgs.pulseaudio}/bin/pactl set-source-mute @DEFAULT_SOURCE@ toggle && ${refresh}";
+        "XF86AudioPlay" = "exec ${pkgs.playerctl}/bin/playerctl play";
+        "XF86AudioPause" = "exec ${pkgs.playerctl}/bin/playerctl pause";
+        "XF86AudioNext" = "exec ${pkgs.playerctl}/bin/playerctl next";
+        "XF86AudioPrev" = "exec ${pkgs.playerctl}/bin/playerctl prev";
+        # backlight
+        "XF86MonBrightnessUp" = "exec --no-startup-id ${pkgs.light}/bin/light -A 1";
+        "XF86MonBrightnessDown" = "exec --no-startup-id ${pkgs.light}/bin/light -U 1";
+      };
     defaultWorkspace = "workspace number 1";
     assigns = {
-      "1: term" = [{ class = "^Alacritty$"; }];
-      "2: web" = [{ class = "^(Firefox|qutebrowser)$"; }];
+      "1: term" = [{class = "^Alacritty$";}];
+      "2: web" = [{class = "^(Firefox|qutebrowser)$";}];
     };
     modes = {
       resize = {
@@ -529,8 +530,8 @@ in {
         always = true;
         notification = false;
       }
-      { command = "qutebrowser"; }
-      { command = "alacritty"; }
+      {command = "qutebrowser";}
+      {command = "alacritty";}
       {
         command = "keepassxc";
         always = true;
@@ -575,7 +576,7 @@ in {
           interval = 1;
           format = "{1m}";
         }
-        { block = "sound"; }
+        {block = "sound";}
         {
           block = "time";
           interval = 60;
@@ -650,7 +651,7 @@ in {
         # search for link with / then hit enter to follow
         "<return>" = "selection-follow";
       };
-      prompt = { "<Ctrl-y>" = "prompt-yes"; };
+      prompt = {"<Ctrl-y>" = "prompt-yes";};
       insert = {
         "<Ctrl-h>" = "fake-key <Backspace>";
         "<Ctrl-a>" = "fake-key <Home>";
@@ -670,7 +671,7 @@ in {
       };
     };
     settings = {
-      confirm_quit = [ "downloads" ]; # only confirm if downloads in progress
+      confirm_quit = ["downloads"]; # only confirm if downloads in progress
       content.blocking.enabled = true;
       content.blocking.method = "both";
       content.blocking.hosts.block_subdomains = true;
@@ -681,7 +682,7 @@ in {
         "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
         "https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters-2022.txt"
       ];
-      content.blocking.whitelist = [ "https://*.reddit.com/*" ];
+      content.blocking.whitelist = ["https://*.reddit.com/*"];
 
       content.default_encoding = "utf-8";
       content.geolocation = false;
@@ -692,13 +693,15 @@ in {
       content.webrtc_ip_handling_policy = "default-public-interface-only";
       content.javascript.can_access_clipboard = true;
       content.site_specific_quirks.enabled = false;
-      content.headers.user_agent =
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36";
+      content.headers.user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36";
       content.pdfjs = true;
       content.autoplay = false;
       # Disable smooth scrolling on mac because of https://github.com/qutebrowser/qutebrowser/issues/6840
       # Note: this is in home-linux so this if is pointless, but I'm hoping qutebrowser will build on mac soon and this can move
-      scrolling.smooth = if pkgs.stdenv.isDarwin then false else true;
+      scrolling.smooth =
+        if pkgs.stdenv.isDarwin
+        then false
+        else true;
       auto_save.session = true; # remember open tabs
       session.lazy_restore = true;
       # if input is focused on tab load, allow typing
@@ -706,8 +709,10 @@ in {
       # exit insert mode if clicking on non editable item
       input.insert_mode.auto_leave = true;
       downloads.location.directory = "${
-          if pkgs.stdenv.isDarwin then "/Users/" else "/home/"
-        }${username}/Downloads";
+        if pkgs.stdenv.isDarwin
+        then "/Users/"
+        else "/home/"
+      }${username}/Downloads";
 
       downloads.location.prompt = false;
       downloads.position = "bottom";
@@ -718,13 +723,13 @@ in {
       # enabling darkmode auto-changes website colors and images and often makes things worse instead of better :-(
       colors.webpage.darkmode.enabled = false;
       colors.webpage.bg = "black";
-      statusbar.widgets = [ "progress" "keypress" "url" "history" ];
+      statusbar.widgets = ["progress" "keypress" "url" "history"];
       tabs.position = "left";
       tabs.title.format = "{index}: {audio}{current_title}";
       tabs.title.format_pinned = "{index}: {audio}{current_title}";
       tabs.last_close = "close";
-      spellcheck.languages = [ "en-US" ];
-      editor.command = [ "neovide" "{}:{line}" ];
+      spellcheck.languages = ["en-US"];
+      editor.command = ["neovide" "{}:{line}"];
       fileselect.handler = "external";
       fileselect.single_file.command = [
         "alacritty"
@@ -752,8 +757,7 @@ in {
     # these create :whatever commands
     aliases = {
       # bookmarklet copied from getpocket.com/add/?ep=1
-      pocket =
-        "jseval --url javascript:(function()%7Bvar%20e=function(t,n,r,i,s)%7Bvar%20o=[5725664,2839244,3201831,4395922,8906499,4608765,5885226,5372109,1439837,3633248];var%20i=i%7C%7C0,u=0,n=n%7C%7C[],r=r%7C%7C0,s=s%7C%7C0;var%20a=%7B'a':97,'b':98,'c':99,'d':100,'e':101,'f':102,'g':103,'h':104,'i':105,'j':106,'k':107,'l':108,'m':109,'n':110,'o':111,'p':112,'q':113,'r':114,'s':115,'t':116,'u':117,'v':118,'w':119,'x':120,'y':121,'z':122,'A':65,'B':66,'C':67,'D':68,'E':69,'F':70,'G':71,'H':72,'I':73,'J':74,'K':75,'L':76,'M':77,'N':78,'O':79,'P':80,'Q':81,'R':82,'S':83,'T':84,'U':85,'V':86,'W':87,'X':88,'Y':89,'Z':90,'0':48,'1':49,'2':50,'3':51,'4':52,'5':53,'6':54,'7':55,'8':56,'9':57,'%5C/':47,':':58,'?':63,'=':61,'-':45,'_':95,'&':38,'$':36,'!':33,'.':46%7D;if(!s%7C%7Cs==0)%7Bt=o[0]+t%7Dfor(var%20f=0;f%3Ct.length;f++)%7Bvar%20l=function(e,t)%7Breturn%20a[e[t]]?a[e[t]]:e.charCodeAt(t)%7D(t,f);if(!l*1)l=3;var%20c=l*(o[i]+l*o[u%25o.length]);n[r]=(n[r]?n[r]+c:c)+s+u;var%20p=c%25(50*1);if(n[p])%7Bvar%20d=n[r];n[r]=n[p];n[p]=d%7Du+=c;r=r==50?0:r+1;i=i==o.length-1?0:i+1%7Dif(s==193)%7Bvar%20v='';for(var%20f=0;f%3Cn.length;f++)%7Bv+=String.fromCharCode(n[f]%25(25*1)+97)%7Do=function()%7B%7D;return%20v+'c7a8217062'%7Delse%7Breturn%20e(u+'',n,r,i,s+1)%7D%7D;var%20t=document,n=t.location.href,r=t.title;var%20i=e(n);var%20s=t.createElement('script');s.type='text/javascript';s.src='https://getpocket.com/b/r4.js?h='+i+'&u='+encodeURIComponent(n)+'&t='+encodeURIComponent(r);e=i=function()%7B%7D;var%20o=t.getElementsByTagName('head')[0]%7C%7Ct.documentElement;o.appendChild(s)%7D)()";
+      pocket = "jseval --url javascript:(function()%7Bvar%20e=function(t,n,r,i,s)%7Bvar%20o=[5725664,2839244,3201831,4395922,8906499,4608765,5885226,5372109,1439837,3633248];var%20i=i%7C%7C0,u=0,n=n%7C%7C[],r=r%7C%7C0,s=s%7C%7C0;var%20a=%7B'a':97,'b':98,'c':99,'d':100,'e':101,'f':102,'g':103,'h':104,'i':105,'j':106,'k':107,'l':108,'m':109,'n':110,'o':111,'p':112,'q':113,'r':114,'s':115,'t':116,'u':117,'v':118,'w':119,'x':120,'y':121,'z':122,'A':65,'B':66,'C':67,'D':68,'E':69,'F':70,'G':71,'H':72,'I':73,'J':74,'K':75,'L':76,'M':77,'N':78,'O':79,'P':80,'Q':81,'R':82,'S':83,'T':84,'U':85,'V':86,'W':87,'X':88,'Y':89,'Z':90,'0':48,'1':49,'2':50,'3':51,'4':52,'5':53,'6':54,'7':55,'8':56,'9':57,'%5C/':47,':':58,'?':63,'=':61,'-':45,'_':95,'&':38,'$':36,'!':33,'.':46%7D;if(!s%7C%7Cs==0)%7Bt=o[0]+t%7Dfor(var%20f=0;f%3Ct.length;f++)%7Bvar%20l=function(e,t)%7Breturn%20a[e[t]]?a[e[t]]:e.charCodeAt(t)%7D(t,f);if(!l*1)l=3;var%20c=l*(o[i]+l*o[u%25o.length]);n[r]=(n[r]?n[r]+c:c)+s+u;var%20p=c%25(50*1);if(n[p])%7Bvar%20d=n[r];n[r]=n[p];n[p]=d%7Du+=c;r=r==50?0:r+1;i=i==o.length-1?0:i+1%7Dif(s==193)%7Bvar%20v='';for(var%20f=0;f%3Cn.length;f++)%7Bv+=String.fromCharCode(n[f]%25(25*1)+97)%7Do=function()%7B%7D;return%20v+'c7a8217062'%7Delse%7Breturn%20e(u+'',n,r,i,s+1)%7D%7D;var%20t=document,n=t.location.href,r=t.title;var%20i=e(n);var%20s=t.createElement('script');s.type='text/javascript';s.src='https://getpocket.com/b/r4.js?h='+i+'&u='+encodeURIComponent(n)+'&t='+encodeURIComponent(r);e=i=function()%7B%7D;var%20o=t.getElementsByTagName('head')[0]%7C%7Ct.documentElement;o.appendChild(s)%7D)()";
     };
     quickmarks = {
       icc = "https://ironcorelabs.com/";
@@ -780,14 +784,10 @@ in {
       w = "https://en.wikipedia.org/wiki/Special:Search?search={}&go=Go&ns0=1";
       aw = "https://wiki.archlinux.org/?search={}";
       nw = "https://nixos.wiki/index.php?search={}";
-      np =
-        "https://search.nixos.org/packages?channel=22.11&from=0&size=100&sort=relevance&type=packages&query={}";
-      nu =
-        "https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query={}";
-      no =
-        "https://search.nixos.org/options?channel=22.11&from=0&size=50&sort=relevance&type=packages&query={}";
-      nf =
-        "https://search.nixos.org/flakes?channel=22.11&from=0&size=50&sort=relevance&type=packages&query={}";
+      np = "https://search.nixos.org/packages?channel=22.11&from=0&size=100&sort=relevance&type=packages&query={}";
+      nu = "https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query={}";
+      no = "https://search.nixos.org/options?channel=22.11&from=0&size=50&sort=relevance&type=packages&query={}";
+      nf = "https://search.nixos.org/flakes?channel=22.11&from=0&size=50&sort=relevance&type=packages&query={}";
       g = "https://www.google.com/search?hl=en&q={}";
       gh = "https://github.com/?q={}";
       yt = "https://www.youtube.com/results?search_query={}";
@@ -807,5 +807,4 @@ in {
       ${builtins.readFile ./dotfiles/qutebrowser-theme-onedark.py}
     '';
   };
-
 }
