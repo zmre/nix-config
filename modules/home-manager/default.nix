@@ -113,9 +113,9 @@
     [utm]; # utm is a qemu wrapper for mac only
 in {
   programs.home-manager.enable = true;
-  # TODO
-  manual.manpages.enable = false; # temporary 2023-06-22 until man page build errors
+  # TODO temporary 2023-06-22 until man page build errors
   # are resolved https://github.com/nix-community/home-manager/issues/4142
+  manual.manpages.enable = false;
   home.enableNixpkgsReleaseCheck = false;
 
   # This value determines the Home Manager release that your
