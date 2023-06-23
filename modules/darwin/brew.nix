@@ -27,11 +27,8 @@
 
     casks = [
       "adobe-creative-cloud"
-      "amethyst" # for window tiling -- I miss chunkwm but it's successor, yabai, was unstable.
+      "amethyst" # for window tiling -- I miss chunkwm but it's successor, yabai, was unstable for me and required security compromises.
       #"audio-hijack"
-      # chrome based browser https://arc.net getting a lot of buzz. just curious to try it.
-      # i'm on the waitlist
-      "arc"
       "bartender" # organize status bar
       "blockblock"
       "brave-browser" # TODO: move to home-manager when it builds

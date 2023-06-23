@@ -113,6 +113,9 @@
     [utm]; # utm is a qemu wrapper for mac only
 in {
   programs.home-manager.enable = true;
+  # TODO
+  manual.manpages.enable = false; # temporary 2023-06-22 until man page build errors
+  # are resolved https://github.com/nix-community/home-manager/issues/4142
   home.enableNixpkgsReleaseCheck = false;
 
   # This value determines the Home Manager release that your
@@ -1278,6 +1281,7 @@ in {
   home.file.".config/lf/lficons.sh".source = ./dotfiles/lf/lficons.sh;
   programs.git = {
     enable = true;
+    lfs.enable = true;
     userName = "Patrick Walsh";
     userEmail = "patrick.walsh@ironcorelabs.com";
     aliases = {
