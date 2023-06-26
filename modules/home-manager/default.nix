@@ -306,6 +306,8 @@ in {
     }
     // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
       "Library/KeyBindings/DefaultKeyBinding.dict".source = ./dotfiles/DefaultKeyBinding.dict;
+      # company colors -- may still need to "install" them from a color picker window
+      "Library/Colors/IronCore-Branding-June-17.clr".source = ./dotfiles/IronCore-Branding-June-17.clr;
       "Library/Preferences/espanso/match/base.yml".text = pkgs.lib.generators.toYAML {} {
         matches = [
           {
