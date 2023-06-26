@@ -1,5 +1,10 @@
-{ inputs, username, lib, pkgs, ... }: {
-
+{
+  inputs,
+  username,
+  lib,
+  pkgs,
+  ...
+}: {
   time.timeZone = "America/Denver";
   programs.zsh = {
     enable = true;
@@ -9,17 +14,25 @@
 
   # environment setup
   environment = {
-    systemPackages = [ pkgs.cachix ];
+    systemPackages = [pkgs.cachix];
     etc = {
       home-manager.source = "${inputs.home-manager}";
       nixpkgs-unstable.source = "${inputs.nixpkgs-unstable}";
       nixpkgs-stable.source = "${inputs.nixpkgs-stable}";
     };
     # list of acceptable shells in /etc/shells
-    shells = with pkgs.stable; [ bash zsh ];
-    pathsToLink = [ "/libexec" ];
+    shells = with pkgs.stable; [bash zsh];
+    pathsToLink = ["/libexec"];
   };
 
+  # Fixes error about home dir being /var/empty
+  # See https://github.com/nix-community/home-manager/issues/4026
+  users.users.${username} = {
+    home =
+      if pkgs.stdenvNoCC.isDarwin
+      then "/Users/${username}"
+      else "/home/${username}";
+  };
   nix = {
     # package = pkgs.nixVersions.nix_2_11;
     package = pkgs.nix;
@@ -32,14 +45,14 @@
       # Because macos sandbox can create issues https://github.com/NixOS/nix/issues/4119
       sandbox = false; # !pkgs.stdenv.isDarwin;
       #trusted-users = [ "${config.user.name}" "root" "@admin" "@wheel" ];
-      trusted-users = [ "${username}" "root" "@admin" "@wheel" ];
+      trusted-users = ["${username}" "root" "@admin" "@wheel"];
       # TODO: turn this back on
       # disabled 2023-01-21 because of "cannot link" errors as described here:
       # https://github.com/NixOS/nix/issues/7273
       auto-optimise-store = false;
       max-jobs = 8;
       cores = 0; # use them all
-      allowed-users = [ "@wheel" ];
+      allowed-users = ["@wheel"];
       substituters = [
         "https://cache.nixos.org"
         "https://nix-community.cachix.org"
@@ -59,5 +72,4 @@
       options = "--delete-older-than 30d";
     };
   };
-
 }
