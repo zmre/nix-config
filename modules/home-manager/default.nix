@@ -161,194 +161,259 @@ in {
       else "/home/${username}/Notes";
   };
 
-  home.file.".inputrc".text = ''
-    set show-all-if-ambiguous on
-    set completion-ignore-case on
-    set mark-directories on
-    set mark-symlinked-directories on
+  home.file =
+    {
+      ".inputrc".text = ''
+        set show-all-if-ambiguous on
+        set completion-ignore-case on
+        set mark-directories on
+        set mark-symlinked-directories on
 
-    # Do not autocomplete hidden files unless the pattern explicitly begins with a dot
-    set match-hidden-files off
+        # Do not autocomplete hidden files unless the pattern explicitly begins with a dot
+        set match-hidden-files off
 
-    # Show extra file information when completing, like `ls -F` does
-    set visible-stats on
+        # Show extra file information when completing, like `ls -F` does
+        set visible-stats on
 
-    # Be more intelligent when autocompleting by also looking at the text after
-    # the cursor. For example, when the current line is "cd ~/src/mozil", and
-    # the cursor is on the "z", pressing Tab will not autocomplete it to "cd
-    # ~/src/mozillail", but to "cd ~/src/mozilla". (This is supported by the
-    # Readline used by Bash 4.)
-    set skip-completed-text on
+        # Be more intelligent when autocompleting by also looking at the text after
+        # the cursor. For example, when the current line is "cd ~/src/mozil", and
+        # the cursor is on the "z", pressing Tab will not autocomplete it to "cd
+        # ~/src/mozillail", but to "cd ~/src/mozilla". (This is supported by the
+        # Readline used by Bash 4.)
+        set skip-completed-text on
 
-    # Allow UTF-8 input and output, instead of showing stuff like $'\0123\0456'
-    set input-meta on
-    set output-meta on
-    set convert-meta off
+        # Allow UTF-8 input and output, instead of showing stuff like $'\0123\0456'
+        set input-meta on
+        set output-meta on
+        set convert-meta off
 
-    # Use Alt/Meta + Delete to delete the preceding word
-    "\e[3;3~": kill-word
+        # Use Alt/Meta + Delete to delete the preceding word
+        "\e[3;3~": kill-word
 
-    set keymap vi
-    set editing-mode vi-insert
-    "\e\C-h": backward-kill-word
-    "\e\C-?": backward-kill-word
-    "\eb": backward-word
-    "\C-a": beginning-of-line
-    "\C-l": clear-screen
-    "\C-e": end-of-line
-    "\ef": forward-word
-    "\C-k": kill-line
-    "\C-y": yank
-    # Go up a dir with ctrl-n
-    "\C-n":"cd ..\n"
-    set editing-mode vi
-  '';
-  home.file.".direnvrc".text = ''
-    source ~/.config/direnv/direnvrc
-  '';
-  home.file.".p10k.zsh".source = ./dotfiles/p10k.zsh;
-  home.file.".wallpaper.jpg".source = ./wallpaper/castle2.jpg;
-  home.file.".lockpaper.png".source = ./wallpaper/kali.png;
+        set keymap vi
+        set editing-mode vi-insert
+        "\e\C-h": backward-kill-word
+        "\e\C-?": backward-kill-word
+        "\eb": backward-word
+        "\C-a": beginning-of-line
+        "\C-l": clear-screen
+        "\C-e": end-of-line
+        "\ef": forward-word
+        "\C-k": kill-line
+        "\C-y": yank
+        # Go up a dir with ctrl-n
+        "\C-n":"cd ..\n"
+        set editing-mode vi
+      '';
+      ".direnvrc".text = ''
+        source ~/.config/direnv/direnvrc
+      '';
+      ".p10k.zsh".source = ./dotfiles/p10k.zsh;
+      ".wallpaper.jpg".source = ./wallpaper/castle2.jpg;
+      ".lockpaper.png".source = ./wallpaper/kali.png;
 
-  # terminfo to allow rich handling of italics, 256 colors, etc.
-  # these files were generated from the dotfiles dir which has a terminfo.src
-  # downloaded from https://invisible-island.net/datafiles/current/terminfo.src.gz
-  # the terminfo definitions were created with the command:
-  # tic -xe alacritty,alacritty-direct,kitty,kitty-direct,tmux-256color -o terminfo terminfo.src
-  # Also did this for xterm-kitty (from within kitty so TERMINFO is set)
-  # tic -x -o ~/.terminfo $TERMINFO/kitty.terminfo
-  # Then copied out the resulting ~/.terminfo/78/xterm-kitty file
-  # I'm not sure if this is OS dependent. For now, only doing this on Darwin. Possibly I should generate
-  # on each local system first in a derivation
-  home.file.".terminfo/61/alacritty".source = ./dotfiles/terminfo/61/alacritty;
-  home.file.".terminfo/61/alacritty-direct".source =
-    ./dotfiles/terminfo/61/alacritty-direct;
-  home.file.".terminfo/6b/kitty".source = ./dotfiles/terminfo/6b/kitty;
-  home.file.".terminfo/6b/kitty-direct".source =
-    ./dotfiles/terminfo/6b/kitty-direct;
-  home.file.".terminfo/74/tmux-256color".source =
-    ./dotfiles/terminfo/74/tmux-256color;
-  home.file.".terminfo/78/xterm-kitty".source =
-    ./dotfiles/terminfo/78/xterm-kitty;
-  home.file.".terminfo/x/xterm-kitty".source =
-    ./dotfiles/terminfo/78/xterm-kitty;
+      # terminfo to allow rich handling of italics, 256 colors, etc.
+      # these files were generated from the dotfiles dir which has a terminfo.src
+      # downloaded from https://invisible-island.net/datafiles/current/terminfo.src.gz
+      # the terminfo definitions were created with the command:
+      # tic -xe alacritty,alacritty-direct,kitty,kitty-direct,tmux-256color -o terminfo terminfo.src
+      # Also did this for xterm-kitty (from within kitty so TERMINFO is set)
+      # tic -x -o ~/.terminfo $TERMINFO/kitty.terminfo
+      # Then copied out the resulting ~/.terminfo/78/xterm-kitty file
+      # I'm not sure if this is OS dependent. For now, only doing this on Darwin. Possibly I should generate
+      # on each local system first in a derivation
+      ".terminfo/61/alacritty".source = ./dotfiles/terminfo/61/alacritty;
+      ".terminfo/61/alacritty-direct".source =
+        ./dotfiles/terminfo/61/alacritty-direct;
+      ".terminfo/6b/kitty".source = ./dotfiles/terminfo/6b/kitty;
+      ".terminfo/6b/kitty-direct".source =
+        ./dotfiles/terminfo/6b/kitty-direct;
+      ".terminfo/74/tmux-256color".source =
+        ./dotfiles/terminfo/74/tmux-256color;
+      ".terminfo/78/xterm-kitty".source =
+        ./dotfiles/terminfo/78/xterm-kitty;
+      ".terminfo/x/xterm-kitty".source =
+        ./dotfiles/terminfo/78/xterm-kitty;
+      ".config/lf/lfimg".source = ./dotfiles/lf/lfimg;
+      ".config/lf/lf_kitty_preview".source =
+        ./dotfiles/lf/lf_kitty_preview;
+      ".config/lf/pv.sh".source = ./dotfiles/lf/pv.sh;
+      ".config/lf/cls.sh".source = ./dotfiles/lf/cls.sh;
+      #".config/lf/previewer.sh".source = ./dotfiles/lf/previewer.sh;
+      ".config/lf/pager.sh".source = ./dotfiles/lf/pager.sh;
+      ".config/lf/lficons.sh".source = ./dotfiles/lf/lficons.sh;
+      # Config for hackernews-tui to make it darker
+      ".config/hn-tui.toml".text = ''
+        [theme.palette]
+        background = "#242424"
+        foreground = "#f6f6ef"
+        selection_background = "#4a4c4c"
+        selection_foreground = "#d8dad6"
+      '';
+      # Prose linting
+      "${config.xdg.configHome}/proselint/config.json".text = ''
+        {
+          "checks": {
+            "typography.symbols.curly_quotes": false,
+            "typography.symbols.ellipsis": false
+          }
+        }
+      '';
+      ".styles".source = ./dotfiles/vale-styles;
+      ".vale.ini".text = ''
+        StylesPath = .styles
 
-  # Config for hackernews-tui to make it darker
-  home.file.".config/hn-tui.toml".text = ''
-    [theme.palette]
-    background = "#242424"
-    foreground = "#f6f6ef"
-    selection_background = "#4a4c4c"
-    selection_foreground = "#d8dad6"
-  '';
-  home.file."Library/Preferences/espanso/match/base.yml".text = pkgs.lib.generators.toYAML {} {
-    matches = [
-      {
-        trigger = "icphone";
-        replace = "415.968.9607";
-      }
-      {
-        trigger = ":checkbox:";
-        replace = "⬜️";
-      }
-      {
-        trigger = ":checked:";
-        replace = "✅";
-      }
-      {
-        trigger = ":checkmark:";
-        replace = "✓";
-      }
-      {
-        trigger = "acmlink";
-        replace = "https://dl.acm.org/citation.cfm?id=3201602";
-      }
-      {
-        trigger = "icaddr1";
-        replace = "1750 30th Street #500";
-      }
-      {
-        trigger = "icaddr2";
-        replace = "Boulder, CO 80301-1029";
-      }
-      {
-        trigger = "icoffice1";
-        replace = "1919 14th Street, 7th Floor";
-      }
-      {
-        trigger = "icoffice2";
-        replace = "Boulder, CO 80302";
-      }
-      {
-        trigger = "..p";
-        replace = "..Patrick";
-      }
-      {
-        trigger = "myskype";
-        replace = "303.731.3155";
-      }
-      {
-        trigger = "-icc";
-        replace = "ironcorelabs.com";
-      }
-      {
-        trigger = "--icl";
-        replace = "IronCore Labs";
-      }
-      {
-        trigger = ".zsg";
-        replace = ".zmre@spamgourmet.com";
-      }
-      {
-        trigger = "mycal";
-        replace = "https://app.hubspot.com/meetings/patrick-walsh";
-      }
-      {
-        trigger = "p@i";
-        replace = "patrick.walsh@ironcorelabs.com";
-      }
-      {
-        trigger = "p@w";
-        replace = "pwalsh@well.com";
-      }
-      {
-        trigger = "--sig";
-        replace = ''
-          --
-          Patrick Walsh  ●  CEO
-          patrick.walsh@ironcorelabs.com  ●  @zmre
+        MinAlertLevel = suggestion
 
-          IronCore Labs
-          Strategic privacy for modern SaaS.
-          https://ironcorelabs.com  ●  @ironcorelabs  ●  415.968.9607
-        '';
-      }
-      {
-        # Dates
-        trigger = "ddate";
-        replace = "{{mydate}}";
-        vars = [
+        Packages = proselint, alex, Readability
+
+        [*]
+        BasedOnStyles = Vale, proselint
+        IgnoredScopes = code, tt
+        SkippedScopes = script, style, pre, figure
+        Google.FirstPerson = NO
+        Google.We = NO
+        Google.Acronyms = NO
+        Google.Units = NO
+        Google.Spacing = NO
+        Google.Exclamation = NO
+        Google.Headings = NO
+        Google.Parens = NO
+        Google.DateFormat = NO
+        Google.Ellipses = NO
+        proselint.Typography = NO
+        Vale.Spelling = NO
+      '';
+      ".config/kitty/startup.session".text = ''
+        new_tab
+        cd ~
+        launch zsh
+
+        new_tab notes
+        cd ~/Library/Containers/co.noteplan.NotePlan3/Data/Library/Application Support/co.noteplan.NotePlan3
+        launch zsh
+
+        new_tab news
+        layout grid
+        launch zsh -i -c tickrs
+        launch zsh
+        launch zsh -i -c "watch -n 120 -c \"/opt/homebrew/bin/icalBuddy -tf %H:%M -n -f -eep notes -ec 'Outschool Schedule,HomeAW,Contacts,Birthdays,Found in Natural Language' eventsToday\""
+        launch zsh -i -c hackernews_tui
+        new_tab svelte
+        cd ~/src/icl/website/website-svelte-branch
+      '';
+    }
+    // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
+      "Library/KeyBindings/DefaultKeyBinding.dict".source = ./dotfiles/DefaultKeyBinding.dict;
+      "Library/Preferences/espanso/match/base.yml".text = pkgs.lib.generators.toYAML {} {
+        matches = [
           {
-            name = "mydate";
-            type = "date";
-            params = {format = "%Y-%m-%d";};
+            trigger = "icphone";
+            replace = "415.968.9607";
+          }
+          {
+            trigger = ":checkbox:";
+            replace = "⬜️";
+          }
+          {
+            trigger = ":checked:";
+            replace = "✅";
+          }
+          {
+            trigger = ":checkmark:";
+            replace = "✓";
+          }
+          {
+            trigger = "acmlink";
+            replace = "https://dl.acm.org/citation.cfm?id=3201602";
+          }
+          {
+            trigger = "icaddr1";
+            replace = "1750 30th Street #500";
+          }
+          {
+            trigger = "icaddr2";
+            replace = "Boulder, CO 80301-1029";
+          }
+          {
+            trigger = "icoffice1";
+            replace = "1919 14th Street, 7th Floor";
+          }
+          {
+            trigger = "icoffice2";
+            replace = "Boulder, CO 80302";
+          }
+          {
+            trigger = "..p";
+            replace = "..Patrick";
+          }
+          {
+            trigger = "myskype";
+            replace = "303.731.3155";
+          }
+          {
+            trigger = "-icc";
+            replace = "ironcorelabs.com";
+          }
+          {
+            trigger = "--icl";
+            replace = "IronCore Labs";
+          }
+          {
+            trigger = ".zsg";
+            replace = ".zmre@spamgourmet.com";
+          }
+          {
+            trigger = "mycal";
+            replace = "https://app.hubspot.com/meetings/patrick-walsh";
+          }
+          {
+            trigger = "p@i";
+            replace = "patrick.walsh@ironcorelabs.com";
+          }
+          {
+            trigger = "p@w";
+            replace = "pwalsh@well.com";
+          }
+          {
+            trigger = "--sig";
+            replace = ''
+              --
+              Patrick Walsh  ●  CEO
+              patrick.walsh@ironcorelabs.com  ●  @zmre
+
+              IronCore Labs
+              Strategic privacy for modern SaaS.
+              https://ironcorelabs.com  ●  @ironcorelabs  ●  415.968.9607
+            '';
+          }
+          {
+            # Dates
+            trigger = "ddate";
+            replace = "{{mydate}}";
+            vars = [
+              {
+                name = "mydate";
+                type = "date";
+                params = {format = "%Y-%m-%d";};
+              }
+            ];
+          }
+          {
+            # Shell commands example
+            trigger = ":shell";
+            replace = "{{output}}";
+            vars = [
+              {
+                name = "output";
+                type = "shell";
+                params = {cmd = "echo Hello from your shell";};
+              }
+            ];
           }
         ];
-      }
-      {
-        # Shell commands example
-        trigger = ":shell";
-        replace = "{{output}}";
-        vars = [
-          {
-            name = "output";
-            type = "shell";
-            params = {cmd = "echo Hello from your shell";};
-          }
-        ];
-      }
-    ];
-  };
+      };
+    };
 
   programs.bat = {
     enable = true;
@@ -407,41 +472,6 @@ in {
       journal.time = "on";
     };
   };
-
-  # Prose linting
-  home.file."${config.xdg.configHome}/proselint/config.json".text = ''
-    {
-      "checks": {
-        "typography.symbols.curly_quotes": false,
-        "typography.symbols.ellipsis": false
-      }
-    }
-  '';
-  home.file.".styles".source = ./dotfiles/vale-styles;
-  home.file.".vale.ini".text = ''
-    StylesPath = .styles
-
-    MinAlertLevel = suggestion
-
-    Packages = proselint, alex, Readability
-
-    [*]
-    BasedOnStyles = Vale, proselint
-    IgnoredScopes = code, tt
-    SkippedScopes = script, style, pre, figure
-    Google.FirstPerson = NO
-    Google.We = NO
-    Google.Acronyms = NO
-    Google.Units = NO
-    Google.Spacing = NO
-    Google.Exclamation = NO
-    Google.Headings = NO
-    Google.Parens = NO
-    Google.DateFormat = NO
-    Google.Ellipses = NO
-    proselint.Typography = NO
-    Vale.Spelling = NO
-  '';
 
   # I really don't use VSCode. I try it now and then to see what I think.
   # My setup uses Neovim in the background whenever you go to Normal mode.
@@ -1271,14 +1301,6 @@ in {
       "<enter>" = ":printfx; quit";
     };
   };
-  home.file.".config/lf/lfimg".source = ./dotfiles/lf/lfimg;
-  home.file.".config/lf/lf_kitty_preview".source =
-    ./dotfiles/lf/lf_kitty_preview;
-  home.file.".config/lf/pv.sh".source = ./dotfiles/lf/pv.sh;
-  home.file.".config/lf/cls.sh".source = ./dotfiles/lf/cls.sh;
-  #home.file.".config/lf/previewer.sh".source = ./dotfiles/lf/previewer.sh;
-  home.file.".config/lf/pager.sh".source = ./dotfiles/lf/pager.sh;
-  home.file.".config/lf/lficons.sh".source = ./dotfiles/lf/lficons.sh;
   programs.git = {
     enable = true;
     lfs.enable = true;
@@ -1520,24 +1542,6 @@ in {
     theme = "One Half Dark"; # or Dracula or OneDark see https://github.com/kovidgoyal/kitty-themes/tree/master/themes
     # extraConfig = "\n";
   };
-  home.file.".config/kitty/startup.session".text = ''
-    new_tab
-    cd ~
-    launch zsh
-
-    new_tab notes
-    cd ~/Library/Containers/co.noteplan.NotePlan3/Data/Library/Application Support/co.noteplan.NotePlan3
-    launch zsh
-
-    new_tab news
-    layout grid
-    launch zsh -i -c tickrs
-    launch zsh
-    launch zsh -i -c "watch -n 120 -c \"/opt/homebrew/bin/icalBuddy -tf %H:%M -n -f -eep notes -ec 'Outschool Schedule,HomeAW,Contacts,Birthdays,Found in Natural Language' eventsToday\""
-    launch zsh -i -c hackernews_tui
-    new_tab svelte
-    cd ~/src/icl/website/website-svelte-branch
-  '';
   programs.alacritty = {
     enable = true;
     package =
