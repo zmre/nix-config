@@ -38,7 +38,7 @@
       "dash" # offline developer docs
       "default-folder-x"
       "discord"
-      "docker" # TODO: move to home-manager
+      #"docker" # removed in favor of colima + docker cli
       "dropbox"
       # TODO: move espanso to home-manager
       "espanso" # text expander functionality (but open source donationware, x-platform, rust-based)

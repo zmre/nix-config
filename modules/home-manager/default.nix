@@ -110,12 +110,13 @@
       #dbeaver # database sql manager with er diagrams
     ]
     ++ lib.optionals pkgs.stdenv.isDarwin
-    [utm]; # utm is a qemu wrapper for mac only
+    [
+      colima # command line docker server replacement
+      docker
+      utm # utm is a qemu wrapper gui for mac only
+    ];
 in {
   programs.home-manager.enable = true;
-  # TODO temporary 2023-06-22 until man page build errors
-  # are resolved https://github.com/nix-community/home-manager/issues/4142
-  manual.manpages.enable = false;
   home.enableNixpkgsReleaseCheck = false;
 
   # This value determines the Home Manager release that your
