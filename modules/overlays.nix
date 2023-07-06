@@ -38,7 +38,7 @@
       # hackernews-tui = prev.rustPlatform.buildRustPackage {
       hackernews-tui =
         (prev.makeRustPlatform {
-          inherit (inputs.fenix.packages.${prev.system}.minimal) cargo rustc;
+          inherit (inputs.fenix.packages.${prev.system}.stable) cargo rustc;
         })
         .buildRustPackage {
           name = "hackernews-tui";
