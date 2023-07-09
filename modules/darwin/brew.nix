@@ -43,6 +43,7 @@
       # TODO: move espanso to home-manager
       "espanso" # text expander functionality (but open source donationware, x-platform, rust-based)
       "firefox" # TODO: firefox build is broken on ARM; check to see if fixed
+      "freetube" # trying out private youtube browsing after reading about how how toxic their algo is
       "fork"
       "google-drive"
       "gpg-suite"
@@ -171,7 +172,7 @@
       "gdrive"
       "marp-cli" # convert markdown to html slides
       "ical-buddy"
-      "trippy" # an mtr alternative
+      #"trippy" # an mtr alternative / moving to the nix version
       # would rather load these as part of a security shell, but...
       "p0f" # the nix one only builds on linux
       "hashcat" # the nix one only builds on linux

@@ -58,6 +58,7 @@
     aria # cli downloader
     ncftp
     hostname
+    trippy # mtr alternative
     xh # rust version of httpie / better curl
 
     # misc
