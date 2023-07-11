@@ -379,16 +379,30 @@ in {
             trigger = "p@w";
             replace = "pwalsh@well.com";
           }
+          # {
+          #   trigger = "--sig";
+          #   replace = ''
+          #     --
+          #     Patrick Walsh  ●  CEO
+          #     patrick.walsh@ironcorelabs.com  ●  @zmre
+          #
+          #     IronCore Labs
+          #     Strategic privacy for modern SaaS.
+          #     https://ironcorelabs.com  ●  @ironcorelabs  ●  415.968.9607
+          #   '';
+          # }
           {
             trigger = "--sig";
-            replace = ''
-              --
-              Patrick Walsh  ●  CEO
-              patrick.walsh@ironcorelabs.com  ●  @zmre
-
-              IronCore Labs
-              Strategic privacy for modern SaaS.
-              https://ironcorelabs.com  ●  @ironcorelabs  ●  415.968.9607
+            html = ''
+              <p>--&nbsp;</p>
+              <p style="font-family:Helvetica,Arial,sans-serif;font-size:14px;"><b>Patrick Walsh</b>&nbsp;&nbsp;<span style="color:red;">&bull;</span>&nbsp;&nbsp;Co-founder and CEO<br/>
+              patrick.walsh@ironcorelabs.com&nbsp;&nbsp;<span style="color:red;">&bull;</span>&nbsp;&nbsp;@zmre<br/>
+              <br/>
+              <b>IronCore Labs</b><br/>
+              Real data protection for cloud apps and AI<br/>
+              <a href="https://ironcorelabs.com/">ironcorelabs.com</a>&nbsp;&nbsp;<span style="color:red;">&bull;</span>&nbsp;&nbsp;@ironcorelabs&nbsp;&nbsp;<span style="color:red;">&bull;</span>&nbsp;&nbsp;415.968.9607<br/>
+              </p>
+              <p style="font-family:Helvetica,Arial,sans-serif;font-size:14px;color:red;">Sign up for <a style="color:red;font-weight:bold;" href="https://ironcorelabs.com/products/cloaked-ai/">Cloaked AI</a> to protect your AI data</p>
             '';
           }
           {
