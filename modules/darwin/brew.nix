@@ -53,6 +53,7 @@
       "kopiaui" # ui for kopia dedupe backup
       "knockknock"
       "little-snitch"
+      "lm-studio"
       "lockrattler"
       #"loopback" -- haven't been using this of late
       "marked"
