@@ -54,7 +54,7 @@
     #pkgs.sniffnet # x-platform gui traffic monitor (rust)
     # not building on m1 right now
     #bmon # bandwidth monitor by interface
-    caddy # local filesystem web server
+    static-web-server # serve local static files
     aria # cli downloader
     ncftp
     hostname
