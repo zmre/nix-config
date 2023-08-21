@@ -1370,6 +1370,7 @@ in {
         protocol.version = "2";
         core.commitGraph = true;
         gc.writeCommitGraph = true;
+        push.autoSetupRemote = true;
       }
       // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
         # these should speed up vim nvim-tree and other things that watch git repos but
