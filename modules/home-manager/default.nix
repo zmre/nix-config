@@ -312,6 +312,18 @@ in {
       "Library/Preferences/espanso/match/base.yml".text = pkgs.lib.generators.toYAML {} {
         matches = [
           {
+            trigger = "lorem1";
+            replace = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua";
+          }
+          {
+            trigger = "lorem2";
+            replace = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+          }
+          {
+            trigger = "lorem3";
+            replace = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+          }
+          {
             trigger = "icphone";
             replace = "415.968.9607";
           }
