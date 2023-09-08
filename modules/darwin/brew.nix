@@ -9,86 +9,180 @@
     caskArgs.no_quarantine = true;
     onActivation = {
       autoUpdate = false;
-      upgrade = false;
+      upgrade = true;
       cleanup = "uninstall"; # should maybe be "zap" - remove anything not listed here
     };
-    global = {brewfile = true;};
+    global = {
+      brewfile = true;
+      autoUpdate = false;
+    };
 
     taps = [
+      "homebrew/core"
       "homebrew/bundle"
       "homebrew/cask"
       "homebrew/cask-fonts"
-      "homebrew/core"
       "homebrew/services"
-      "koekeishiya/formulae"
+      #"koekeishiya/formulae"
       "homebrew/cask-drivers" # for flipper zero
       "fujiapple852/trippy"
     ];
 
     casks = [
-      "adobe-creative-cloud"
-      "amethyst" # for window tiling -- I miss chunkwm but it's successor, yabai, was unstable for me and required security compromises.
+      {
+        name = "adobe-creative-cloud";
+        greedy = true;
+      }
+      {
+        name = "amethyst"; # for window tiling -- I miss chunkwm but it's successor, yabai, was unstable for me and required security compromises.
+        greedy = true;
+      }
       #"audio-hijack"
-      "bartender" # organize status bar
+      {
+        name = "bartender"; # organize status bar
+        greedy = true;
+      }
       "blockblock"
-      "brave-browser" # TODO: move to home-manager when it builds
+      {
+        name = "brave-browser"; # TODO: move to home-manager when it builds
+        greedy = true;
+      }
       #"canon-eos-utility"
       #"canon-eos-webcam-utility"
       "choosy" # multi-browser url launch selector; see also https://github.com/johnste/finicky
-      "dash" # offline developer docs
-      "default-folder-x"
-      "discord"
+      {
+        name = "dash"; # offline developer docs
+        greedy = true;
+      }
+      {
+        name = "default-folder-x";
+        greedy = true;
+      }
+      {
+        name = "discord";
+        greedy = true;
+      }
       #"docker" # removed in favor of colima + docker cli
-      "dropbox"
+      {
+        name = "dropbox";
+        greedy = true;
+      }
       # TODO: move espanso to home-manager
       "espanso" # text expander functionality (but open source donationware, x-platform, rust-based)
-      "firefox" # TODO: firefox build is broken on ARM; check to see if fixed
+      {
+        name = "firefox"; # TODO: firefox build is broken on ARM; check to see if fixed
+        greedy = true;
+      }
       "freetube" # trying out private youtube browsing after reading about how how toxic their algo is
-      "fork"
-      "google-drive"
-      "gpg-suite"
-      "imageoptim"
+      {
+        name = "fork";
+        greedy = true;
+      }
+      {
+        name = "google-drive";
+        greedy = true;
+      }
+      {
+        name = "gpg-suite";
+        greedy = true;
+      }
+      {
+        name = "imageoptim";
+        greedy = true;
+      }
       "insta360-studio"
-      "istat-menus"
-      "kopiaui" # ui for kopia dedupe backup
+      {
+        name = "istat-menus";
+        greedy = true;
+      }
+      {
+        name = "kopiaui"; # ui for kopia dedupe backup
+        greedy = true;
+      }
       "knockknock"
       "little-snitch"
       "lm-studio"
       "lockrattler"
       #"loopback" -- haven't been using this of late
-      "marked"
+      {
+        name = "marked";
+        greedy = true;
+      }
       #"microsoft-office" -- moved this to apple app store
       #"mpv"
       "noun-project"
-      "obs" # TODO: move to nix version obs-studio when not broken
-      "orion" # just trying out the Orion browser
-      "parallels"
+      {
+        name = "obs"; # TODO: move to nix version obs-studio when not broken
+        greedy = true;
+      }
+      {
+        name = "orion"; # just trying out the Orion browser
+        greedy = true;
+      }
+      {
+        name = "parallels";
+        greedy = true;
+      }
       #"pomatez" # pomodoro timer, but installs itself as startup item and doesn't
       # give an option to disable that and doesn't ask you first. can
       # kill that in other ways, but that's a real negative sign to me
-      "protonmail-bridge" # TODO: nix version now installs and works -- move over
+      {
+        name = "protonmail-bridge"; # TODO: nix version now installs and works -- move over
+        greedy = true;
+      }
       "qflipper"
       "qutebrowser" # TODO: move over when it builds on arm64 darwin
-      "qlmarkdown"
+      # Update: qutebrowser built today, 2023-09-07! but errors on launch :(
+      {
+        name = "qlmarkdown";
+        greedy = true;
+      }
       "qlstephen"
       #"qlprettypatch" # not updated in 9 years
       "qlvideo"
       #"quicklookase" # not updated in 6 years
       #"ripcord" # native (non-electron) desktop client for Slack + Discord -- try again in 2023
       "reikey"
-      "raycast"
-      "screenflow"
-      "signal" # TODO: move to home-manager (signal-desktop) when not broken
+      {
+        name = "raycast";
+        greedy = true;
+      }
+      {
+        name = "screenflow";
+        greedy = true;
+      }
+      {
+        name = "signal"; # TODO: move to home-manager (signal-desktop) when not broken
+        greedy = true;
+      }
       "silentknight"
       "silnite"
-      "skype"
-      "spotify" # TODO: move to home-manager when not broken
+      {
+        name = "skype";
+        greedy = true;
+      }
+      {
+        name = "spotify"; # TODO: move to home-manager when not broken
+        greedy = true;
+      }
       "swiftdefaultappsprefpane"
       "sync"
-      "syncthing" # TODO: move to home-manager
-      "tor-browser" # TODO: move to home-manager (tor-browser-bundle-bin) when it builds
-      "transmission"
-      "transmit" # for syncing folders with dropbox on-demand instead of using their broken software
+      {
+        name = "syncthing"; # TODO: move to home-manager
+        greedy = true;
+      }
+      {
+        name = "tor-browser"; # TODO: move to home-manager (tor-browser-bundle-bin) when it builds
+        greedy = true;
+      }
+      {
+        name = "transmission";
+        greedy = true;
+      }
+      {
+        name = "transmit"; # for syncing folders with dropbox on-demand instead of using their broken software
+        greedy = true;
+      }
       # why broken, you ask? well, they're using deprecated APIs for one thing
       # their sync service is constantly burning up CPU when nothing is touching their folder
       # and they install quicklook plugins that aren't optional and the adobe illustrator one
@@ -102,15 +196,24 @@
       # have to be enabled in recovery mode and... meh.
       #"veracrypt"
       #"macfuse" # needed by veracrypt
-      "yubico-yubikey-manager" # TODO: move to home-manager (yubikey-manager or yubikey-manager-qt)
-      "zenmap"
-      "zoom" # TODO: move to home-manager (zoom-us)
-      "zotero" # TODO: move to home-manager?
+      "yubico-yubikey-manager" # TODO: move to home-manager (yubikey-manager works for ykman cli, but yubikey-manager-qt still broken)
+      # Note also: yubico authenticator currently installed from mac app store. yubioath-flutter only works on linux
+      {
+        name = "zoom"; # TODO: move to home-manager (zoom-us)
+        greedy = true;
+      }
+      {
+        name = "zotero"; # TODO: move to home-manager?
+        greedy = true;
+      }
       # would be better to load  hese in a security shell, but nix versions don't build on mac
-      "owasp-zap" # TODO: move to home-manager?
-      "burp-suite" # TODO: move to home-manager?
+      "owasp-zap" # TODO: move to home-manager? (zap)
+      "burp-suite" # TODO: move to home-manager? (burpsuite)
       #"warp" # 2022-11-10 testing some crazy new rust-based terminal
-      "webex"
+      {
+        name = "webex";
+        greedy = true;
+      }
       "wireshark-chmodbpf"
 
       # Keeping the next three together as they act in concert and are made by the same guy
@@ -163,17 +266,12 @@
       "Yubico Authenticator" = 1497506650;
     };
     brews = [
-      "pam-reattach"
       "brightness"
       "ciphey"
       "ca-certificates"
-      "dashing" # generate dash docs from html
       "ddcctl"
       "ansiweather"
-      "gdrive"
-      "marp-cli" # convert markdown to html slides
       "ical-buddy"
-      #"trippy" # an mtr alternative / moving to the nix version
       # would rather load these as part of a security shell, but...
       "p0f" # the nix one only builds on linux
       "hashcat" # the nix one only builds on linux

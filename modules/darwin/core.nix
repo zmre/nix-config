@@ -9,7 +9,7 @@
     loginShell = pkgs.zsh;
     pathsToLink = ["/Applications"];
     # I exclusively control homebrew from here, but it's annoying to fully qualify the path to brew binaries
-    systemPath = ["/opt/homebrew/bin"];
+    systemPath = ["/opt/homebrew/bin" "/opt/homebrew/sbin"];
     #backupFileExtension = "backup";
     etc = {
       darwin.source = "${inputs.darwin}";
@@ -19,7 +19,7 @@
     # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
 
     # packages installed in system profile
-    systemPackages = with pkgs; [git curl coreutils gnused];
+    systemPackages = with pkgs; [git curl coreutils gnused pam-reattach];
 
     # Fix "Too many open files" problems. Based on this:
     # https://medium.com/mindful-technology/too-many-open-files-limit-ulimit-on-mac-os-x-add0f1bfddde

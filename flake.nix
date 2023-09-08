@@ -67,6 +67,30 @@
     # VSCode extension built from github -- update version here and in ./modules/overlays.nix
     kubernetes-yaml-formatter.url = "github:longkai/kubernetes-yaml-formatter/v1.1.0";
     kubernetes-yaml-formatter.flake = false;
+
+    # brew-src = {
+    #   url = "github:Homebrew/brew/4.1.10"; # as of 2023-09-07, this newer version fails; default using 4.1.1
+    #   flake = false;
+    # };
+    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    nix-homebrew.inputs.nixpkgs.follows = "nixpkgs";
+    #nix-homebrew.inputs.brew-src.follows = "brew-src";
+    nix-homebrew.inputs.nix-darwin.follows = "darwin";
+    # Declarative, pinned homebrew tap management
+    homebrew-core.url = "github:homebrew/homebrew-core";
+    homebrew-core.flake = false;
+    homebrew-cask.url = "github:homebrew/homebrew-cask";
+    homebrew-cask.flake = false;
+    homebrew-bundle.url = "github:homebrew/homebrew-bundle";
+    homebrew-bundle.flake = false;
+    homebrew-cask-fonts.url = "github:homebrew/homebrew-cask-fonts";
+    homebrew-cask-fonts.flake = false;
+    homebrew-services.url = "github:homebrew/homebrew-services";
+    homebrew-services.flake = false;
+    homebrew-cask-drivers.url = "github:homebrew/homebrew-cask-drivers"; # for flipper zero
+    homebrew-cask-drivers.flake = false;
+    homebrew-trippy.url = "github:fujiapple852/trippy"; # for trippy ping util
+    homebrew-trippy.flake = false;
   };
 
   outputs = inputs @ {
@@ -78,6 +102,7 @@
     home-manager,
     sbhosts,
     nixos-hardware,
+    nix-homebrew,
     ...
   }: let
     inherit (home-manager.lib) homeManagerConfiguration;
@@ -114,9 +139,38 @@
           inherit sbhosts inputs nixpkgs-stable nixpkgs-unstable username;
         };
         modules = [
+          nix-homebrew.darwinModules.nix-homebrew # Make it so I can pin my homebrew taps and actually roll things back
+          {
+            nix-homebrew = {
+              # Install Homebrew under the default prefix
+              enable = true;
+
+              # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
+              enableRosetta = false;
+
+              # User owning the Homebrew prefix
+              user = username;
+
+              # Declarative tap management
+              taps = with inputs; {
+                "homebrew/homebrew-core" = homebrew-core;
+                "homebrew/homebrew-cask" = homebrew-cask;
+                "homebrew/homebrew-cask-fonts" = homebrew-cask-fonts;
+                "homebrew/homebrew-bundle" = homebrew-bundle;
+                "homebrew/homebrew-services" = homebrew-services;
+                "homebrew/homebrew-cask-drivers" = homebrew-cask-drivers;
+                "fujiapple852/trippy" = homebrew-trippy;
+              };
+
+              # With mutableTaps disabled, taps can no longer be added imperatively with `brew tap`.
+              mutableTaps = false;
+
+              # should only need this once...
+              autoMigrate = false;
+            };
+          }
           ./modules/darwin
           home-manager.darwinModules.home-manager
-          {homebrew.brewPrefix = "/opt/homebrew/bin";}
           (mkHome username [
             ./modules/home-manager
             ./modules/home-manager/home-darwin.nix
