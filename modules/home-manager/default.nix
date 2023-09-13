@@ -909,10 +909,10 @@ in {
     shellAliases =
       {
         ls = "ls --color=auto -F";
-        l = "exa --icons --git-ignore --git -F --extended";
-        ll = "exa --icons --git-ignore --git -F --extended -l";
-        lt = "exa --icons --git-ignore --git -F --extended -T";
-        llt = "exa --icons --git-ignore --git -F --extended -l -T";
+        l = "eza --icons --git-ignore --git -F --extended";
+        ll = "eza --icons --git-ignore --git -F --extended -l";
+        lt = "eza --icons --git-ignore --git -F --extended -T";
+        llt = "eza --icons --git-ignore --git -F --extended -l -T";
         fd = "\\fd -H -t d"; # default search directories
         f = "\\fd -H"; # default search this dir for files ignoring .gitignore etc
         lf = "~/.config/lf/lfimg";
@@ -949,7 +949,7 @@ in {
       };
   };
 
-  programs.exa.enable = true;
+  programs.eza.enable = true;
   /*
   programs.pistol = {
     # I've gone back to my pv.sh script for now

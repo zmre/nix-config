@@ -83,6 +83,10 @@
         greedy = true;
       }
       {
+        name = "gotomeeting";
+        greedy = true;
+      }
+      {
         name = "gpg-suite";
         greedy = true;
       }
