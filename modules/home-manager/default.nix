@@ -213,7 +213,7 @@ in {
       ".direnvrc".text = ''
         source ~/.config/direnv/direnvrc
       '';
-      ".p10k.zsh".source = ./dotfiles/p10k.zsh;
+      # ".p10k.zsh".source = ./dotfiles/p10k.zsh;
       ".wallpaper.jpg".source = ./wallpaper/castle2.jpg;
       ".lockpaper.png".source = ./wallpaper/kali.png;
 
@@ -418,6 +418,85 @@ in {
               <a href="https://ironcorelabs.com/">ironcorelabs.com</a>&nbsp;&nbsp;<span style="color:red;">&bull;</span>&nbsp;&nbsp;@ironcorelabs&nbsp;&nbsp;<span style="color:red;">&bull;</span>&nbsp;&nbsp;415.968.9607<br/>
               </p>
               <p style="font-family:Helvetica,Arial,sans-serif;font-size:14px;color:red;">Sign up for <a style="color:red;font-weight:bold;" href="https://ironcorelabs.com/products/cloaked-ai/">Cloaked AI</a> to protect your AI data</p>
+            '';
+          }
+          {
+            trigger = "vcintroreply";
+            form = ''
+              Thanks, [[introducer]]! (To bcc.)
+
+              Hi [[investor]],
+
+              Nice to meet you and thanks for your interest in talking with us. I'd love to take you through our pitch.  What are some good times for you?  Or alternatively, if you'd prefer, you can grab some time on my calendar directly here: https://app.hubspot.com/meetings/patrick-walsh
+
+              Thanks and I look forward to talking with you soon.
+
+              Regards,
+
+              ..Patrick
+            '';
+          }
+          {
+            trigger = "vcintrorequest";
+            vars = [
+              {
+                name = "form";
+                type = "form";
+                params = {
+                  layout = ''
+                    Introducer: [[introducer]]
+                    Investor: [[investor]]
+                    VC Firm: [[firm]]
+                    Reason for them: [[reason]]
+                    Round size: [[roundsize]]
+                    ARR: [[arr]]
+                  '';
+                  fields = {
+                    introducer = {multiline = false;};
+                    investor = {multiline = false;};
+                    firm = {multiline = false;};
+                    reason = {multiline = true;};
+                    roundsize = {multiline = false;};
+                    arr = {mulitline = false;};
+                  };
+                };
+              }
+            ];
+            html = ''
+              <p>{{form.introducer}}, thanks for offering to introduce us.</p>
+
+              <p>Hi {{form.investor}},</p>
+
+              <p>I'm hoping you're the right person to talk to at {{form.firm}} and that we're a potential fit -- {{form.reason}}</p>
+
+              <p>Here's the quick rundown on IronCore Labs:</p>
+
+              <p><b>Problem:</b></p>
+
+              <p>Today, over half of GenAI projects aren't making it to production because of privacy and security issues (per Gartner). Major companies like Google and Facebook are unable to release new products (ie, Bard and Threads) in the EU because of data privacy issues. But the problem isn't constrained to the EU. 60% of CEOs globally say privacy and security issues are blocking their adoption of new AI capabilities.</p>
+
+              <p><b>Solution:</b></p>
+
+              <p>With our Cloaked AI product, companies can use the latest and best hosted cloud solutions for working with GenAI without leaking their private and confidential data (or their customers'). They can search, chat, prevent hallucinations, leverage facial recognition, and more without any risk to the data involved.</p>
+
+              <p>IronCore <b>unlocks the most valuable AI use cases by freeing companies from the privacy and security issues</b> that are blocking them.</p>
+
+              <p>We're currently raising our Series A. Here are the key details:</p>
+
+              <ul>
+              <li><b>Broad Categories:</b> Cybersecurity, Artificial Intelligence, Data Protection, Developer and DevOps Tools, Enterprise</li>
+              <li><b>Company progress:</b> ~{{form.progress}}M in ARR with large marquee customers like HubSpot and Zendesk</li>
+              <li><b>Round size:</b> {{form.roundsize}}M</li>
+              <li><b>AI product readiness:</b> Cloaked AI is currently in beta</li>
+              </ul>
+
+              <p>And if that's not enough to get you started, we have a two minute video that's a mini version of our pitch:</p>
+
+              <p>https://docsend.com/view/q6535e3wn65yqiai</p>
+
+              <p>Regards,</p>
+
+              <p>..Patrick</p>
             '';
           }
           {
@@ -773,12 +852,12 @@ in {
     '';
     initExtraFirst = ''
       #zmodload zsh/zprof
-      source ${./dotfiles/p10k.zsh}
-      source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+      # source ${./dotfiles/p10k.zsh}
+      # source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
       # Prompt stuff
-      if [[ -r "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh" ]]; then
-        source "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh"
-      fi
+      # if [[ -r "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh" ]]; then
+        # source "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh"
+      # fi
     '';
     initExtra = ''
       set -o vi
@@ -1098,7 +1177,7 @@ in {
     enableNushellIntegration =
       false; # I've manually integrated because of bugs 2023-04-05
     enableZshIntegration =
-      false; # nope. I'm happy with the smokin speed of powerlevel10k in zsh
+      true; # nope. I'm happy with the smokin speed of powerlevel10k in zsh
     enableBashIntegration = true;
     settings = {
       format = pkgs.lib.concatStrings [
@@ -1112,10 +1191,10 @@ in {
         "$vcsh"
         "$fossil_branch"
         "$git_branch"
-        "$git_commit"
-        "$git_state"
-        "$git_status"
-        "$git_metrics"
+        # "$git_commit"
+        # "$git_state"
+        # "$git_status"
+        # "$git_metrics"
         "$hg_branch"
         "$pijul_channel"
         "$sudo"
