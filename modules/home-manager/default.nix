@@ -101,6 +101,8 @@
     pkgs.nps # quick nix packages search
     gnugrep
     pkgs.enola # sherlock-like tool
+    zsh-fzf-tab
+
     #pkgs.qutebrowser
   ];
   # using unstable in my home profile for nix commands
@@ -771,8 +773,9 @@ in {
     enable = true;
     enableZshIntegration = true;
     tmux.enableShellIntegration = true;
-    defaultCommand = "fd --type f --hidden --exclude .git";
-    fileWidgetCommand = "fd --type f"; # for when ctrl-t is pressed
+    defaultCommand = "\fd --type f --hidden --exclude .git";
+    fileWidgetCommand = "\fd --exclude .git --type f"; # for when ctrl-t is pressed
+    changeDirWidgetCommand = "\fd --type d --hidden --follow --max-depth 3 --exclude .git";
   };
   programs.ssh = {
     enable = true;
@@ -839,6 +842,16 @@ in {
       # don't use global env as it will slow us down
       skip_global_compinit=1
     '';
+    initExtraFirst = ''
+      #zmodload zsh/zprof
+      # source ${./dotfiles/p10k.zsh}
+      # source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
+      # Prompt stuff
+      # if [[ -r "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh" ]]; then
+        # source "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh"
+      # fi
+      source  ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
+    '';
     #initExtraBeforeCompInit = "";
     completionInit = ''
       # only update compinit once each day
@@ -849,19 +862,27 @@ in {
         compinit
       done
       compinit -C
-    '';
-    initExtraFirst = ''
-      #zmodload zsh/zprof
-      # source ${./dotfiles/p10k.zsh}
-      # source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-      # Prompt stuff
-      # if [[ -r "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh" ]]; then
-        # source "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh"
-      # fi
+
+      # disable sort when completing `git checkout`
+      zstyle ':completion:*:git-checkout:*' sort false
+      # set descriptions format to enable group support
+      zstyle ':completion:*:descriptions' format '[%d]'
+      # set list-colors to enable filename colorizing
+      zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
+      # preview directory's content with exa when completing cd
+      zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+      # switch group using `,` and `.`
+      zstyle ':fzf-tab:*' switch-group ',' '.'
     '';
     initExtra = ''
       set -o vi
       bindkey -v
+
+      jump_key_places(){
+        cd "$(\fd . ~ ~/.config ~/src/sideprojects ~/src/icl ~/src/icl/website ~/src/personal ~/src/gh ~/Sync/Private/Finances ~/Sync/Private ~/Sync/IronCore\ Docs ~/Sync/IronCore\ Docs/Legal ~/Sync/IronCore\ Docs/Finances ~/Sync/IronCore\ Docs/Design ~/Notes ~/Notes/Notes --min-depth 1 --max-depth 1 --type d -L -E .Trash -E @Trash | fzf)"
+        zle reset-prompt
+      }
+      zle -N jump_key_places
 
       # Setup preferred key bindings that emulate the parts of
       # emacs-style input manipulation that I'm familiar with
@@ -879,6 +900,7 @@ in {
       bindkey '\ef' forward-word
       bindkey '^k' kill-line
       bindkey '^u' backward-kill-line
+      bindkey '^f' jump_key_places
 
       # I prefer for up/down and j/k to do partial searches if there is
       # already text in play, rather than just normal through history
@@ -899,6 +921,8 @@ in {
       zle -N edit-command-line
       bindkey -M vicmd 'v' edit-command-line
 
+      # next line makes completions case insensitive
+      zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
       zstyle ':completion:*' completer _extensions _complete _approximate
       zstyle ':completion:*' menu select
       zstyle ':completion:*:manuals'    separate-sections true
@@ -907,19 +931,12 @@ in {
       zstyle ':completion:*' use-cache on
       zstyle ':completion:*' cache-path ~/.zsh/cache
       zstyle ':completion:*:(all-|)files' ignored-patterns '(|*/)CVS'
-      zstyle ':completion:*:cd:*' ignored-patterns '(*/)#CVS'
+      #zstyle ':completion:*:cd:*' ignored-patterns '(*/)#CVS'
       zstyle ':completion:*:*:kill:*' menu yes select
       zstyle ':completion:*:kill:*'   force-list always
-      # TODO: need to look this up as below is broken
       zstyle -e ':completion:*:default' list-colors 'reply=("$''${PREFIX:+=(#bi)($PREFIX:t)(?)*==34=34}:''${(s.:.)LS_COLORS}")'
 
-      # taskwarrior
-      zstyle ':completion:*:*:task:*' verbose yes
-      zstyle ':completion:*:*:task:*:descriptions' format '%U%B%d%b%u'
-      zstyle ':completion:*:*:task:*' group-name '\'
-
       zmodload -a colors
-      # TODO: need to look this up as below is broken
       zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS} # complete with same colors as ls
       zstyle ':completion:*:*:*:*:hosts' list-colors '=*=1;36' # bold cyan
       zstyle ':completion:*:*:*:*:users' list-colors '=*=36;40' # dark cyan on black
@@ -931,19 +948,20 @@ in {
 
       # Customize fzf plugin to use fd
       # Should default to ignore anything in ~/.gitignore
-      #export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+      #export FZF_DEFAULT_COMMAND='\fd --type f --hidden --exclude .git'
       # Use fd (https://github.com/sharkdp/fd) instead of the default find
       # command for listing path candidates.
       # - The first argument to the function ($1) is the base path to start traversal
       # - See the source code (completion.{bash,zsh}) for the details.
-      #_fzf_compgen_path() {
-        #\fd --hidden --follow . "$1"
-      #}
+      # _fzf_compgen_path() {
+      #   \fd --type d --hidden --follow --max-depth 3 --exclude .git . "$1"
+      # }
 
       # Use fd to generate the list for directory completion
-      #_fzf_compgen_dir() {
-        #\fd --type d --hidden --follow . "$1"
-      #}
+      # _fzf_compgen_dir() {
+      #   \fd --type d --hidden --follow --max-depth 3 --exclude .git . "$1"
+      # }
+
 
       # Per https://github.com/junegunn/fzf/wiki/Configuring-fuzzy-completion
       # Since fzf init comes before this, and we setopt vi, we need to reassign:
@@ -970,21 +988,6 @@ in {
         };
       }
     ];
-    # oh-my-zsh.enable = true;
-    # oh-my-zsh.plugins = [
-    #   "sudo"
-    #   "gitfast"
-    #   "vim-interaction"
-    #   "docker"
-    #   "taskwarrior"
-    #   "tmux"
-    #   "fzf"
-    #   "cargo"
-    #   "brew"
-    #   "ripgrep"
-    #   "vi-mode"
-    #   "zoxide"
-    # ];
     shellAliases =
       {
         ls = "ls --color=auto -F";
@@ -1004,6 +1007,9 @@ in {
         # search for a note and with ctrl-n, create it if not found
         # add subdir as needed like "n meetings" or "n wiki"
         n = "zk edit --interactive";
+        ".." = "cd ..";
+        "..." = "cd ../..";
+        "...." = "cd ../../..";
       }
       // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
         # Figure out the uniform type identifiers and uri schemes of a file (must specify the file)
@@ -1011,11 +1017,11 @@ in {
         checktype = "mdls -name kMDItemContentType -name kMDItemContentTypeTree -name kMDItemKind";
         # dwupdate = "pushd ~/.config/nixpkgs ; nix flake update ; /opt/homebrew/bin/brew update; popd ; dwswitch ; /opt/homebrew/bin/brew upgrade ; /opt/homebrew/bin/brew upgrade --cask --greedy; dwshowupdates; popd";
         # brew update should no longer be needed; and brew upgrade should just happen, I think, but I might need to specify greedy per package
-        dwupdate = "pushd ~/.config/nixpkgs ; nix flake update ; popd ; dwswitch ; /opt/homebrew/bin/brew upgrade ; /opt/homebrew/bin/brew upgrade --cask --greedy; dwshowupdates; popd";
+        dwupdate = "pushd ~/.config/nixpkgs ; nix flake update ; popd ; dwswitch ; dwshowupdates; popd";
         dwswitch = "pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
         dwswitchx = "pushd ~; darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
         dwclean = "pushd ~; sudo nix-env --delete-generations +7 --profile /nix/var/nix/profiles/system; sudo nix-collect-garbage --delete-older-than 30d ; nix store optimise ; popd";
-        dwupcheck = "pushd ~/.config/nixpkgs ; nix flake update ; darwin-rebuild build --flake ~/.config/nixpkgs/.#$(hostname -s) && nix store diff-closures /nix/var/nix/profiles/system ~/.config/nixpkgs/result; brew update >& /dev/null && brew upgrade -n -g; popd"; # todo: prefer nvd?
+        dwupcheck = "pushd ~/.config/nixpkgs ; nix flake update ; darwin-rebuild build --flake ~/.config/nixpkgs/.#$(hostname -s) && nix store diff-closures /nix/var/nix/profiles/system ~/.config/nixpkgs/result; popd"; # todo: prefer nvd?
         # i use the zsh shell out in case anyone blindly copies this into their bash or fish profile since syntax is zsh specific
         dwshowupdates = ''
           zsh -c "nix store diff-closures /nix/var/nix/profiles/system-*-link(om[2]) /nix/var/nix/profiles/system-*-link(om[1])"'';
@@ -1028,7 +1034,7 @@ in {
       };
   };
 
-  programs.eza.enable = true;
+  programs.eza.enable = true; # replacement for "exa" which is now archived
   /*
   programs.pistol = {
     # I've gone back to my pv.sh script for now
@@ -1299,6 +1305,7 @@ in {
         Downloads = " ";
         Music = " ";
         Pictures = " ";
+        "Library/Containers/co.noteplan.NotePlan3/Data/Library/Application Support/co.noteplan.NotePlan3" = "Notes";
       };
       package.disabled = true;
       package.format = "version [$version](bold green) ";

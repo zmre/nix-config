@@ -22,7 +22,7 @@
     };
     # list of acceptable shells in /etc/shells
     shells = with pkgs.stable; [bash zsh];
-    pathsToLink = ["/libexec"];
+    pathsToLink = ["/libexec" "/share/zsh"];
   };
 
   # Fixes error about home dir being /var/empty
