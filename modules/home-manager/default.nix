@@ -289,6 +289,7 @@ in {
         Google.DateFormat = NO
         Google.Ellipses = NO
         proselint.Typography = NO
+        proselint.DateCase = NO
         Vale.Spelling = NO
       '';
       ".config/kitty/startup.session".text = ''
