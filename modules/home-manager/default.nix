@@ -308,7 +308,7 @@ in {
         launch zsh -i -c "watch -n 120 -c \"/opt/homebrew/bin/icalBuddy -tf %H:%M -n -f -eep notes -ec 'Outschool Schedule,HomeAW,Contacts,Birthdays,Found in Natural Language' eventsToday\""
         launch zsh -i -c hackernews_tui
         new_tab svelte
-        cd ~/src/icl/website/website-svelte-branch
+        cd ~/src/icl/website.worktree
       '';
     }
     // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
@@ -991,11 +991,12 @@ in {
     ];
     shellAliases =
       {
+        c = "clear";
         ls = "ls --color=auto -F";
-        l = "eza --icons --git-ignore --git -F --extended";
+        l = "eza --icons --git-ignore --git -F";
         ll = "eza --icons --git-ignore --git -F --extended -l";
-        lt = "eza --icons --git-ignore --git -F --extended -T";
-        llt = "eza --icons --git-ignore --git -F --extended -l -T";
+        lt = "eza --icons --git-ignore --git -F -T";
+        llt = "eza --icons --git-ignore --git -F -l -T";
         fd = "\\fd -H -t d"; # default search directories
         f = "\\fd -H"; # default search this dir for files ignoring .gitignore etc
         lf = "~/.config/lf/lfimg";
