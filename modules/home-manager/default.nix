@@ -1019,8 +1019,10 @@ in {
         checktype = "mdls -name kMDItemContentType -name kMDItemContentTypeTree -name kMDItemKind";
         # dwupdate = "pushd ~/.config/nixpkgs ; nix flake update ; /opt/homebrew/bin/brew update; popd ; dwswitch ; /opt/homebrew/bin/brew upgrade ; /opt/homebrew/bin/brew upgrade --cask --greedy; dwshowupdates; popd";
         # brew update should no longer be needed; and brew upgrade should just happen, I think, but I might need to specify greedy per package
-        dwupdate = "pushd ~/.config/nixpkgs ; nix flake update ; popd ; dwswitch ; dwshowupdates; popd";
-        dwswitch = "pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
+        dwupdate = "pushd ~/.config/nixpkgs ; nix flake update ; popd ; dwswitchx ; dwshowupdates; popd";
+        # Cachix on my whole nix store is burning unnecessary bandwidth and time -- slowing things down rather than speeding up
+        # From now on will just use for select personal flakes and things
+        #dwswitch = "pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
         dwswitchx = "pushd ~; darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
         dwclean = "pushd ~; sudo nix-env --delete-generations +7 --profile /nix/var/nix/profiles/system; sudo nix-collect-garbage --delete-older-than 30d ; nix store optimise ; popd";
         dwupcheck = "pushd ~/.config/nixpkgs ; nix flake update ; darwin-rebuild build --flake ~/.config/nixpkgs/.#$(hostname -s) && nix store diff-closures /nix/var/nix/profiles/system ~/.config/nixpkgs/result; popd"; # todo: prefer nvd?
@@ -1303,10 +1305,10 @@ in {
         truncate_to_repo = false;
       };
       directory.substitutions = {
-        Documents = " ";
-        Downloads = " ";
-        Music = " ";
-        Pictures = " ";
+        # Documents = " ";
+        # Downloads = " ";
+        # Music = " ";
+        # Pictures = " ";
         "Library/Containers/co.noteplan.NotePlan3/Data/Library/Application Support/co.noteplan.NotePlan3" = "Notes";
       };
       package.disabled = true;
