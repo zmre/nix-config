@@ -880,7 +880,7 @@ in {
       bindkey -v
 
       jump_key_places(){
-        cd "$(\fd . ~ ~/.config ~/src/sideprojects ~/src/icl ~/src/icl/website ~/src/personal ~/src/gh ~/Sync/Private/Finances ~/Sync/Private ~/Sync/IronCore\ Docs ~/Sync/IronCore\ Docs/Legal ~/Sync/IronCore\ Docs/Finances ~/Sync/IronCore\ Docs/Design ~/Notes ~/Notes/Notes --min-depth 1 --max-depth 1 --type d -L -E .Trash -E @Trash | fzf)"
+        cd "$(\fd . ~ ~/.config ~/src/sideprojects ~/src/icl ~/src/icl/website.worktree ~/src/personal ~/src/gh ~/Sync/Private/Finances ~/Sync/Private ~/Sync/IronCore\ Docs ~/Sync/IronCore\ Docs/Legal ~/Sync/IronCore\ Docs/Finances ~/Sync/IronCore\ Docs/Design ~/Notes ~/Notes/Notes --min-depth 1 --max-depth 1 --type d -L -E .Trash -E @Trash | fzf)"
         zle reset-prompt
       }
       zle -N jump_key_places
@@ -1005,6 +1005,7 @@ in {
         qp = ''
           qutebrowser --temp-basedir --set content.private_browsing true --set colors.tabs.bar.bg "#552222" --config-py "$HOME/.config/qutebrowser/config.py" --qt-arg name "qp,qp"'';
         calc = "kalker";
+        tailscale = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
         df = "duf";
         # search for a note and with ctrl-n, create it if not found
         # add subdir as needed like "n meetings" or "n wiki"

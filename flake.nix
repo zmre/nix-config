@@ -32,6 +32,7 @@
 
     pwnvim.url = "github:zmre/pwnvim";
     pwneovide.url = "github:zmre/pwneovide";
+    # pwneovide.inputs.pwnvim.follows = "pwnvim";
 
     ironhide.url = "github:IronCoreLabs/ironhide?ref=1.0.5";
 
