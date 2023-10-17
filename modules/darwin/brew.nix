@@ -247,7 +247,7 @@
       "Kaleidoscope" = 587512244; # GUI 3-way merge
       "Keynote" = 409183694;
       "Keyshape" = 1223341056; # animated svg editor
-      "Kindle" = 405399194;
+      "Kindle" = 302584613;
       "Microsoft Excel" = 462058435;
       "Microsoft Word" = 462054704;
       "Microsoft PowerPoint" = 462062816;
@@ -265,7 +265,7 @@
       "Tailscale" = 1475387142; # P2P mesh VPN for my devices
       "Vimari" = 1480933944;
       "Vinegar" = 1591303229;
-      "WireGuard" = 1451685025; # VPN
+      #"WireGuard" = 1451685025; # VPN -- but tailscale does it all for me now
       "Xcode" = 497799835;
       "Yubico Authenticator" = 1497506650;
     };
@@ -504,3 +504,4 @@
 #vulkan-sdk
 #wkhtmltopdf
 #zenmap
+
