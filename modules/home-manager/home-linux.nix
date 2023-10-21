@@ -691,7 +691,7 @@ in {
       # might break some sites; stops fingerprinting
       content.canvas_reading = false;
       content.webrtc_ip_handling_policy = "default-public-interface-only";
-      content.javascript.can_access_clipboard = true;
+      content.javascript.clipboard = "access";
       content.site_specific_quirks.enabled = false;
       content.headers.user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36";
       content.pdfjs = true;
