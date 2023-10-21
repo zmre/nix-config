@@ -64,9 +64,10 @@
     useDHCP = false;
     interfaces.wlan0.useDHCP = true;
 
-    # use local dns server that uses privacy preserving dns over tls
-    nameservers = ["127.0.0.1" "::1" "1.1.1.1"];
-    resolvconf.useLocalResolver = true;
+    # no longer using local dns -- tailscale settings will take
+    # over automatically and make sure all dns is safe
+    nameservers = ["1.1.1.1" "8.8.8.8"];
+    resolvconf.useLocalResolver = false;
     firewall.enable = true;
     firewall.checkReversePath = false; # disable rpfilter so wireguard works
     # Note: wireguard setup is not currently reproducible and uses network manager
