@@ -1005,7 +1005,6 @@ in {
         qp = ''
           qutebrowser --temp-basedir --set content.private_browsing true --set colors.tabs.bar.bg "#552222" --config-py "$HOME/.config/qutebrowser/config.py" --qt-arg name "qp,qp"'';
         calc = "kalker";
-        tailscale = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
         df = "duf";
         # search for a note and with ctrl-n, create it if not found
         # add subdir as needed like "n meetings" or "n wiki"
@@ -1015,6 +1014,7 @@ in {
         "...." = "cd ../../..";
       }
       // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
+        tailscale = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
         # Figure out the uniform type identifiers and uri schemes of a file (must specify the file)
         # for use in SwiftDefaultApps
         checktype = "mdls -name kMDItemContentType -name kMDItemContentTypeTree -name kMDItemKind";
