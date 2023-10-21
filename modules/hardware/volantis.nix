@@ -12,8 +12,8 @@
     kernelParams = ["mem_sleep_default=deep" "nvme.noacpi=1" "net.ifnames=0"];
     initrd.checkJournalingFS = false;
     supportedFilesystems = ["btrfs"];
-    cleanTmpDir = true;
-    tmpOnTmpfs = true;
+    tmp.cleanOnBoot = true;
+    tmp.useTmpfs = true;
   };
 
   environment.sessionVariables = {
@@ -79,7 +79,7 @@
   services.tailscale.enable =
     true; # p2p mesh vpn with my hosts -- does it override dnscrypt-proxy?
   services.dnscrypt-proxy2 = {
-    enable = true;
+    enable = false;
     settings = {
       listen_addresses = ["127.0.0.1:53"];
       ipv4_servers = true;

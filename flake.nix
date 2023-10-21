@@ -106,8 +106,6 @@
     nix-homebrew,
     ...
   }: let
-    inherit (home-manager.lib) homeManagerConfiguration;
-
     mkPkgs = system:
       import nixpkgs {
         inherit system;

@@ -35,12 +35,12 @@
 
   i18n.defaultLocale = "en_US.UTF-8";
 
-  nixpkgs.config = import ../../config.nix;
+  # nixpkgs.config = import ../../config.nix;
 
   services.locate = {
     enable = true; # periodically update locate db
     localuser = null;
-    locate = pkgs.mlocate;
+    package = pkgs.mlocate;
   };
   #services.timesyncd.enable = true;
   services.printing.enable = true; # cupsd printing
@@ -98,11 +98,11 @@
   system.stateVersion = "21.11";
 
   fonts = {
-    enableDefaultFonts = true;
+    enableDefaultPackages = true;
     fontconfig.enable = true;
     fontDir.enable = true;
     enableGhostscriptFonts = true;
-    fonts = with pkgs; [
+    packages = with pkgs; [
       powerline-fonts
       source-code-pro
       (nerdfonts.override {
