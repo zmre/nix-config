@@ -23,7 +23,8 @@ with pkgs;
         masscan
         nikto
         onesixtyone
-        nmap-graphical
+        #nmap-graphical
+        nmap
         rustscan
         snmpcheck
         sslscan
@@ -66,7 +67,6 @@ with pkgs;
         zsteg
 
         # manipulation
-        gdb
         radare2
         sqlitebrowser
         unrar
@@ -85,12 +85,16 @@ with pkgs;
         #snowman
         #valgrind
         binwalk
-        ghidra-bin # NSA's free ida-pro, basically
 
         # misc
         faraday-cli
         corkscrew # tunnel ssh through http proxies
         pwntools
+      ]
+      ++ lib.optionals (!pkgs.stdenv.isAarch64) [
+        # x86 only
+        ghidra-bin # NSA's free ida-pro, basically
+        gdb
       ]
       ++ lib.optionals (!stdenv.isDarwin) [
         # Things that only build on Linux go here
