@@ -74,7 +74,7 @@
     #youtube-dl replaced by yt-dlp
     pkgs.yt-dlp
     vulnix # check for live nix apps that are listed in NVD
-    pkgs.tickrs # track stocks
+    # pkgs.tickrs # track stocks
     #taskwarrior-tui
     aspell # spell checker
     kalker # cli calculator; alt. to bc and calc
@@ -994,6 +994,7 @@ in {
         c = "clear";
         ls = "ls --color=auto -F";
         l = "eza --icons --git-ignore --git -F";
+        la = "eza --icons --git-ignore --git -F -a";
         ll = "eza --icons --git-ignore --git -F --extended -l";
         lt = "eza --icons --git-ignore --git -F -T";
         llt = "eza --icons --git-ignore --git -F -l -T";

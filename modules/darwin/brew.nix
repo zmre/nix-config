@@ -105,7 +105,7 @@
       }
       "knockknock"
       "little-snitch"
-      "lm-studio"
+      #"lm-studio"
       "lockrattler"
       #"loopback" -- haven't been using this of late
       {
@@ -211,7 +211,7 @@
         greedy = true;
       }
       # would be better to load  hese in a security shell, but nix versions don't build on mac
-      "owasp-zap" # TODO: move to home-manager? (zap)
+      "zap" # TODO: move to home-manager? (zap)
       "burp-suite" # TODO: move to home-manager? (burpsuite)
       #"warp" # 2022-11-10 testing some crazy new rust-based terminal
       {
