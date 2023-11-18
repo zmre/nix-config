@@ -111,14 +111,14 @@
   networkPkgs = with pkgs.stable; [mtr iftop];
   guiPkgs = with pkgs;
     [
-      element-desktop
+      pkgs.element-desktop
       pkgs.pwneovide # wrapper makes a macos app for launching (and ensures it calls pwnvim)
       #dbeaver # database sql manager with er diagrams
     ]
     ++ lib.optionals pkgs.stdenv.isDarwin
     [
       colima # command line docker server replacement
-      docker
+      pkgs.stable.docker
       utm # utm is a qemu wrapper gui for mac only
     ];
 in {
@@ -241,9 +241,13 @@ in {
         ./dotfiles/terminfo/78/xterm-kitty;
       ".terminfo/x/xterm-kitty".source =
         ./dotfiles/terminfo/78/xterm-kitty;
+      ".terminfo/77/wezterm".source =
+        ./dotfiles/terminfo/77/wezterm; # fetched from https://raw.githubusercontent.com/wez/wezterm/master/termwiz/data/wezterm.terminfo
+
       ".config/lf/lfimg".source = ./dotfiles/lf/lfimg;
       ".config/lf/lf_kitty_preview".source =
         ./dotfiles/lf/lf_kitty_preview;
+
       ".config/lf/pv.sh".source = ./dotfiles/lf/pv.sh;
       ".config/lf/cls.sh".source = ./dotfiles/lf/cls.sh;
       #".config/lf/previewer.sh".source = ./dotfiles/lf/previewer.sh;
@@ -315,6 +319,13 @@ in {
       "Library/KeyBindings/DefaultKeyBinding.dict".source = ./dotfiles/DefaultKeyBinding.dict;
       # company colors -- may still need to "install" them from a color picker window
       "Library/Colors/IronCore-Branding-June-17.clr".source = ./dotfiles/IronCore-Branding-June-17.clr;
+      # Espanso config
+      "Library/Preferences/espanso/config/default.yml".text = pkgs.lib.generators.toYAML {} {
+        #search_shortcut = "off";
+        search_shortcut = "ALT+SHIFT+SPACE";
+        search_trigger = "off"; # could allow typing .shortcut to trigger menu (or whatever you specify)
+      };
+      # Espanso expansions
       "Library/Preferences/espanso/match/base.yml".text = pkgs.lib.generators.toYAML {} {
         matches = [
           {
@@ -561,25 +572,34 @@ in {
       urgency.user.tag.networking.coefficient = -10.0;
       uda.reviewed.type = "date";
       uda.reviewed.label = "Reviewed";
-      report._reviewed.description = "Tasksh review report.  Adjust the filter to your needs.";
-      report._reviewed.columns = "uuid";
-      report._reviewed.sort = "reviewed+,modified+";
-      report._reviewed.filter = "( reviewed.none: or reviewed.before:now-6days ) and ( +PENDING or +WAITING )";
+      report = {
+        _reviewed = {
+          description = "Tasksh review report.  Adjust the filter to your needs.";
+          columns = "uuid";
+          sort = "reviewed+,modified+";
+          filter = "( reviewed.none: or reviewed.before:now-6days ) and ( +PENDING or +WAITING )";
+        };
+        ready = {
+          columns = "id,start.active,depends.indicator,project,due.relative,description.desc";
+          labels = ",,Depends, Project, Due, Description";
+        };
+        minimal = {
+          columns = "id,project,description.truncated";
+          labels = " , Project, Description";
+          sort = "project+/,urgency-";
+        };
+        #if none of the tasks in a report have a particular column, it will not show in the report
+      };
       search.case.sensitive = "no";
       # Shortcuts
-      alias.dailystatus = "status:completed end.after:today all";
-      alias.punt = "modify wait:1d";
-      alias.someday = "mod +someday wait:someday";
+      alias = {
+        dailystatus = "status:completed end.after:today all";
+        punt = "modify wait:1d";
+        someday = "mod +someday wait:someday";
+      };
 
       # task ready report default with custom columns
       default.command = "ready";
-      report.ready.columns = "id,start.active,depends.indicator,project,due.relative,description.desc";
-      report.ready.labels = ",,Depends, Project, Due, Description";
-      #if none of the tasks in a report have a particular column, it will not show in the report
-
-      report.minimal.columns = "id,project,description.truncated";
-      report.minimal.labels = " , Project, Description";
-      report.minimal.sort = "project+/,urgency-";
 
       # Indicate the active task in reports
       active.indicator = ">";
@@ -1501,6 +1521,7 @@ in {
     difftastic = {
       enable = true;
       background = "dark";
+      # color = "always";
     };
     #ignores = [ ".cargo" ];
     ignores = import ./dotfiles/gitignore.nix;
@@ -1595,6 +1616,63 @@ in {
     ];
   };
 
+  # 2023-11-07 also trying wezterm, though it looks like kitty is a bit faster (which is nuts)
+  # Conclusion: I like it, but kitty has faster throughput with same features and uses 200mb
+  # instead of 300mb that wezterm uses. Leaving setup here in case I want to try again.
+  programs.wezterm = {
+    enable = false;
+    enableZshIntegration = true;
+    extraConfig = ''
+      local wezterm = require 'wezterm'
+      local act = wezterm.action
+      return {
+        use_fancy_tab_bar = true,
+        hide_tab_bar_if_only_one_tab = true,
+        --color_scheme = 'OneHalfDark',
+        color_scheme = 'OneDark (base16)',
+        font = wezterm.font 'Hasklug Nerd Font Mono',
+        term = 'wezterm',
+        window_background_opacity = 0.9,
+        font_size = 17.0,
+        key_tables = {
+          -- Defines the keys that are active in our resize-pane mode.
+          -- Since we're likely to want to make multiple adjustments,
+          -- we made the activation one_shot=false. We therefore need
+          -- to define a key assignment for getting out of this mode.
+          -- 'resize_pane' here corresponds to the name="resize_pane" in
+          -- the key assignments above.
+          resize_pane = {
+            { key = 'LeftArrow',  action = act.AdjustPaneSize { 'Left', 1 } },
+            { key = 'h',          action = act.AdjustPaneSize { 'Left', 1 } },
+            { key = 'RightArrow', action = act.AdjustPaneSize { 'Right', 1 } },
+            { key = 'l',          action = act.AdjustPaneSize { 'Right', 1 } },
+            { key = 'UpArrow',    action = act.AdjustPaneSize { 'Up', 1 } },
+            { key = 'k',          action = act.AdjustPaneSize { 'Up', 1 } },
+            { key = 'DownArrow',  action = act.AdjustPaneSize { 'Down', 1 } },
+            { key = 'j',          action = act.AdjustPaneSize { 'Down', 1 } },
+
+            -- Cancel the mode by pressing escape
+            { key = 'Escape',     action = 'PopKeyTable' },
+          },
+
+          -- Defines the keys that are active in our activate-pane mode.
+          -- 'activate_pane' here corresponds to the name="activate_pane" in
+          -- the key assignments above.
+          activate_pane = {
+            { key = 'LeftArrow',  action = act.ActivatePaneDirection 'Left' },
+            { key = 'h',          action = act.ActivatePaneDirection 'Left' },
+            { key = 'RightArrow', action = act.ActivatePaneDirection 'Right' },
+            { key = 'l',          action = act.ActivatePaneDirection 'Right' },
+            { key = 'UpArrow',    action = act.ActivatePaneDirection 'Up' },
+            { key = 'k',          action = act.ActivatePaneDirection 'Up' },
+            { key = 'DownArrow',  action = act.ActivatePaneDirection 'Down' },
+            { key = 'j',          action = act.ActivatePaneDirection 'Down' },
+          },
+        },
+      }
+    '';
+  };
+
   # 2022-11-06 going to try kitty for a bit
   programs.kitty = {
     enable = true;
@@ -1608,10 +1686,31 @@ in {
       # \x02 is ctrl-b so sequence below is ctrl-b, h
       "cmd+[" = "send_text all \\x02h";
       "cmd+]" = "send_text all \\x02l";
+      "ctrl+shift+b" = "show_scrollback";
+      # "ctrl+shift+b" = "launch --stdin-source=@screen_scrollback --stdin-add-formatting --type=overlay page -WO -q 90000";
       "ctrl+shift+h" = "neighboring_window left";
       "ctrl+shift+j" = "neighboring_window down";
       "ctrl+shift+k" = "neighboring_window up";
       "ctrl+shift+l" = "neighboring_window right";
+      "ctrl+shift+m" = "next_layout";
+      "cmd+1" = "goto_tab 1";
+      "cmd+2" = "goto_tab 2";
+      "cmd+3" = "goto_tab 3";
+      "cmd+4" = "goto_tab 4";
+      "cmd+5" = "goto_tab 5";
+      "cmd+6" = "goto_tab 6";
+      "cmd+7" = "goto_tab 7";
+      "cmd+8" = "goto_tab 8";
+      "cmd+9" = "goto_tab 9";
+      "cmd+alt+1" = "first_window";
+      "cmd+alt+2" = "second_window";
+      "cmd+alt+3" = "third_window";
+      "cmd+alt+4" = "fourth_window";
+      "cmd+alt+5" = "fifth_window";
+      "cmd+alt+6" = "sixth_window";
+      "cmd+alt+7" = "seventh_window";
+      "cmd+alt+8" = "eighth_window";
+      "cmd+alt+9" = "ninth_window";
     };
     font = {
       name = "Hasklug Nerd Font Mono Medium";
@@ -1628,6 +1727,11 @@ in {
     darwinLaunchOptions = ["--single-instance"];
     settings = {
       scrollback_lines = 10000;
+      # scrollback_pager = "nvim -u NONE -R -M -c 'lua require(\"pwnvim.kitty+page\")(INPUT_LINE_NUMBER, CURSOR_LINE, CURSOR_COLUMN)' -";
+      # scrollback_pager = "page -WO -q 90000";
+      # map f1
+      # scrollback_pager = "nvim -R -M -";
+      scrollback_pager = ''nvim -R -c "set norelativenumber nonumber nolist signcolumn=no showtabline=0 foldcolumn=0" -c "autocmd TermOpen * normal G" -c "autocmd TermClose * :!rm /tmp/kitty_scrollback_buffer" -c "silent! write /tmp/kitty_scrollback_buffer | terminal cat /tmp/kitty_scrollback_buffer -"'';
       enable_audio_bell = false;
       update_check_interval = 0;
       macos_option_as_alt = "both";

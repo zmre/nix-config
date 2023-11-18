@@ -21,7 +21,7 @@
         src = inputs.enola;
         # just have to manually update this each time it fails, I guess
         # vendorSha256 = prev.lib.fakeSha256;
-        vendorSha256 = "sha256-UA4AoO9yDgufZrABJImo+580aaye4jp7qRevj3Efkrg=";
+        vendorHash = "sha256-UA4AoO9yDgufZrABJImo+580aaye4jp7qRevj3Efkrg=";
       };
     })
     (final: prev: {
