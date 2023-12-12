@@ -18,6 +18,12 @@
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-23.05";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; # defaulting to unstable these days
 
+    flake-compat = {
+      # Needed along with default.nix in root to allow nixd lsp to do completions
+      # See: https://github.com/nix-community/nixd/tree/main/docs/examples/flake
+      url = "github:inclyc/flake-compat";
+      flake = false;
+    };
     darwin.url = "github:lnl7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
     home-manager.url = "github:nix-community/home-manager/master";

@@ -111,7 +111,7 @@
   networkPkgs = with pkgs.stable; [mtr iftop];
   guiPkgs = with pkgs;
     [
-      pkgs.element-desktop
+      # pkgs.element-desktop
       pkgs.pwneovide # wrapper makes a macos app for launching (and ensures it calls pwnvim)
       #dbeaver # database sql manager with er diagrams
     ]
@@ -624,7 +624,13 @@ in {
       redhat.vscode-yaml
       jnoortheen.nix-ide
       vspacecode.whichkey # ?
-      bungcip.better-toml
+      tamasfe.even-better-toml
+      ms-python.python
+      ms-toolsai.jupyter
+      ms-toolsai.jupyter-keymap
+      ms-toolsai.jupyter-renderers
+      ms-toolsai.vscode-jupyter-cell-tags
+      ms-toolsai.vscode-jupyter-slideshow
       esbenp.prettier-vscode
       timonwong.shellcheck
       matklad.rust-analyzer
@@ -1137,11 +1143,11 @@ in {
 
       # Initialize hook to add new entries to the database.
       if (not ($env | default false __zoxide_hooked | get __zoxide_hooked)) {
-        let-env __zoxide_hooked = true
-        let-env config = ($env | default {} config).config
-        let-env config = ($env.config | default {} hooks)
-        let-env config = ($env.config | update hooks ($env.config.hooks | default [] pre_prompt))
-        let-env config = ($env.config | update hooks.pre_prompt ($env.config.hooks.pre_prompt | append {||
+        $env.__zoxide_hooked = true
+        $env.config = ($env | default {} config).config
+        $env.config = ($env.config | default {} hooks)
+        $env.config = ($env.config | update hooks ($env.config.hooks | default [] pre_prompt))
+        $env.config = ($env.config | update hooks.pre_prompt ($env.config.hooks.pre_prompt | append {||
           zoxide add -- $env.PWD
         }))
       }
@@ -1166,18 +1172,18 @@ in {
       alias z = __zoxide_z
       alias zi = __zoxide_zi
 
-      let-env STARSHIP_SHELL = "nu"
-      let-env STARSHIP_SESSION_KEY = (random chars -l 16)
-      let-env PROMPT_MULTILINE_INDICATOR = (^starship prompt --continuation)
-      let-env PROMPT_INDICATOR = ""
-      let-env PROMPT_INDICATOR_VI_INSERT = {|| "" }
-      let-env PROMPT_INDICATOR_VI_NORMAL = {|| "〉" }
-      let-env PROMPT_COMMAND = {||
+      $env.STARSHIP_SHELL = "nu"
+      $env.STARSHIP_SESSION_KEY = (random chars -l 16)
+      $env.PROMPT_MULTILINE_INDICATOR = (^starship prompt --continuation)
+      $env.PROMPT_INDICATOR = ""
+      $env.PROMPT_INDICATOR_VI_INSERT = {|| "" }
+      $env.PROMPT_INDICATOR_VI_NORMAL = {|| "〉" }
+      $env.PROMPT_COMMAND = {||
         # jobs are not supported
         let width = (term size).columns
         ^starship prompt $"--cmd-duration=($env.CMD_DURATION_MS)" $"--status=($env.LAST_EXIT_CODE)" $"--terminal-width=($width)"
       }
-      let-env PROMPT_COMMAND_RIGHT = {||
+      $env.PROMPT_COMMAND_RIGHT = {||
         let width = (term size).columns
         ^starship prompt --right $"--cmd-duration=($env.CMD_DURATION_MS)" $"--status=($env.LAST_EXIT_CODE)" $"--terminal-width=($width)"
       }
@@ -1190,12 +1196,12 @@ in {
     envFile.text = ''
       # The prompt indicators are environmental variables that represent
       # the state of the prompt
-      #let-env PROMPT_INDICATOR = "❯ "
-      #let-env PROMPT_INDICATOR_VI_INSERT = "❯ "
-      #let-env PROMPT_INDICATOR_VI_NORMAL = "❮ "
-      #let-env PROMPT_MULTILINE_INDICATOR = ""
+      #$env.PROMPT_INDICATOR = "❯ "
+      #$env.PROMPT_INDICATOR_VI_INSERT = "❯ "
+      #$env.PROMPT_INDICATOR_VI_NORMAL = "❮ "
+      #$env.PROMPT_MULTILINE_INDICATOR = ""
 
-      let-env EDITOR = "nvim"
+      $env.EDITOR = "nvim"
 
       zoxide init nushell --hook prompt | save -f ~/.zoxide.nu
 

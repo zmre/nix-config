@@ -47,7 +47,10 @@
         name = "brave-browser"; # TODO: move to home-manager when it builds
         greedy = true;
       }
-      #"canon-eos-utility"
+      {
+        name = "canon-eos-utility";
+        greedy = true;
+      }
       #"canon-eos-webcam-utility"
       "choosy" # multi-browser url launch selector; see also https://github.com/johnste/finicky
       {
@@ -65,6 +68,10 @@
       #"docker" # removed in favor of colima + docker cli
       {
         name = "dropbox";
+        greedy = true;
+      }
+      {
+        name = "elgato-stream-deck";
         greedy = true;
       }
       # TODO: move espanso to home-manager
@@ -270,16 +277,17 @@
       "Yubico Authenticator" = 1497506650;
     };
     brews = [
-      "brightness"
-      "ciphey"
-      "ca-certificates"
-      "ddcctl"
       "ansiweather"
+      "brightness"
+      "ca-certificates"
+      "choose-gui"
+      "ciphey"
+      "ddcctl"
       "ical-buddy"
       # would rather load these as part of a security shell, but...
-      "p0f" # the nix one only builds on linux
       "hashcat" # the nix one only builds on linux
       "hydra" # the nix one only builds on linux
+      "p0f" # the nix one only builds on linux
     ];
   };
 }

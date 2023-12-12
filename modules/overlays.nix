@@ -25,6 +25,21 @@
       };
     })
     (final: prev: {
+      zsh-fzf-tab = prev.zsh-fzf-tab.overrideAttrs (
+        oldAttrs: let
+          INSTALL_PATH = "${placeholder "out"}/share/fzf-tab";
+        in {
+          installPhase = ''
+            mkdir -p ${INSTALL_PATH}
+            cp -r lib ${INSTALL_PATH}/lib
+            install -D fzf-tab.zsh ${INSTALL_PATH}/fzf-tab.zsh
+            install -D fzf-tab.plugin.zsh ${INSTALL_PATH}/fzf-tab.plugin.zsh
+            # install -D modules/Src/aloxaf/fzftab.so ${INSTALL_PATH}/modules/Src/aloxaf/fzftab.so
+          '';
+        }
+      );
+    })
+    (final: prev: {
       kubernetes-yaml-formatter = prev.vscode-utils.buildVscodeExtension {
         name = "kubernetes-yaml-formatter";
         src = inputs.kubernetes-yaml-formatter;

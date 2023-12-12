@@ -19,7 +19,7 @@
     # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
 
     # packages installed in system profile
-    systemPackages = with pkgs; [git curl coreutils gnused pam-reattach];
+    systemPackages = with pkgs; [git curl coreutils gnused pam-reattach zoxide];
 
     # Fix "Too many open files" problems. Based on this:
     # https://medium.com/mindful-technology/too-many-open-files-limit-ulimit-on-mac-os-x-add0f1bfddde
