@@ -106,6 +106,7 @@
         name = "istat-menus";
         greedy = true;
       }
+      "keycastr"
       {
         name = "kopiaui"; # ui for kopia dedupe backup
         greedy = true;
