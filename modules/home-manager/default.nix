@@ -619,6 +619,7 @@ in {
       true; # to allow vscode to install extensions not available via nix
     # package = pkgs.vscode-fhs; # or pkgs.vscodium or pkgs.vscode-with-extensions
     extensions = with pkgs.vscode-extensions; [
+      bbenoist.nix
       scala-lang.scala
       svelte.svelte-vscode
       redhat.vscode-yaml
