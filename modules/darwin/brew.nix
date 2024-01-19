@@ -62,6 +62,10 @@
         greedy = true;
       }
       {
+        name = "descript";
+        greedy = true;
+      }
+      {
         name = "discord";
         greedy = true;
       }
