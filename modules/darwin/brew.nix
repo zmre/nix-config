@@ -267,7 +267,7 @@
       #"NextDNS" = 1464122853;
       "NotePlan 3" = 1505432629;
       "PCalc" = 403504866;
-      "PeakHour" = 1241445112;
+      "PeakHour" = 1560576252;
       "SQLPro Studio" = 985614903;
       "Save to Reader" = 1640236961; # readwise reader (my pocket replacement)
       "Scrivener" = 1310686187;

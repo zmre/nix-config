@@ -1028,8 +1028,7 @@ in {
         fd = "\\fd -H -t d"; # default search directories
         f = "\\fd -H"; # default search this dir for files ignoring .gitignore etc
         lf = "~/.config/lf/lfimg";
-        nixosedit = "nvim $(realpath /etc/nixos/configuration.nix) ; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.#";
-        nixedit = "nvim ~/.config/nixpkgs/home.nix ; sudo nixos-rebuild switch --flake ~/.config/nixpkgs/.#";
+        nixflakeupdate1 = "nix run github:vimjoyer/nix-update-input"; # does `nix flake lock --update-input` with relevant fuzzy complete. Though actually, our tab completion does the same
         qp = ''
           qutebrowser --temp-basedir --set content.private_browsing true --set colors.tabs.bar.bg "#552222" --config-py "$HOME/.config/qutebrowser/config.py" --qt-arg name "qp,qp"'';
         calc = "kalker";

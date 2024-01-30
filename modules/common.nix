@@ -71,5 +71,13 @@
       automatic = true;
       options = "--delete-older-than 30d";
     };
+    # From https://nixos.wiki/wiki/Flakes for pinning registry to system packages
+    # For reasons I don't understand, the lines below are breaking the build with `error: 'builtins.storePath' is not allowed in pure evaluation mode`
+    #registry = {
+    #  nixpkgs.to = {
+    #    type = "path";
+    #    path = pkgs.path;
+    #  };
+    #};
   };
 }
