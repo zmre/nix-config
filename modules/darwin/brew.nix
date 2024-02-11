@@ -21,7 +21,7 @@
       "homebrew/core"
       "homebrew/bundle"
       "homebrew/cask"
-      "homebrew/cask-fonts"
+      # "homebrew/cask-fonts"
       "homebrew/services"
       #"koekeishiya/formulae"
       "homebrew/cask-drivers" # for flipper zero

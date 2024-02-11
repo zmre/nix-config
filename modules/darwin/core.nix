@@ -55,52 +55,62 @@
   };
 
   # Many of these taken from https://github.com/mathiasbynens/dotfiles/blob/master/.macos
-  system.activationScripts.extraActivation.enable = true;
-  system.activationScripts.extraActivation.text = ''
-    echo "Activating extra preferences..."
-    # Close any open System Preferences panes, to prevent them from overriding
-    # settings we’re about to change
-    osascript -e 'tell application "System Preferences" to quit'
+  system = {
+    activationScripts = {
+      extraActivation = {
+        enable = true;
+        text = ''
+          echo "Activating extra preferences..."
+          # Close any open System Preferences panes, to prevent them from overriding
+          # settings we’re about to change
+          osascript -e 'tell application "System Preferences" to quit'
 
-    # Show the ~/Library folder
-    #chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
+          # Show the ~/Library folder
+          #chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
 
-    # Add the keyboard shortcut ⌘ + Enter to send an email in Mail.app
-    defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Send" "@\U21a9"
+          # Add the keyboard shortcut ⌘ + Enter to send an email in Mail.app
+          defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Send" "@\U21a9"
 
-    # Display emails in threaded mode, sorted by date (newest at the top)
-    defaults write com.apple.mail DraftsViewerAttributes -dict-add "DisplayInThreadedMode" -string "yes"
-    defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortedDescending" -string "no"
-    defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortOrder" -string "received-date"
+          # Display emails in threaded mode, sorted by date (newest at the top)
+          defaults write com.apple.mail DraftsViewerAttributes -dict-add "DisplayInThreadedMode" -string "yes"
+          defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortedDescending" -string "no"
+          defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortOrder" -string "received-date"
 
-    defaults write com.apple.spotlight orderedItems -array \
-    	'{"enabled" = 1;"name" = "APPLICATIONS";}' \
-    	'{"enabled" = 1;"name" = "DIRECTORIES";}' \
-    	'{"enabled" = 1;"name" = "PDF";}' \
-    	'{"enabled" = 1;"name" = "DOCUMENTS";}' \
-    	'{"enabled" = 1;"name" = "PRESENTATIONS";}' \
-    	'{"enabled" = 1;"name" = "SPREADSHEETS";}' \
-    	'{"enabled" = 1;"name" = "MENU_OTHER";}' \
-    	'{"enabled" = 1;"name" = "CONTACT";}' \
-    	'{"enabled" = 1;"name" = "IMAGES";}' \
-    	'{"enabled" = 1;"name" = "MESSAGES";}' \
-    	'{"enabled" = 1;"name" = "SYSTEM_PREFS";}' \
-    	'{"enabled" = 1;"name" = "EVENT_TODO";}' \
-    	'{"enabled" = 1;"name" = "MENU_CONVERSION";}' \
-    	'{"enabled" = 1;"name" = "MENU_EXPRESSION";}' \
-    	'{"enabled" = 0;"name" = "FONTS";}' \
-    	'{"enabled" = 0;"name" = "BOOKMARKS";}' \
-    	'{"enabled" = 0;"name" = "MUSIC";}' \
-    	'{"enabled" = 0;"name" = "MOVIES";}' \
-    	'{"enabled" = 0;"name" = "SOURCE";}' \
-    	'{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
-    	'{"enabled" = 0;"name" = "MENU_WEBSEARCH";}' \
-    	'{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}'
-  '';
-  system.activationScripts.postUserActivation.text = ''
-    # Following line should allow us to avoid a logout/login cycle
-    /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
-  '';
+          defaults write com.apple.spotlight orderedItems -array \
+            '{"enabled" = 1;"name" = "APPLICATIONS";}' \
+            '{"enabled" = 1;"name" = "DIRECTORIES";}' \
+            '{"enabled" = 1;"name" = "PDF";}' \
+            '{"enabled" = 1;"name" = "DOCUMENTS";}' \
+            '{"enabled" = 1;"name" = "PRESENTATIONS";}' \
+            '{"enabled" = 1;"name" = "SPREADSHEETS";}' \
+            '{"enabled" = 1;"name" = "MENU_OTHER";}' \
+            '{"enabled" = 1;"name" = "CONTACT";}' \
+            '{"enabled" = 1;"name" = "IMAGES";}' \
+            '{"enabled" = 1;"name" = "MESSAGES";}' \
+            '{"enabled" = 1;"name" = "SYSTEM_PREFS";}' \
+            '{"enabled" = 1;"name" = "EVENT_TODO";}' \
+            '{"enabled" = 1;"name" = "MENU_CONVERSION";}' \
+            '{"enabled" = 1;"name" = "MENU_EXPRESSION";}' \
+            '{"enabled" = 0;"name" = "FONTS";}' \
+            '{"enabled" = 0;"name" = "BOOKMARKS";}' \
+            '{"enabled" = 0;"name" = "MUSIC";}' \
+            '{"enabled" = 0;"name" = "MOVIES";}' \
+            '{"enabled" = 0;"name" = "SOURCE";}' \
+            '{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
+            '{"enabled" = 0;"name" = "MENU_WEBSEARCH";}' \
+            '{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}'
+        '';
+      };
+      postUserActivation.text = ''
+        # Following line should allow us to avoid a logout/login cycle
+        /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+      '';
+    };
+    keyboard = {
+      enableKeyMapping = true;
+      remapCapsLockToEscape = true;
+    };
+  };
 
   documentation.enable = true;
 
@@ -115,16 +125,12 @@
   #   arguments = [ "-config" "f73bff" ];
   # };
 
-  system.keyboard = {
-    enableKeyMapping = true;
-    remapCapsLockToEscape = true;
-  };
-
   fonts.fontDir.enable =
     true; # if this is true, manually installed system fonts will be deleted!
   fonts.fonts = with pkgs; [
     # powerline-fonts
     # source-code-pro
+    roboto-slab
     source-sans-pro
     (nerdfonts.override {
       # holy hell it can take a long time to install everything; strip down
@@ -147,10 +153,12 @@
     noto-fonts
     vistafonts # needed for msoffice
   ];
-  nix.nixPath = ["darwin=/etc/${config.environment.etc.darwin.target}"];
-  nix.extraOptions = ''
-    extra-platforms = x86_64-darwin aarch64-darwin
-  '';
+  nix = {
+    nixPath = ["darwin=/etc/${config.environment.etc.darwin.target}"];
+    extraOptions = ''
+      extra-platforms = x86_64-darwin aarch64-darwin
+    '';
+  };
 
   # auto manage nixbld users with nix darwin
   nix.configureBuildUsers = true;
