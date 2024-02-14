@@ -159,7 +159,7 @@ in {
     COLORTERM = "truecolor";
     FZF_CTRL_R_OPTS = "--sort --exact";
     BROWSER = "qutebrowser";
-    TERMINAL = "alacritty";
+    TERMINAL = "kitty";
     HOMEBREW_NO_AUTO_UPDATE = 1;
     #LIBVA_DRIVER_NAME="iHD";
     ZK_NOTEBOOK_DIR =
@@ -1781,9 +1781,9 @@ in {
     # extraConfig = "\n";
   };
   programs.alacritty = {
-    enable = true;
-    package =
-      pkgs.alacritty; # switching to unstable so i get 0.11 with undercurl support
+    enable = false;
+    #package =
+    #pkgs.alacritty; # switching to unstable so i get 0.11 with undercurl support
     settings = {
       window.decorations = "full";
       window.dynamic_title = true;
