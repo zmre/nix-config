@@ -84,6 +84,10 @@
         name = "firefox"; # TODO: firefox build is broken on ARM; check to see if fixed
         greedy = true;
       }
+      {
+        name = "focusrite-control-2";
+        greedy = true;
+      }
       "freetube" # trying out private youtube browsing after reading about how how toxic their algo is
       {
         name = "fork";
@@ -518,3 +522,4 @@
 #vulkan-sdk
 #wkhtmltopdf
 #zenmap
+

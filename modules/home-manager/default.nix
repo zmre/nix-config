@@ -16,7 +16,7 @@
     duf # df alternative showing free disk space
     fswatch
     tree
-    chkrootkit
+    #chkrootkit # build fail 2024-02-27
 
     # compression
     atool
@@ -59,7 +59,7 @@
     #bmon # bandwidth monitor by interface
     static-web-server # serve local static files
     aria # cli downloader
-    ncftp
+    # ncftp
     hostname
     trippy # mtr alternative
     xh # rust version of httpie / better curl
@@ -101,7 +101,7 @@
     pkgs.nps # quick nix packages search
     gnugrep
     pkgs.enola # sherlock-like tool
-    zsh-fzf-tab
+    #zsh-fzf-tab # build fail 2024-02-27
 
     #pkgs.qutebrowser
   ];
@@ -800,7 +800,7 @@ in {
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
-    tmux.enableShellIntegration = true;
+    tmux.enableShellIntegration = false;
     defaultCommand = "\fd --type f --hidden --exclude .git";
     fileWidgetCommand = "\fd --exclude .git --type f"; # for when ctrl-t is pressed
     changeDirWidgetCommand = "\fd --type d --hidden --follow --max-depth 3 --exclude .git";
@@ -878,8 +878,9 @@ in {
       # if [[ -r "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh" ]]; then
         # source "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh"
       # fi
-      source  ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh
     '';
+    #       source  ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh ## disabled 2024-02-27 but belongs in initExtraFirst
+
     #initExtraBeforeCompInit = "";
     completionInit = ''
       # only update compinit once each day
@@ -898,9 +899,9 @@ in {
       # set list-colors to enable filename colorizing
       zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
       # preview directory's content with exa when completing cd
-      zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+      #zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
       # switch group using `,` and `.`
-      zstyle ':fzf-tab:*' switch-group ',' '.'
+      #zstyle ':fzf-tab:*' switch-group ',' '.'
     '';
     initExtra = ''
       set -o vi
@@ -993,7 +994,7 @@ in {
 
       # Per https://github.com/junegunn/fzf/wiki/Configuring-fuzzy-completion
       # Since fzf init comes before this, and we setopt vi, we need to reassign:
-      bindkey '^I' fzf-completion
+      #bindkey '^I' fzf-completion
 
       # Needed for lf to be pretty
       . ~/.config/lf/lficons.sh
