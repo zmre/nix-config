@@ -25,7 +25,7 @@
       "homebrew/services"
       #"koekeishiya/formulae"
       "homebrew/cask-drivers" # for flipper zero
-      "fujiapple852/trippy"
+      # "fujiapple852/trippy"
     ];
 
     casks = [

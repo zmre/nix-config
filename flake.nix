@@ -90,14 +90,14 @@
     homebrew-cask.flake = false;
     homebrew-bundle.url = "github:homebrew/homebrew-bundle";
     homebrew-bundle.flake = false;
-    homebrew-cask-fonts.url = "github:homebrew/homebrew-cask-fonts";
-    homebrew-cask-fonts.flake = false;
+    # homebrew-cask-fonts.url = "github:homebrew/homebrew-cask-fonts";
+    # homebrew-cask-fonts.flake = false;
     homebrew-services.url = "github:homebrew/homebrew-services";
     homebrew-services.flake = false;
     homebrew-cask-drivers.url = "github:homebrew/homebrew-cask-drivers"; # for flipper zero
     homebrew-cask-drivers.flake = false;
-    homebrew-trippy.url = "github:fujiapple852/trippy"; # for trippy ping util
-    homebrew-trippy.flake = false;
+    # homebrew-trippy.url = "github:fujiapple852/trippy"; # for trippy ping util
+    # homebrew-trippy.flake = false;
   };
 
   outputs = inputs @ {
@@ -160,11 +160,11 @@
               taps = with inputs; {
                 "homebrew/homebrew-core" = homebrew-core;
                 "homebrew/homebrew-cask" = homebrew-cask;
-                "homebrew/homebrew-cask-fonts" = homebrew-cask-fonts;
+                # "homebrew/homebrew-cask-fonts" = homebrew-cask-fonts;
                 "homebrew/homebrew-bundle" = homebrew-bundle;
                 "homebrew/homebrew-services" = homebrew-services;
                 "homebrew/homebrew-cask-drivers" = homebrew-cask-drivers;
-                "fujiapple852/trippy" = homebrew-trippy;
+                # "fujiapple852/trippy" = homebrew-trippy;
               };
 
               # With mutableTaps disabled, taps can no longer be added imperatively with `brew tap`.
