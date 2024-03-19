@@ -33,7 +33,7 @@
     jq
     lynx
     sourceHighlight # for lf preview
-    ffmpeg.bin
+    ffmpeg-full.bin
     ffmpegthumbnailer # for lf preview
     pandoc # for lf preview
     imagemagick # for lf preview
@@ -851,7 +851,7 @@ in {
   programs.zsh = {
     enable = true;
     enableCompletion = true;
-    enableAutosuggestions = true;
+    autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     # let's the terminal track current working dir but only builds on linux
     enableVteIntegration =
