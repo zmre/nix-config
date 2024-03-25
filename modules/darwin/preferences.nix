@@ -67,6 +67,19 @@ _: {
       show-process-indicators = true;
       orientation = "bottom";
       mru-spaces = false;
+      # Hot corners
+      # Possible values:
+      #  0: no-op
+      #  2: Mission Control
+      #  3: Show application windows
+      #  4: Desktop
+      #  5: Start screen saver
+      #  6: Disable screen saver
+      #  7: Dashboard
+      # 10: Put display to sleep
+      # 11: Launchpad
+      # 12: Notification Center
+      # 13: Lock Screen
       # mouse in top right corner will (5) start screensaver
       wvous-tr-corner = 5;
     };
@@ -119,13 +132,33 @@ _: {
       PMPrintingExpandedStateForPrint = true;
       PMPrintingExpandedStateForPrint2 = true;
     };
-    CustomSystemPreferences = {};
+    CustomSystemPreferences = {
+      #NSGlobalDomain = {
+      #NSUserKeyEquivalents = {
+      # @ is command
+      # ^ is control
+      # ~ is option
+      # $ is shift
+      # It seems this is the old place for putting global system shortcuts
+      # The new place is the inscrutable com.apple.symbolichotkeys
+      # which doesn't have nice syntax and uses numbers to represent operations
+      # Are those numbers consistent across OS versions? Who knows!
+      # Doing a `defaults read com.apple.symbolichotkeys` before and after changes
+      # and diffing them seems to be the best way to reverse engineer things
+      # and not a great option.
+      #};
+      #};
+    };
     CustomUserPreferences = {
       NSGlobalDomain = {
         # Add a context menu item for showing the Web Inspector in web views
         WebKitDeveloperExtras = true;
+        AppleMiniaturizeOnDoubleClick = false;
+        NSAutomaticTextCompletionEnabled = true;
+        "com.apple.sound.beep.flash" = false;
       };
       "com.apple.finder" = {
+        OpenWindowForNewRemovableDisk = true;
         ShowExternalHardDrivesOnDesktop = true;
         ShowHardDrivesOnDesktop = true;
         ShowMountedServersOnDesktop = true;
@@ -133,6 +166,11 @@ _: {
         _FXSortFoldersFirst = true;
         # When performing a search, search the current folder by default
         FXDefaultSearchScope = "SCcf";
+        FXInfoPanesExpanded = {
+          General = true;
+          OpenWith = true;
+          Privileges = true;
+        };
       };
       "com.apple.desktopservices" = {
         # Avoid creating .DS_Store files on network or USB volumes
@@ -179,6 +217,21 @@ _: {
       "com.apple.mail" = {
         # Disable inline attachments (just show the icons)
         DisableInlineAttachmentViewing = true;
+        ShouldShowUnreadMessagesInBold = true;
+        ShowActivity = false;
+        ShowBccHeader = true;
+        ShowCcHeader = true;
+        ShowComposeFormatInspectorBar = true;
+        NSUserKeyEquivalents = {
+          Send = "@\\U21a9";
+        };
+      };
+      "com.apple.ActivityMonitor" = {
+        OpenMainWindow = true;
+        IconType = 5; # visualize cpu in dock icon
+        ShowCategory = 0; # show all processes
+        SortColumn = "CPUUsage";
+        SortDirection = 0;
       };
       "com.apple.AdLib" = {
         allowApplePersonalizedAdvertising = false;
@@ -186,6 +239,54 @@ _: {
       "com.apple.print.PrintingPrefs" = {
         # Automatically quit printer app once the print jobs complete
         "Quit When Finished" = true;
+      };
+      # Note: this will merge (I hope) with the saved and modified plist with the shortcuts
+      "com.amethyst.Amethyst" = {
+        "enables-layout-hud" = true;
+        "enables-layout-hud-on-space-change" = false;
+        "smart-window-margins" = true;
+        "float-small-windows" = true;
+        SUEnableAutomaticChecks = false;
+        SUSendProfileInfo = false;
+        floating = [
+          {
+            id = "com.raycase.macos";
+            "window-titles" = [];
+          }
+          {
+            id = "com.apple.systempreferences";
+            "window-titles" = [];
+          }
+          {
+            id = "com.kapeli.dashdoc";
+            "window-titles" = [];
+          }
+          {
+            id = "com.markmcguill.strongbox.mac";
+            "window-titles" = [];
+          }
+          {
+            id = "com.yubico.yubioath";
+            "window-titles" = [];
+          }
+        ];
+        "window-resize-step" = 5;
+        "window-margins" = 1;
+        "window-margin-size" = 5;
+        # TODO: Amethyst uses binary blobs for keyboard shortcuts. How to capture here? And defaults read truncates...
+        "mouse-follows-focus" = false;
+        "mouse-resizes-windows" = true;
+        "follow-space-thrown-windows" = true;
+        layouts = [
+          "widescreen-tall"
+          "wide"
+          "tall"
+          "row"
+          "column"
+          "fullscreen"
+          "bsp"
+          "floating"
+        ];
       };
       "com.apple.SoftwareUpdate" = {
         AutomaticCheckEnabled = true;

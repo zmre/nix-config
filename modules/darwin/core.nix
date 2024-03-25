@@ -69,7 +69,7 @@
           #chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
 
           # Add the keyboard shortcut ⌘ + Enter to send an email in Mail.app
-          defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Send" "@\U21a9"
+          # defaults write com.apple.mail NSUserKeyEquivalents -dict-add "Send" "@\U21a9"
 
           # Display emails in threaded mode, sorted by date (newest at the top)
           defaults write com.apple.mail DraftsViewerAttributes -dict-add "DisplayInThreadedMode" -string "yes"
@@ -99,7 +99,15 @@
             '{"enabled" = 0;"name" = "MENU_DEFINITION";}' \
             '{"enabled" = 0;"name" = "MENU_WEBSEARCH";}' \
             '{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}'
+
+          echo "Turning on verbose boot startup"
+          sudo nvram boot-args="-v"
+
+          echo "Restoring system hotkeys and amethyst hotkeys"
+          defaults import com.apple.symbolichotkeys ${./plists/symbolichotkeys.plist}
+          defaults import com.amethyst.Amethyst ${./plists/amethyst.plist}
         '';
+        # to create an importable plist, see export-plists.sh
       };
       postUserActivation.text = ''
         # Following line should allow us to avoid a logout/login cycle
