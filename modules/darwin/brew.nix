@@ -290,6 +290,7 @@
       "ansiweather"
       "brightness"
       "ca-certificates"
+      "chkrootkit" # TODO: moved here 2024-03-25 since nix version is broken
       "choose-gui"
       "ciphey"
       "ddcctl"
