@@ -76,6 +76,9 @@
           defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortedDescending" -string "no"
           defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortOrder" -string "received-date"
 
+          # Doesn't seem to matter in the global domain so trying this
+          defaults write "/Library/Preferences/com.apple.SoftwareUpdate" ScheduleFrequency 1
+
           defaults write com.apple.spotlight orderedItems -array \
             '{"enabled" = 1;"name" = "APPLICATIONS";}' \
             '{"enabled" = 1;"name" = "DIRECTORIES";}' \
