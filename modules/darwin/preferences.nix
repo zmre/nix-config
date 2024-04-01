@@ -291,11 +291,17 @@ _: {
       "com.apple.SoftwareUpdate" = {
         AutomaticCheckEnabled = true;
         # Check for software updates daily, not just once per week
+        # Except it doesn't seem to be doing this. And in some guides, it shows referencing a prefs file
+        # Going to cover my bases and add this a second time in a second place immediately below
         ScheduleFrequency = 1;
         # Download newly available updates in background
         AutomaticDownload = 1;
         # Install System data files & security updates
         CriticalUpdateInstall = 1;
+      };
+      "/Library/Preferences/com.apple.SoftwareUpdate" = {
+        # See note in previous block
+        ScheduleFrequency = 1;
       };
       "com.apple.TimeMachine".DoNotOfferNewDisksForBackup = true;
       # Prevent Photos from opening automatically when devices are plugged in
