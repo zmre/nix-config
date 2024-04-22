@@ -253,6 +253,7 @@
       "DaisyDisk" = 411643860;
       "Disk Decipher" = 516538625;
       "Disk Speed Test" = 425264550;
+      "Drafts" = 1435957248;
       "Fantastical" = 975937182; # calendar alternative
       "Forecast Bar" = 982710545;
       "Ghostery – Privacy Ad Blocker" = 1436953057;

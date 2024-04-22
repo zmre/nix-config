@@ -408,6 +408,10 @@ in {
             trigger = "p@w";
             replace = "pwalsh@well.com";
           }
+          {
+            trigger = "p@g";
+            replace = "pjwalsh@gmail.com";
+          }
           # {
           #   trigger = "--sig";
           #   replace = ''
@@ -651,12 +655,13 @@ in {
       dracula-theme.theme-dracula
       eamodio.gitlens # for git blame
       marp-team.marp-vscode # for markdown slides
-      pkgs.kubernetes-yaml-formatter # format k8s; from overlays and flake input
+      # pkgs.kubernetes-yaml-formatter # format k8s; from overlays and flake input # not building as of 2024-04-22; not sure why, no time to debug right now
       # live share not currently working via nix
       #ms-vsliveshare.vsliveshare # live share coding with others
       # wishlist
       # ardenivanov.svelte-intellisense
       # cschleiden.vscode-github-actions
+      github.vscode-github-actions
       # csstools.postcss
       # stylelint.vscode-stylelint
       # vunguyentuan.vscode-css-variables
