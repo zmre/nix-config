@@ -224,7 +224,7 @@
         modules = [
           ./modules/hardware/framework-volantis.nix
           ./modules/hardware/volantis.nix
-          nixos-hardware.nixosModules.framework
+          nixos-hardware.nixosModules.framework-11th-gen-intel
           ./modules/nixos
           sbhosts.nixosModule
           {networking.stevenBlackHosts.enable = true;}

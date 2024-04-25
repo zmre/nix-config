@@ -138,7 +138,7 @@
     enable = true;
     autorun = true;
     defaultDepth = 24;
-    xkbOptions = "caps:escape";
+    xkb.options = "caps:escape";
     # Setup a graphical login
     displayManager = {
       lightdm.enable = true;
