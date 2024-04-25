@@ -165,7 +165,7 @@
     vistafonts # needed for msoffice
   ];
   nix = {
-    nixPath = ["darwin=/etc/${config.environment.etc.darwin.target}"];
+    nixPath = ["nixpkgs=${inputs.nixpkgs}" "darwin=/etc/${config.environment.etc.darwin.target}"];
     extraOptions = ''
       extra-platforms = x86_64-darwin aarch64-darwin
     '';
