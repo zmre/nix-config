@@ -638,7 +638,7 @@ in {
       ms-toolsai.vscode-jupyter-slideshow
       esbenp.prettier-vscode
       timonwong.shellcheck
-      matklad.rust-analyzer
+      rust-lang.rust-analyzer
       graphql.vscode-graphql
       dbaeumer.vscode-eslint
       codezombiech.gitignore
@@ -1220,8 +1220,7 @@ in {
     enable = true;
     enableNushellIntegration =
       false; # I've manually integrated because of bugs 2023-04-05
-    enableZshIntegration =
-      true; # nope. I'm happy with the smokin speed of powerlevel10k in zsh
+    enableZshIntegration = true;
     enableBashIntegration = true;
     settings = {
       format = pkgs.lib.concatStrings [
@@ -1776,8 +1775,8 @@ in {
 
       # Misc
       # nvim true-zen kitty integration requires following two settings, but I've disabled due to bugs in true-zen
-      # allow_remote_control = "socket-only";
-      # listen_on = "unix:/tmp/kitty-sock";
+      allow_remote_control = "socket-only";
+      listen_on = "unix:/tmp/kitty-sock";
       visual_bell_duration = "0.1";
       background_opacity = "0.95";
       startup_session = "~/.config/kitty/startup.session";

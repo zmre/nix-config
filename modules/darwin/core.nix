@@ -136,9 +136,7 @@
   #   arguments = [ "-config" "f73bff" ];
   # };
 
-  fonts.fontDir.enable =
-    true; # if this is true, manually installed system fonts will be deleted!
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
     # powerline-fonts
     # source-code-pro
     roboto-slab
