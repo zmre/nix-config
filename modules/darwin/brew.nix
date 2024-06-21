@@ -47,10 +47,10 @@
         name = "brave-browser"; # TODO: move to home-manager when it builds
         greedy = true;
       }
-      {
-        name = "canon-eos-utility";
-        greedy = true;
-      }
+      # {
+      #   name = "canon-eos-utility";
+      #   greedy = true;
+      # }
       #"canon-eos-webcam-utility"
       "choosy" # multi-browser url launch selector; see also https://github.com/johnste/finicky
       {
