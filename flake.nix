@@ -14,10 +14,10 @@
   };
 
   inputs = {
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
     ## TODO: not sure if it matters, but probably worth threading -darwin version through on darwin builds
-    # nixpkgs-stable.url = "github:nixos/nixpkgs/nixpkgs-24.05-darwin";
+    nixpkgs-stable-darwin.url = "github:nixos/nixpkgs/nixpkgs-24.05-darwin";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; # defaulting to unstable these days
 
     flake-compat = {
@@ -106,6 +106,7 @@
     self,
     nixpkgs,
     nixpkgs-stable,
+    nixpkgs-stable-darwin,
     nixpkgs-unstable,
     darwin,
     home-manager,
@@ -119,7 +120,7 @@
         inherit system;
         inherit
           (import ./modules/overlays.nix {
-            inherit inputs nixpkgs-unstable nixpkgs-stable;
+            inherit inputs nixpkgs-unstable nixpkgs-stable nixpkgs-stable-darwin;
           })
           overlays
           ;
@@ -143,7 +144,7 @@
         system = "aarch64-darwin";
         pkgs = mkPkgs "aarch64-darwin";
         specialArgs = {
-          inherit sbhosts inputs nixpkgs-stable nixpkgs-unstable username;
+          inherit sbhosts inputs nixpkgs-stable nixpkgs-stable-darwin nixpkgs-unstable username;
         };
         modules = [
           nix-homebrew.darwinModules.nix-homebrew # Make it so I can pin my homebrew taps and actually roll things back

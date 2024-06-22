@@ -18,7 +18,10 @@
     etc = {
       home-manager.source = "${inputs.home-manager}";
       nixpkgs-unstable.source = "${inputs.nixpkgs-unstable}";
-      nixpkgs-stable.source = "${inputs.nixpkgs-stable}";
+      nixpkgs-stable.source =
+        if pkgs.stdenvNoCC.isDarwin
+        then "${inputs.nixpkgs-stable-darwin}"
+        else "${inputs.nixpkgs-stable}";
     };
     # list of acceptable shells in /etc/shells
     shells = with pkgs.stable; [bash zsh];
