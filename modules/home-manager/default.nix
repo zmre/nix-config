@@ -6,121 +6,122 @@
   lib,
   ...
 }: let
-  defaultPkgs = with pkgs.stable; [
-    # filesystem
-    fd
-    ripgrep
-    du-dust
-    fzy
-    curl
-    duf # df alternative showing free disk space
-    fswatch
-    tree
-    #chkrootkit # build fail 2024-02-27
+  defaultPkgs =
+    (with pkgs.stable; [
+      # filesystem
+      fd
+      ripgrep
+      du-dust
+      fzy
+      curl
+      duf # df alternative showing free disk space
+      fswatch
+      tree
 
-    # compression
-    atool
-    unzip
-    gzip
-    xz
-    zip
+      # compression
+      atool
+      unzip
+      gzip
+      xz
+      zip
 
-    # file viewers
-    pkgs.pwnvim # moved my neovim config to its own repo for atomic management and install
-    less
-    page # like less, but uses nvim, which is handy for selecting out text and such
-    file
-    jq
-    lynx
-    sourceHighlight # for lf preview
-    ffmpeg-full.bin
-    ffmpegthumbnailer # for lf preview
-    pandoc # for lf preview
-    imagemagick # for lf preview
-    highlight # code coloring in lf
-    poppler_utils # for pdf2text in lf
-    mediainfo # used by lf
-    exiftool # used by lf
-    rich-cli # used by lf (experimenting with mdcat replacement)
-    exif
-    glow # browse markdown dirs
-    mdcat # colorize markdown
-    html2text
-    #pkgs.ctpv
-    pkgs.marp-cli # convert markdown to html slides
-    #pkgs.gdrive3
-    pkgs.dashing # generate dash docs from html
+      # file viewers
+      less
+      page # like less, but uses nvim, which is handy for selecting out text and such
+      file
+      jq
+      lynx
+      sourceHighlight # for lf preview
+      ffmpeg-full.bin
+      ffmpegthumbnailer # for lf preview
+      pandoc # for lf preview
+      imagemagick # for lf preview
+      highlight # code coloring in lf
+      poppler_utils # for pdf2text in lf
+      mediainfo # used by lf
+      exiftool # used by lf
+      #rich-cli # used by lf (experimenting with mdcat replacement)
+      exif
+      glow # browse markdown dirs
+      mdcat # colorize markdown
+      html2text
+      #pkgs.ctpv
 
-    # network
-    gping
-    bandwhich # bandwidth monitor by process
-    #pkgs.sniffnet # x-platform gui traffic monitor (rust)
-    # not building on m1 right now
-    #bmon # bandwidth monitor by interface
-    static-web-server # serve local static files
-    aria # cli downloader
-    # ncftp
-    hostname
-    trippy # mtr alternative
-    xh # rust version of httpie / better curl
+      # network
+      gping
+      bandwhich # bandwidth monitor by process
+      #pkgs.sniffnet # x-platform gui traffic monitor (rust)
+      # not building on m1 right now
+      #bmon # bandwidth monitor by interface
+      static-web-server # serve local static files
+      aria # cli downloader
+      # ncftp
+      hostname
+      trippy # mtr alternative
+      xh # rust version of httpie / better curl
 
-    # misc
-    pkgs.ironhide # rust version of IronCore's ironhide
-    pkgs.devenv # quick setup of dev envs for projects
-    neofetch # display key software/version info in term
-    #nodePackages.readability-cli # quick commandline website article read
-    vimv # shell script to bulk rename
-    pkgs.btop # currently like this better than bottom and htop
-    #youtube-dl replaced by yt-dlp
-    pkgs.yt-dlp
-    vulnix # check for live nix apps that are listed in NVD
-    # pkgs.tickrs # track stocks
-    #taskwarrior-tui
-    aspell # spell checker
-    kalker # cli calculator; alt. to bc and calc
-    rink # calculator for unit conversions
-    nix-tree # explore dependencies
-    asciinema # terminal screencast
-    ctags
-    catimg # ascii rendering of any image in terminal x-pltfrm
-    fortune
-    ipcalc
-    kondo # free disk space by cleaning project build dirs
-    ncspot # control spotify
-    optipng
-    pkgs.hackernews-tui
-    procps
-    pstree
-    pkgs.gtm-okr
-    pkgs.babble-cli # twitter tui
-    # pkgs.toot # mastodon tui
-    yubikey-manager # cli for yubikey
-    pkgs.zk # cli for indexing markdown files
-    pastel # cli for color manipulation
-    pkgs.kopia # deduping backup
-    pkgs.nps # quick nix packages search
-    gnugrep
-    pkgs.enola # sherlock-like tool
-    #zsh-fzf-tab # build fail 2024-02-27
-
-    #pkgs.qutebrowser
-  ];
+      # misc
+      neofetch # display key software/version info in term
+      #nodePackages.readability-cli # quick commandline website article read
+      vimv # shell script to bulk rename
+      vulnix # check for live nix apps that are listed in NVD
+      #taskwarrior-tui
+      aspell # spell checker
+      kalker # cli calculator; alt. to bc and calc
+      rink # calculator for unit conversions
+      nix-tree # explore dependencies
+      asciinema # terminal screencast
+      ctags
+      catimg # ascii rendering of any image in terminal x-pltfrm
+      fortune
+      ipcalc
+      kondo # free disk space by cleaning project build dirs
+      ncspot # control spotify
+      optipng
+      procps
+      pstree
+      toot # mastodon tui
+      yubikey-manager # cli for yubikey
+      pastel # cli for color manipulation
+      gnugrep
+      #zsh-fzf-tab # build fail 2024-02-27
+    ])
+    ++ (with pkgs; [
+      # unstable packages
+      # pkgs.tickrs # track stocks
+      #chkrootkit # build fail 2024-02-27
+      pwnvim # moved my neovim config to its own repo for atomic management and install
+      gtm-okr
+      babble-cli # twitter tui
+      enola # sherlock-like tool
+      kopia # deduping backup
+      nps # quick nix packages search
+      zk # cli for indexing markdown files
+      hackernews-tui
+      btop # currently like this better than bottom and htop
+      #youtube-dl replaced by yt-dlp
+      yt-dlp
+      marp-cli # convert markdown to html slides
+      ironhide # rust version of IronCore's ironhide
+      devenv # quick setup of dev envs for projects
+      #qutebrowser
+    ]);
   # using unstable in my home profile for nix commands
   # nixEditorPkgs = with pkgs; [ nix statix ];
 
   networkPkgs = with pkgs.stable; [mtr iftop];
-  guiPkgs = with pkgs;
+  guiPkgs =
     [
       # pkgs.element-desktop
       pkgs.pwneovide # wrapper makes a macos app for launching (and ensures it calls pwnvim)
       #dbeaver # database sql manager with er diagrams
     ]
-    ++ lib.optionals pkgs.stdenv.isDarwin
-    [
-      colima # command line docker server replacement
-      pkgs.stable.docker
-      utm # utm is a qemu wrapper gui for mac only
-    ];
+    ++ (lib.optionals pkgs.stdenv.isDarwin
+      [
+        pkgs.colima # command line docker server replacement
+        pkgs.stable.docker
+        pkgs.utm # utm is a qemu wrapper gui for mac only
+      ]);
 in {
   programs.home-manager.enable = true;
   home.enableNixpkgsReleaseCheck = false;
