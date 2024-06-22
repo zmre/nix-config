@@ -93,7 +93,7 @@
     pstree
     pkgs.gtm-okr
     pkgs.babble-cli # twitter tui
-    pkgs.toot # mastodon tui
+    # pkgs.toot # mastodon tui
     yubikey-manager # cli for yubikey
     pkgs.zk # cli for indexing markdown files
     pastel # cli for color manipulation
@@ -1569,7 +1569,7 @@ in {
   };
 
   programs.newsboat = {
-    enable = true;
+    enable = false;
     autoReload = true;
     browser =
       if pkgs.stdenvNoCC.isDarwin
