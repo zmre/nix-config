@@ -74,9 +74,11 @@ in {
       name = "Matcha-dark-azul";
     };
   };
-  xdg.mimeApps.enable = true;
-  xdg.mimeApps.associations.added = associations;
-  xdg.mimeApps.defaultApplications = associations;
+  xdg.mimeApps = {
+    enable = true;
+    associations.added = associations;
+    defaultApplications = associations;
+  };
 
   services.udiskie = {
     enable = true; # automount disks
@@ -779,15 +781,16 @@ in {
       po = "https://getpocket.com/my-list";
     };
     searchEngines = {
-      DEFAULT = "https://duckduckgo.com/?q={}&ia=web";
+      DEFAULT = "https://kagi.com/search?q={}";
       d = "https://duckduckgo.com/?q={}&ia=web";
+      k = "https://kagi.com/search?q={}";
       w = "https://en.wikipedia.org/wiki/Special:Search?search={}&go=Go&ns0=1";
       aw = "https://wiki.archlinux.org/?search={}";
       nw = "https://nixos.wiki/index.php?search={}";
-      np = "https://search.nixos.org/packages?channel=22.11&from=0&size=100&sort=relevance&type=packages&query={}";
+      np = "https://search.nixos.org/packages?channel=24.05&from=0&size=100&sort=relevance&type=packages&query={}";
       nu = "https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query={}";
-      no = "https://search.nixos.org/options?channel=22.11&from=0&size=50&sort=relevance&type=packages&query={}";
-      nf = "https://search.nixos.org/flakes?channel=22.11&from=0&size=50&sort=relevance&type=packages&query={}";
+      no = "https://search.nixos.org/options?channel=24.05&from=0&size=50&sort=relevance&type=packages&query={}";
+      nf = "https://search.nixos.org/flakes?channel=24.05&from=0&size=50&sort=relevance&type=packages&query={}";
       g = "https://www.google.com/search?hl=en&q={}";
       gh = "https://github.com/?q={}";
       yt = "https://www.youtube.com/results?search_query={}";

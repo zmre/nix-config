@@ -123,7 +123,11 @@
     };
   };
 
-  documentation.enable = true;
+  documentation.enable = true; # temp disable 2024-07-06 to workaround issue
+  # documentation.doc.enable = false;
+  # documentation.man.enable = false;
+  # documentation.man.generateCaches.enable = false;
+  # documentation.nixos.enable = false;
 
   # Just configure DNS for WiFi for now
   networking.knownNetworkServices = ["Wi-Fi"];

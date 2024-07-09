@@ -21,6 +21,9 @@
       fierce # dns recon
       httrack # offline browser / website mirror
       fping
+      pktgen
+      boofuzz
+      ostinato
       hping
       masscan
       nikto
@@ -30,11 +33,18 @@
       snmpcheck
       sslscan
       theharvester
+      socialscan
+      urlhunter
+      sn0int
+      zmap
+      cloudbrute
+      sn0int
+      sslsplit
       # wireshark moved to nixos config
       # pick one of wireshark or wireshark-cli
       wireshark
       #wireshark-cli
-      #zmap # currently marked broken 2022-01-31
+      zmap # currently marked broken 2022-01-31
 
       # Passwords
       fcrackzip
@@ -44,13 +54,22 @@
       rarcrack
       crunch # wordlist generator
       ncrack # network auth cracker
+      brutespray
+      #chntpw
+      crowbar
+      hcxtools
 
       # Sniffing
       ettercap
       bettercap
       mitmproxy
+      proxychains
+      proxify
       wireshark
       ngrep
+      dhcpdump
+      dnstop
+      nload
       #netsniff-ng ?
 
       # Web
@@ -115,5 +134,40 @@
       # manipulation
       radare2-cutter
       #afl # fuzzer tool
+      # cloud
+      cloud-nuke
+      cloudfox
+      ec2stepshell
+      gato
+      gcp-scanner
+      ggshield
+      goblob
+      imdshift
+      pacu
+      poutine
+      prowler
+      yatas
+      # git
+      bomber-go
+      cargo-audit
+      credential-detector
+      deepsecrets
+      detect-secrets
+      freeze
+      git-secret
+      gitjacker
+      gitleaks
+      gitls
+      gokart
+      legitify
+      secretscanner
+      skjold
+      tell-me-your-secrets
+      trufflehog
+      whispers
+      xeol
+      # misc
+      keedump
+      sploitscan
     ];
 }

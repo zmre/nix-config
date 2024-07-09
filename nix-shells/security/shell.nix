@@ -19,20 +19,26 @@ with pkgs;
         fierce
         httrack # offline browser / website mirror
         fping
+        gping
+        pktgen
+        boofuzz
+        ostinato
         hping
         masscan
         nikto
         onesixtyone
-        #nmap-graphical
         nmap
         rustscan
         snmpcheck
         sslscan
         theharvester
-        #zmap # currently marked broken 2022-01-31
-        #cloudbrute
-        #sn0int
-        #sslsplit
+        socialscan
+        urlhunter
+        sn0int
+        zmap
+        cloudbrute
+        sn0int
+        sslsplit
 
         # Passwords
         fcrackzip
@@ -42,17 +48,23 @@ with pkgs;
         rarcrack
         crunch # wordlist generator
         ncrack # network auth cracker
-        #brutespray
+        brutespray
         #chntpw
-        #crowbar
-        #hcxtools
+        crowbar
+        hcxtools
 
         # Sniffing
         ettercap
         bettercap
         mitmproxy
+        proxychains
+        proxify
         # wireshark moved below as it only builds on linux 2022-03-30
         ngrep
+        dhcpdump
+        dnstop
+        bandwhich
+        nload
 
         # Web
         dirb
@@ -83,7 +95,7 @@ with pkgs;
         #patchelf
         #retdec
         #snowman
-        #valgrind
+        valgrind
         binwalk
 
         # misc
@@ -107,11 +119,14 @@ with pkgs;
         # Sniffing
         dsniff
         tcpflow
+        tcpdump
+        tcpreplay
         p0f
         netsniff-ng
         # wireshark moved to nixos config
         # pick one of wireshark or wireshark-cli
         wireshark
+        termshark
         #wireshark-cli
         # Web
         burpsuite
@@ -121,6 +136,11 @@ with pkgs;
         wifite2
         reaverwps
         aircrack-ng
+        airgeddon
+        bully
+        netscanner
+        wavemon
+        killerbee
         # bluetooth
         bluez
         # rfid
@@ -134,6 +154,43 @@ with pkgs;
         stegseek
         # manipulation
         radare2-cutter
-        #afl # fuzzer tool
+        aflplusplus # fuzzer tool
+        # cloud
+        cloud-nuke
+        cloudfox
+        ec2stepshell
+        gato
+        gcp-scanner
+        ggshield
+        goblob
+        imdshift
+        pacu
+        poutine
+        prowler
+        yatas
+        # git
+        bomber-go
+        cargo-audit
+        credential-detector
+        deepsecrets
+        detect-secrets
+        freeze
+        garble
+        git-secret
+        gitjacker
+        gitleaks
+        gitls
+        gokart
+        legitify
+        secretscanner
+        skjold
+        tell-me-your-secrets
+        trufflehog
+        whispers
+        xeol
+        # misc
+        exploitdb
+        keedump
+        sploitscan
       ];
   }

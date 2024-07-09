@@ -39,12 +39,19 @@
     #powertop.enable = true;
   };
   # an alternative to above? is this needed?
-  #services.auto-cpufreq.enable = true;
-  services.fwupd.enable = true; # firmware update; run: sudo fwupdmgr update
-  # Quick suspend if power button pushed
-  #services.logind.extraConfig = ''
-  #HandlePowerKey=suspend
-  #'';
+  services = {
+    #auto-cpufreq.enable = true;
+    fwupd = {
+      enable = true; # firmware update; run: sudo fwupdmgr update
+      extraRemotes = ["lvfs-testing"];
+      # Might be necessary once to make the update succeed
+      uefiCapsuleSettings.DisableCapsuleUpdateOnDisk = true;
+    };
+    # Quick suspend if power button pushed
+    #logind.extraConfig = ''
+    #HandlePowerKey=suspend
+    #'';
+  };
 
   networking = {
     hostName = "volantis";
@@ -114,18 +121,18 @@
     enableAllFirmware = true;
     # video.hidpi.enable = true;
     cpu.intel.updateMicrocode = true;
-    opengl = {
-      enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
-      extraPackages = with pkgs; [
-        # mesa.drivers
-        # vaapiVdpau
-        vaapiIntel
-        libvdpau-va-gl
-        intel-media-driver
-      ];
-    };
+    # graphics = {
+    #   enable = true;
+    #   # driSupport = true;
+    #   # driSupport32Bit = true;
+    #   extraPackages = with pkgs; [
+    #     # mesa.drivers
+    #     # vaapiVdpau
+    #     vaapiIntel
+    #     libvdpau-va-gl
+    #     intel-media-driver
+    #   ];
+    # };
     pulseaudio = {
       enable = false;
       #package = pkgs.pulseaudioFull; # needed for bluetooth audio
@@ -138,6 +145,7 @@
   security.rtkit.enable = true; # bring in audio
   services.blueman.enable = true;
   #services.xserver.dpi = 160; # fix font sizes in x
+  #services.xserver.upscaleDefaultCursor = true; # make cursor bigger; requires dpi be set
 
   # pipewire brings better audio/video handling
   services.pipewire = {

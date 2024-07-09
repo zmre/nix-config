@@ -1787,7 +1787,7 @@ in {
     # extraConfig = "\n";
   };
   programs.alacritty = {
-    enable = false;
+    enable = pkgs.stdenv.isLinux; # only install on Linux
     #package =
     #pkgs.alacritty; # switching to unstable so i get 0.11 with undercurl support
     settings = {
@@ -1796,7 +1796,7 @@ in {
       #background_opacity = 0.9;
       window.opacity = 0.9;
       scrolling.history = 3000;
-      scrolling.smooth = true;
+      # scrolling.smooth = true;
       font.normal.family = "MesloLGS Nerd Font Mono";
       font.normal.style = "Regular";
       font.bold.style = "Bold";
@@ -1809,8 +1809,8 @@ in {
       shell.program = "${pkgs.zsh}/bin/zsh";
       live_config_reload = true;
       cursor.vi_mode_style = "Underline";
-      draw_bold_text_with_bright_colors = true;
-      key_bindings = [
+      colors.draw_bold_text_with_bright_colors = true;
+      keyboard.bindings = [
         {
           key = "Escape";
           mods = "Control";
@@ -1818,17 +1818,17 @@ in {
           action = "ToggleViMode";
         }
         # cmd-{ and cmd-} and cmd-] and cmd-[ will switch tmux windows
-        {
-          key = "LBracket";
-          mods = "Command";
-          # \x02 is ctrl-b so sequence below is ctrl-b, h
-          chars = "\\x02h";
-        }
-        {
-          key = "RBracket";
-          mods = "Command";
-          chars = "\\x02l";
-        }
+        # {
+        #   key = "LBracket";
+        #   mods = "Command";
+        #   # \x02 is ctrl-b so sequence below is ctrl-b, h
+        #   chars = "\\x02h";
+        # }
+        # {
+        #   key = "RBracket";
+        #   mods = "Command";
+        #   chars = "\\x02l";
+        # }
       ];
     };
   };

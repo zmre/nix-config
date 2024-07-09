@@ -33,25 +33,35 @@
     firmware-manager
   ];
 
+  documentation.enable = true; # temp disable 2024-07-06 to workaround issue
+  # documentation.doc.enable = false;
+  # documentation.man.enable = false;
+  documentation.man.generateCaches = false;
+  documentation.nixos.enable = false;
+
   i18n.defaultLocale = "en_US.UTF-8";
 
   # nixpkgs.config = import ../../config.nix;
 
-  services.locate = {
-    enable = true; # periodically update locate db
-    localuser = null;
-    package = pkgs.mlocate;
+  services = {
+    locate = {
+      enable = true; # periodically update locate db
+      localuser = null;
+      package = pkgs.mlocate;
+    };
+    #timesyncd.enable = true;
+    printing.enable = true; # cupsd printing
+    earlyoom.enable = true; # out of memory detection
+    # thermald.enable = true; # enable thermal data
+    autorandr.enable = true; # autodetect display config
   };
-  #services.timesyncd.enable = true;
-  services.printing.enable = true; # cupsd printing
-  services.earlyoom.enable = true; # out of memory detection
-  # services.thermald.enable = true; # enable thermal data
-  services.autorandr.enable = true; # autodetect display config
-  security.sudo.enable = true;
-  security.sudo.execWheelOnly = true;
-  security.sudo.extraConfig = ''
-    Defaults   timestamp_timeout=-1
-  '';
+  security.sudo = {
+    enable = true;
+    execWheelOnly = true;
+    extraConfig = ''
+      Defaults   timestamp_timeout=-1
+    '';
+  };
   # suggest install package if cmd missing
   programs.command-not-found.enable = true;
 
@@ -101,7 +111,7 @@
     enableDefaultPackages = true;
     fontconfig.enable = true;
     fontDir.enable = true;
-    enableGhostscriptFonts = true;
+    enableGhostscriptFonts = false;
     packages = with pkgs; [
       powerline-fonts
       source-code-pro
@@ -133,6 +143,21 @@
   # needed here instead of home-manager so we can run as a user and not root
   programs.wireshark.enable = true;
 
+  # Enable touchpad support
+  services.libinput = {
+    enable = true;
+    touchpad = {
+      accelSpeed = "0.7";
+      naturalScrolling = true;
+      middleEmulation = true;
+      tapping = true;
+      scrollMethod = "twofinger";
+      #disableWhileTyping = true;
+    };
+  };
+
+  services.displayManager.defaultSession = "none+i3";
+
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
@@ -142,7 +167,6 @@
     # Setup a graphical login
     displayManager = {
       lightdm.enable = true;
-      defaultSession = "none+i3";
       sessionCommands = ''
         case $(hostname) in
           volantis)
@@ -157,19 +181,9 @@
       '';
     };
     # Keyboard
-    layout = "us";
+    xkb.layout = "us";
     autoRepeatDelay = 265;
     autoRepeatInterval = 20;
-    # Enable touchpad support
-    libinput = {
-      enable = true;
-      touchpad.accelSpeed = "0.7";
-      touchpad.naturalScrolling = true;
-      touchpad.middleEmulation = true;
-      touchpad.tapping = true;
-      touchpad.scrollMethod = "twofinger";
-      #touchpad.disableWhileTyping = true;
-    };
     windowManager.i3 = {
       enable = true;
       package = pkgs.stable.i3-gaps; # adds extra functionality
