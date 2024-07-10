@@ -604,33 +604,37 @@ in {
   programs.firefox = {
     enable = true;
     # turns out you have to setup a profile (below) for extensions to install
-    profiles.home.extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-      ublock-origin
-      #https-everywhere
-      noscript
-      vimium
-    ];
-    profiles.home.id = 0;
-    profiles.home.settings = {
-      "app.update.auto" = false; # nix will handle updates
-      "browser.search.region" = "US";
-      "browser.search.countryCode" = "US";
-      "browser.ctrlTab.recentlyUsedOrder" = false;
-      "browser.newtabpage.enhanced" = true;
-      "devtools.chrome.enabled" = true;
-      "devtools.theme" = "dark";
-      "extensions.pocket.enabled" = true;
-      "network.prefetch-next" = true;
-      "nework.predictor.enabled" = true;
-      "browser.uidensity" = 1;
-      "privacy.trackingprotection.enabled" = true;
-      "privacy.trackingprotection.socialtracking.enabled" = true;
-      "privacy.trackingprotection.socialtracking.annotate.enabled" = true;
-      "privacy.trackingprotection.socialtracking.notification.enabled" = false;
-      "services.sync.engine.addons" = false;
-      "services.sync.engine.passwords" = false;
-      "services.sync.engine.prefs" = false;
-      "signon.rememberSignons" = false;
+    profiles = {
+      home = {
+        extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+          ublock-origin
+          #https-everywhere
+          noscript
+          vimium
+        ];
+        id = 0;
+        settings = {
+          "app.update.auto" = false; # nix will handle updates
+          "browser.search.region" = "US";
+          "browser.search.countryCode" = "US";
+          "browser.ctrlTab.recentlyUsedOrder" = false;
+          "browser.newtabpage.enhanced" = true;
+          "devtools.chrome.enabled" = true;
+          "devtools.theme" = "dark";
+          "extensions.pocket.enabled" = false;
+          "network.prefetch-next" = true;
+          "nework.predictor.enabled" = true;
+          "browser.uidensity" = 1;
+          "privacy.trackingprotection.enabled" = true;
+          "privacy.trackingprotection.socialtracking.enabled" = true;
+          "privacy.trackingprotection.socialtracking.annotate.enabled" = true;
+          "privacy.trackingprotection.socialtracking.notification.enabled" = false;
+          "services.sync.engine.addons" = false;
+          "services.sync.engine.passwords" = false;
+          "services.sync.engine.prefs" = false;
+          "signon.rememberSignons" = false;
+        };
+      };
     };
   };
 
@@ -674,30 +678,33 @@ in {
     };
     settings = {
       confirm_quit = ["downloads"]; # only confirm if downloads in progress
-      content.blocking.enabled = true;
-      content.blocking.method = "both";
-      content.blocking.hosts.block_subdomains = true;
-      # StevenBlack list pulls from lots of sources; we also update our /etc/hosts
-      # with this, but that only gets an update when we rebuild our nix system
-      # whereas this should reload more often
-      content.blocking.hosts.lists = [
-        "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
-        "https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters-2022.txt"
-      ];
-      content.blocking.whitelist = ["https://*.reddit.com/*"];
-
-      content.default_encoding = "utf-8";
-      content.geolocation = false;
-      content.cookies.accept = "no-3rdparty";
+      content = {
+        blocking = {
+          enabled = true;
+          method = "both";
+          hosts.block_subdomains = true;
+          # StevenBlack list pulls from lots of sources; we also update our /etc/hosts
+          # with this, but that only gets an update when we rebuild our nix system
+          # whereas this should reload more often
+          hosts.lists = [
+            "https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts"
+            "https://raw.githubusercontent.com/uBlockOrigin/uAssets/master/filters/filters-2022.txt"
+          ];
+          whitelist = ["https://*.reddit.com/*"];
+        };
+        default_encoding = "utf-8";
+        geolocation = false;
+        cookies.accept = "no-3rdparty";
+        # might break some sites; stops fingerprinting
+        canvas_reading = false;
+        webrtc_ip_handling_policy = "default-public-interface-only";
+        javascript.clipboard = "access";
+        site_specific_quirks.enabled = false;
+        headers.user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36";
+        pdfjs = true;
+        autoplay = false;
+      };
       qt.highdpi = true;
-      # might break some sites; stops fingerprinting
-      content.canvas_reading = false;
-      content.webrtc_ip_handling_policy = "default-public-interface-only";
-      content.javascript.clipboard = "access";
-      content.site_specific_quirks.enabled = false;
-      content.headers.user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36";
-      content.pdfjs = true;
-      content.autoplay = false;
       # Disable smooth scrolling on mac because of https://github.com/qutebrowser/qutebrowser/issues/6840
       # Note: this is in home-linux so this if is pointless, but I'm hoping qutebrowser will build on mac soon and this can move
       scrolling.smooth =
@@ -706,55 +713,65 @@ in {
         else true;
       auto_save.session = true; # remember open tabs
       session.lazy_restore = true;
-      # if input is focused on tab load, allow typing
-      input.insert_mode.auto_load = true;
-      # exit insert mode if clicking on non editable item
-      input.insert_mode.auto_leave = true;
-      downloads.location.directory = "${
-        if pkgs.stdenv.isDarwin
-        then "/Users/"
-        else "/home/"
-      }${username}/Downloads";
+      input.insert_mode = {
+        # if input is focused on tab load, allow typing
+        auto_load = true;
+        # exit insert mode if clicking on non editable item
+        auto_leave = true;
+      };
+      downloads = {
+        location.directory = "${
+          if pkgs.stdenv.isDarwin
+          then "/Users/"
+          else "/home/"
+        }${username}/Downloads";
 
-      downloads.location.prompt = false;
-      downloads.position = "bottom";
-      downloads.remove_finished = 10000;
+        location.prompt = false;
+        position = "bottom";
+        remove_finished = 10000;
+      };
       completion.use_best_match = true;
       completion.shrink = true;
-      colors.webpage.preferred_color_scheme = "dark";
-      # enabling darkmode auto-changes website colors and images and often makes things worse instead of better :-(
-      colors.webpage.darkmode.enabled = false;
-      colors.webpage.bg = "black";
+      colors.webpage = {
+        preferred_color_scheme = "dark";
+        # enabling darkmode auto-changes website colors and images and often makes things worse instead of better :-(
+        darkmode.enabled = false;
+        bg = "black";
+      };
       statusbar.widgets = ["progress" "keypress" "url" "history"];
-      tabs.position = "left";
-      tabs.title.format = "{index}: {audio}{current_title}";
-      tabs.title.format_pinned = "{index}: {audio}{current_title}";
-      tabs.last_close = "close";
+      tabs = {
+        position = "left";
+        title.format = "{index}: {audio}{current_title}";
+        title.format_pinned = "{index}: {audio}{current_title}";
+        last_close = "close";
+      };
       spellcheck.languages = ["en-US"];
       editor.command = ["neovide" "{}:{line}"];
-      fileselect.handler = "external";
-      fileselect.single_file.command = [
-        "alacritty"
-        "--class"
-        "lf,lf"
-        "-t"
-        "Chooser"
-        "-e"
-        "sh"
-        "-c"
-        "lf -selection-path {}"
-      ];
-      fileselect.multiple_files.command = [
-        "alacritty"
-        "--class"
-        "lf,lf"
-        "-t"
-        "Chooser"
-        "-e"
-        "sh"
-        "-c"
-        "lf -selection-path {}"
-      ];
+      fileselect = {
+        handler = "external";
+        single_file.command = [
+          "alacritty"
+          "--class"
+          "lf,lf"
+          "-t"
+          "Chooser"
+          "-e"
+          "sh"
+          "-c"
+          "lf -selection-path {}"
+        ];
+        multiple_files.command = [
+          "alacritty"
+          "--class"
+          "lf,lf"
+          "-t"
+          "Chooser"
+          "-e"
+          "sh"
+          "-c"
+          "lf -selection-path {}"
+        ];
+      };
     };
     # these create :whatever commands
     aliases = {
