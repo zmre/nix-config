@@ -829,7 +829,10 @@ in {
   };
   programs.mpv = {
     enable = true;
-    scripts = with pkgs.mpvScripts; [thumbnail sponsorblock];
+    package = pkgs.stable.mpv;
+    # TODO: Commenting out scripts 2024-07-09 because they are causing an error
+    # around swift-wrapper-5.8 being broken
+    # scripts = with pkgs.stable.mpvScripts; [thumbnail sponsorblock];
     config = {
       # disable on-screen controller -- else I get a message saying I have to add this
       osc = false;

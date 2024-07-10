@@ -11,18 +11,18 @@
       stable =
         if prev.stdenv.isDarwin
         then
-          import nixpkgs-stable {
-            inherit (prev) system;
-            config = import ../config.nix;
-            #nix.package = inputs.nixos-stable.nixVersions.nix_2_11;
-            nix.package = inputs.nixos-unstable.nix;
-          }
-        else
           import nixpkgs-stable-darwin {
             inherit (prev) system;
             config = import ../config.nix;
             #nix.package = inputs.nixos-stable.nixVersions.nix_2_11;
-            nix.package = inputs.nixos-unstable.nix;
+            nix.package = inputs.nixos-stable.nix;
+          }
+        else
+          import nixpkgs-stable {
+            inherit (prev) system;
+            config = import ../config.nix;
+            #nix.package = inputs.nixos-stable.nixVersions.nix_2_11;
+            nix.package = inputs.nixos-stable.nix;
           };
     })
     (final: prev: {
