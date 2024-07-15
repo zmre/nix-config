@@ -829,6 +829,7 @@ in {
   };
   programs.mpv = {
     enable = true;
+    # TODO: Same problem as below when using unstable
     package = pkgs.stable.mpv;
     # TODO: Commenting out scripts 2024-07-09 because they are causing an error
     # around swift-wrapper-5.8 being broken

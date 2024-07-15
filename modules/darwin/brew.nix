@@ -37,7 +37,7 @@
         name = "amethyst"; # for window tiling -- I miss chunkwm but it's successor, yabai, was unstable for me and required security compromises.
         greedy = true;
       }
-      #"audio-hijack"
+      "audio-hijack" # used to use this for making my audio cleaner, but removed when I got a fancy audio setup. bringing back now (2024-07-11) to experiment with recording of sources
       {
         name = "bartender"; # organize status bar
         greedy = true;
@@ -93,6 +93,7 @@
         name = "fork";
         greedy = true;
       }
+      "gitkraken-cli"
       {
         name = "google-drive";
         greedy = true;
@@ -296,6 +297,8 @@
       "ciphey"
       "ddcctl"
       "ical-buddy"
+      "whisper-cpp"
+      "whisperkit-cli"
       # would rather load these as part of a security shell, but...
       "hashcat" # the nix one only builds on linux
       "hydra" # the nix one only builds on linux
