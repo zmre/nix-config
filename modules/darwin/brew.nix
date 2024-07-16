@@ -47,6 +47,10 @@
         name = "brave-browser"; # TODO: move to home-manager when it builds
         greedy = true;
       }
+      {
+        name = "chatgpt";
+        greedy = true;
+      }
       # {
       #   name = "canon-eos-utility";
       #   greedy = true;
