@@ -1012,6 +1012,24 @@ in {
       # Setup zoxide
       eval "$(zoxide init zsh)"
 
+      function convert_vid_to_h264() {
+          input_file="$1"
+          extension="''${input_file##*.}"
+          base_name="''${input_file%.*}"
+          output_file="''${base_name}-h264.''${extension}"
+          ffmpeg -i "$input_file" -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 192k "$output_file"
+      }
+
+      function convert_v9_vids_to_h264() {
+        for file in *.mp4; do
+          codec=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 "$file")
+
+          if [[ "$codec" == "vp9" ]]; then
+            convert_vid_to_h264 "$file"
+          fi
+        done
+      }
+
       #zprof
     '';
     sessionVariables = {};
@@ -1050,6 +1068,13 @@ in {
         ".." = "cd ..";
         "..." = "cd ../..";
         "...." = "cd ../../..";
+        # These options increase compatibility (with quicktime), but decrease resolution :(
+        # when the mp4 resolution available is not the highest resolution available
+        # -S '+vcodec:avc,+acodec:m4a'
+        # -S 'codec:h264:m4a'
+        "yt" = "yt-dlp -f 'bv*+ba/b' --remux-video mp4 --embed-subs --write-auto-sub --embed-thumbnail --write-subs --sub-langs 'en.*,en-orig,en' --embed-chapters --sponsorblock-mark default --sponsorblock-remove default --no-prefer-free-formats --check-formats --embed-metadata --cookies-from-browser brave --user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'";
+        "yt-fix" = "convert_vid_to_h264";
+        "yt-fix-curdir" = "convert_v9_vids_to_h264";
       }
       // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
         tailscale = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
