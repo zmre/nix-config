@@ -57,6 +57,7 @@ in {
       # apps
       slack
       discord
+      element-desktop
     ];
   gtk = {
     enable = true;
@@ -737,8 +738,8 @@ in {
       colors.webpage = {
         preferred_color_scheme = "dark";
         # enabling darkmode auto-changes website colors and images and often makes things worse instead of better :-(
-        darkmode.enabled = false;
-        bg = "black";
+        #darkmode.enabled = false;
+        #bg = "black";
       };
       statusbar.widgets = ["progress" "keypress" "url" "history"];
       tabs = {

@@ -75,7 +75,7 @@
       # Web
       dirb
       gobuster
-      wfuzz
+      #wfuzz
       wpscan
       urlhunter
 
@@ -140,12 +140,12 @@
       ec2stepshell
       gato
       gcp-scanner
-      ggshield
+      #ggshield
       goblob
       imdshift
       pacu
       poutine
-      prowler
+      #prowler
       yatas
       # git
       bomber-go
