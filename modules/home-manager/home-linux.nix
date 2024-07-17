@@ -50,6 +50,8 @@ in {
       chkrootkit # scan for breaches
 
       traceroute
+
+      plex-media-player
     ]
     ++ lib.optionals (!pkgs.stdenv.isAarch64) [
       # apps
@@ -89,7 +91,7 @@ in {
 
   # Need to set this up per device... just install it and let config be manual
   services.syncthing = {
-    enable = true;
+    enable = false;
     tray.enable = false;
   };
 

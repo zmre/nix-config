@@ -141,7 +141,7 @@
     bluetooth.enable = true;
     bluetooth.powerOnBoot = false;
   };
-  sound.enable = true;
+  # sound.enable = true;
   security.rtkit.enable = true; # bring in audio
   services.blueman.enable = true;
   #services.xserver.dpi = 160; # fix font sizes in x
