@@ -806,7 +806,7 @@ in {
 
   programs.fzf = {
     enable = true;
-    enableZshIntegration = true;
+    enableZshIntegration = false;
     tmux.enableShellIntegration = false;
     defaultCommand = "\fd --type f --hidden --exclude .git";
     fileWidgetCommand = "\fd --exclude .git --type f"; # for when ctrl-t is pressed
@@ -1018,7 +1018,18 @@ in {
           extension="''${input_file##*.}"
           base_name="''${input_file%.*}"
           output_file="''${base_name}-h264.''${extension}"
-          ffmpeg -i "$input_file" -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 192k "$output_file"
+
+          # The following copies subtitles, chapters, thumbnails, etc.
+          # while converting to h264
+
+          # -hide_banner = don't show ffmpeg build info
+          # -map 0 = pass through all channels
+          # -c copy = copy all channels (yeah, need both for some reason)
+          # -c✌️0 libx264 = convert the first video channel to h264
+          # -movflags +faststart = optimize for streaming so movie can start right away
+          # -crf 22 = specify video quality: 0 is lossless, 51 is worst, and 17-28 is desired range
+          # -preset medium = video tuning parameter presets for size vs speed of conversion
+          ffmpeg -hide_banner -i "$input_file" -map 0 -c copy -c:v:0 libx264 -movflags +faststart -crf 22 -preset medium "$output_file" && rm "$input_file"
       }
 
       function convert_v9_vids_to_h264() {
@@ -1248,6 +1259,24 @@ in {
     '';
   };
 
+  # Nice shell history https://atuin.sh -- experimenting with this 2024-07-26
+  programs.atuin = {
+    enable = true;
+    enableZshIntegration = true;
+    settings = {
+      update_check = false;
+      search_mode = "fuzzy";
+      inline_height = 33;
+      common_prefix = ["sudo"];
+      dialect = "us";
+      #workspaces = true;
+      #filter_mode = "directory";
+      history_filter = [
+        "^ "
+        # "^innocuous-cmd .*--secret=.+"
+      ];
+    };
+  };
   programs.starship = {
     enable = true;
     enableNushellIntegration =
@@ -1581,14 +1610,14 @@ in {
     plugins = with pkgs; [
       tmuxPlugins.sensible
       tmuxPlugins.open
-      {
-        plugin = tmuxPlugins.fzf-tmux-url;
-        # default key bind is ctrl-b, u
-        extraConfig = ''
-          set -g @fzf-url-history-limit '2000'
-          set -g @open-S 'https://www.duckduckgo.com/'
-        '';
-      }
+      # {
+      #   plugin = tmuxPlugins.fzf-tmux-url;
+      #   # default key bind is ctrl-b, u
+      #   extraConfig = ''
+      #     set -g @fzf-url-history-limit '2000'
+      #     set -g @open-S 'https://www.duckduckgo.com/'
+      #   '';
+      # }
       {
         plugin = tmuxPlugins.resurrect;
         extraConfig = ''
