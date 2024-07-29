@@ -399,6 +399,18 @@ in {
             replace = ".zmre@spamgourmet.com";
           }
           {
+            trigger = "gbot";
+            replace = "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Googlebot/2.1; +http://www.google.com/bot.html) Chrome/127.0.6533.72 Safari/537.36";
+          }
+          {
+            trigger = "gbnews";
+            replace = "Googlebot-News";
+          }
+          {
+            trigger = "bbot";
+            replace = "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)";
+          }
+          {
             trigger = "mycal";
             replace = "https://app.hubspot.com/meetings/patrick-walsh";
           }
