@@ -1099,7 +1099,7 @@ in {
         "yt" = "yt-dlp -f 'bv*+ba/b' --remux-video mp4 --embed-subs --write-auto-sub --embed-thumbnail --write-subs --sub-langs 'en.*,en-orig,en' --embed-chapters --sponsorblock-mark default --sponsorblock-remove default --no-prefer-free-formats --check-formats --embed-metadata --cookies-from-browser brave --user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'";
         "yt-fix" = "convert_vid_to_h264";
         "yt-fix-curdir" = "convert_v9_vids_to_h264";
-        "syncm" = "rsync -avhzP --progress \"~/Sync/Private/PW Projects/Magic/\" pwalsh@synology1.savannah-basilisk.ts.net:/volume1/video/Magic/";
+        "syncm" = "rsync -avhzP --progress \"$HOME/Sync/Private/PW Projects/Magic/\" pwalsh@synology1.savannah-basilisk.ts.net:/volume1/video/Magic/";
       }
       // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
         tailscale = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
