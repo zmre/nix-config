@@ -34,17 +34,13 @@
     # I use the nur repo for firefox extensions
     nur.url = "github:nix-community/NUR";
 
-    # Need fenix to specify rustc version -- specifically for hackernews-tui
-    fenix.url = "github:nix-community/fenix";
-    fenix.inputs.nixpkgs.follows = "nixpkgs-unstable";
-
     pwnvim.url = "github:zmre/pwnvim";
     pwneovide.url = "github:zmre/pwneovide";
     # pwneovide.inputs.pwnvim.follows = "pwnvim";
 
     ironhide.url = "github:IronCoreLabs/ironhide?ref=1.0.5";
 
-    hackernews-tui.url = "github:aome510/hackernews-TUI";
+    hackernews-tui.url = "github:aome510/hackernews-TUI?ref=v0.13.4";
     hackernews-tui.flake = false;
 
     # blocklist to add to hosts file -- stops ads and malware across apps
