@@ -133,6 +133,8 @@
     #     intel-media-driver
     #   ];
     # };
+    hackrf.enable = true;
+    ubertooth.enable = true;
     pulseaudio = {
       enable = false;
       #package = pkgs.pulseaudioFull; # needed for bluetooth audio

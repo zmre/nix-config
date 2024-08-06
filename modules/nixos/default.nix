@@ -81,6 +81,8 @@
           "power"
           "lxd"
           "render"
+          "ubertooth"
+          "plugdev"
           "networkmanager"
           "docker"
           "wireshark"

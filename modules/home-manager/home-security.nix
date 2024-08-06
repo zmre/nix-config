@@ -127,6 +127,7 @@
       gnuradio
       gqrx
       hackrf
+      ubertooth
       multimon-ng
       # crypto / stego
       pngcheck
