@@ -77,10 +77,12 @@
     kubernetes-yaml-formatter.url = "github:longkai/kubernetes-yaml-formatter/v1.1.0";
     kubernetes-yaml-formatter.flake = false;
 
-    # brew-src = {
-    #   url = "github:Homebrew/brew/4.1.10"; # as of 2023-09-07, this newer version fails; default using 4.1.1
-    #   flake = false;
-    # };
+    # github extensions not in nixpkgs (should periodically check that)
+    gh-worktree.url = "github:zmre/gh-worktree";
+    gh-worktree.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    gh-feed.url = "github:rsteube/gh-feed";
+    gh-feed.flake = false;
+
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
     nix-homebrew.inputs.nixpkgs.follows = "nixpkgs";
     #nix-homebrew.inputs.brew-src.follows = "brew-src";
@@ -182,7 +184,7 @@
           (mkHome username [
             ./modules/home-manager
             ./modules/home-manager/home-darwin.nix
-            # ./modules/home-manager/home-security.nix
+            ./modules/home-manager/home-security.nix
           ])
         ];
       };

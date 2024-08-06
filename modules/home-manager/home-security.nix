@@ -8,7 +8,6 @@
     [
       # Exploitation
       exploitdb
-      metasploit
       sqlmap
       arpoison
 
@@ -21,9 +20,7 @@
       fierce # dns recon
       httrack # offline browser / website mirror
       fping
-      pktgen
       boofuzz
-      ostinato
       hping
       masscan
       nikto
@@ -36,7 +33,6 @@
       socialscan
       urlhunter
       sn0int
-      zmap
       cloudbrute
       sn0int
       sslsplit
@@ -44,7 +40,6 @@
       # pick one of wireshark or wireshark-cli
       wireshark
       #wireshark-cli
-      zmap # currently marked broken 2022-01-31
 
       # Passwords
       fcrackzip
@@ -53,21 +48,15 @@
       pdfcrack
       rarcrack
       crunch # wordlist generator
-      ncrack # network auth cracker
-      brutespray
       #chntpw
       crowbar
-      hcxtools
 
       # Sniffing
       ettercap
       bettercap
-      mitmproxy
-      proxychains
       proxify
       wireshark
       ngrep
-      dhcpdump
       dnstop
       nload
       #netsniff-ng ?
@@ -76,14 +65,13 @@
       dirb
       gobuster
       #wfuzz
-      wpscan
       urlhunter
 
-      # crypto / stego
+      # Crypto / stego
       #exif # installed elsewhere
       zsteg
 
-      # manipulation
+      # Manipulation
       gdb
       radare2
       sqlitebrowser
@@ -101,26 +89,45 @@
     ++ lib.optionals
     (!pkgs.stdenv.isDarwin) [
       # Things that only build on Linux go here
+      # Exploitation
+      metasploit
+
       # Recon
+      recon-ng
       enum4linux-ng # local privesc finder
       ike-scan
+      pktgen
+      ostinato
+      #zmap # currently marked broken 2022-01-31
+
       # Passwords
       hashcat
       thc-hydra
+      hcxtools
+      ncrack # network auth cracker
+      brutespray
+
       # Sniffing
       dsniff
       tcpflow
       p0f
       netsniff-ng
+      mitmproxy
+      dhcpdump
+      proxychains
+
       # Web
       burpsuite
       zap
+      wpscan
+
       # Wifi
       kismet
       wifite2
       reaverwps
       aircrack-ng
-      # bluetooth
+
+      # Bluetooth
       bluez
       # rfid
       proxmark3
@@ -129,10 +136,12 @@
       hackrf
       ubertooth
       multimon-ng
-      # crypto / stego
+
+      # Crypto / stego
       pngcheck
       stegseek
-      # manipulation
+
+      # Manipulation
       radare2-cutter
       #afl # fuzzer tool
       # cloud
@@ -167,7 +176,8 @@
       trufflehog
       whispers
       xeol
-      # misc
+
+      # Misc
       keedump
       sploitscan
     ];

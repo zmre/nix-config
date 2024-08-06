@@ -835,9 +835,10 @@ in {
   };
   programs.gh = {
     enable = true;
-    # stable is currently failing as of 2022-02-17
-    # error: Could not find a version that satisfies the requirement tomlkit<0.8,>=0.7 (from remarshal)
     package = pkgs.gh;
+    # Ones I have installed that aren't available in pkgs 2024-07-31:
+    #inputs.gh-feed
+    extensions = with pkgs; [gh-dash gh-notify gh-poi gh-worktree gh-feed];
     settings = {git_protocol = "ssh";};
   };
   programs.mpv = {

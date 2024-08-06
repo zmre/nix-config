@@ -135,6 +135,7 @@
       }
       #"microsoft-office" -- moved this to apple app store
       #"mpv"
+      "metasploit" # TODO 2024-07-31 nix version not running on mac
       "noun-project"
       {
         name = "obs"; # TODO: move to nix version obs-studio when not broken
@@ -301,6 +302,7 @@
       "ciphey"
       "ddcctl"
       "ical-buddy"
+      "recon-ng" # TODO nix version doesn't work on mac at last try 2024-07-31
       "whisper-cpp"
       "whisperkit-cli"
       # would rather load these as part of a security shell, but...

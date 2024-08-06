@@ -100,6 +100,18 @@
       inherit (inputs.nps.packages.${final.system}) nps;
       inherit (inputs.devenv.packages.${final.system}) devenv;
     })
+    (final: prev: {
+      inherit (inputs.gh-worktree.packages.${final.system}) gh-worktree;
+      gh-feed = prev.buildGoModule {
+        pname = "gh-feed";
+        name = "gh-feed";
+        doCheck = false;
+        src = inputs.gh-feed;
+        # just have to manually update this each time it fails, I guess
+        # vendorHash = prev.lib.fakeHash;
+        vendorHash = "sha256-RjVRGdeltBTjdNzq5jl5oz5O9VqM3xO3IceCWXapNGc=";
+      };
+    })
     inputs.nur.overlay
   ];
 }
