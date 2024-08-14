@@ -280,10 +280,11 @@ in {
 
         Packages = proselint, alex, Readability
 
-        [*]
-        BasedOnStyles = Vale, proselint
         IgnoredScopes = code, tt
         SkippedScopes = script, style, pre, figure
+
+        [*]
+        BasedOnStyles = Vale, proselint
         Google.FirstPerson = NO
         Google.We = NO
         Google.Acronyms = NO
