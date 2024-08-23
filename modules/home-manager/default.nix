@@ -214,9 +214,9 @@ in {
         "\C-n":"cd ..\n"
         set editing-mode vi
       '';
-      ".direnvrc".text = ''
-        source ~/.config/direnv/direnvrc
-      '';
+      #".direnvrc".text = ''
+      #source ~/.config/direnv/direnvrc
+      #'';
       # ".p10k.zsh".source = ./dotfiles/p10k.zsh;
       ".wallpaper.jpg".source = ./wallpaper/castle2.jpg;
       ".lockpaper.png".source = ./wallpaper/kali.png;
