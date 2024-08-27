@@ -122,6 +122,7 @@
         pkgs.colima # command line docker server replacement
         pkgs.stable.docker
         pkgs.utm # utm is a qemu wrapper gui for mac only
+        pkgs.raycast
       ]);
 in {
   programs.home-manager.enable = true;

@@ -32,9 +32,8 @@
       theharvester
       socialscan
       urlhunter
-      sn0int
       cloudbrute
-      sn0int
+      #sn0int # temp disable cuz rust build issue 2024-08-26
       sslsplit
       # wireshark moved to nixos config
       # pick one of wireshark or wireshark-cli

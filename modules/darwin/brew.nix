@@ -169,10 +169,10 @@
       #"quicklookase" # not updated in 6 years
       #"ripcord" # native (non-electron) desktop client for Slack + Discord -- try again in 2023
       "reikey"
-      {
-        name = "raycast";
-        greedy = true;
-      }
+      # { # moving to nix pkgs version
+      #   name = "raycast";
+      #   greedy = true;
+      # }
       {
         name = "screenflow";
         greedy = true;
