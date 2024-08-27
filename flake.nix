@@ -42,7 +42,11 @@
 
     hackernews-tui.url = "github:aome510/hackernews-TUI?ref=v0.13.4";
     hackernews-tui.flake = false;
-
+    # fenix needed to build hackernews with older rustc for now (2024-08-26)
+    fenix = {
+      url = "github:nix-community/fenix?ref=6c9f0709358f212766cff5ce79f6e8300ec1eb91";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # blocklist to add to hosts file -- stops ads and malware across apps
     sbhosts.url = "github:StevenBlack/hosts";
 

@@ -61,17 +61,24 @@
       };
     })
     (final: prev: {
-      hackernews-tui = prev.rustPlatform.buildRustPackage {
-        name = "hackernews-tui";
-        pname = "hackernews-tui";
-        cargoLock = {lockFile = inputs.hackernews-tui + /Cargo.lock;};
-        # buildDependencies = [prev.glib];
-        buildInputs =
-          [prev.pkg-config prev.libiconv]
-          ++ prev.lib.optionals prev.stdenv.isDarwin
-          [prev.darwin.apple_sdk.frameworks.Security];
-        src = inputs.hackernews-tui;
-      };
+      hackernews-tui = let
+        inherit (inputs.fenix.packages.${prev.system}.stable) toolchain;
+      in
+        (prev.makeRustPlatform {
+          cargo = toolchain;
+          rustc = toolchain;
+        })
+        .buildRustPackage {
+          name = "hackernews-tui";
+          pname = "hackernews-tui";
+          cargoLock = {lockFile = inputs.hackernews-tui + /Cargo.lock;};
+          # buildDependencies = [prev.glib];
+          buildInputs =
+            [prev.pkg-config prev.libiconv]
+            ++ prev.lib.optionals prev.stdenv.isDarwin
+            [prev.darwin.apple_sdk.frameworks.Security];
+          src = inputs.hackernews-tui;
+        };
     })
     (final: prev: {
       # qutebrowser = prev.qutebrowser.override {
@@ -104,7 +111,7 @@
         src = inputs.gh-feed;
         # just have to manually update this each time it fails, I guess
         # vendorHash = prev.lib.fakeHash;
-        vendorHash = "sha256-RjVRGdeltBTjdNzq5jl5oz5O9VqM3xO3IceCWXapNGc=";
+        vendorHash = "sha256-kmXIFv3H0Phn+/phfC5n2dfE5oVHHapGHJLFFO9P5jo=";
       };
     })
     inputs.nur.overlay
