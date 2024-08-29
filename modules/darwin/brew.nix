@@ -82,8 +82,6 @@
         name = "elgato-stream-deck";
         greedy = true;
       }
-      # TODO: move espanso to home-manager
-      "espanso" # text expander functionality (but open source donationware, x-platform, rust-based)
       {
         name = "firefox"; # TODO: firefox build is broken on ARM; check to see if fixed
         greedy = true;
