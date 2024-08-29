@@ -123,6 +123,7 @@
         pkgs.stable.docker
         pkgs.utm # utm is a qemu wrapper gui for mac only
         pkgs.raycast
+        pkgs.spotify
       ]);
 in {
   programs.home-manager.enable = true;

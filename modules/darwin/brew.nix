@@ -187,10 +187,6 @@
         name = "skype";
         greedy = true;
       }
-      {
-        name = "spotify"; # TODO: move to home-manager when not broken
-        greedy = true;
-      }
       "swiftdefaultappsprefpane"
       "sync"
       {
