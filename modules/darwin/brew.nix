@@ -226,7 +226,7 @@
         name = "zotero"; # TODO: move to home-manager?
         greedy = true;
       }
-      # would be better to load  hese in a security shell, but nix versions don't build on mac
+      # would be better to load these in a security shell, but nix versions don't build on mac
       "zap" # TODO: move to home-manager? (zap)
       "zed" # visual studio alternative in beta now; written in rust, uses gpu and multithreads to be smokin fast
       "burp-suite" # TODO: move to home-manager? (burpsuite)
