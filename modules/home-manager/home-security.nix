@@ -29,7 +29,7 @@
       rustscan
       snmpcheck
       sslscan
-      theharvester
+      #theharvester # temp disable; broken 2024-09-06
       socialscan
       urlhunter
       cloudbrute
