@@ -94,7 +94,7 @@
       pwnvim # moved my neovim config to its own repo for atomic management and install
       gtm-okr
       babble-cli # twitter tui
-      enola # sherlock-like tool
+      #enola # sherlock-like tool # TODO: build is failing 2024-09-11 see overlays file for more details
       kopia # deduping backup
       nps # quick nix packages search
       zk # cli for indexing markdown files

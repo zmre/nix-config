@@ -38,7 +38,8 @@
     pwneovide.url = "github:zmre/pwneovide";
     # pwneovide.inputs.pwnvim.follows = "pwnvim";
 
-    ironhide.url = "github:IronCoreLabs/ironhide?ref=1.0.5";
+    ironhide.url = "github:IronCoreLabs/ironhide?ref=1.0.9";
+    ironhide.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     hackernews-tui.url = "github:aome510/hackernews-TUI?ref=v0.13.4";
     hackernews-tui.flake = false;

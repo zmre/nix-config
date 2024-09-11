@@ -26,7 +26,9 @@
           };
     })
     (final: prev: {
-      enola = prev.buildGoModule {
+      enola = prev.buildGo123Module {
+        # TODO: this seems to be failing with this problem https://discourse.nixos.org/t/cant-update-a-go-package-getting-go-inconsistent-vendoring/27063/6
+        # But I don't have time to figure out how to fix it right now 2024-09-11
         name = "enola";
         pname = "enola";
         src = inputs.enola;
