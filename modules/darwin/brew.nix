@@ -303,6 +303,7 @@
       "hashcat" # the nix one only builds on linux
       "hydra" # the nix one only builds on linux
       "p0f" # the nix one only builds on linux
+      "yt-dlp" # youtube downloader
     ];
   };
 }

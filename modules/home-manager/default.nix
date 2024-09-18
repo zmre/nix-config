@@ -101,7 +101,7 @@
       hackernews-tui
       btop # currently like this better than bottom and htop
       #youtube-dl replaced by yt-dlp
-      yt-dlp
+      # yt-dlp # Moving to homebrew for now for extra capabilities built in 2024-09-17
       marp-cli # convert markdown to html slides
       ironhide # rust version of IronCore's ironhide
       devenv # quick setup of dev envs for projects
@@ -436,7 +436,7 @@ in {
       dracula-theme.theme-dracula
       eamodio.gitlens # for git blame
       marp-team.marp-vscode # for markdown slides
-      # pkgs.kubernetes-yaml-formatter # format k8s; from overlays and flake input # not building as of 2024-04-22; not sure why, no time to debug right now
+      #pkgs.kubernetes-yaml-formatter # format k8s; from overlays and flake input # not building as of 2024-04-22; not sure why, no time to debug right now
       # live share not currently working via nix
       #ms-vsliveshare.vsliveshare # live share coding with others
       # wishlist
