@@ -128,7 +128,7 @@
         src = inputs.gh-feed;
         # just have to manually update this each time it fails, I guess
         # vendorHash = prev.lib.fakeHash;
-        vendorHash = "sha256-kmXIFv3H0Phn+/phfC5n2dfE5oVHHapGHJLFFO9P5jo=";
+        vendorHash = "sha256-IFSu4MC/vntxRsg2G7e70lXe1aCRTmpRQt0JPXWabQA=";
       };
     })
     inputs.nur.overlay

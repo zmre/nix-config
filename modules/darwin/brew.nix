@@ -123,7 +123,10 @@
         greedy = true;
       }
       "knockknock"
-      "little-snitch"
+      {
+        name = "little-snitch";
+        greedy = true;
+      }
       #"lm-studio"
       "lockrattler"
       #"loopback" -- haven't been using this of late
