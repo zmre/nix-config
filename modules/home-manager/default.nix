@@ -1625,7 +1625,7 @@ in {
       startup_session = "~/.config/kitty/startup.session";
       shell = "${pkgs.zsh}/bin/zsh --login --interactive";
     };
-    theme = "One Half Dark"; # or Dracula or OneDark see https://github.com/kovidgoyal/kitty-themes/tree/master/themes
+    themeFile = "One Half Dark"; # or Dracula or OneDark see https://github.com/kovidgoyal/kitty-themes/tree/master/themes
     # extraConfig = "\n";
   };
   programs.alacritty = {
