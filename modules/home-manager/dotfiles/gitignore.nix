@@ -134,7 +134,6 @@
   ".gdb_history"
   ".git"
   ".git/"
-  ".gitignore"
   ".gitkeep"
   ".gopath/"
   ".grunt"
