@@ -77,7 +77,8 @@
         version = "1.1.0";
       };
     })
-    (final: prev: {
+    /*
+       (final: prev: {
       hackernews-tui = let
         inherit (inputs.fenix.packages.${prev.system}.stable) toolchain;
       in
@@ -96,6 +97,20 @@
             [prev.darwin.apple_sdk.frameworks.Security];
           src = inputs.hackernews-tui;
         };
+    })
+    */
+    (final: prev: {
+      hackernews-tui = prev.rustPlatform.buildRustPackage {
+        name = "hackernews-tui";
+        pname = "hackernews-tui";
+        cargoLock = {lockFile = inputs.hackernews-tui + /Cargo.lock;};
+        # buildDependencies = [prev.glib];
+        buildInputs =
+          [prev.pkg-config prev.libiconv]
+          ++ prev.lib.optionals prev.stdenv.isDarwin
+          [prev.darwin.apple_sdk.frameworks.Security];
+        src = inputs.hackernews-tui;
+      };
     })
     (final: prev: {
       # qutebrowser = prev.qutebrowser.override {

@@ -123,10 +123,10 @@
     };
   };
 
-  launchd.user.agents.raycast = {
-    serviceConfig.ProgramArguments = ["${pkgs.raycast}/Applications/Raycast.app/Contents/MacOS/Raycast"];
-    serviceConfig.RunAtLoad = true;
-  };
+  # launchd.user.agents.raycast = {
+  #   serviceConfig.ProgramArguments = ["${pkgs.raycast}/Applications/Raycast.app/Contents/MacOS/Raycast"];
+  #   serviceConfig.RunAtLoad = true;
+  # };
 
   documentation.enable = true; # temp disable 2024-07-06 to workaround issue
   # documentation.doc.enable = false;

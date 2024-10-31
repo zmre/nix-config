@@ -48,11 +48,11 @@
       rarcrack
       crunch # wordlist generator
       #chntpw
-      crowbar
+      #crowbar # build issues on 2024-10-30
 
       # Sniffing
       ettercap
-      bettercap
+      #bettercap # build issues on 2024-10-30
       proxify
       wireshark
       ngrep

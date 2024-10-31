@@ -108,6 +108,7 @@
         name = "gpg-suite";
         greedy = true;
       }
+      "httpie"
       {
         name = "imageoptim";
         greedy = true;
@@ -118,11 +119,13 @@
         greedy = true;
       }
       "keycastr"
+      "kitty" # would prefer to let nix install this as I have for over a year but post 15.1, nix version doesn't launch right
       {
         name = "kopiaui"; # ui for kopia dedupe backup
         greedy = true;
       }
       "knockknock"
+      "league-of-legends"
       {
         name = "little-snitch";
         greedy = true;
@@ -170,10 +173,10 @@
       #"quicklookase" # not updated in 6 years
       #"ripcord" # native (non-electron) desktop client for Slack + Discord -- try again in 2023
       "reikey"
-      # { # moving to nix pkgs version
-      #   name = "raycast";
-      #   greedy = true;
-      # }
+      {
+        name = "raycast";
+        greedy = true;
+      }
       {
         name = "screenflow";
         greedy = true;
@@ -276,7 +279,7 @@
       #"NextDNS" = 1464122853;
       "NotePlan 3" = 1505432629;
       "PCalc" = 403504866;
-      "PeakHour" = 1560576252;
+      #"PeakHour" = 1560576252;
       "SQLPro Studio" = 985614903;
       "Save to Reader" = 1640236961; # readwise reader (my pocket replacement)
       "Scrivener" = 1310686187;

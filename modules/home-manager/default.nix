@@ -103,7 +103,7 @@
       #youtube-dl replaced by yt-dlp
       # yt-dlp # Moving to homebrew for now for extra capabilities built in 2024-09-17
       marp-cli # convert markdown to html slides
-      ironhide # rust version of IronCore's ironhide
+      #ironhide # rust version of IronCore's ironhide
       devenv # quick setup of dev envs for projects
       #qutebrowser
     ]);
@@ -122,7 +122,7 @@
         pkgs.colima # command line docker server replacement
         pkgs.stable.docker
         pkgs.utm # utm is a qemu wrapper gui for mac only
-        pkgs.raycast
+        #pkgs.raycast # creates weird problems on upgrades having raycast in different paths, sadly; back to brew 2024-10-30
         pkgs.spotify
       ]);
 in {
@@ -247,6 +247,21 @@ in {
         ./dotfiles/terminfo/78/xterm-kitty;
       ".terminfo/77/wezterm".source =
         ./dotfiles/terminfo/77/wezterm; # fetched from https://raw.githubusercontent.com/wez/wezterm/master/termwiz/data/wezterm.terminfo
+
+      # Don't let curl struggle to connect forever. After 10 seconds, give up
+      # Note: max-time = 240 or something might also be useful but that caps the total time for an operation
+      # The speed-time and speed-limit items are in seconds and bytes per second and the idea is to stop transfers that
+      # get really slow.  So if speed-time is 15 and speed-limit is 1000 then if a transfer falls to less than 1000 bytes/s
+      # for 15 seconds, it gets killed
+      ".config/curlrc".text = ''
+        connect-timeout 10
+        speed-time 30
+        speed-limit 1000
+        retry 2
+        retry-max-time 30
+        location
+        max-redirs 3
+      '';
 
       ".config/lf/lfimg".source = ./dotfiles/lf/lfimg;
       ".config/lf/lf_kitty_preview".source =
@@ -605,7 +620,8 @@ in {
     package = pkgs.gh;
     # Ones I have installed that aren't available in pkgs 2024-07-31:
     #inputs.gh-feed
-    extensions = with pkgs; [gh-dash gh-notify gh-poi gh-worktree gh-feed];
+    # TODO: investigate why gh-feed is no longer building 2024-10-30; removed from extensions for now
+    extensions = with pkgs; [gh-dash gh-notify gh-poi gh-worktree]; #gh-feed
     settings = {git_protocol = "ssh";};
   };
   programs.mpv = {
@@ -870,7 +886,7 @@ in {
         "syncm" = "rsync -avhzP --progress \"$HOME/Sync/Private/PW Projects/Magic/\" pwalsh@synology1.savannah-basilisk.ts.net:/volume1/video/Magic/";
       }
       // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
-        tailscale = "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
+        tailscale = "/Applications/Tailscale.localized/Tailscale.app/Contents/MacOS/Tailscale";
         # Figure out the uniform type identifiers and uri schemes of a file (must specify the file)
         # for use in SwiftDefaultApps
         checktype = "mdls -name kMDItemContentType -name kMDItemContentTypeTree -name kMDItemKind";
@@ -1474,7 +1490,7 @@ in {
   # Conclusion: I like it, but kitty has faster throughput with same features and uses 200mb
   # instead of 300mb that wezterm uses. Leaving setup here in case I want to try again.
   programs.wezterm = {
-    enable = false;
+    enable = true;
     enableZshIntegration = true;
     extraConfig = ''
       local wezterm = require 'wezterm'
@@ -1530,6 +1546,7 @@ in {
   # 2022-11-06 going to try kitty for a bit
   programs.kitty = {
     enable = true;
+    package = pkgs.emptyDirectory; # post 15.1 update, having issues with nix version and moving to brew for now 2024-10-30
     keybindings = {
       "super+equal" = "increase_font_size";
       "super+minus" = "decrease_font_size";
