@@ -147,5 +147,6 @@
       };
     })
     inputs.nur.overlay
+    inputs.yazi.overlays.default
   ];
 }

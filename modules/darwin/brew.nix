@@ -119,7 +119,7 @@
         greedy = true;
       }
       "keycastr"
-      "kitty" # would prefer to let nix install this as I have for over a year but post 15.1, nix version doesn't launch right
+      #"kitty" # would prefer to let nix install this as I have for over a year but post 15.1, nix version doesn't launch right
       {
         name = "kopiaui"; # ui for kopia dedupe backup
         greedy = true;
@@ -246,6 +246,7 @@
       # Keeping the next three together as they act in concert and are made by the same guy
       "kindavim" # ctrl-esc allows you to control an input area as if in vim normal mode
       "scrolla" # use vim commands to select scroll areas and scroll
+      "wezterm"
       "wooshy" # use cmd-shift-space to bring up search to select interface elements in current app
     ];
 

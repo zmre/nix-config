@@ -352,6 +352,24 @@
         "type": "github"
       }
     },
+    "flake-utils_11": {
+      "inputs": {
+        "systems": "systems_7"
+      },
+      "locked": {
+        "lastModified": 1726560853,
+        "narHash": "sha256-X6rJYSESBVr3hBoH0WbKE5KvhPU5bloyZ2L4K60/fPQ=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "c1dfcf08411b08f6b8615f7d8971a2bfa81d5e8a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
     "flake-utils_2": {
       "locked": {
         "lastModified": 1637014545,
@@ -1042,6 +1060,22 @@
         "type": "indirect"
       }
     },
+    "nixpkgs_9": {
+      "locked": {
+        "lastModified": 1729265718,
+        "narHash": "sha256-4HQI+6LsO3kpWTYuVGIzhJs1cetFcwT7quWCk/6rqeo=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "ccc0c2126893dd20963580b6478d1a10a4512185",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "noice-nvim": {
       "flake": false,
       "locked": {
@@ -1279,7 +1313,10 @@
         "nur": "nur",
         "pwneovide": "pwneovide",
         "pwnvim": "pwnvim_2",
-        "sbhosts": "sbhosts"
+        "sbhosts": "sbhosts",
+        "yazi": "yazi",
+        "yazi-flavors": "yazi-flavors",
+        "yazi-quicklook": "yazi-quicklook"
       }
     },
     "rust-analyzer-src": {
@@ -1366,6 +1403,27 @@
         "owner": "oxalica",
         "repo": "rust-overlay",
         "rev": "815d1b3ee71716fc91a7bd149801e1f04d45fbc5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "rust-overlay_4": {
+      "inputs": {
+        "nixpkgs": [
+          "yazi",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1729391507,
+        "narHash": "sha256-as0I9xieJUHf7kiK2a9znDsVZQTFWhM1pLivII43Gi0=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "784981a9feeba406de38c1c9a3decf966d853cca",
         "type": "github"
       },
       "original": {
@@ -1482,6 +1540,21 @@
         "type": "github"
       }
     },
+    "systems_7": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
     "utils": {
       "inputs": {
         "systems": "systems"
@@ -1497,6 +1570,58 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "yazi": {
+      "inputs": {
+        "flake-utils": "flake-utils_11",
+        "nixpkgs": "nixpkgs_9",
+        "rust-overlay": "rust-overlay_4"
+      },
+      "locked": {
+        "lastModified": 1730461939,
+        "narHash": "sha256-flbkUMfCcjyDb/rZF/7laTTOx6UuWwTBzyh4/L1E834=",
+        "owner": "sxyazi",
+        "repo": "yazi",
+        "rev": "0baccdc9aaa26bbea458f0b7fcbe7916c8b2c1df",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sxyazi",
+        "repo": "yazi",
+        "type": "github"
+      }
+    },
+    "yazi-flavors": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1730465552,
+        "narHash": "sha256-Tpu/BLs/P/5KipggGQM8je1BpLpEDVBSAb5qZPXea1k=",
+        "owner": "yazi-rs",
+        "repo": "flavors",
+        "rev": "d504f70dd5e81e4f623004a26ac0269ddc5a5820",
+        "type": "github"
+      },
+      "original": {
+        "owner": "yazi-rs",
+        "repo": "flavors",
+        "type": "github"
+      }
+    },
+    "yazi-quicklook": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1728045996,
+        "narHash": "sha256-brXOe6LIIMlNoGcaPp9XDN9TZkMrgvNB66pzNFzxpao=",
+        "owner": "vvatikiotis",
+        "repo": "quicklook.yazi",
+        "rev": "73c9244873881ee43aae41d69c2f6f90e2f2c05c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "vvatikiotis",
+        "repo": "quicklook.yazi",
         "type": "github"
       }
     }

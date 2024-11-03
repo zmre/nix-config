@@ -5,11 +5,13 @@
       "https://cache.nixos.org"
       "https://nix-community.cachix.org"
       "https://zmre.cachix.org"
+      "https://yazi.cachix.org"
     ];
     extra-trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "zmre.cachix.org-1:WIE1U2a16UyaUVr+Wind0JM6pEXBe43PQezdPKoDWLE="
+      "yazi.cachix.org-1:Dcdz63NZKfvUCbDGngQDAZq6kOroIrFoyO064uvLh8k="
     ];
   };
 
@@ -83,6 +85,12 @@
     gh-worktree.inputs.nixpkgs.follows = "nixpkgs-unstable";
     gh-feed.url = "github:rsteube/gh-feed";
     gh-feed.flake = false;
+
+    yazi.url = "github:sxyazi/yazi";
+    yazi-quicklook.url = "github:vvatikiotis/quicklook.yazi";
+    yazi-quicklook.flake = false;
+    yazi-flavors.url = "github:yazi-rs/flavors";
+    yazi-flavors.flake = false;
 
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
     nix-homebrew.inputs.nixpkgs.follows = "nixpkgs";

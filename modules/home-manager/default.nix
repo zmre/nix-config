@@ -163,7 +163,7 @@ in {
     COLORTERM = "truecolor";
     FZF_CTRL_R_OPTS = "--sort --exact";
     BROWSER = "qutebrowser";
-    TERMINAL = "kitty";
+    #TERMINAL = "kitty";
     HOMEBREW_NO_AUTO_UPDATE = 1;
     #LIBVA_DRIVER_NAME="iHD";
     ZK_NOTEBOOK_DIR =
@@ -236,15 +236,15 @@ in {
       ".terminfo/61/alacritty".source = ./dotfiles/terminfo/61/alacritty;
       ".terminfo/61/alacritty-direct".source =
         ./dotfiles/terminfo/61/alacritty-direct;
-      ".terminfo/6b/kitty".source = ./dotfiles/terminfo/6b/kitty;
-      ".terminfo/6b/kitty-direct".source =
-        ./dotfiles/terminfo/6b/kitty-direct;
+      # ".terminfo/6b/kitty".source = ./dotfiles/terminfo/6b/kitty;
+      # ".terminfo/6b/kitty-direct".source =
+      #   ./dotfiles/terminfo/6b/kitty-direct;
       ".terminfo/74/tmux-256color".source =
         ./dotfiles/terminfo/74/tmux-256color;
-      ".terminfo/78/xterm-kitty".source =
-        ./dotfiles/terminfo/78/xterm-kitty;
-      ".terminfo/x/xterm-kitty".source =
-        ./dotfiles/terminfo/78/xterm-kitty;
+      # ".terminfo/78/xterm-kitty".source =
+      #   ./dotfiles/terminfo/78/xterm-kitty;
+      # ".terminfo/x/xterm-kitty".source =
+      #   ./dotfiles/terminfo/78/xterm-kitty;
       ".terminfo/77/wezterm".source =
         ./dotfiles/terminfo/77/wezterm; # fetched from https://raw.githubusercontent.com/wez/wezterm/master/termwiz/data/wezterm.terminfo
 
@@ -263,15 +263,17 @@ in {
         max-redirs 3
       '';
 
-      ".config/lf/lfimg".source = ./dotfiles/lf/lfimg;
-      ".config/lf/lf_kitty_preview".source =
-        ./dotfiles/lf/lf_kitty_preview;
+      ".config/wezterm/wezterm.lua".source = ./dotfiles/wezterm/wezterm.lua;
 
-      ".config/lf/pv.sh".source = ./dotfiles/lf/pv.sh;
-      ".config/lf/cls.sh".source = ./dotfiles/lf/cls.sh;
+      # ".config/lf/lfimg".source = ./dotfiles/lf/lfimg;
+      # ".config/lf/lf_kitty_preview".source =
+      # ./dotfiles/lf/lf_kitty_preview;
+
+      # ".config/lf/pv.sh".source = ./dotfiles/lf/pv.sh;
+      # ".config/lf/cls.sh".source = ./dotfiles/lf/cls.sh;
       #".config/lf/previewer.sh".source = ./dotfiles/lf/previewer.sh;
-      ".config/lf/pager.sh".source = ./dotfiles/lf/pager.sh;
-      ".config/lf/lficons.sh".source = ./dotfiles/lf/lficons.sh;
+      # ".config/lf/pager.sh".source = ./dotfiles/lf/pager.sh;
+      # ".config/lf/lficons.sh".source = ./dotfiles/lf/lficons.sh;
       # Config for hackernews-tui to make it darker
       ".config/hn-tui.toml".text = ''
         [theme.palette]
@@ -804,7 +806,9 @@ in {
       #bindkey '^I' fzf-completion
 
       # Needed for lf to be pretty
-      . ~/.config/lf/lficons.sh
+      # . ~/.config/lf/lficons.sh
+
+      if [[ -f /Applications/WezTerm.app/Contents/Resources ]] ; then source /Applications/WezTerm.app/Contents/Resources/wezterm.sh ; fi
 
       # Setup zoxide
       eval "$(zoxide init zsh)"
@@ -864,7 +868,7 @@ in {
         llt = "eza --icons --git-ignore --git -F -l -T";
         fd = "\\fd -H -t d"; # default search directories
         f = "\\fd -H"; # default search this dir for files ignoring .gitignore etc
-        lf = "~/.config/lf/lfimg";
+        #lf = "~/.config/lf/lfimg";
         nixflakeupdate1 = "nix run github:vimjoyer/nix-update-input"; # does `nix flake lock --update-input` with relevant fuzzy complete. Though actually, our tab completion does the same
         qp = ''
           qutebrowser --temp-basedir --set content.private_browsing true --set colors.tabs.bar.bg "#552222" --config-py "$HOME/.config/qutebrowser/config.py" --qt-arg name "qp,qp"'';
@@ -1232,8 +1236,10 @@ in {
     };
   };
 
+  # Leaving my config in place, but throwing out lf in favor of yazi for now 2024-11-01
+  # Main reason: viewing images in lf is just very spotty. Works sometimes and not others
   programs.lf = {
-    enable = true;
+    enable = false;
     settings = {
       icons = true;
       incsearch = true;
@@ -1318,6 +1324,221 @@ in {
       "<enter>" = ":printfx; quit";
     };
   };
+
+  programs.yazi = {
+    enable = true;
+    enableZshIntegration = true;
+    flavors = {
+      catppuccin-mocha = (inputs.yazi-flavors) + /catppuccin-mocha.yazi;
+    };
+    theme = {
+      use = "catppuccin-mocha";
+
+      status = {
+        separator_open = "";
+        separator_close = "";
+        separator_style = {
+          fg = "#45475a";
+          bg = "#45475a";
+        };
+
+        # Mode
+        mode_normal = {
+          fg = "#1e1e2e";
+          bg = "#a6e3a1";
+          bold = true;
+        };
+        mode_select = {
+          fg = "#1e1e2e";
+          bg = "#a6e3a1";
+          bold = true;
+        };
+        mode_unset = {
+          fg = "#1e1e2e";
+          bg = "#f2cdcd";
+          bold = true;
+        };
+
+        # Progress
+        progress_label = {
+          fg = "#ffffff";
+          bold = true;
+        };
+        progress_normal = {
+          fg = "#89b4fa";
+          bg = "#45475a";
+        };
+        progress_error = {
+          fg = "#f38ba8";
+          bg = "#45475a";
+        };
+      };
+
+      tasks = {
+        border = {fg = "#a6e3a1";};
+        title = {};
+        hovered = {underline = true;};
+      };
+    };
+    initLua = ./dotfiles/yazi/init.lua;
+    keymap = {
+      manager = {
+        append_keymap = [
+          {
+            on = ["," " "];
+            run = ["plugin quicklook"];
+            desc = "Macos Quicklook";
+          }
+          {
+            on = ["g" "r"];
+            run = ''shell 'ya pub dds-cd --str "$(git rev-parse --show-toplevel)"' --confirm'';
+            desc = "Git root";
+          }
+        ];
+      };
+    };
+    plugins = {
+      quicklook = inputs.yazi-quicklook;
+      folder-rules = ./dotfiles/yazi/plugins/folder-rules.yazi;
+    };
+    settings = {
+      manager = {
+        sort_by = "natural";
+        sort_dir_first = true;
+        sort_reverse = true;
+        sort_sensitive = false; # case insensitive sorting
+        sort_translit = false; # if true, replaces Â as A, Æ as AE, etc
+        linemode = "size_and_mtime";
+      };
+      opener = {
+        play = [
+          {
+            run = ''mpv --force-window "$@"'';
+            for = "unix"; # here unix is macos and linux
+            orphan = true;
+          }
+          {
+            run = "plugin quicklook";
+            orphan = true;
+            desc = "Quicklook";
+            for = "macos";
+          }
+          {
+            run = ''mediainfo "$1"; echo "Press enter to exit"; read _'';
+            block = true;
+            desc = "Show media info";
+            for = "unix";
+          }
+        ];
+        edit = [
+          {
+            run = ''nvim "$@"'';
+            block = true;
+            desc = "nvim";
+            for = "unix";
+          }
+          {
+            run = ''pwneovide "$@"'';
+            orphan = true;
+            desc = "neovide";
+            for = "unix";
+          }
+        ];
+        reveal = [
+          # if folder, open explorer current location
+          {
+            run = ''xdg-open "$(dirname "$1")"'';
+            desc = "Reveal";
+            for = "linux";
+          }
+          {
+            run = ''open -R "$1"'';
+            desc = "Reveal in Finder";
+            for = "macos";
+          }
+          {
+            run = ''explorer /select,"%1"'';
+            orphan = true;
+            desc = "Reveal";
+            for = "windows";
+          }
+          {
+            run = ''exiftool "$1"; echo "Press enter to exit"; read _'';
+            block = true;
+            desc = "Show EXIF";
+            for = "unix";
+          }
+        ];
+        open = [
+          {
+            run = ''open "$@"'';
+            desc = "Open";
+            for = "macos";
+          }
+          {
+            run = ''xdg-open "$1"'';
+            desc = "Open";
+            for = "linux";
+          }
+        ];
+      };
+      open = {
+        rules = [
+          # Folder
+          {
+            name = "*/";
+            use = ["open" "reveal"];
+          } # open explorer of current selected directory
+          # Text
+          {
+            mime = "text/*";
+            use = ["edit" "reveal"];
+          }
+          # Image
+          {
+            mime = "image/*";
+            use = ["open" "reveal"];
+          }
+          # Media
+          {
+            mime = "{audio,video}/*";
+            use = ["play" "reveal"];
+          }
+          # Archive
+          {
+            mime = "application/{,g}zip";
+            use = ["extract" "reveal"];
+          }
+          {
+            mime = "application/x-{tar,bzip*,7z-compressed,xz,rar}";
+            use = ["extract" "reveal"];
+          }
+          # JSON
+          {
+            mime = "application/{json,x-ndjson}";
+            use = ["edit" "reveal"];
+          }
+          {
+            mime = "*/javascript";
+            use = ["edit" "reveal"];
+          }
+          # Empty file
+          {
+            mime = "inode/x-empty";
+            use = ["edit" "reveal"];
+          }
+          # Fallback
+          {
+            name = "*";
+            use = ["open" "reveal"];
+          }
+        ];
+      };
+    };
+    shellWrapperName = "y";
+    theme = {};
+  };
+
   programs.git = {
     enable = true;
     lfs.enable = true;
@@ -1428,7 +1649,7 @@ in {
   };
 
   programs.newsboat = {
-    enable = false;
+    enable = true;
     autoReload = true;
     browser =
       if pkgs.stdenvNoCC.isDarwin
@@ -1486,67 +1707,10 @@ in {
     ];
   };
 
-  # 2023-11-07 also trying wezterm, though it looks like kitty is a bit faster (which is nuts)
-  # Conclusion: I like it, but kitty has faster throughput with same features and uses 200mb
-  # instead of 300mb that wezterm uses. Leaving setup here in case I want to try again.
-  programs.wezterm = {
-    enable = true;
-    enableZshIntegration = true;
-    extraConfig = ''
-      local wezterm = require 'wezterm'
-      local act = wezterm.action
-      return {
-        use_fancy_tab_bar = true,
-        hide_tab_bar_if_only_one_tab = true,
-        --color_scheme = 'OneHalfDark',
-        color_scheme = 'OneDark (base16)',
-        font = wezterm.font 'Hasklug Nerd Font Mono',
-        term = 'wezterm',
-        window_background_opacity = 0.9,
-        font_size = 17.0,
-        key_tables = {
-          -- Defines the keys that are active in our resize-pane mode.
-          -- Since we're likely to want to make multiple adjustments,
-          -- we made the activation one_shot=false. We therefore need
-          -- to define a key assignment for getting out of this mode.
-          -- 'resize_pane' here corresponds to the name="resize_pane" in
-          -- the key assignments above.
-          resize_pane = {
-            { key = 'LeftArrow',  action = act.AdjustPaneSize { 'Left', 1 } },
-            { key = 'h',          action = act.AdjustPaneSize { 'Left', 1 } },
-            { key = 'RightArrow', action = act.AdjustPaneSize { 'Right', 1 } },
-            { key = 'l',          action = act.AdjustPaneSize { 'Right', 1 } },
-            { key = 'UpArrow',    action = act.AdjustPaneSize { 'Up', 1 } },
-            { key = 'k',          action = act.AdjustPaneSize { 'Up', 1 } },
-            { key = 'DownArrow',  action = act.AdjustPaneSize { 'Down', 1 } },
-            { key = 'j',          action = act.AdjustPaneSize { 'Down', 1 } },
-
-            -- Cancel the mode by pressing escape
-            { key = 'Escape',     action = 'PopKeyTable' },
-          },
-
-          -- Defines the keys that are active in our activate-pane mode.
-          -- 'activate_pane' here corresponds to the name="activate_pane" in
-          -- the key assignments above.
-          activate_pane = {
-            { key = 'LeftArrow',  action = act.ActivatePaneDirection 'Left' },
-            { key = 'h',          action = act.ActivatePaneDirection 'Left' },
-            { key = 'RightArrow', action = act.ActivatePaneDirection 'Right' },
-            { key = 'l',          action = act.ActivatePaneDirection 'Right' },
-            { key = 'UpArrow',    action = act.ActivatePaneDirection 'Up' },
-            { key = 'k',          action = act.ActivatePaneDirection 'Up' },
-            { key = 'DownArrow',  action = act.ActivatePaneDirection 'Down' },
-            { key = 'j',          action = act.ActivatePaneDirection 'Down' },
-          },
-        },
-      }
-    '';
-  };
-
   # 2022-11-06 going to try kitty for a bit
   programs.kitty = {
-    enable = true;
-    package = pkgs.emptyDirectory; # post 15.1 update, having issues with nix version and moving to brew for now 2024-10-30
+    enable = false;
+    #package = pkgs.emptyDirectory; # post 15.1 update, having issues with nix version and moving to brew for now 2024-10-30
     keybindings = {
       "super+equal" = "increase_font_size";
       "super+minus" = "decrease_font_size";
