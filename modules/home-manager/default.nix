@@ -103,7 +103,7 @@
       #youtube-dl replaced by yt-dlp
       # yt-dlp # Moving to homebrew for now for extra capabilities built in 2024-09-17
       marp-cli # convert markdown to html slides
-      #ironhide # rust version of IronCore's ironhide
+      ironhide # rust version of IronCore's ironhide
       devenv # quick setup of dev envs for projects
       #qutebrowser
     ]);
@@ -816,7 +816,7 @@ in {
       precmd_functions+=(set_tab_title)
 
       function set_tab_title() {
-        echo -ne "\033]0; zsh ($(basename "$PWD")) \007"
+          echo -ne "\033]0;zsh ($(basename "''${PWD/\/Users\/pwalsh/~}"))\007"
       }
       function convert_vid_to_h264() {
           input_file="$1"

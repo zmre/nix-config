@@ -181,7 +181,11 @@ wezterm.on('gui-startup', function(cmd)
   local news_tab, news_left_pane, _ = window:spawn_tab({})
   local notes_tab, notes_pane, _ = window:spawn_tab({ cwd = wezterm.home_dir .. "/Notes" })
   local website_tab, website_pane, _ = window:spawn_tab({ cwd = wezterm.home_dir .. "/src/icl/website.worktree" })
-  local yazi_tab, yazi_pane, _ = window:spawn_tab { cwd = wezterm.home_dir, set_environment_variables = { PATH = path }, args = { 'yazi', '~' } }
+  -- Switched from calling yazi natively to spawning a shell and then launching it
+  -- This adds more memory overhead to the yazi tab, which sucks, but allows me to drop to the shell by quitting yazi and have the folder be preserved
+  -- local yazi_tab, yazi_pane, _ = window:spawn_tab { cwd = wezterm.home_dir, set_environment_variables = { PATH = path }, args = { 'yazi', '~' } }
+  local yazi_tab, yazi_pane, _ = window:spawn_tab { cwd = wezterm.home_dir, set_environment_variables = { PATH = path } }
+  yazi_pane:send_text("y\n")
   local news_right_pane = news_left_pane:split({ direction = "Right", size = 0.5, set_environment_variables = { PATH = path }, args = { "hackernews_tui" } })
   notes_tab:set_title('notes')
   news_tab:set_title('news')
