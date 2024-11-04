@@ -813,6 +813,11 @@ in {
       # Setup zoxide
       eval "$(zoxide init zsh)"
 
+      precmd_functions+=(set_tab_title)
+
+      function set_tab_title() {
+        echo -ne "\033]0; zsh ($(basename "$PWD")) \007"
+      }
       function convert_vid_to_h264() {
           input_file="$1"
           extension="''${input_file##*.}"
@@ -1087,7 +1092,15 @@ in {
     enableBashIntegration = true;
     settings = {
       format = pkgs.lib.concatStrings [
-        "$os"
+        #"$os" # turns out it takes starship 20ms to figure out the OS at every prompt, but we can hard code it at build time
+        # alt for linux: "🐧 "
+        (
+          if pkgs.stdenv.isLinux
+          then "❄️"
+          else if pkgs.stdenv.isDarwin
+          then ""
+          else "🪟 "
+        )
         "$shell"
         "$username"
         "$hostname"

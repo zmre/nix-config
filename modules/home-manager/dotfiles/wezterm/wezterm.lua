@@ -18,12 +18,17 @@ config.adjust_window_size_when_changing_font_size = false
 config.automatically_reload_config = true
 -- config.window_close_confirmation = "NeverPrompt"
 config.tab_bar_at_bottom = true
-config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 2000 }
 config.scrollback_lines = 10000
 config.window_frame = {
   inactive_titlebar_bg = "none",
   active_titlebar_bg = "none",
   font_size = 16
+}
+config.window_padding = {
+  left = 1,
+  right = 1,
+  top = 0,
+  bottom = 0,
 }
 config.colors = {
   tab_bar = {
@@ -39,8 +44,12 @@ config.colors = {
     }
   }
 }
+-- Use ctrl-b as leader to be tmux-like (although I think the default there is ctrl-a... hmmm)
+config.leader = { key = "b", mods = "CTRL", timeout_milliseconds = 2000 }
 config.keys = {
+  -- ctrl-b, [ puts us into a vim-like mode for navigating and selecting and copying out history
   { key = "[", mods = "LEADER", action = act.ActivateCopyMode },
+  -- ctrl-b, | splits vertically while - splits horizontally
   {
     key = "-",
     mods = "LEADER",
@@ -51,6 +60,11 @@ config.keys = {
     mods = "LEADER",
     action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }),
   },
+  -- I have way too many ways to change panes, but the three options are:
+  -- ctrl-shift+h/j/k/l
+  -- ctrl-b, h/j/k/l
+  -- ctrl-b, a to activate the mode for navigating panes with h/j/k/l -- should probably remove this one
+  -- ctrl-b, r to activate the mode for resizing the current pane with h/j/k/l
   {
     key = 'h',
     mods = 'CTRL|SHIFT',
@@ -151,6 +165,13 @@ config.key_tables = {
     { key = 'j',          action = act.ActivatePaneDirection 'Down' },
   },
 }
+
+config.animation_fps = 165
+config.max_fps = 165
+local gpus = wezterm.gui.enumerate_gpus()
+config.front_end = 'WebGpu'
+config.webgpu_power_preference = 'HighPerformance'
+config.webgpu_preferred_adapter = gpus[1]
 
 wezterm.on('gui-startup', function(cmd)
   local path =
