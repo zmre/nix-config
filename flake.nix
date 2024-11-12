@@ -40,7 +40,7 @@
     pwneovide.url = "github:zmre/pwneovide";
     # pwneovide.inputs.pwnvim.follows = "pwnvim";
 
-    ironhide.url = "github:IronCoreLabs/ironhide?ref=2024-10-30-update-flake";
+    ironhide.url = "github:IronCoreLabs/ironhide";
     ironhide.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     hackernews-tui.url = "github:aome510/hackernews-TUI";

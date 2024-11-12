@@ -175,7 +175,10 @@
         name = "raycast";
         greedy = true;
       }
-      "rode-central"
+      {
+        name = "rode-central";
+        greedy = true;
+      }
       {
         name = "screenflow";
         greedy = true;
