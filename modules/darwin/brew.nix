@@ -51,10 +51,7 @@
         name = "chatgpt";
         greedy = true;
       }
-      # {
-      #   name = "canon-eos-utility";
-      #   greedy = true;
-      # }
+      "canon-eos-utility"
       #"canon-eos-webcam-utility"
       "choosy" # multi-browser url launch selector; see also https://github.com/johnste/finicky
       {
@@ -133,6 +130,7 @@
       #"lm-studio"
       "lockrattler"
       #"loopback" -- haven't been using this of late
+      "macwhisper"
       {
         name = "marked";
         greedy = true;
@@ -177,6 +175,7 @@
         name = "raycast";
         greedy = true;
       }
+      "rode-central"
       {
         name = "screenflow";
         greedy = true;
