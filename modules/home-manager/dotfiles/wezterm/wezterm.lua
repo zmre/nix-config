@@ -19,14 +19,17 @@ config.automatically_reload_config = true
 -- config.window_close_confirmation = "NeverPrompt"
 config.tab_bar_at_bottom = true
 config.scrollback_lines = 10000
+-- Following two settings are per Wez https://github.com/wez/wezterm/issues/3731 to get the cmd key to pass through to nvim
+config.enable_kitty_keyboard = true
+config.enable_csi_u_key_encoding = false
 config.window_frame = {
   inactive_titlebar_bg = "none",
   active_titlebar_bg = "none",
   font_size = 16
 }
 config.window_padding = {
-  left = 1,
-  right = 1,
+  left = 2,
+  right = 2,
   top = 0,
   bottom = 0,
 }

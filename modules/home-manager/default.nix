@@ -1399,14 +1399,19 @@ in {
       manager = {
         append_keymap = [
           {
-            on = ["," " "];
+            on = ["," " "]; # comma then space to preview, which is weird in yazi land where comma triggers sort options, but it works okay for me
             run = ["plugin quicklook"];
             desc = "Macos Quicklook";
           }
           {
-            on = ["g" "r"];
+            on = ["g" "r"]; # most g <something> commands go somewhere specific but this one goes to root of current folder
             run = ''shell 'ya pub dds-cd --str "$(git rev-parse --show-toplevel)"' --confirm'';
             desc = "Git root";
+          }
+          {
+            on = ["g" "k"]; # most g <something> commands go somewhere specific but this one goes to root of current folder
+            run = "cd ~/Desktop";
+            desc = "Goto Desktop";
           }
         ];
       };
