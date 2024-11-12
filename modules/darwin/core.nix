@@ -12,7 +12,8 @@
     #backupFileExtension = "backup";
     etc = {
       darwin.source = "${inputs.darwin}";
-      hosts.source = "${inputs.sbhosts}/hosts";
+      #hosts.source = "${inputs.sbhosts}/hosts"; # this works great pre-overlay except I wanted to modify the hosts file
+      hosts.source = "${pkgs.sbhosts}/hosts";
     };
     # Use a custom configuration.nix location.
     # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix

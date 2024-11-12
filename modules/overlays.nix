@@ -135,6 +135,24 @@
       inherit (inputs.devenv.packages.${final.system}) devenv;
     })
     (final: prev: {
+      # This exists so I can get rid of the damn ip6 localhost aliases in StevenBlack's hosts file
+      # as these aliases make me unable to use localhost in Safari and elsewhere.
+      # Instead of referencing into the flake, I make a derivation and use a patch file to remove
+      # those lines.
+      sbhosts = prev.stdenvNoCC.mkDerivation {
+        name = "sbhosts";
+        src = inputs.sbhosts;
+        dontConfigure = true;
+        dontBuild = true;
+        dontFixup = true;
+        patches = [./sbhosts-no-ipv6-localhost.patch];
+        installPhase = ''
+          mkdir -p "$out"
+          mv ./hosts "$out"/
+        '';
+      };
+    })
+    (final: prev: {
       inherit (inputs.gh-worktree.packages.${final.system}) gh-worktree;
       gh-feed = prev.buildGoModule {
         pname = "gh-feed";
