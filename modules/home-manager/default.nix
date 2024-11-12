@@ -295,6 +295,7 @@ in {
       ".vale.ini".text = ''
         StylesPath = .styles
 
+        # alert level options: suggestion, warning or error
         MinAlertLevel = suggestion
 
         Packages = proselint, alex, Readability
@@ -303,7 +304,7 @@ in {
         SkippedScopes = script, style, pre, figure
 
         [*]
-        BasedOnStyles = Vale, proselint
+        BasedOnStyles = Vale, proselint, Openly
         Google.FirstPerson = NO
         Google.We = NO
         Google.Acronyms = NO
