@@ -318,6 +318,9 @@ in {
         proselint.Typography = NO
         proselint.DateCase = NO
         Vale.Spelling = NO
+        Openly.E-Prime = NO
+        Openly.Spelling = NO
+        proselint.But = NO
       '';
       ".config/kitty/startup.session".text = ''
         new_tab
@@ -835,14 +838,28 @@ in {
           # -movflags +faststart = optimize for streaming so movie can start right away
           # -crf 22 = specify video quality: 0 is lossless, 51 is worst, and 17-28 is desired range
           # -preset medium = video tuning parameter presets for size vs speed of conversion
-          ffmpeg -hide_banner -i "$input_file" -map 0 -c copy -c:v:0 libx264 -movflags +faststart -crf 22 -preset medium "$output_file" && rm "$input_file"
+          # -map_chapters 0 = retain chapters from input file
+          if [ "$(uname)" == "Darwin" ] ; then
+            # Per https://trac.ffmpeg.org/wiki/HWAccelIntro, on MacOS, we can use the h264_videotoolbox target to trigger
+            # hardware acceleration on the encoding side of things; in my tests it goes about 4x faster
+            ffmpeg -hide_banner -i "$input_file" -map 0 -c copy -c:v:0 h264_videotoolbox -movflags +faststart -b:v 8000k -map_chapters 0 "$output_file" && rm "$input_file"
+          else
+            ffmpeg -hide_banner -i "$input_file" -map 0 -c copy -c:v:0 libx264 -movflags +faststart -crf 22 -preset medium -map_chapters 0 "$output_file" && rm "$input_file"
+          fi
+      }
+      function convert_vid_and_audio_to_h264() {
+          # Same as above plus
+          # -c:a aac -b:a 192k = convert audio too, just to be sure it will work
+          # Why not always convert audio?  Last time I did it, I had sync issues with audio being off from video...
+          ffmpeg -hide_banner -i "$input_file" -map 0 -c copy -c:v:0 libx264 -movflags +faststart -crf 22 -preset medium -c:a aac -b:a 192k -map_chapters 0 "$output_file" && rm "$input_file"
+
       }
 
       function convert_v9_vids_to_h264() {
         for file in *.mp4; do
           codec=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 "$file")
 
-          if [[ "$codec" == "vp9" ]]; then
+          if [[ "$codec" == "vp9" || "$codec" == "av1" ]]; then
             convert_vid_to_h264 "$file"
           fi
         done
@@ -1409,7 +1426,7 @@ in {
             desc = "Git root";
           }
           {
-            on = ["g" "k"]; # most g <something> commands go somewhere specific but this one goes to root of current folder
+            on = ["g" "k"]; # most g <something> commands go somewhere specific but this one goes to the desktop
             run = "cd ~/Desktop";
             desc = "Goto Desktop";
           }
@@ -1492,6 +1509,11 @@ in {
           {
             run = ''open "$@"'';
             desc = "Open";
+            for = "macos";
+          }
+          {
+            run = ''open "$@"'';
+            desc = "Open MacOS"; # adding twice to see if I can get this to show up inside yazi-nvim
             for = "macos";
           }
           {
