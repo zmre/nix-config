@@ -83,10 +83,10 @@
         name = "firefox"; # TODO: firefox build is broken on ARM; check to see if fixed
         greedy = true;
       }
-      {
-        name = "focusrite-control-2";
-        greedy = true;
-      }
+      # {
+      #   name = "focusrite-control-2";
+      #   greedy = true;
+      # }
       "freetube" # trying out private youtube browsing after reading about how how toxic their algo is
       {
         name = "fork";
@@ -289,7 +289,8 @@
       "Slack" = 803453959;
       "StopTheMadness" = 1376402589;
       "Strongbox" = 1270075435; # password manager
-      "Tailscale" = 1475387142; # P2P mesh VPN for my devices
+      # app store sandbox version doesn't allow some features like ssh
+      #"Tailscale" = 1475387142; # P2P mesh VPN for my devices
       "Vimari" = 1480933944;
       "Vinegar" = 1591303229;
       #"WireGuard" = 1451685025; # VPN -- but tailscale does it all for me now
@@ -306,13 +307,13 @@
       "ddcctl"
       "ical-buddy"
       "recon-ng" # TODO nix version doesn't work on mac at last try 2024-07-31
-      "whisper-cpp"
-      "whisperkit-cli"
+      #"whisper-cpp"
+      #"whisperkit-cli"
       # would rather load these as part of a security shell, but...
       "hashcat" # the nix one only builds on linux
       "hydra" # the nix one only builds on linux
       "p0f" # the nix one only builds on linux
-      "yt-dlp" # youtube downloader
+      #"yt-dlp" # youtube downloader / 2024-11-19 moved back to nix now that curl-cffi (curl-impersonate) is supported
     ];
   };
 }

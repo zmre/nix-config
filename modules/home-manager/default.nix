@@ -100,11 +100,11 @@
       zk # cli for indexing markdown files
       hackernews-tui
       btop # currently like this better than bottom and htop
-      #youtube-dl replaced by yt-dlp
-      # yt-dlp # Moving to homebrew for now for extra capabilities built in 2024-09-17
       marp-cli # convert markdown to html slides
       ironhide # rust version of IronCore's ironhide
       devenv # quick setup of dev envs for projects
+      tailscale # p2p vpn
+      openai-whisper-cpp # Allow GPU accelerated local transcriptions
       #qutebrowser
     ]);
   # using unstable in my home profile for nix commands
@@ -633,10 +633,10 @@ in {
   programs.mpv = {
     enable = true;
     # TODO: Same problem as below when using unstable
-    package = pkgs.stable.mpv;
+    package = pkgs.mpv;
     # TODO: Commenting out scripts 2024-07-09 because they are causing an error
     # around swift-wrapper-5.8 being broken
-    # scripts = with pkgs.stable.mpvScripts; [thumbnail sponsorblock];
+    scripts = with pkgs.mpvScripts; [thumbnail sponsorblock];
     config = {
       # disable on-screen controller -- else I get a message saying I have to add this
       osc = false;
@@ -913,7 +913,6 @@ in {
         "syncm" = "rsync -avhzP --progress \"$HOME/Sync/Private/PW Projects/Magic/\" pwalsh@synology1.savannah-basilisk.ts.net:/volume1/video/Magic/";
       }
       // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
-        tailscale = "/Applications/Tailscale.localized/Tailscale.app/Contents/MacOS/Tailscale";
         # Figure out the uniform type identifiers and uri schemes of a file (must specify the file)
         # for use in SwiftDefaultApps
         checktype = "mdls -name kMDItemContentType -name kMDItemContentTypeTree -name kMDItemKind";
@@ -1578,6 +1577,18 @@ in {
     };
     shellWrapperName = "y";
     theme = {};
+  };
+  programs.yt-dlp = {
+    # previously had this disabled because I needed curl-impersonate (curl-cffi lib) to get past cloudflare stuff
+    # but as of 2024-11-19 that appears to be in place
+    enable = true;
+    settings = {
+      embed-thumbnail = true;
+      embed-subs = true;
+      embed-chapters = true;
+      sponsorblock-remove = "default";
+      embed-metadata = true;
+    };
   };
 
   programs.git = {

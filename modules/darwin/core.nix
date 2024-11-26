@@ -8,7 +8,8 @@
   environment = {
     pathsToLink = ["/Applications"];
     # I exclusively control homebrew from here, but it's annoying to fully qualify the path to brew binaries
-    systemPath = ["/opt/homebrew/bin" "/opt/homebrew/sbin"];
+    # Also, might as well have access to system binaries from everywhere
+    systemPath = ["/run/current-system/sw/bin" "/opt/homebrew/bin" "/opt/homebrew/sbin"];
     #backupFileExtension = "backup";
     etc = {
       darwin.source = "${inputs.darwin}";
@@ -136,14 +137,9 @@
 
   # Just configure DNS for WiFi for now
   networking.knownNetworkServices = ["Wi-Fi"];
-  networking.dns = ["1.1.1.1" "1.0.0.1"];
-  #networking.dns = [ "127.0.0.1" "1.1.1.1" ];
-  # So the nextdns installed by nix is not signed and apple refuses to run it.
-  # Switching to the version from the App store
-  # services.nextdns = {
-  #   enable = true;
-  #   arguments = [ "-config" "f73bff" ];
-  # };
+
+  # Commenting out DNS settings since Tailscale is handling it for me now
+  # networking.dns = ["1.1.1.1" "1.0.0.1"];
 
   fonts.packages = with pkgs; [
     # powerline-fonts
@@ -183,6 +179,11 @@
 
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
+
+  services.tailscale = {
+    enable = true;
+    overrideLocalDns = true;
+  };
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog

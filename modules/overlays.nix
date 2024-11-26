@@ -37,7 +37,8 @@
         vendorHash = "sha256-UA4AoO9yDgufZrABJImo+580aaye4jp7qRevj3Efkrg=";
       };
     })
-    (final: prev: {
+    /*
+       (final: prev: {
       # Purpose of this is to add the impersonation features from curl-impersonate to get around cloudflare block and others
       # See https://github.com/yt-dlp/yt-dlp?tab=readme-ov-file#impersonation
       # So far I'm failing and will probably just use the version from brew, which has the impersonation features
@@ -52,6 +53,7 @@
           buildInputs = oldAttrs.buildInputs ++ [prev.python3Packages.curl-cffi];
         });
     })
+    */
     (final: prev: {
       zsh-fzf-tab = prev.zsh-fzf-tab.overrideAttrs (
         oldAttrs: let

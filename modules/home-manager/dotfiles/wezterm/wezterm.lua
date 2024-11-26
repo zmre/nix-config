@@ -47,12 +47,12 @@ config.colors = {
     }
   }
 }
--- Use ctrl-b as leader to be tmux-like (although I think the default there is ctrl-a... hmmm)
-config.leader = { key = "b", mods = "CTRL", timeout_milliseconds = 2000 }
+-- Use ctrl-a as leader to be tmux-like
+config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 2000 }
 config.keys = {
-  -- ctrl-b, [ puts us into a vim-like mode for navigating and selecting and copying out history
+  -- ctrl-a, [ puts us into a vim-like mode for navigating and selecting and copying out history
   { key = "[", mods = "LEADER", action = act.ActivateCopyMode },
-  -- ctrl-b, | splits vertically while - splits horizontally
+  -- ctrl-a, | splits vertically while - splits horizontally
   {
     key = "-",
     mods = "LEADER",
@@ -65,9 +65,9 @@ config.keys = {
   },
   -- I have way too many ways to change panes, but the three options are:
   -- ctrl-shift+h/j/k/l
-  -- ctrl-b, h/j/k/l
-  -- ctrl-b, a to activate the mode for navigating panes with h/j/k/l -- should probably remove this one
-  -- ctrl-b, r to activate the mode for resizing the current pane with h/j/k/l
+  -- ctrl-a, h/j/k/l
+  -- ctrl-a, a to activate the mode for navigating panes with h/j/k/l -- should probably remove this one
+  -- ctrl-a, r to activate the mode for resizing the current pane with h/j/k/l
   {
     key = 'h',
     mods = 'CTRL|SHIFT',
