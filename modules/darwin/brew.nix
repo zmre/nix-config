@@ -38,10 +38,11 @@
         greedy = true;
       }
       "audio-hijack" # used to use this for making my audio cleaner, but removed when I got a fancy audio setup. bringing back now (2024-07-11) to experiment with recording of sources
-      {
-        name = "bartender"; # organize status bar
-        greedy = true;
-      }
+      # {
+      # Replacing with open source ice bar 2024-11-29
+      #   name = "bartender"; # organize status bar
+      #   greedy = true;
+      # }
       "blockblock"
       {
         name = "brave-browser"; # TODO: move to home-manager when it builds
@@ -115,6 +116,7 @@
         name = "istat-menus";
         greedy = true;
       }
+      "jordanbaird-ice" # icebar alternative to bartender https://github.com/jordanbaird/Ice
       "keycastr"
       #"kitty" # would prefer to let nix install this as I have for over a year but post 15.1, nix version doesn't launch right
       {
@@ -193,12 +195,13 @@
         name = "skype";
         greedy = true;
       }
+      "subler" # used to edit metadata on videos
       "swiftdefaultappsprefpane"
       "sync"
-      {
-        name = "syncthing"; # TODO: move to home-manager
-        greedy = true;
-      }
+      # {
+      #   name = "syncthing"; # TODO: move to home-manager
+      #   greedy = true;
+      # }
       {
         name = "tor-browser"; # TODO: move to home-manager (tor-browser-bundle-bin) when it builds
         greedy = true;
@@ -262,23 +265,25 @@
       "DaisyDisk" = 411643860;
       "Disk Decipher" = 516538625;
       "Disk Speed Test" = 425264550;
-      "Drafts" = 1435957248;
+      #"Drafts" = 1435957248;
       "Fantastical" = 975937182; # calendar alternative
       "Forecast Bar" = 982710545;
-      "Ghostery – Privacy Ad Blocker" = 1436953057;
+      #"Ghostery – Privacy Ad Blocker" = 1436953057; # old version
       "Gifox 2" = 1461845568; # For short animated gif screen caps
       #"Ice Cubes" = 6444915884; # mastodon client -- it's good but i switched to ivory
       "iMovie" = 408981434;
       "iStumbler" = 546033581;
-      "Kagi, Inc." = 1622835804; # Paid private search engine plugin for Safari
+      "com.kagimacOS.Kagi-Search" = 1622835804; # Paid private search engine plugin for Safari
       "Kaleidoscope" = 587512244; # GUI 3-way merge
       "Keynote" = 409183694;
       "Keyshape" = 1223341056; # animated svg editor
       "Kindle" = 302584613;
+      "MailTrackerBlocker" = 6450760473; # Mail extension for blocking tracker pixels
       "Microsoft Excel" = 462058435;
       "Microsoft Word" = 462054704;
       "Microsoft PowerPoint" = 462062816;
       "Monodraw" = 920404675; # ASCII drawings
+      #"MsgFiler" = 6478043112; # Mail extension (sort of) for keyboard driven message filing
       #"NextDNS" = 1464122853;
       "NotePlan 3" = 1505432629;
       "PCalc" = 403504866;
@@ -287,7 +292,7 @@
       "Save to Reader" = 1640236961; # readwise reader (my pocket replacement)
       "Scrivener" = 1310686187;
       "Slack" = 803453959;
-      "StopTheMadness" = 1376402589;
+      #"StopTheMadness" = 1376402589;
       "Strongbox" = 1270075435; # password manager
       # app store sandbox version doesn't allow some features like ssh
       #"Tailscale" = 1475387142; # P2P mesh VPN for my devices

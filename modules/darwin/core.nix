@@ -146,21 +146,16 @@
     # source-code-pro
     roboto-slab
     source-sans-pro
-    (nerdfonts.override {
-      # holy hell it can take a long time to install everything; strip down
-      fonts = [
-        "FiraCode"
-        "Hasklig"
-        "DroidSansMono"
-        "DejaVuSansMono"
-        "iA-Writer"
-        "JetBrainsMono"
-        "Meslo"
-        "SourceCodePro"
-        "Inconsolata"
-        "NerdFontsSymbolsOnly" # for some apps, you can use this with any unpatched font
-      ];
-    })
+    nerd-fonts.fira-code
+    nerd-fonts.hasklug
+    nerd-fonts.droid-sans-mono
+    nerd-fonts.dejavu-sans-mono
+    nerd-fonts.im-writing
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.meslo-lg
+    nerd-fonts.sauce-code-pro
+    nerd-fonts.inconsolata
+    nerd-fonts.symbols-only
     montserrat
     raleway
     vegur

@@ -129,6 +129,8 @@ _: {
       NSDocumentSaveNewDocumentsToCloud = false;
       # speed up animation on open/save boxes (default:0.2)
       NSWindowResizeTime = 0.001;
+      # when the below is on, it means you can hold cmd+ctrl and click anywhere on a window to drag it around
+      NSWindowShouldDragOnGesture = true;
       PMPrintingExpandedStateForPrint = true;
       PMPrintingExpandedStateForPrint2 = true;
     };
@@ -377,7 +379,8 @@ _: {
         raycastGlobalHotkey = "Command-49";
         raycastPreferredWindowMode = "default";
         raycastShouldFollowSystemAppearance = 1;
-        raycastWindowPresentationMode = 1;
+        # presentation modes: 1=screen with active window, 2=primary screen
+        raycastWindowPresentationMode = 2;
         showGettingStartedLink = 0;
         "store_termsAccepted" = 1;
         suggestedPreferredGoogleBrowser = 1;

@@ -910,7 +910,7 @@ in {
         "yt" = "yt-dlp -f 'bv*+ba/b' --remux-video mp4 --embed-subs --write-auto-sub --embed-thumbnail --write-subs --sub-langs 'en.*,en-orig,en' --embed-chapters --sponsorblock-mark default --sponsorblock-remove default --no-prefer-free-formats --check-formats --embed-metadata --cookies-from-browser brave --user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'";
         "yt-fix" = "convert_vid_to_h264";
         "yt-fix-curdir" = "convert_v9_vids_to_h264";
-        "syncm" = "rsync -avhzP --progress \"$HOME/Sync/Private/PW Projects/Magic/\" pwalsh@synology1.savannah-basilisk.ts.net:/volume1/video/Magic/";
+        "syncm" = "rsync -avhP --delete --progress \"$HOME/Sync/Private/PW Projects/Magic/\" pwalsh@synology1.savannah-basilisk.ts.net:/volume1/video/Magic/";
       }
       // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
         # Figure out the uniform type identifiers and uri schemes of a file (must specify the file)
@@ -1425,9 +1425,14 @@ in {
             desc = "Git root";
           }
           {
-            on = ["g" "k"]; # most g <something> commands go somewhere specific but this one goes to the desktop
+            on = ["g" "k"];
             run = "cd ~/Desktop";
             desc = "Goto Desktop";
+          }
+          {
+            on = ["g" "n"];
+            run = "cd ~/Notes/Notes";
+            desc = "Goto Notes";
           }
         ];
       };
@@ -1451,12 +1456,6 @@ in {
             run = ''mpv --force-window "$@"'';
             for = "unix"; # here unix is macos and linux
             orphan = true;
-          }
-          {
-            run = "plugin quicklook";
-            orphan = true;
-            desc = "Quicklook";
-            for = "macos";
           }
           {
             run = ''mediainfo "$1"; echo "Press enter to exit"; read _'';
