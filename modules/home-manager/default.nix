@@ -682,17 +682,15 @@ in {
     envExtra = ''
       # don't use global env as it will slow us down
       skip_global_compinit=1
+      # disable the reading of /etc/zshrc, which has redundant things and crap I don't want
+      # like brew shellenv which takes forever, plus redundant compinit calls
+      NOSYSZSHRC="1"
+      LANGUAGE="en_US.UTF-8"
+      LC_ALL="en_US.UTF-8"
     '';
     initExtraFirst = ''
-      #zmodload zsh/zprof
-      # source ${./dotfiles/p10k.zsh}
-      # source ${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme
-      # Prompt stuff
-      # if [[ -r "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh" ]]; then
-        # source "$\{XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-$\{(%):-%n}.zsh"
-      # fi
+      zmodload zsh/zprof
     '';
-    #       source  ${pkgs.zsh-fzf-tab}/share/fzf-tab/fzf-tab.plugin.zsh ## disabled 2024-02-27 but belongs in initExtraFirst
 
     #initExtraBeforeCompInit = "";
     completionInit = ''
@@ -711,10 +709,6 @@ in {
       zstyle ':completion:*:descriptions' format '[%d]'
       # set list-colors to enable filename colorizing
       zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
-      # preview directory's content with exa when completing cd
-      #zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
-      # switch group using `,` and `.`
-      #zstyle ':fzf-tab:*' switch-group ',' '.'
     '';
     initExtra = ''
       set -o vi
@@ -812,7 +806,7 @@ in {
       # Needed for lf to be pretty
       # . ~/.config/lf/lficons.sh
 
-      if [[ -f /Applications/WezTerm.app/Contents/Resources ]] ; then source /Applications/WezTerm.app/Contents/Resources/wezterm.sh ; fi
+      if [[ -d /Applications/WezTerm.app/Contents/Resources ]] ; then source /Applications/WezTerm.app/Contents/Resources/wezterm.sh ; fi
 
       # Setup zoxide
       eval "$(zoxide init zsh)"
@@ -910,14 +904,12 @@ in {
         "yt" = "yt-dlp -f 'bv*+ba/b' --remux-video mp4 --embed-subs --write-auto-sub --embed-thumbnail --write-subs --sub-langs 'en.*,en-orig,en' --embed-chapters --sponsorblock-mark default --sponsorblock-remove default --no-prefer-free-formats --check-formats --embed-metadata --cookies-from-browser brave --user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'";
         "yt-fix" = "convert_vid_to_h264";
         "yt-fix-curdir" = "convert_v9_vids_to_h264";
-        "syncm" = "rsync -avhP --delete --progress \"$HOME/Sync/Private/PW Projects/Magic/\" pwalsh@synology1.savannah-basilisk.ts.net:/volume1/video/Magic/";
+        "syncm" = "rsync -avhP --delete --progress \"$HOME/Sync/Private/PW Projects/Magic/Videos/\" pwalsh@synology1.savannah-basilisk.ts.net:/volume1/video/Magic/";
       }
       // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
         # Figure out the uniform type identifiers and uri schemes of a file (must specify the file)
         # for use in SwiftDefaultApps
         checktype = "mdls -name kMDItemContentType -name kMDItemContentTypeTree -name kMDItemKind";
-        # dwupdate = "pushd ~/.config/nixpkgs ; nix flake update ; /opt/homebrew/bin/brew update; popd ; dwswitch ; /opt/homebrew/bin/brew upgrade ; /opt/homebrew/bin/brew upgrade --cask --greedy; dwshowupdates; popd";
-        # brew update should no longer be needed; and brew upgrade should just happen, I think, but I might need to specify greedy per package
         dwupdate = "pushd ~/.config/nixpkgs ; nix flake update ; popd ; dwswitchx ; dwshowupdates; popd";
         # Cachix on my whole nix store is burning unnecessary bandwidth and time -- slowing things down rather than speeding up
         # From now on will just use for select personal flakes and things

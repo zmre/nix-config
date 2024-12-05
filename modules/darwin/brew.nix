@@ -157,6 +157,10 @@
       # give an option to disable that and doesn't ask you first. can
       # kill that in other ways, but that's a real negative sign to me
       {
+        name = "proton-mail"; # currently in beta, but snappier than web version
+        greedy = true;
+      }
+      {
         name = "protonmail-bridge"; # TODO: nix version now installs and works -- move over
         greedy = true;
       }

@@ -4,6 +4,10 @@ local config = wezterm.config_builder()
 local act = wezterm.action
 local mux = wezterm.mux
 
+config.default_prog = { '/run/current-system/sw/bin/zsh', '-l', '-i' }
+config.set_environment_variables = {
+  NOSYSZSHRC = "1" -- disable the reading of /etc/zshrc, which has redundant things and crap I don't want
+}
 config.use_fancy_tab_bar = true
 config.hide_tab_bar_if_only_one_tab = true
 config.bold_brightens_ansi_colors = true
@@ -47,11 +51,20 @@ config.colors = {
     }
   }
 }
+-- dim inactive pane
+config.inactive_pane_hsb = {
+  saturation = 0.7,
+  brightness = 0.4,
+}
 -- Use cmd-ctrl-a as leader to be tmux-like
 config.leader = { key = "a", mods = "SUPER|CTRL", timeout_milliseconds = 2000 }
 config.keys = {
+  -- jump to previous/next prompt with shift up/down arrows
+  { key = "UpArrow",   mods = "SHIFT",  action = act.ScrollToPrompt(-1) },
+  { key = "DownArrow", mods = "SHIFT",  action = act.ScrollToPrompt(1) },
+
   -- cmd-ctrl-a, [ puts us into a vim-like mode for navigating and selecting and copying out history
-  { key = "[", mods = "LEADER", action = act.ActivateCopyMode },
+  { key = "[",         mods = "LEADER", action = act.ActivateCopyMode },
   -- cmd-ctrl-a, | splits vertically while - splits horizontally
   {
     key = "-",
@@ -108,7 +121,9 @@ config.keys = {
     mods = 'LEADER',
     action = act.ActivatePaneDirection 'Down',
   },
-
+  -- since we mapped ctrl-shift-l to moving pane right, we need a different mapping for debug overlay
+  -- and we'll use ctrl-shift-; (ctrl-:)
+  { key = ':', mods = 'CTRL', action = act.ShowDebugOverlay },
   -- ctrl-a, followed by 'a' will put us in activate-pane
   -- mode until we press some other key or until 1 second (1000ms)
   -- of time elapses
@@ -133,41 +148,60 @@ config.keys = {
     },
   },
 }
-config.key_tables = {
-  -- Defines the keys that are active in our resize-pane mode.
-  -- Since we're likely to want to make multiple adjustments,
-  -- we made the activation one_shot=false. We therefore need
-  -- to define a key assignment for getting out of this mode.
-  -- 'resize_pane' here corresponds to the name="resize_pane" in
-  -- the key assignments above.
-  resize_pane = {
-    { key = 'LeftArrow',  action = act.AdjustPaneSize { 'Left', 1 } },
-    { key = 'h',          action = act.AdjustPaneSize { 'Left', 1 } },
-    { key = 'RightArrow', action = act.AdjustPaneSize { 'Right', 1 } },
-    { key = 'l',          action = act.AdjustPaneSize { 'Right', 1 } },
-    { key = 'UpArrow',    action = act.AdjustPaneSize { 'Up', 1 } },
-    { key = 'k',          action = act.AdjustPaneSize { 'Up', 1 } },
-    { key = 'DownArrow',  action = act.AdjustPaneSize { 'Down', 1 } },
-    { key = 'j',          action = act.AdjustPaneSize { 'Down', 1 } },
+if wezterm.gui then
+  -- 2024-12-05 we only have default tables for copy_mode and search_mode right now
 
-    -- Cancel the mode by pressing escape
-    { key = 'Escape',     action = 'PopKeyTable' },
-  },
+  -- add some keys to copy mode, which we get into with ctrl-shift-X
+  local copy_mode = wezterm.gui.default_key_tables().copy_mode
+  -- Add alt-v to select the whole current semanticzone -- area between prompts, probably
+  table.insert(copy_mode, {
+    key = 'v',
+    mods = 'ALT',
+    action = act.CopyMode { SetSelectionMode = 'SemanticZone' },
+  })
+  -- move to previous/next prompt with shift up/down arrows
+  table.insert(copy_mode,
+    { key = "UpArrow", mods = "SHIFT", action = act.CopyMode 'MoveBackwardSemanticZone' }
+  )
+  table.insert(copy_mode,
+    { key = "DownArrow", mods = "SHIFT", action = act.CopyMode 'MoveForwardSemanticZone' }
+  )
 
-  -- Defines the keys that are active in our activate-pane mode.
-  -- 'activate_pane' here corresponds to the name="activate_pane" in
-  -- the key assignments above.
-  activate_pane = {
-    { key = 'LeftArrow',  action = act.ActivatePaneDirection 'Left' },
-    { key = 'h',          action = act.ActivatePaneDirection 'Left' },
-    { key = 'RightArrow', action = act.ActivatePaneDirection 'Right' },
-    { key = 'l',          action = act.ActivatePaneDirection 'Right' },
-    { key = 'UpArrow',    action = act.ActivatePaneDirection 'Up' },
-    { key = 'k',          action = act.ActivatePaneDirection 'Up' },
-    { key = 'DownArrow',  action = act.ActivatePaneDirection 'Down' },
-    { key = 'j',          action = act.ActivatePaneDirection 'Down' },
-  },
-}
+  config.key_tables = {
+    copy_mode = copy_mode,
+    -- Defines the keys that are active in our resize-pane mode.
+    -- Since we're likely to want to make multiple adjustments,
+    -- we made the activation one_shot=false. We therefore need
+    -- to define a key assignment for getting out of this mode.
+    -- 'resize_pane' here corresponds to the name="resize_pane" in
+    -- the key assignments above.
+    resize_pane = {
+      { key = 'LeftArrow',  action = act.AdjustPaneSize { 'Left', 1 } },
+      { key = 'h',          action = act.AdjustPaneSize { 'Left', 1 } },
+      { key = 'RightArrow', action = act.AdjustPaneSize { 'Right', 1 } },
+      { key = 'l',          action = act.AdjustPaneSize { 'Right', 1 } },
+      { key = 'UpArrow',    action = act.AdjustPaneSize { 'Up', 1 } },
+      { key = 'k',          action = act.AdjustPaneSize { 'Up', 1 } },
+      { key = 'DownArrow',  action = act.AdjustPaneSize { 'Down', 1 } },
+      { key = 'j',          action = act.AdjustPaneSize { 'Down', 1 } },
+      -- Cancel the mode by pressing escape
+      { key = 'Escape',     action = 'PopKeyTable' },
+    },
+    -- Defines the keys that are active in our activate-pane mode.
+    -- 'activate_pane' here corresponds to the name="activate_pane" in
+    -- the key assignments above.
+    activate_pane = {
+      { key = 'LeftArrow',  action = act.ActivatePaneDirection 'Left' },
+      { key = 'h',          action = act.ActivatePaneDirection 'Left' },
+      { key = 'RightArrow', action = act.ActivatePaneDirection 'Right' },
+      { key = 'l',          action = act.ActivatePaneDirection 'Right' },
+      { key = 'UpArrow',    action = act.ActivatePaneDirection 'Up' },
+      { key = 'k',          action = act.ActivatePaneDirection 'Up' },
+      { key = 'DownArrow',  action = act.ActivatePaneDirection 'Down' },
+      { key = 'j',          action = act.ActivatePaneDirection 'Down' },
+    },
+  }
+end
 
 config.animation_fps = 165
 config.max_fps = 165
@@ -175,6 +209,15 @@ local gpus = wezterm.gui.enumerate_gpus()
 config.front_end = 'WebGpu'
 config.webgpu_power_preference = 'HighPerformance'
 config.webgpu_preferred_adapter = gpus[1]
+
+-- Triple click to select everything in a semantic zone (output between prompts for example)
+config.mouse_bindings = {
+  {
+    event = { Down = { streak = 3, button = 'Left' } },
+    action = wezterm.action.SelectTextAtMouseCursor 'SemanticZone',
+    mods = 'NONE',
+  },
+}
 
 wezterm.on('gui-startup', function(cmd)
   local path =
