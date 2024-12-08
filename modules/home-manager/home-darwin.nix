@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  home,
   ...
 }: {
   # stolen from https://github.com/nix-community/home-manager/issues/1341

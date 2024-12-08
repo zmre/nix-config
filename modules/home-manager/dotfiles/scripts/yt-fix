@@ -1,0 +1,108 @@
+#!/bin/bash
+
+# When we download videos, they come in lots of formats, but many of those
+# aren't supported by Apple's Quicktime and quicklook, which is very annoying.
+# This script will convert to an Apple friendly format for any specified files
+# and if a directory, then for any files that need to be converted.
+# Use -h to get more help
+
+FIX_AUDIO="0"
+CHECK_ONLY="0"
+
+fix_vid() {
+  input_file="$1"
+  extension="${input_file##*.}"
+  base_name="${input_file%.*}"
+  output_file="${base_name}-h264.${extension}"
+
+  VID_PARAMS=""
+  AUD_PARAMS=""
+  if [[ "$(uname)" == "Darwin" ]] ; then
+    # Per https://trac.ffmpeg.org/wiki/HWAccelIntro, on MacOS, we can use the h264_videotoolbox target to trigger
+    # hardware acceleration on the encoding side of things; in my tests it goes about 4x faster
+    VID_PARAMS="h264_videotoolbox -movflags +faststart -b:v 8000k"
+  else
+    VID_PARAMS="libx264 -movflags +faststart -crf 22 -preset medium"
+  fi
+
+  if [[ "$FIX_AUDIO" == "1" ]]; then
+    AUD_PARAMS="-c:a aac -b:a 192k"
+  fi
+
+
+  # The following copies subtitles, chapters, thumbnails, etc.
+  # while converting to h264
+
+  # -hide_banner = don't show ffmpeg build info
+  # -map 0 = pass through all channels
+  # -c copy = copy all channels (yeah, need both for some reason)
+  # -c✌️0 libx264 = convert the first video channel to h264
+  # -movflags +faststart = optimize for streaming so movie can start right away
+  # -crf 22 = specify video quality: 0 is lossless, 51 is worst, and 17-28 is desired range
+  # -preset medium = video tuning parameter presets for size vs speed of conversion
+  # -map_chapters 0 = retain chapters from input file
+  # shellcheck disable=SC2086
+  ffmpeg -hide_banner -i "$input_file" -map 0 -c copy -c:v:0 $VID_PARAMS $AUD_PARAMS -map_chapters 0 "$output_file" && rm "$input_file"
+}
+
+function fix_dir() {
+  for file in "${1}"/*.mp4; do
+    codec=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 "$file")
+
+    if [[ "$codec" == "vp9" || "$codec" == "av1" ]]; then
+      # Apple quicktime can't play either of these. Possibly this list will grow over time
+      if [[ "$CHECK_ONLY" == "0" ]]; then
+        echo "Fixing $file"
+        fix_vid "$file"
+      else
+        echo "File $file has format $codec"
+      fi 
+    fi
+  done
+}
+
+show_help() {
+  echo "Usage: $0 [options] [file|directory]..."
+  echo
+  echo "Looks for mp4 files and converts them into Apple-friendly format"
+  echo
+  echo "Options:"
+  echo "  -h, --help    Show this help message and exit"
+  echo "  -a            Convert audio, too -- only do if necessary"
+  echo "  -c            For directories, check only and report files with 'bad' codecs"
+  echo
+  echo "Arguments:"
+  echo "  file          Process the specified file"
+  echo "  directory     Process the specified directory"
+  echo "  (none)        Process the current directory"
+}
+
+# If we have an argument, then we need to see if it's a file or a folder. If no argument, assume current directory (".")
+
+if [ $# -eq 0 ]; then
+  fix_dir "."
+else
+  for arg in "$@"; do
+    case "$arg" in
+      -a)
+        FIX_AUDIO="1"
+        ;;
+      -c)
+        CHECK_ONLY="1"
+        ;;
+      -h|--help)
+        show_help
+        exit 0
+        ;;
+      *)
+        if [ -f "$arg" ]; then
+          fix_vid "$arg"
+        elif [ -d "$arg" ]; then
+          fix_dir "$arg"
+        else
+          echo "Error: $1 is neither a file nor a directory"
+        fi
+        ;;
+    esac
+  done
+fi

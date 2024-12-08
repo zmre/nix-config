@@ -1,0 +1,76 @@
+#!/bin/bash
+
+
+# Default whisper model and options for multi-person meetings
+WHISPERMODEL="$HOME/.config/whisper/ggml-small.en-tdrz.bin"
+WHISPEROPTS="-tdrz"
+
+convert_audio() {
+  # First take the mono SM7B and the stereo computer output and send them to different channels
+  echo "Generating the stereo file..."
+  ffmpeg -hide_banner -loglevel error -i "${DIR}/Audio/1_SM7B.wav" -i "${DIR}/Audio/7_Computer.wav" -filter_complex '[0:a][1:a]amerge=inputs=2,pan=stereo|c0<c0+c1|c1<c2+c3[a]' -map '[a]' -ar 16000 -y "${DIR}/Audio/meeting-speaker-stereo.wav" > /dev/null
+}
+
+transcribe_audio() {
+  # Next transcribe the file
+  echo "Transcribing using ${WHISPERMODEL}..."
+  whisper-cpp -m "$WHISPERMODEL" $WHISPEROPTS -l en -p 4 -t 8 -np "${DIR}/Audio/meeting-speaker-stereo.wav" -otxt > /dev/null
+  if [ -f "${DIR}/Audio/meeting-speaker-stereo.wav.txt" ] ; then
+    pbcopy < "${DIR}/Audio/meeting-speaker-stereo.wav.txt"
+    cat "${DIR}/Audio/meeting-speaker-stereo.wav.txt"
+    echo ""
+    echo "Success! Transcript copied to clipboard but can also be found in ${DIR}/Audio/meeting-speaker-stereo.wav.txt"
+  else
+    echo "Sorry, there was a problem. Try it manually."
+  fi
+
+}
+
+summarize_audio() {
+  echo "Sorry, for now you need to transcribe the audio manually."
+  echo
+  echo "Here's the prompt I've been using of late:"
+  echo
+  echo 'Write up a markdown summary of this meeting. Make a markdown header for each section using h2 notation with two hashes. The first section should be titled "Attendees" and should have bullet points with each attendee, their title, and a summary of their role if known. The next section should be titled "Overview" and should have up to five bullet points summarizing the entire meeting. For each topic discussed, add a section with a headline for the topic and up to four bullet points under it regarding what was discussed. Next make a section titled "Decisions" with bullet points for every decision that was made. Last, make a section titled "Action Items" with bullets for every task including the responsible individuals, and any deadlines.  Here is the transcript:'
+
+}
+
+show_help() {
+  echo "Usage: $0 [options] [directory]"
+  echo
+  echo "Expects a rode videocaster folder with iso recordings"
+  echo "Assumes many speakers, but better results if there are two"
+  echo
+  echo "Options:"
+  echo "  -h, --help    Show this help message and exit"
+  echo "  -2            Two person meeting only"
+  echo
+  echo "Arguments:"
+  echo "  directory     Process the specified directory, root of recording folder (default is current dir)"
+}
+
+DIR="."
+for arg in "$@"; do
+  case "$arg" in
+    -2)
+      WHISPERMODEL="$HOME/.config/whisper/ggml-large-v3-turbo.bin"
+      WHISPEROPTS="-di"
+      ;;
+    -h|--help)
+      show_help
+      exit 0
+      ;;
+    *)
+      DIR="$arg"
+      ;;
+  esac
+done
+
+if [ -f "${DIR}/Audio/1_SM7B.wav" ] && [ -f "${DIR}/Audio/7_Computer.wav" ]; then
+  convert_audio
+  transcribe_audio
+  summarize_audio
+else
+  echo "Please be in or provide the path to the root of the recording folder. Should have Audio/1_SM7B.wav under it"
+fi
+

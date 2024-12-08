@@ -126,6 +126,9 @@
         pkgs.spotify
       ]);
 in {
+  imports = [
+    ./shell-scripts.nix
+  ];
   programs.home-manager.enable = true;
   home.enableNixpkgsReleaseCheck = false;
 
@@ -322,24 +325,24 @@ in {
         Openly.Spelling = NO
         proselint.But = NO
       '';
-      ".config/kitty/startup.session".text = ''
-        new_tab
-        cd ~
-        launch zsh
-
-        new_tab notes
-        cd ~/Library/Containers/co.noteplan.NotePlan3/Data/Library/Application Support/co.noteplan.NotePlan3
-        launch zsh
-
-        new_tab news
-        layout grid
-        launch zsh -i -c tickrs
-        launch zsh
-        launch zsh -i -c "watch -n 120 -c \"/opt/homebrew/bin/icalBuddy -tf %H:%M -n -f -eep notes -ec 'Outschool Schedule,HomeAW,Contacts,Birthdays,Found in Natural Language' eventsToday\""
-        launch zsh -i -c hackernews_tui
-        new_tab svelte
-        cd ~/src/icl/website.worktree
-      '';
+      # ".config/kitty/startup.session".text = ''
+      #   new_tab
+      #   cd ~
+      #   launch zsh
+      #
+      #   new_tab notes
+      #   cd ~/Library/Containers/co.noteplan.NotePlan3/Data/Library/Application Support/co.noteplan.NotePlan3
+      #   launch zsh
+      #
+      #   new_tab news
+      #   layout grid
+      #   launch zsh -i -c tickrs
+      #   launch zsh
+      #   launch zsh -i -c "watch -n 120 -c \"/opt/homebrew/bin/icalBuddy -tf %H:%M -n -f -eep notes -ec 'Outschool Schedule,HomeAW,Contacts,Birthdays,Found in Natural Language' eventsToday\""
+      #   launch zsh -i -c hackernews_tui
+      #   new_tab svelte
+      #   cd ~/src/icl/website.worktree
+      # '';
     }
     // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
       "Library/KeyBindings/DefaultKeyBinding.dict".source = ./dotfiles/DefaultKeyBinding.dict;
@@ -816,49 +819,6 @@ in {
       function set_tab_title() {
           echo -ne "\033]0;zsh ($(basename "''${PWD/\/Users\/pwalsh/~}"))\007"
       }
-      function convert_vid_to_h264() {
-          input_file="$1"
-          extension="''${input_file##*.}"
-          base_name="''${input_file%.*}"
-          output_file="''${base_name}-h264.''${extension}"
-
-          # The following copies subtitles, chapters, thumbnails, etc.
-          # while converting to h264
-
-          # -hide_banner = don't show ffmpeg build info
-          # -map 0 = pass through all channels
-          # -c copy = copy all channels (yeah, need both for some reason)
-          # -c✌️0 libx264 = convert the first video channel to h264
-          # -movflags +faststart = optimize for streaming so movie can start right away
-          # -crf 22 = specify video quality: 0 is lossless, 51 is worst, and 17-28 is desired range
-          # -preset medium = video tuning parameter presets for size vs speed of conversion
-          # -map_chapters 0 = retain chapters from input file
-          if [ "$(uname)" == "Darwin" ] ; then
-            # Per https://trac.ffmpeg.org/wiki/HWAccelIntro, on MacOS, we can use the h264_videotoolbox target to trigger
-            # hardware acceleration on the encoding side of things; in my tests it goes about 4x faster
-            ffmpeg -hide_banner -i "$input_file" -map 0 -c copy -c:v:0 h264_videotoolbox -movflags +faststart -b:v 8000k -map_chapters 0 "$output_file" && rm "$input_file"
-          else
-            ffmpeg -hide_banner -i "$input_file" -map 0 -c copy -c:v:0 libx264 -movflags +faststart -crf 22 -preset medium -map_chapters 0 "$output_file" && rm "$input_file"
-          fi
-      }
-      function convert_vid_and_audio_to_h264() {
-          # Same as above plus
-          # -c:a aac -b:a 192k = convert audio too, just to be sure it will work
-          # Why not always convert audio?  Last time I did it, I had sync issues with audio being off from video...
-          ffmpeg -hide_banner -i "$input_file" -map 0 -c copy -c:v:0 libx264 -movflags +faststart -crf 22 -preset medium -c:a aac -b:a 192k -map_chapters 0 "$output_file" && rm "$input_file"
-
-      }
-
-      function convert_v9_vids_to_h264() {
-        for file in *.mp4; do
-          codec=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 "$file")
-
-          if [[ "$codec" == "vp9" || "$codec" == "av1" ]]; then
-            convert_vid_to_h264 "$file"
-          fi
-        done
-      }
-
       #zprof
     '';
     sessionVariables = {};
@@ -901,10 +861,6 @@ in {
         # when the mp4 resolution available is not the highest resolution available
         # -S '+vcodec:avc,+acodec:m4a'
         # -S 'codec:h264:m4a'
-        "yt" = "yt-dlp -f 'bv*+ba/b' --remux-video mp4 --embed-subs --write-auto-sub --embed-thumbnail --write-subs --sub-langs 'en.*,en-orig,en' --embed-chapters --sponsorblock-mark default --sponsorblock-remove default --no-prefer-free-formats --check-formats --embed-metadata --cookies-from-browser brave --user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'";
-        "yt-fix" = "convert_vid_to_h264";
-        "yt-fix-curdir" = "convert_v9_vids_to_h264";
-        "syncm" = "rsync -avhP --delete --progress \"$HOME/Sync/Private/PW Projects/Magic/Videos/\" pwalsh@synology1.savannah-basilisk.ts.net:/volume1/video/Magic/";
       }
       // pkgs.lib.optionalAttrs pkgs.stdenv.isDarwin {
         # Figure out the uniform type identifiers and uri schemes of a file (must specify the file)
