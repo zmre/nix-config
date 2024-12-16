@@ -17,9 +17,9 @@
 
   inputs = {
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.05";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     ## TODO: not sure if it matters, but probably worth threading -darwin version through on darwin builds
-    nixpkgs-stable-darwin.url = "github:nixos/nixpkgs/nixpkgs-24.05-darwin";
+    nixpkgs-stable-darwin.url = "github:nixos/nixpkgs/nixpkgs-24.11-darwin";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable"; # defaulting to unstable these days
 
     flake-compat = {
@@ -193,7 +193,7 @@
           (mkHome username [
             ./modules/home-manager
             ./modules/home-manager/home-darwin.nix
-            ./modules/home-manager/home-security.nix
+            # ./modules/home-manager/home-security.nix
           ])
         ];
       };

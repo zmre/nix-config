@@ -12,7 +12,7 @@
     name = "yt";
     runtimeInputs = with pkgs; [yt-dlp];
     text = ''
-      yt-dlp -f 'bv*+ba/b' --remux-video mp4 --embed-subs --write-auto-sub --embed-thumbnail --write-subs --sub-langs 'en.*,en-orig,en' --embed-chapters --sponsorblock-mark default --sponsorblock-remove default --no-prefer-free-formats --check-formats --embed-metadata --cookies-from-browser brave --user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
+      yt-dlp -f 'bv*+ba/b' --remux-video mp4 --embed-subs --write-auto-sub --embed-thumbnail --write-subs --sub-langs 'en.*,en-orig,en' --embed-chapters --sponsorblock-mark default --sponsorblock-remove default --no-prefer-free-formats --check-formats --embed-metadata --cookies-from-browser brave --user-agent 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36' "$1"
     '';
   };
   yt-fix = pkgs.writeShellApplication {
@@ -20,11 +20,11 @@
     runtimeInputs = with pkgs; [ffmpeg deterministic-uname];
     text = builtins.readFile ./dotfiles/scripts/yt-fix;
   };
-  syncm = pkgs.writeShellApplication {
-    name = "syncm";
-    runtimeInputs = [pkgs.rsync];
-    text = "rsync -avhP --delete --progress \"$HOME/Sync/Private/PW Projects/Magic/Videos/\" pwalsh@synology1.savannah-basilisk.ts.net:/volume1/video/Magic/";
-  };
+  # syncm = pkgs.writeShellApplication {
+  #   name = "syncm";
+  #   runtimeInputs = [pkgs.rsync];
+  #   text = "rsync -avhP --delete --progress \"$HOME/Sync/Private/PW Projects/Magic/Videos/\" pwalsh@synology1.savannah-basilisk.ts.net:/volume1/video/Magic/";
+  # };
   desktop-hide = pkgs.writeShellApplication {
     name = "desktop-hide";
     runtimeInputs = [];
@@ -46,6 +46,11 @@
     runtimeInputs = with pkgs; [ffmpeg openai-whisper-cpp];
     text = builtins.readFile ./dotfiles/scripts/transcribe-rode-meeting;
   };
+  transcribe-video-to-subtitles = pkgs.writeShellApplication {
+    name = "transcribe-video-to-subtitles";
+    runtimeInputs = with pkgs; [ffmpeg openai-whisper-cpp];
+    text = builtins.readFile ./dotfiles/scripts/transcribe-video-to-subtitles;
+  };
 in {
   # Below are needed for bright.sh script, but this is an import in home-manager and homebrew is set under darwin so...
   # these are moving over there.
@@ -57,9 +62,10 @@ in {
   home.packages =
     [
       yt
-      syncm
+      #syncm
       yt-fix
       transcribe-rode-meeting
+      transcribe-video-to-subtitles
     ]
     ++ lib.optionals (!pkgs.stdenvNoCC.isLinux) []
     ++ lib.optionals (!pkgs.stdenvNoCC.isDarwin) [

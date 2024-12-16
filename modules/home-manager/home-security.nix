@@ -37,7 +37,7 @@
       sslsplit
       # wireshark moved to nixos config
       # pick one of wireshark or wireshark-cli
-      wireshark
+      pkgs.stable.wireshark
       #wireshark-cli
 
       # Passwords

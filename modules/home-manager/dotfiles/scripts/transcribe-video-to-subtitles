@@ -1,0 +1,77 @@
+#!/bin/bash
+
+WHISPERMODEL="$HOME/.config/whisper/ggml-large-v3-turbo.bin"
+
+# Function to check if subtitles exist in the video
+check_subtitles() {
+  local video_file="$1"
+  ffprobe -i "$video_file" -show_streams -select_streams s 2>/dev/null | grep -q "codec_name"
+}
+
+# Function to transcribe video with Whisper
+generate_subtitles() {
+  local video_file="$1"
+  ffmpeg -i "$video_file" -ar 16000 -ac 1 -c:a pcm_s16le "${video_file}.wav"
+  whisper-cpp "${video_file}.wav" -m "$WHISPERMODEL" -l en -p 4 -t 8 --output_format srt
+  rm "${video_file}.wav" 
+}
+
+# Function to embed subtitles with FFmpeg
+embed_subtitles() {
+  local video_file="$1"
+  local subtitle_file="${video_file%.*}.wav.srt"
+  local output_file="${video_file%.*}_with_subtitles.mp4"
+
+  ffmpeg -i "$video_file" -map 0 -c copy -map_chapters 0 -vf subtitles="$subtitle_file" "$output_file"
+}
+
+
+show_help() {
+  echo "Usage: $0 <file>"
+  echo
+  echo "Expects a mp4 video, if necessary, transcribes it and then"
+  echo "embeds the transcription back into the video"
+  echo
+  echo "Options:"
+  echo "  -h, --help    Show this help message and exit"
+  echo
+  echo "Arguments:"
+  echo "  file          The mp4 file to process"
+}
+
+video_file=""
+for arg in "$@"; do
+  case "$arg" in
+    -h|--help)
+      show_help
+      exit 0
+      ;;
+    *)
+      video_file="$arg"
+      ;;
+  esac
+done
+
+if ! [ -f "$video_file" ]; then
+  echo "Error: File '$video_file' not found!"
+  exit 1
+fi
+
+echo "Checking for existing subtitles in '$video_file'..."
+if check_subtitles "$video_file"; then
+  echo "Subtitles already exist in '$video_file'. No further action required."
+  exit 0
+else
+  echo "No subtitles found. Generating subtitles with Whisper..."
+  generate_subtitles "$video_file"
+
+  subtitle_file="${video_file%.*}.srt"
+  if [ -f "$subtitle_file" ]; then
+    echo "Subtitles generated. Embedding them into the video..."
+    embed_subtitles "$video_file"
+    echo "Subtitles successfully embedded into '${video_file%.*}_with_subtitles.mp4'."
+  else
+    echo "Error: Subtitle generation failed!"
+    exit 1
+  fi
+fi

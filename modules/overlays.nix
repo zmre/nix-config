@@ -166,7 +166,7 @@
         vendorHash = "sha256-IFSu4MC/vntxRsg2G7e70lXe1aCRTmpRQt0JPXWabQA=";
       };
     })
-    inputs.nur.overlay
+    inputs.nur.overlays.default
     inputs.yazi.overlays.default
   ];
 }

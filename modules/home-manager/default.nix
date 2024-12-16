@@ -633,16 +633,18 @@ in {
     extensions = with pkgs; [gh-dash gh-notify gh-poi gh-worktree]; #gh-feed
     settings = {git_protocol = "ssh";};
   };
+
   programs.mpv = {
     enable = true;
     # TODO: Same problem as below when using unstable
-    package = pkgs.mpv;
+    #package = pkgs.mpv;
+    package = pkgs.emptyDirectory; # post 15.1, gui doesn't start so switching to brew but keeping config
     # TODO: Commenting out scripts 2024-07-09 because they are causing an error
     # around swift-wrapper-5.8 being broken
-    scripts = with pkgs.mpvScripts; [thumbnail sponsorblock];
+    #scripts = with pkgs.mpvScripts; [thumbnail sponsorblock];
     config = {
       # disable on-screen controller -- else I get a message saying I have to add this
-      osc = false;
+      osc = true;
       # Use a large seekable RAM cache even for local input.
       cache = true;
       save-position-on-quit = false;

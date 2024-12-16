@@ -138,7 +138,7 @@
         greedy = true;
       }
       #"microsoft-office" -- moved this to apple app store
-      #"mpv"
+      "stolendata-mpv" # 2024-12-11 switching to brew but keeping hm config; gui not launching
       "metasploit" # TODO 2024-07-31 nix version not running on mac
       "noun-project"
       {
@@ -156,6 +156,10 @@
       #"pomatez" # pomodoro timer, but installs itself as startup item and doesn't
       # give an option to disable that and doesn't ask you first. can
       # kill that in other ways, but that's a real negative sign to me
+      {
+        name = "proton-drive";
+        greedy = true;
+      }
       {
         name = "proton-mail"; # currently in beta, but snappier than web version
         greedy = true;
