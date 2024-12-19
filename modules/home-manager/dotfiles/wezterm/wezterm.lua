@@ -203,8 +203,8 @@ if wezterm.gui then
   }
 end
 
-config.animation_fps = 165
-config.max_fps = 165
+config.animation_fps = 120
+config.max_fps = 120
 local gpus = wezterm.gui.enumerate_gpus()
 config.front_end = 'WebGpu'
 config.webgpu_power_preference = 'HighPerformance'

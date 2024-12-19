@@ -116,6 +116,7 @@
       # pkgs.element-desktop
       pkgs.pwneovide # wrapper makes a macos app for launching (and ensures it calls pwnvim)
       #dbeaver # database sql manager with er diagrams
+      pkgs.obsidian # going to try obsidian again despite electron annoyance (vim still for desktop editing, obsidian syncing for mobile)
     ]
     ++ (lib.optionals pkgs.stdenv.isDarwin
       [
