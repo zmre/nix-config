@@ -11,9 +11,9 @@ CHECK_ONLY="0"
 
 fix_vid() {
   input_file="$1"
-  extension="${input_file##*.}"
+  #extension="${input_file##*.}"
   base_name="${input_file%.*}"
-  output_file="${base_name}-h264.${extension}"
+  output_file="${base_name}-h264.mp4"
 
   VID_PARAMS=""
   AUD_PARAMS=""
@@ -46,7 +46,9 @@ fix_vid() {
 }
 
 function fix_dir() {
-  for file in "${1}"/*.mp4; do
+  for file in "${1}"/*.{mp4,m4v}; do
+    [[ -e "$file" ]] || continue # skip if no files match (glob is passed as literal)
+
     codec=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 "$file")
 
     if [[ "$codec" == "vp9" || "$codec" == "av1" ]]; then

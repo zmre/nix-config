@@ -1,6 +1,7 @@
 #!/bin/bash
 
 WHISPERMODEL="$HOME/.config/whisper/ggml-large-v3-turbo.bin"
+export WHISPER_COREML=1
 
 # Function to check if subtitles exist in the video
 check_subtitles() {
@@ -11,9 +12,9 @@ check_subtitles() {
 # Function to transcribe video with Whisper
 generate_subtitles() {
   local video_file="$1"
-  ffmpeg -i "$video_file" -ar 16000 -ac 1 -c:a pcm_s16le "${video_file}.wav"
-  whisper-cpp "${video_file}.wav" -m "$WHISPERMODEL" -l en -p 4 -t 8 --output_format srt
-  rm "${video_file}.wav" 
+  ffmpeg -i "$video_file" -ar 16000 -ac 1 -c:a pcm_s16le "${video_file%.*}.wav"
+  whisper-cpp "${video_file%.*}.wav" -m "$WHISPERMODEL" -l en --output-srt >& /dev/null
+  rm -f "${video_file%.*}.wav" 
 }
 
 # Function to embed subtitles with FFmpeg
@@ -22,7 +23,18 @@ embed_subtitles() {
   local subtitle_file="${video_file%.*}.wav.srt"
   local output_file="${video_file%.*}_with_subtitles.mp4"
 
-  ffmpeg -i "$video_file" -map 0 -c copy -map_chapters 0 -vf subtitles="$subtitle_file" "$output_file"
+  ffmpeg -hide_banner -loglevel error -i "$video_file" \
+    -i "$subtitle_file" \
+    -map 0 -map 1 -c copy -map_chapters 0 \
+    -c:s mov_text -metadata:s:s:0 language=eng \
+    -y "$output_file"
+}
+
+clear_subtitles() {
+  local video_file="$1"
+  local output_file="${video_file%.*}_no_subtitles.mp4"
+
+  ffmpeg -i "${video_file}" -map 0 -map -0:s -map_metadata 0 -c copy "${output_file}" && mv "${output_file}" "${video_file}"
 }
 
 
@@ -33,18 +45,33 @@ show_help() {
   echo "embeds the transcription back into the video"
   echo
   echo "Options:"
-  echo "  -h, --help    Show this help message and exit"
+  echo "  -c, --clear     Clear existing subtitles first"
+  echo "  -o, --overwrite Overwrite input file on success"
+  echo "  -f, --force     Re-embed even if subtitles exit"
+  echo "  -h, --help      Show this help message and exit"
   echo
   echo "Arguments:"
   echo "  file          The mp4 file to process"
 }
 
 video_file=""
+force="0"
+clear="0"
+overwrite="0"
 for arg in "$@"; do
   case "$arg" in
     -h|--help)
       show_help
       exit 0
+      ;;
+    -f|--force)
+      force="1"
+      ;;
+    -c|--clear)
+      clear="1"
+      ;;
+    -o|--overwrite)
+      overwrite="1"
       ;;
     *)
       video_file="$arg"
@@ -58,20 +85,36 @@ if ! [ -f "$video_file" ]; then
 fi
 
 echo "Checking for existing subtitles in '$video_file'..."
-if check_subtitles "$video_file"; then
+if [ "$force" == "0" ] && check_subtitles "$video_file"; then
   echo "Subtitles already exist in '$video_file'. No further action required."
   exit 0
-else
-  echo "No subtitles found. Generating subtitles with Whisper..."
-  generate_subtitles "$video_file"
+fi
 
-  subtitle_file="${video_file%.*}.srt"
-  if [ -f "$subtitle_file" ]; then
-    echo "Subtitles generated. Embedding them into the video..."
-    embed_subtitles "$video_file"
+echo "Generating subtitles with Whisper..."
+generate_subtitles "$video_file"
+
+if [ "$clear" == "1" ]; then
+  clear_subtitles "$video_file"
+fi
+
+subtitle_file="${video_file%.*}.wav.srt"
+if [ -f "$subtitle_file" ]; then
+  echo "Subtitles generated. Embedding them into the video..."
+  embed_subtitles "$video_file"
+  if [ -f "${video_file%.*}_with_subtitles.mp4" ] ; then
     echo "Subtitles successfully embedded into '${video_file%.*}_with_subtitles.mp4'."
+    if [ "$overwrite" == "1" ] ; then
+      echo "Overwriting original so subtitles in '$video_file'..."
+      mv "${video_file%.*}_with_subtitles.mp4" "$video_file"
+    fi
   else
-    echo "Error: Subtitle generation failed!"
-    exit 1
+    echo
+    echo
+    echo "**** Error: subtitle file not produced!!"
+    echo
+    echo
   fi
+else
+  echo "Error: Subtitle generation failed!"
+  exit 1
 fi
