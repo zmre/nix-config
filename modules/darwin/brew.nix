@@ -165,7 +165,7 @@
         greedy = true;
       }
       {
-        name = "protonmail-bridge"; # TODO: nix version now installs and works -- move over
+        name = "proton-mail-bridge"; # TODO: nix version now installs and works -- move over
         greedy = true;
       }
       "qflipper"

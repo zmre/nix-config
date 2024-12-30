@@ -48,7 +48,11 @@ _: {
       stealthenabled = 1;
     };
 
-    spaces.spans-displays = false; # separate spaces on each display
+    # if using spaces, below should be false
+    # if using workspaces from aerospace, set below to true
+    # Aerospace says mac is more stable with below true:
+    # https://nikitabobko.github.io/AeroSpace/guide#a-note-on-displays-have-separate-spaces
+    spaces.spans-displays = true; # separate spaces on each display
 
     # dock settings
     dock = {
@@ -67,6 +71,7 @@ _: {
       show-process-indicators = true;
       orientation = "bottom";
       mru-spaces = false;
+      expose-group-apps = true;
       # Hot corners
       # Possible values:
       #  0: no-op
@@ -90,6 +95,8 @@ _: {
     # };
 
     NSGlobalDomain = {
+      # Disable window animations to make Aerospace snappier
+      NSAutomaticWindowAnimationsEnabled = false;
       # 2 = heavy font smoothing; if text looks blurry, back this down to 1
       AppleFontSmoothing = 2;
       AppleShowAllExtensions = true;
@@ -187,6 +194,11 @@ _: {
       "com.apple.screencapture" = {
         location = "~/Desktop";
         type = "png";
+      };
+      "com.apple.universalaccess" = {
+        # Prevent a long touch of the alt/option key from turning on mouse keys, which makes half the keyboard unusable
+        # Note to self: five presses of alt/option in a row turn it off. But I don't use mousekeys, so let's disable it
+        useMouseKeysShortcutKeys = 0;
       };
       "com.apple.Safari" = {
         # Privacy: don’t send search queries to Apple

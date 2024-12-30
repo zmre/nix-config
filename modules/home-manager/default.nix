@@ -125,6 +125,10 @@
         pkgs.utm # utm is a qemu wrapper gui for mac only
         #pkgs.raycast # creates weird problems on upgrades having raycast in different paths, sadly; back to brew 2024-10-30
         pkgs.spotify
+        pkgs.aerospace
+        pkgs.sketchybar
+        pkgs.jankyborders
+        # pkgs.ghostty
       ]);
 in {
   imports = [
@@ -219,6 +223,11 @@ in {
         # Go up a dir with ctrl-n
         "\C-n":"cd ..\n"
         set editing-mode vi
+        set show-mode-in-prompt on
+        # non-blinking block cursor when in normal mode
+        set vi-cmd-mode-string "\1\e[2 q\2"
+        # non-blinking beam cursor when in insert mode
+        set vi-ins-mode-string "\1\e[6 q\2"
       '';
       #".direnvrc".text = ''
       #source ~/.config/direnv/direnvrc
@@ -268,6 +277,7 @@ in {
       '';
 
       ".config/wezterm/wezterm.lua".source = ./dotfiles/wezterm/wezterm.lua;
+      ".config/aerospace/aerospace.toml".source = ./dotfiles/aerospace.toml;
 
       # ".config/lf/lfimg".source = ./dotfiles/lf/lfimg;
       # ".config/lf/lf_kitty_preview".source =
@@ -695,7 +705,7 @@ in {
       LC_ALL="en_US.UTF-8"
     '';
     initExtraFirst = ''
-      zmodload zsh/zprof
+      #zmodload zsh/zprof
     '';
 
     #initExtraBeforeCompInit = "";
@@ -719,6 +729,7 @@ in {
     initExtra = ''
       set -o vi
       bindkey -v
+
 
       jump_key_places(){
         cd "$(\fd . ~ ~/.config ~/src/sideprojects ~/src/icl ~/src/icl/website.worktree ~/src/personal ~/src/gh ~/Sync/Private/Finances ~/Sync/Private ~/Sync/IronCore\ Docs ~/Sync/IronCore\ Docs/Legal ~/Sync/IronCore\ Docs/Finances ~/Sync/IronCore\ Docs/Design ~/Notes ~/Notes/Notes --min-depth 1 --max-depth 1 --type d -L -E .Trash -E @Trash | fzf)"
@@ -822,6 +833,36 @@ in {
       function set_tab_title() {
           echo -ne "\033]0;zsh ($(basename "''${PWD/\/Users\/pwalsh/~}"))\007"
       }
+
+      # following are needed with starship to get the cursors right
+      # below versions are non-blinking; use 1,3,5 for blinking versions
+      function _cursor_block() { echo -ne '\e[2 q' }
+      function _cursor_bar() { echo -ne '\e[4 q' }
+      function _cursor_beam() { echo -ne '\e[6 q' }
+
+      function zle-keymap-select zle-line-init
+      {
+          case $KEYMAP in
+              vicmd)      _cursor_block;;
+              viins|main) _cursor_beam;;
+              *)          _cursor_bar;;
+          esac
+
+          #starship_render
+
+          #zle reset-prompt
+          #zle -R
+      }
+
+      function zle-line-finish
+      {
+          _cursor_block
+      }
+
+      zle -N zle-line-init
+      zle -N zle-line-finish
+      zle -N zle-keymap-select
+
       #zprof
     '';
     sessionVariables = {};
@@ -832,9 +873,15 @@ in {
         src = pkgs.fetchFromGitHub {
           owner = "chisui";
           repo = "zsh-nix-shell";
-          rev = "v0.5.0";
-          sha256 = "0za4aiwwrlawnia4f29msk822rj9bgcygw6a8a6iikiwzjjz0g91";
+          rev = "v0.8.0";
+          sha256 = "1lzrn0n4fxfcgg65v0qhnj7wnybybqzs4adz7xsrkgmcsr0ii8b7";
         };
+      }
+      {
+        # better vi mode, see https://github.com/jeffreytse/zsh-vi-mode
+        name = "zsh-vi-mode";
+        file = "zsh-vi-mode.plugin.zsh";
+        src = pkgs.zsh-vi-mode;
       }
     ];
     shellAliases =
@@ -1036,7 +1083,7 @@ in {
   programs.atuin = {
     enable = true;
     enableZshIntegration = true;
-    flags = ["--disable-up-arrow"];
+    # flags = ["--disable-up-arrow"];
     settings = {
       update_check = false;
       search_mode = "fuzzy";
@@ -1046,6 +1093,13 @@ in {
       workspaces = true;
       filter_mode = "host";
       filter_mode_shell_up_key_binding = "session"; # pointless now that I've disabled up arrow
+      search_mode_shell_up_key_binding = "prefix";
+      keymap_mode = "vim-insert";
+      keymap_cursor = {
+        emacs = "blink-underline";
+        vim_insert = "steady-bar";
+        vim_normal = "steady-block";
+      };
       history_filter = [
         "^ "
         # "^innocuous-cmd .*--secret=.+"
@@ -1861,6 +1915,7 @@ in {
   # text expander functionality (but open source donationware, x-platform, rust-based)
   services.espanso = {
     enable = true;
+    package = pkgs.stable.espanso;
     configs = {
       default = {
         #search_shortcut = "off";

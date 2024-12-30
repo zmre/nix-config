@@ -127,6 +127,7 @@
       });
     })
     (final: prev: {
+      inherit (inputs.ghostty.packages.${final.system}) ghostty;
       inherit (inputs.gtm-okr.packages.${final.system}) gtm-okr;
       inherit (inputs.babble-cli.packages.${final.system}) babble-cli;
       inherit (inputs.mkalias.packages.${final.system}) mkalias;

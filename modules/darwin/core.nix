@@ -110,12 +110,17 @@
           echo "Restoring system hotkeys and amethyst hotkeys"
           defaults import com.apple.symbolichotkeys ${./plists/symbolichotkeys.plist}
           defaults import com.amethyst.Amethyst ${./plists/amethyst.plist}
+
         '';
         # to create an importable plist, see export-plists.sh
       };
       postUserActivation.text = ''
         # Following line should allow us to avoid a logout/login cycle
+        echo "Activating settings"
         /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+
+        echo "Reloading config in aerospace"
+        aerospace reload-config
       '';
     };
     keyboard = {
@@ -129,7 +134,7 @@
   #   serviceConfig.RunAtLoad = true;
   # };
 
-  documentation.enable = true; # temp disable 2024-07-06 to workaround issue
+  documentation.enable = true;
   # documentation.doc.enable = false;
   # documentation.man.enable = false;
   # documentation.man.generateCaches.enable = false;
