@@ -14,9 +14,9 @@ after-startup-command = [
     'exec-and-forget /etc/profiles/per-user/pwalsh/bin/borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=3.0',
   #'exec-and-forget sketchybar'
 ]
-#exec-on-workspace-change = ['/bin/bash', '-c',
-  #'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
-#]
+exec-on-workspace-change = ['/bin/bash', '-c',
+  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE'
+]
 
 # Start AeroSpace at login
 start-at-login = true
@@ -64,7 +64,12 @@ run = ['move-node-to-workspace M']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.Music'
-run = ['move-node-to-workspace 6']
+# Floating music because of weirdness with it flashing onto current workspace otherwise
+run = ['layout floating', 'move-node-to-workspace S']
+
+[[on-window-detected]]
+if.app-id = 'com.spotify.client'
+run = ['move-node-to-workspace S']
 
 [[on-window-detected]]
 if.app-id = 'com.github.wez.wezterm'
@@ -126,6 +131,10 @@ if.app-id = 'com.kapeli.dashdoc'
 run = ['layout floating']
 
 [[on-window-detected]]
+if.app-id = 'com.markmcguill.strongbox.mac'
+run = ['layout floating']
+
+[[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
 run = ['layout floating']
 
@@ -172,15 +181,15 @@ outer.right =      4
 
 [workspace-to-monitor-force-assignment]
 # plugged in
-# 1 | LG Ultra HD
-# 2 | LG UltraFine
-# 3 | RODE_RCV
+# 1 | LG Ultra HD          (secondary left)
+# 2 | LG UltraFine         (main central)
+# 3 | RODE_RCV             (tertiary right)
 # not plugged in
 # 1 | Built-in Retina Display
 
-B = ['LG Ultra HD', 'built-in']
-Y = ['LG Ultra HD', 'built-in']
-V = ['RODE_RCV', 'built-in']
+B = ['LG Ultra HD', 'built-in'] # browser to big vertical secondary monitor
+Y = ['LG Ultra HD', 'built-in'] # youtube to big vertical secondary monitor
+V = ['RODE_RCV', 'built-in']    # video meetings to teleprompter
 
 
 # 'main' binding mode declaration
@@ -205,13 +214,6 @@ V = ['RODE_RCV', 'built-in']
 # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
-# You can uncomment the following lines to open up terminal with alt + enter shortcut (like in i3)
-# alt-enter = '''exec-and-forget osascript -e '
-# tell application "Terminal"
-#     do script
-#     activate
-# end tell'
-# '''
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 alt-slash = 'layout tiles horizontal vertical'
@@ -242,46 +244,60 @@ alt-ctrl-k = ['join-with up']
 alt-ctrl-l = ['join-with right']
 
 # https://nikitabobko.github.io/AeroSpace/commands#workspace
-alt-ctrl-n = 'exec-and-forget aerospace list-workspaces --monitor focused --empty no | aerospace workspace next'
-alt-ctrl-p = 'exec-and-forget aerospace list-workspaces --monitor focused --empty no | aerospace workspace prev'
-alt-ctrl-shift-n = ['workspace --wrap-around next']
-alt-ctrl-shift-p = ['workspace --wrap-around prev']
+alt-ctrl-n = 'exec-and-forget aerospace list-workspaces --monitor focused --empty no | aerospace workspace --wrap-around next' # next occupied space on current monitor
+alt-ctrl-p = 'exec-and-forget aerospace list-workspaces --monitor focused --empty no | aerospace workspace --wrap-around prev' # prev occupied space on current monitor
+alt-ctrl-shift-n = ['workspace --wrap-around next'] # next space -- any monitor and occupied or unoccupied
+alt-ctrl-shift-p = ['workspace --wrap-around prev'] # prev space -- any monitor and occupied or unoccupied
 
-# TODO: use alt-z,x,c to focus-monitor by name
-# TODO: use alt-shift-z,x,c to move-node-to-monitor --focus-follows-window
-# TODO: use alt-ctrl-z,x,c to move-workspace-to-monitor
+# plugged in
+# 1 | LG Ultra HD          (secondary left)
+# 2 | LG UltraFine         (main central)
+# 3 | RODE_RCV             (tertiary right)
+# not plugged in
+# 1 | Built-in Retina Display
+alt-z = 'focus-monitor 1'
+alt-x = 'focus-monitor 2'
+alt-c = 'focus-monitor 3'
+alt-shift-z = 'move-node-to-monitor --focus-follows-window 1'
+alt-shift-x = 'move-node-to-monitor --focus-follows-window 2'
+alt-shift-c = 'move-node-to-monitor --focus-follows-window 3'
+
+# move-workspace-to-monitor is crappy -- can only specify next/prev and not specific monitors
+# we'll just use z/c to mean prev/next
+# also can't move focus with the workspace
+alt-ctrl-z = 'move-workspace-to-monitor --wrap-around prev'
+#alt-ctrl-x = 'move-workspace-to-monitor 2'
+alt-ctrl-c = 'move-workspace-to-monitor --wrap-around next'
 
 # full reset
 alt-shift-r = ['reload-config', 'flatten-workspace-tree']
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-alt-1 = 'workspace --auto-back-and-forth 1'
-alt-2 = 'workspace --auto-back-and-forth 2'
-alt-3 = 'workspace --auto-back-and-forth 3'
-alt-4 = 'workspace --auto-back-and-forth 4'
-alt-5 = 'workspace --auto-back-and-forth 5'
-alt-6 = 'workspace --auto-back-and-forth 6'
-alt-7 = 'workspace --auto-back-and-forth 7'
-alt-8 = 'workspace --auto-back-and-forth 8'
-alt-9 = 'workspace --auto-back-and-forth 9'
-alt-a = 'workspace --auto-back-and-forth A' 
-alt-b = 'workspace --auto-back-and-forth B' # browsers excluding brave
-alt-d = 'workspace --auto-back-and-forth D' # "day": calendar and reminders
-alt-e = 'workspace --auto-back-and-forth E' # email apps
-alt-g = 'workspace --auto-back-and-forth G'
-alt-i = 'workspace --auto-back-and-forth I'
-alt-m = 'workspace --auto-back-and-forth M' # message apps like signal, slack, and messages
-alt-n = 'workspace --auto-back-and-forth N' # notes excluding the ghostty popup notes
-alt-o = 'workspace --auto-back-and-forth O'
-alt-p = 'workspace --auto-back-and-forth P' # photo apps
-alt-q = 'workspace --auto-back-and-forth Q'
-alt-s = 'workspace --auto-back-and-forth S'
-alt-u = 'workspace --auto-back-and-forth U'
-alt-v = 'workspace --auto-back-and-forth V' # video meetings (except won't pin brave)
-alt-w = 'workspace --auto-back-and-forth W' # wezterm
-alt-x = 'workspace --auto-back-and-forth X'
-alt-y = 'workspace --auto-back-and-forth Y' # youtube
-alt-z = 'workspace --auto-back-and-forth Z'
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
+alt-a = 'workspace A' 
+alt-b = 'workspace B' # browsers excluding brave
+alt-d = 'workspace D' # "day": calendar and reminders
+alt-e = 'workspace E' # email apps
+alt-g = 'workspace G'
+alt-i = 'workspace I'
+alt-m = 'workspace M' # message apps like signal, slack, and messages
+alt-n = 'workspace N' # notes excluding the ghostty popup notes
+alt-o = 'workspace O'
+alt-p = 'workspace P' # photo apps
+alt-q = 'workspace Q'
+alt-s = 'workspace S' # music/spotify
+alt-u = 'workspace U'
+alt-v = 'workspace V' # video meetings (except won't pin brave)
+alt-w = 'workspace W' # wezterm
+alt-y = 'workspace Y' # youtube
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 alt-shift-1 = 'move-node-to-workspace --focus-follows-window 1'
@@ -304,13 +320,11 @@ alt-shift-n = 'move-node-to-workspace --focus-follows-window N' # notes excludin
 alt-shift-o = 'move-node-to-workspace --focus-follows-window O'
 alt-shift-p = 'move-node-to-workspace --focus-follows-window P' # photo apps
 alt-shift-q = 'move-node-to-workspace --focus-follows-window Q'
-alt-shift-s = 'move-node-to-workspace --focus-follows-window S'
+alt-shift-s = 'move-node-to-workspace --focus-follows-window S' # music/spotify
 alt-shift-u = 'move-node-to-workspace --focus-follows-window U'
 alt-shift-v = 'move-node-to-workspace --focus-follows-window V'
 alt-shift-w = 'move-node-to-workspace --focus-follows-window W' # wezterm
-alt-shift-x = 'move-node-to-workspace --focus-follows-window X'
 alt-shift-y = 'move-node-to-workspace --focus-follows-window Y' # youtube
-alt-shift-z = 'move-node-to-workspace --focus-follows-window Z'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'

@@ -127,6 +127,8 @@
       });
     })
     (final: prev: {
+      yt-x = inputs.yt-x.packages.${final.system}.default;
+      aerospace-sketchy = inputs.aerospace-sketchy.packages.${final.system}.default;
       inherit (inputs.ghostty.packages.${final.system}) ghostty;
       inherit (inputs.gtm-okr.packages.${final.system}) gtm-okr;
       inherit (inputs.babble-cli.packages.${final.system}) babble-cli;

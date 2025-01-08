@@ -17,6 +17,9 @@
       autoUpdate = false;
     };
 
+    # Weird side-effect of using nix-homebrew pinning is that what's below needs to be duplicated in the flake
+    # or possibly I can get rid of this...
+    # but I think it needs to be the same, though I might have to activate the system with the new tap in the flake before adding it here? ugh.
     taps = [
       "homebrew/core"
       "homebrew/bundle"
@@ -26,6 +29,7 @@
       #"koekeishiya/formulae"
       "homebrew/cask-drivers" # for flipper zero
       # "fujiapple852/trippy"
+      "pikachuexe/FreeTube"
     ];
 
     casks = [
@@ -88,7 +92,12 @@
       #   name = "focusrite-control-2";
       #   greedy = true;
       # }
-      "freetube" # trying out private youtube browsing after reading about how how toxic their algo is
+      # the homebrew version is precompiled but they only precompile x86 versions so this uses rosetta
+      # there's now a nix version and it self compiles but the compile fails (2025-01-08) and looks like it might be x86 anyway
+      # so trying out an arm build in the tap pikachuexe/freetube/pikachuexe-freetube
+      #"freetube" # trying out private youtube browsing after reading about how how toxic youtube's algo is
+      "pikachuexe-freetube" # trying out and holy hell, freetube is soooo much faster with the arm build. night and day for startup time especially.
+
       {
         name = "fork";
         greedy = true;
@@ -193,6 +202,10 @@
         name = "screenflow";
         greedy = true;
       }
+      # Following three things are for sketchybar
+      "font-sf-pro"
+      "font-sf-mono-for-powerline"
+      "sf-symbols"
       {
         name = "signal"; # TODO: move to home-manager (signal-desktop) when not broken
         greedy = true;
@@ -266,7 +279,7 @@
     masApps = {
       "Amphetamine" = 937984704;
       "Apple Configurator 2" = 1037126344;
-      "Blurred" = 1497527363; # dim non-foreground windows
+      #"Blurred" = 1497527363; # dim non-foreground windows -- removed when I realized this is Intel not ARM :-(
       "Boxy SVG" = 611658502; # nice code-oriented visual svg editor
       "Brother iPrint&Scan" = 1193539993;
       "Cardhop" = 1290358394; # contacts alternative

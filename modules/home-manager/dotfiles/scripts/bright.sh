@@ -14,5 +14,5 @@ fi
 FRAC=$(echo "scale=1; $INT/100" |bc)
 
 
-brightness $FRAC >& /dev/null
-ddcctl -d 1 -b $INT >& /dev/null
+brightness "$FRAC" >& /dev/null
+ddcctl -d 1 -b "$INT" >& /dev/null

@@ -86,6 +86,8 @@
       pastel # cli for color manipulation
       gnugrep
       #zsh-fzf-tab # build fail 2024-02-27
+      pkgs.yt-x # terminal youtube browser
+      chafa # cmd line image viewer needed with yt-x
     ])
     ++ (with pkgs; [
       # unstable packages
@@ -125,9 +127,8 @@
         pkgs.utm # utm is a qemu wrapper gui for mac only
         #pkgs.raycast # creates weird problems on upgrades having raycast in different paths, sadly; back to brew 2024-10-30
         pkgs.spotify
-        pkgs.aerospace
-        pkgs.sketchybar
-        pkgs.jankyborders
+        # Below is my packaging of aerospace, sketchy, and configs from a flake at https://github.com/zmre/aerospace-sketchybar-nix-lua-config
+        pkgs.aerospace-sketchy
         # pkgs.ghostty
       ]);
 in {
@@ -277,7 +278,6 @@ in {
       '';
 
       ".config/wezterm/wezterm.lua".source = ./dotfiles/wezterm/wezterm.lua;
-      ".config/aerospace/aerospace.toml".source = ./dotfiles/aerospace.toml;
 
       # ".config/lf/lfimg".source = ./dotfiles/lf/lfimg;
       # ".config/lf/lf_kitty_preview".source =
@@ -296,6 +296,7 @@ in {
         selection_background = "#4a4c4c"
         selection_foreground = "#d8dad6"
       '';
+      "${config.xdg.configHome}/yt-x/yt-x.conf".source = ./dotfiles/yt-x.conf;
       # Prose linting
       "${config.xdg.configHome}/proselint/config.json".text = ''
         {
@@ -359,8 +360,50 @@ in {
       "Library/KeyBindings/DefaultKeyBinding.dict".source = ./dotfiles/DefaultKeyBinding.dict;
       # company colors -- may still need to "install" them from a color picker window
       "Library/Colors/IronCore-Branding-June-17.clr".source = ./dotfiles/IronCore-Branding-June-17.clr;
+      # Switching from just putting config in place, to using outside config and making a service that starts it
+      #".config/aerospace/aerospace.toml".source = ./dotfiles/aerospace.toml;
+      # TODO: switch to keepalive true at some point; currently false so I can kill running apps and play with the
+      #       config from inside the flake before pushing up changes and consuming them.
+      # "Library/LaunchAgents/com.zmre.aerospace-sketchy.plist".text = ''
+      #     <?xml version="1.0" encoding="UTF-8"?>
+      #     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      #     <plist version="1.0">
+      #     <dict>
+      #       <key>Label</key>
+      #       <string>com.zmre.aerospace-sketchy</string>
+      #       <key>ProgramArguments</key>
+      #       <array>
+      #         <string>${pkgs.aerospace-sketchy}/bin/pwaerospace</string>
+      #       </array>
+      #       <key>RunAtLoad</key>
+      #       <true/>
+      #       <key>KeepAlive</key>
+      #       <false/>
+      #     </dict>
+      #   </plist>
+      # '';
     };
-
+  # home.activation = {
+  #   restartAerospace = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  #     echo "Reloading config in aerospace"
+  #     ${pkgs.aerospace}/bin/aerospace reload-config
+  #   '';
+  # };
+  launchd = {
+    # enable by default is true only on darwin
+    agents = {
+      "com.zmre.aerospace-sketchy" = {
+        enable = true;
+        config = {
+          Label = "com.zmre.aerospace-sketchy";
+          ProgramArguments = ["${pkgs.aerospace-sketchy}/bin/pwaerospace"];
+          RunAtLoad = true;
+          # For now, if aerospace dies, I think just calling pwaerospace from the cli will bring it back.
+          KeepAlive = false;
+        };
+      };
+    };
+  };
   programs.bat = {
     enable = true;
     #extraPackages = with pkgs.bat-extras; [ batman batgrep ];
@@ -834,30 +877,42 @@ in {
           echo -ne "\033]0;zsh ($(basename "''${PWD/\/Users\/pwalsh/~}"))\007"
       }
 
+      #### Change cursor depending on mode
       # following are needed with starship to get the cursors right
       # below versions are non-blinking; use 1,3,5 for blinking versions
       function _cursor_block() { echo -ne '\e[2 q' }
       function _cursor_bar() { echo -ne '\e[4 q' }
       function _cursor_beam() { echo -ne '\e[6 q' }
-
-      function zle-keymap-select zle-line-init
-      {
+      function zle-line-finish {
+          _cursor_block
+      }
+      function zle-keymap-select zle-line-init {
           case $KEYMAP in
               vicmd)      _cursor_block;;
               viins|main) _cursor_beam;;
               *)          _cursor_bar;;
           esac
-
-          #starship_render
-
-          #zle reset-prompt
-          #zle -R
       }
 
-      function zle-line-finish
-      {
-          _cursor_block
-      }
+      #### Make the up arrow default to just the local session commands, but ctrl-up can be global
+      #bindkey "''${key [Up]}" up-line-or-local-history
+      #bindkey "''${key [Down]}" down-line-or-local-history
+      #bindkey "^[[1;5A" up-line-or-history    # [CTRL] + Cursor up
+      #bindkey "^[[1;5B" down-line-or-history  # [CTRL] + Cursor down
+
+
+      #up-line-or-local-history() {
+          #zle set-local-history 1
+          #zle up-line-or-history
+          #zle set-local-history 0
+      #}
+      #zle -N up-line-or-local-history
+      #down-line-or-local-history() {
+          #zle set-local-history 1
+          #zle down-line-or-history
+          #zle set-local-history 0
+      #}
+      #zle -N down-line-or-local-history
 
       zle -N zle-line-init
       zle -N zle-line-finish
@@ -1083,7 +1138,7 @@ in {
   programs.atuin = {
     enable = true;
     enableZshIntegration = true;
-    # flags = ["--disable-up-arrow"];
+    flags = ["--disable-up-arrow"];
     settings = {
       update_check = false;
       search_mode = "fuzzy";

@@ -118,9 +118,6 @@
         # Following line should allow us to avoid a logout/login cycle
         echo "Activating settings"
         /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
-
-        echo "Reloading config in aerospace"
-        aerospace reload-config
       '';
     };
     keyboard = {
@@ -161,6 +158,7 @@
     nerd-fonts.sauce-code-pro
     nerd-fonts.inconsolata
     nerd-fonts.symbols-only
+    sketchybar-app-font
     montserrat
     raleway
     vegur

@@ -164,6 +164,9 @@ _: {
         WebKitDeveloperExtras = true;
         AppleMiniaturizeOnDoubleClick = false;
         NSAutomaticTextCompletionEnabled = true;
+        # The menu bar at the top of the screen can be hidden all the time (shows up with your cursor at the top) with value 1;
+        # normal operation showing all the time except in full screen is value of 0.
+        _HIHideMenuBar = 1;
         "com.apple.sound.beep.flash" = false;
       };
       "com.apple.finder" = {

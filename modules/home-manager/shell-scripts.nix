@@ -5,6 +5,12 @@
 }: let
   bright = pkgs.writeShellApplication {
     name = "bright.sh";
+    # Below are needed for bright.sh script, but this is an import in home-manager and homebrew is set under darwin so...
+    # these are moving over there.
+    # homebrew.brews = [
+    #   "brightness"
+    #   "ddcctl"
+    # ];
     runtimeInputs = [];
     text = builtins.readFile ./dotfiles/scripts/bright.sh;
   };
@@ -52,13 +58,6 @@
     text = builtins.readFile ./dotfiles/scripts/transcribe-video-to-subtitles;
   };
 in {
-  # Below are needed for bright.sh script, but this is an import in home-manager and homebrew is set under darwin so...
-  # these are moving over there.
-  # homebrew.brews = [
-  #   "brightness"
-  #   "ddcctl"
-  # ];
-
   home.packages =
     [
       yt
@@ -67,8 +66,8 @@ in {
       transcribe-rode-meeting
       transcribe-video-to-subtitles
     ]
-    ++ lib.optionals (!pkgs.stdenvNoCC.isLinux) []
-    ++ lib.optionals (!pkgs.stdenvNoCC.isDarwin) [
+    ++ lib.optionals (pkgs.stdenvNoCC.isLinux) []
+    ++ lib.optionals (pkgs.stdenvNoCC.isDarwin) [
       bright
       desktop-hide
       desktop-show
