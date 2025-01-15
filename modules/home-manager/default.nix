@@ -690,14 +690,11 @@ in {
 
   programs.mpv = {
     enable = true;
-    # TODO: Same problem as below when using unstable
-    #package = pkgs.mpv;
-    package = pkgs.emptyDirectory; # post 15.1, gui doesn't start so switching to brew but keeping config
-    # TODO: Commenting out scripts 2024-07-09 because they are causing an error
-    # around swift-wrapper-5.8 being broken
-    #scripts = with pkgs.mpvScripts; [thumbnail sponsorblock];
+    # Until someone changes makeWrapper to makeBinaryWrapper in https://github.com/NixOS/nixpkgs/issues/356860, we need to use the brew version to avoid the
+    # issue where post macos 15.1, gui doesn't start from Finder (The application “Finder” does not have permission to open “(null).”)
+    package = pkgs.emptyDirectory;
+    #scripts = with pkgs.mpvScripts; [thumbnail sponsorblock uosc];
     config = {
-      # disable on-screen controller -- else I get a message saying I have to add this
       osc = true;
       # Use a large seekable RAM cache even for local input.
       cache = true;
@@ -716,6 +713,15 @@ in {
       hls-bitrate = "max"; # use max quality for HLS streams
 
       user-agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:57.0) Gecko/20100101 Firefox/58.0";
+    };
+    bindings = {
+      #"G" = "add sub-scale +0.1"; # increase the subtitle font size (this is the default)
+      #"F" = "add sub-scale -0.1"; # decrease the subtitle font size (this is the default)
+      #"r" = "add sub-pos -1"; # move subtitles up (this is the default)
+      #"R" = "add sub-pos +1"; # move subtitles down (this is the default)
+      #"PGUP" = "add chapter 1"; # seek to the next chapter (this is the default)
+      #"PGDWN" = "add chapter -1"; # seek to the previous chapter (this is the default)
+      #"g-c" = "script-binding select/select-chapter"; # chapter chooser (this is the default)
     };
     defaultProfiles = ["gpu-hq"];
   };

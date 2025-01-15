@@ -170,6 +170,6 @@
       };
     })
     inputs.nur.overlays.default
-    inputs.yazi.overlays.default
+    #inputs.yazi.overlays.default
   ];
 }

@@ -124,7 +124,7 @@ config.keys = {
   -- since we mapped ctrl-shift-l to moving pane right, we need a different mapping for debug overlay
   -- and we'll use ctrl-shift-; (ctrl-:)
   { key = ':', mods = 'CTRL', action = act.ShowDebugOverlay },
-  -- ctrl-a, followed by 'a' will put us in activate-pane
+  -- cmd-ctrl-a, followed by 'a' will put us in activate-pane
   -- mode until we press some other key or until 1 second (1000ms)
   -- of time elapses
   {
@@ -135,7 +135,7 @@ config.keys = {
       timeout_milliseconds = 1000,
     },
   },
-  -- ctrl-a, followed by 'r' will put us in resize-pane
+  -- cmd-ctrl-a, followed by 'r' will put us in resize-pane
   -- mode until we press some other key or until 1 second (1000ms)
   -- of time elapses
   {
@@ -151,7 +151,7 @@ config.keys = {
 if wezterm.gui then
   -- 2024-12-05 we only have default tables for copy_mode and search_mode right now
 
-  -- add some keys to copy mode, which we get into with ctrl-shift-X
+  -- add some keys to copy mode, which we get into with ctrl-shift-X or cmd-ctrl-a, [
   local copy_mode = wezterm.gui.default_key_tables().copy_mode
   -- Add alt-v to select the whole current semanticzone -- area between prompts, probably
   table.insert(copy_mode, {
