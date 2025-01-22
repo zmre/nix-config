@@ -98,7 +98,6 @@
       babble-cli # twitter tui
       #enola # sherlock-like tool # TODO: build is failing 2024-09-11 see overlays file for more details
       kopia # deduping backup
-      nps # quick nix packages search
       zk # cli for indexing markdown files
       hackernews-tui
       btop # currently like this better than bottom and htop
