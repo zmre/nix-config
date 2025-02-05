@@ -397,8 +397,7 @@ in {
           Label = "com.zmre.aerospace-sketchy";
           ProgramArguments = ["${pkgs.aerospace-sketchy}/bin/pwaerospace"];
           RunAtLoad = true;
-          # For now, if aerospace dies, I think just calling pwaerospace from the cli will bring it back.
-          KeepAlive = false;
+          KeepAlive = true;
         };
       };
     };
