@@ -1752,14 +1752,14 @@ in {
       #     set -g @open-S 'https://www.duckduckgo.com/'
       #   '';
       # }
-      {
-        plugin = tmuxPlugins.resurrect;
-        extraConfig = ''
-          set -g @resurrect-strategy-nvim 'session'
-          set -g @resurrect-processes ': all:'
-          set -g @resurrect-capture-pane-contents 'on'
-        '';
-      }
+      # {
+      #   plugin = tmuxPlugins.resurrect;
+      #   extraConfig = ''
+      #     set -g @resurrect-strategy-nvim 'session'
+      #     set -g @resurrect-processes ': all:'
+      #     set -g @resurrect-capture-pane-contents 'on'
+      #   '';
+      # }
     ];
   };
 
