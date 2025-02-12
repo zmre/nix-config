@@ -71,7 +71,7 @@
     devenv.url = "github:cachix/devenv/latest";
 
     # macos window manager: aerospace + sketchybar + jankyborders + configs
-    aerospace-sketchy.url = "github:zmre/aerospace-sketchybar-nix-lua-config";
+    pwaerospace.url = "github:zmre/aerospace-sketchybar-nix-lua-config";
 
     # Tool to make mac aliases without needing Finder scripting permissions for home-manager app linking
     mkalias.url = "github:reckenrode/mkalias";
@@ -117,8 +117,6 @@
     homebrew-cask-drivers.flake = false;
     # homebrew-trippy.url = "github:fujiapple852/trippy"; # for trippy ping util
     # homebrew-trippy.flake = false;
-    homebrew-freetube.url = "github:pikachuexe/homebrew-FreeTube";
-    homebrew-freetube.flake = false;
   };
 
   outputs = inputs @ {
@@ -187,7 +185,6 @@
                 "homebrew/homebrew-services" = homebrew-services;
                 "homebrew/homebrew-cask-drivers" = homebrew-cask-drivers;
                 # "fujiapple852/trippy" = homebrew-trippy;
-                "pikachuexe/homebrew-FreeTube" = homebrew-freetube;
               };
 
               # With mutableTaps disabled, taps can no longer be added imperatively with `brew tap`.

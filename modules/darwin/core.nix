@@ -172,12 +172,6 @@
     '';
   };
 
-  # auto manage nixbld users with nix darwin
-  nix.configureBuildUsers = true;
-
-  # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
-
   services.tailscale = {
     enable = true;
     overrideLocalDns = true;

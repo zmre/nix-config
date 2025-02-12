@@ -29,7 +29,6 @@
       #"koekeishiya/formulae"
       "homebrew/cask-drivers" # for flipper zero
       # "fujiapple852/trippy"
-      "pikachuexe/FreeTube"
     ];
 
     casks = [
@@ -96,8 +95,8 @@
       # the homebrew version is precompiled but they only precompile x86 versions so this uses rosetta
       # there's now a nix version and it self compiles but the compile fails (2025-01-08) and looks like it might be x86 anyway
       # so trying out an arm build in the tap pikachuexe/freetube/pikachuexe-freetube
-      #"freetube" # trying out private youtube browsing after reading about how how toxic youtube's algo is
-      "pikachuexe-freetube" # trying out and holy hell, freetube is soooo much faster with the arm build. night and day for startup time especially.
+      "freetube" # trying out private youtube browsing after reading about how how toxic youtube's algo is
+      #"pikachuexe-freetube" # trying out and holy hell, freetube is soooo much faster with the arm build. night and day for startup time especially.
 
       {
         name = "fork";

@@ -127,7 +127,7 @@
         #pkgs.raycast # creates weird problems on upgrades having raycast in different paths, sadly; back to brew 2024-10-30
         pkgs.spotify
         # Below is my packaging of aerospace, sketchy, and configs from a flake at https://github.com/zmre/aerospace-sketchybar-nix-lua-config
-        pkgs.aerospace-sketchy
+        pkgs.pwaerospace
         # pkgs.ghostty
       ]);
 in {
@@ -363,16 +363,16 @@ in {
       #".config/aerospace/aerospace.toml".source = ./dotfiles/aerospace.toml;
       # TODO: switch to keepalive true at some point; currently false so I can kill running apps and play with the
       #       config from inside the flake before pushing up changes and consuming them.
-      # "Library/LaunchAgents/com.zmre.aerospace-sketchy.plist".text = ''
+      # "Library/LaunchAgents/com.zmre.pwaerospace.plist".text = ''
       #     <?xml version="1.0" encoding="UTF-8"?>
       #     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
       #     <plist version="1.0">
       #     <dict>
       #       <key>Label</key>
-      #       <string>com.zmre.aerospace-sketchy</string>
+      #       <string>com.zmre.pwaerospace</string>
       #       <key>ProgramArguments</key>
       #       <array>
-      #         <string>${pkgs.aerospace-sketchy}/bin/pwaerospace</string>
+      #         <string>${pkgs.pwaerospace}/bin/pwaerospace</string>
       #       </array>
       #       <key>RunAtLoad</key>
       #       <true/>
@@ -391,11 +391,11 @@ in {
   launchd = {
     # enable by default is true only on darwin
     agents = {
-      "com.zmre.aerospace-sketchy" = {
+      "com.zmre.pwaerospace" = {
         enable = true;
         config = {
-          Label = "com.zmre.aerospace-sketchy";
-          ProgramArguments = ["${pkgs.aerospace-sketchy}/bin/pwaerospace"];
+          Label = "com.zmre.pwaerospace";
+          ProgramArguments = ["${pkgs.pwaerospace}/bin/pwaerospace"];
           RunAtLoad = true;
           KeepAlive = true;
         };
