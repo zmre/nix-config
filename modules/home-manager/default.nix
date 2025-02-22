@@ -495,7 +495,7 @@ in {
       ms-toolsai.vscode-jupyter-slideshow
       esbenp.prettier-vscode
       timonwong.shellcheck
-      rust-lang.rust-analyzer
+      # rust-lang.rust-analyzer # disabled 2025-02-21 due to build failure
       graphql.vscode-graphql
       dbaeumer.vscode-eslint
       codezombiech.gitignore
