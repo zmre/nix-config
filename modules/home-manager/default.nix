@@ -88,6 +88,7 @@
       #zsh-fzf-tab # build fail 2024-02-27
       pkgs.yt-x # terminal youtube browser
       chafa # cmd line image viewer needed with yt-x
+      aichat # ai cli tool that can use local rag, local models, etc.
     ])
     ++ (with pkgs; [
       # unstable packages
