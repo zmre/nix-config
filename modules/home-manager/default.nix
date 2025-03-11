@@ -105,7 +105,6 @@
       marp-cli # convert markdown to html slides
       ironhide # rust version of IronCore's ironhide
       devenv # quick setup of dev envs for projects
-      tailscale # p2p vpn
       openai-whisper-cpp # Allow GPU accelerated local transcriptions
       #qutebrowser
     ]);
@@ -118,7 +117,7 @@
       # pkgs.element-desktop
       pkgs.pwneovide # wrapper makes a macos app for launching (and ensures it calls pwnvim)
       #dbeaver # database sql manager with er diagrams
-      pkgs.obsidian # going to try obsidian again despite electron annoyance (vim still for desktop editing, obsidian syncing for mobile)
+      #pkgs.obsidian # going to try obsidian again despite electron annoyance (vim still for desktop editing, obsidian syncing for mobile)
     ]
     ++ (lib.optionals pkgs.stdenv.isDarwin
       [
@@ -480,164 +479,166 @@ in {
     mutableExtensionsDir =
       true; # to allow vscode to install extensions not available via nix
     # package = pkgs.vscode-fhs; # or pkgs.vscodium or pkgs.vscode-with-extensions
-    extensions = with pkgs.vscode-extensions; [
-      bbenoist.nix
-      scala-lang.scala
-      svelte.svelte-vscode
-      redhat.vscode-yaml
-      jnoortheen.nix-ide
-      vspacecode.whichkey # ?
-      tamasfe.even-better-toml
-      ms-python.python
-      ms-toolsai.jupyter
-      ms-toolsai.jupyter-keymap
-      ms-toolsai.jupyter-renderers
-      ms-toolsai.vscode-jupyter-cell-tags
-      ms-toolsai.vscode-jupyter-slideshow
-      esbenp.prettier-vscode
-      timonwong.shellcheck
-      # rust-lang.rust-analyzer # disabled 2025-02-21 due to build failure
-      graphql.vscode-graphql
-      dbaeumer.vscode-eslint
-      codezombiech.gitignore
-      bierner.markdown-emoji
-      bradlc.vscode-tailwindcss
-      naumovs.color-highlight
-      mikestead.dotenv
-      mskelton.one-dark-theme
-      prisma.prisma
-      asvetliakov.vscode-neovim
-      brettm12345.nixfmt-vscode
-      davidanson.vscode-markdownlint
-      pkief.material-icon-theme
-      dracula-theme.theme-dracula
-      eamodio.gitlens # for git blame
-      marp-team.marp-vscode # for markdown slides
-      #pkgs.kubernetes-yaml-formatter # format k8s; from overlays and flake input # not building as of 2024-04-22; not sure why, no time to debug right now
-      # live share not currently working via nix
-      #ms-vsliveshare.vsliveshare # live share coding with others
-      # wishlist
-      # ardenivanov.svelte-intellisense
-      # cschleiden.vscode-github-actions
-      github.vscode-github-actions
-      # csstools.postcss
-      # stylelint.vscode-stylelint
-      # vunguyentuan.vscode-css-variables
-      # ZixuanChen.vitest-explorer
-      # bettercomments ?
-    ];
-    # starting point for bindings: https://github.com/LunarVim/LunarVim/blob/4625145d0278d4a039e55c433af9916d93e7846a/utils/vscode_config/keybindings.json
-    keybindings = [
-      {
-        "key" = "ctrl+e";
-        "command" = "workbench.view.explorer";
-      }
-      {
-        "key" = "shift+ctrl+e";
-        "command" = "-workbench.view.explorer";
-      }
-    ];
-    userSettings = {
-      # Much of the following adapted from https://github.com/LunarVim/LunarVim/blob/4625145d0278d4a039e55c433af9916d93e7846a/utils/vscode_config/settings.json
-      "editor.tabSize" = 2;
-      "editor.fontLigatures" = true;
-      "editor.guides.indentation" = false;
-      "editor.insertSpaces" = true;
-      "editor.fontFamily" = "'Hasklug Nerd Font', 'JetBrainsMono Nerd Font', 'FiraCode Nerd Font','SF Mono', Menlo, Monaco, 'Courier New', monospace";
-      "editor.fontSize" = 12;
-      "editor.formatOnSave" = true;
-      "editor.suggestSelection" = "first";
-      "editor.scrollbar.horizontal" = "hidden";
-      "editor.scrollbar.vertical" = "hidden";
-      "editor.scrollBeyondLastLine" = false;
-      "editor.cursorBlinking" = "solid";
-      "editor.minimap.enabled" = false;
-      "[nix]"."editor.tabSize" = 2;
-      "[svelte]"."editor.defaultFormatter" = "svelte.svelte-vscode";
-      "[jsonc]"."editor.defaultFormatter" = "esbenp.prettier-vscode";
-      "extensions.ignoreRecommendations" = false;
-      "files.insertFinalNewline" = true;
-      "[scala]"."editor.tabSize" = 2;
-      "[json]"."editor.tabSize" = 2;
-      "vim.highlightedyank.enable" = true;
-      "files.trimTrailingWhitespace" = true;
-      "gitlens.codeLens.enabled" = false;
-      "gitlens.currentLine.enabled" = false;
-      "gitlens.hovers.currentLine.over" = "line";
-      "vsintellicode.modify.editor.suggestSelection" = "automaticallyOverrodeDefaultValue";
-      "java.semanticHighlighting.enabled" = true;
-      "workbench.editor.showTabs" = true;
-      "workbench.list.automaticKeyboardNavigation" = false;
-      "workbench.activityBar.visible" = false;
-      #"workbench.colorTheme" = "Dracula";
-      "workbench.colorTheme" = "One Dark";
-      "workbench.iconTheme" = "material-icon-theme";
-      "editor.accessibilitySupport" = "off";
-      "oneDark.bold" = true;
-      "window.zoomLevel" = 1;
-      "window.menuBarVisibility" = "toggle";
-      #"terminal.integrated.shell.linux" = "${pkgs.zsh}/bin/zsh";
+    profiles.default = {
+      extensions = with pkgs.vscode-extensions; [
+        bbenoist.nix
+        scala-lang.scala
+        svelte.svelte-vscode
+        redhat.vscode-yaml
+        jnoortheen.nix-ide
+        vspacecode.whichkey # ?
+        tamasfe.even-better-toml
+        #ms-python.python # disabled 2025-03-08 due to hash mismatch
+        ms-toolsai.jupyter
+        ms-toolsai.jupyter-keymap
+        ms-toolsai.jupyter-renderers
+        ms-toolsai.vscode-jupyter-cell-tags
+        ms-toolsai.vscode-jupyter-slideshow
+        esbenp.prettier-vscode
+        timonwong.shellcheck
+        # rust-lang.rust-analyzer # disabled 2025-02-21 due to build failure
+        graphql.vscode-graphql
+        dbaeumer.vscode-eslint
+        codezombiech.gitignore
+        bierner.markdown-emoji
+        bradlc.vscode-tailwindcss
+        naumovs.color-highlight
+        mikestead.dotenv
+        mskelton.one-dark-theme
+        prisma.prisma
+        asvetliakov.vscode-neovim
+        brettm12345.nixfmt-vscode
+        davidanson.vscode-markdownlint
+        pkief.material-icon-theme
+        dracula-theme.theme-dracula
+        eamodio.gitlens # for git blame
+        marp-team.marp-vscode # for markdown slides
+        #pkgs.kubernetes-yaml-formatter # format k8s; from overlays and flake input # not building as of 2024-04-22; not sure why, no time to debug right now
+        # live share not currently working via nix
+        #ms-vsliveshare.vsliveshare # live share coding with others
+        # wishlist
+        # ardenivanov.svelte-intellisense
+        # cschleiden.vscode-github-actions
+        github.vscode-github-actions
+        # csstools.postcss
+        # stylelint.vscode-stylelint
+        # vunguyentuan.vscode-css-variables
+        # ZixuanChen.vitest-explorer
+        # bettercomments ?
+      ];
+      # starting point for bindings: https://github.com/LunarVim/LunarVim/blob/4625145d0278d4a039e55c433af9916d93e7846a/utils/vscode_config/keybindings.json
+      keybindings = [
+        {
+          "key" = "ctrl+e";
+          "command" = "workbench.view.explorer";
+        }
+        {
+          "key" = "shift+ctrl+e";
+          "command" = "-workbench.view.explorer";
+        }
+      ];
+      userSettings = {
+        # Much of the following adapted from https://github.com/LunarVim/LunarVim/blob/4625145d0278d4a039e55c433af9916d93e7846a/utils/vscode_config/settings.json
+        "editor.tabSize" = 2;
+        "editor.fontLigatures" = true;
+        "editor.guides.indentation" = false;
+        "editor.insertSpaces" = true;
+        "editor.fontFamily" = "'Hasklug Nerd Font', 'JetBrainsMono Nerd Font', 'FiraCode Nerd Font','SF Mono', Menlo, Monaco, 'Courier New', monospace";
+        "editor.fontSize" = 12;
+        "editor.formatOnSave" = true;
+        "editor.suggestSelection" = "first";
+        "editor.scrollbar.horizontal" = "hidden";
+        "editor.scrollbar.vertical" = "hidden";
+        "editor.scrollBeyondLastLine" = false;
+        "editor.cursorBlinking" = "solid";
+        "editor.minimap.enabled" = false;
+        "[nix]"."editor.tabSize" = 2;
+        "[svelte]"."editor.defaultFormatter" = "svelte.svelte-vscode";
+        "[jsonc]"."editor.defaultFormatter" = "esbenp.prettier-vscode";
+        "extensions.ignoreRecommendations" = false;
+        "files.insertFinalNewline" = true;
+        "[scala]"."editor.tabSize" = 2;
+        "[json]"."editor.tabSize" = 2;
+        "vim.highlightedyank.enable" = true;
+        "files.trimTrailingWhitespace" = true;
+        "gitlens.codeLens.enabled" = false;
+        "gitlens.currentLine.enabled" = false;
+        "gitlens.hovers.currentLine.over" = "line";
+        "vsintellicode.modify.editor.suggestSelection" = "automaticallyOverrodeDefaultValue";
+        "java.semanticHighlighting.enabled" = true;
+        "workbench.editor.showTabs" = true;
+        "workbench.list.automaticKeyboardNavigation" = false;
+        "workbench.activityBar.visible" = false;
+        #"workbench.colorTheme" = "Dracula";
+        "workbench.colorTheme" = "One Dark";
+        "workbench.iconTheme" = "material-icon-theme";
+        "editor.accessibilitySupport" = "off";
+        "oneDark.bold" = true;
+        "window.zoomLevel" = 1;
+        "window.menuBarVisibility" = "toggle";
+        #"terminal.integrated.shell.linux" = "${pkgs.zsh}/bin/zsh";
 
-      "svelte.enable-ts-plugin" = true;
-      "javascript.inlayHints.functionLikeReturnTypes.enabled" = true;
-      "javascript.referencesCodeLens.enabled" = true;
-      "javascript.suggest.completeFunctionCalls" = true;
+        "svelte.enable-ts-plugin" = true;
+        "javascript.inlayHints.functionLikeReturnTypes.enabled" = true;
+        "javascript.referencesCodeLens.enabled" = true;
+        "javascript.suggest.completeFunctionCalls" = true;
 
-      "vscode-neovim.neovimExecutablePaths.darwin" = "${pkgs.neovim}/bin/nvim";
-      "vscode-neovim.neovimExecutablePaths.linux" = "${pkgs.neovim}/bin/nvim";
-      /*
-      "vscode-neovim.neovimInitVimPaths.darwin" = "$HOME/.config/nvim/init.vim";
-      "vscode-neovim.neovimInitVimPaths.linux" = "$HOME/.config/nvim/init.vim";
-      */
-      "editor.tokenColorCustomizations" = {
-        "textMateRules" = [
-          {
-            "name" = "One Dark bold";
-            "scope" = [
-              "entity.name.function"
-              "entity.name.type.class"
-              "entity.name.type.module"
-              "entity.name.type.namespace"
-              "keyword.other.important"
-            ];
-            "settings" = {"fontStyle" = "bold";};
-          }
-          {
-            "name" = "One Dark italic";
-            "scope" = [
-              "comment"
-              "entity.other.attribute-name"
-              "keyword"
-              "markup.underline.link"
-              "storage.modifier"
-              "storage.type"
-              "string.url"
-              "variable.language.super"
-              "variable.language.this"
-            ];
-            "settings" = {"fontStyle" = "italic";};
-          }
-          {
-            "name" = "One Dark italic reset";
-            "scope" = [
-              "keyword.operator"
-              "keyword.other.type"
-              "storage.modifier.import"
-              "storage.modifier.package"
-              "storage.type.built-in"
-              "storage.type.function.arrow"
-              "storage.type.generic"
-              "storage.type.java"
-              "storage.type.primitive"
-            ];
-            "settings" = {"fontStyle" = "";};
-          }
-          {
-            "name" = "One Dark bold italic";
-            "scope" = ["keyword.other.important"];
-            "settings" = {"fontStyle" = "bold italic";};
-          }
-        ];
+        "vscode-neovim.neovimExecutablePaths.darwin" = "${pkgs.neovim}/bin/nvim";
+        "vscode-neovim.neovimExecutablePaths.linux" = "${pkgs.neovim}/bin/nvim";
+        /*
+        "vscode-neovim.neovimInitVimPaths.darwin" = "$HOME/.config/nvim/init.vim";
+        "vscode-neovim.neovimInitVimPaths.linux" = "$HOME/.config/nvim/init.vim";
+        */
+        "editor.tokenColorCustomizations" = {
+          "textMateRules" = [
+            {
+              "name" = "One Dark bold";
+              "scope" = [
+                "entity.name.function"
+                "entity.name.type.class"
+                "entity.name.type.module"
+                "entity.name.type.namespace"
+                "keyword.other.important"
+              ];
+              "settings" = {"fontStyle" = "bold";};
+            }
+            {
+              "name" = "One Dark italic";
+              "scope" = [
+                "comment"
+                "entity.other.attribute-name"
+                "keyword"
+                "markup.underline.link"
+                "storage.modifier"
+                "storage.type"
+                "string.url"
+                "variable.language.super"
+                "variable.language.this"
+              ];
+              "settings" = {"fontStyle" = "italic";};
+            }
+            {
+              "name" = "One Dark italic reset";
+              "scope" = [
+                "keyword.operator"
+                "keyword.other.type"
+                "storage.modifier.import"
+                "storage.modifier.package"
+                "storage.type.built-in"
+                "storage.type.function.arrow"
+                "storage.type.generic"
+                "storage.type.java"
+                "storage.type.primitive"
+              ];
+              "settings" = {"fontStyle" = "";};
+            }
+            {
+              "name" = "One Dark bold italic";
+              "scope" = ["keyword.other.important"];
+              "settings" = {"fontStyle" = "bold italic";};
+            }
+          ];
+        };
       };
     };
   };
