@@ -137,7 +137,10 @@
       #"lm-studio"
       "lockrattler"
       #"loopback" -- haven't been using this of late
-      "macwhisper"
+      {
+        name = "macwhisper";
+        greedy = true;
+      }
       {
         name = "marked";
         greedy = true;
