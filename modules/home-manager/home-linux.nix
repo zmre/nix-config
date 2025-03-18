@@ -39,7 +39,7 @@ in {
 
       # apps
       keepassxc
-      spotify-qt
+      #spotify-qt
       nomacs
 
       # terminal linux-only apps
@@ -410,7 +410,7 @@ in {
   };
   # manage audio play/pause
   services.playerctld.enable = true;
-  services.spotifyd.enable = true;
+  #services.spotifyd.enable = true;
 
   services.picom.enable = true; # xsession compositor
   xsession.windowManager.i3.enable = true;

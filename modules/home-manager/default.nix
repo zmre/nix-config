@@ -77,7 +77,7 @@
       fortune
       ipcalc
       kondo # free disk space by cleaning project build dirs
-      ncspot # control spotify
+      #ncspot # control spotify
       optipng
       procps
       pstree
@@ -125,7 +125,7 @@
         pkgs.stable.docker
         pkgs.utm # utm is a qemu wrapper gui for mac only
         #pkgs.raycast # creates weird problems on upgrades having raycast in different paths, sadly; back to brew 2024-10-30
-        pkgs.spotify
+        #pkgs.spotify
         # Below is my packaging of aerospace, sketchy, and configs from a flake at https://github.com/zmre/aerospace-sketchybar-nix-lua-config
         pkgs.pwaerospace
         # pkgs.ghostty
