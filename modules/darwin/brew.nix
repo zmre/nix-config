@@ -338,7 +338,9 @@
       "hashcat" # the nix one only builds on linux
       "hydra" # the nix one only builds on linux
       "p0f" # the nix one only builds on linux
-      #"yt-dlp" # youtube downloader / 2024-11-19 moved back to nix now that curl-cffi (curl-impersonate) is supported
+      "yt-dlp" # youtube downloader / 2024-11-19 moved back to nix now that curl-cffi (curl-impersonate) is supported
+      # 2025-04-09 I'm getting errors saying curl-cffi is unavailable even though the nix recipe has it
+      # so I'm adding it in both places for now
     ];
   };
 }

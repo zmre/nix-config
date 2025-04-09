@@ -484,6 +484,7 @@ in {
         bbenoist.nix
         scala-lang.scala
         svelte.svelte-vscode
+        mkhl.direnv
         redhat.vscode-yaml
         jnoortheen.nix-ide
         vspacecode.whichkey # ?
