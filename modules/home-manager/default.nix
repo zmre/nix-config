@@ -104,6 +104,7 @@
       btop # currently like this better than bottom and htop
       marp-cli # convert markdown to html slides
       ironhide # rust version of IronCore's ironhide
+      ironoxide-cli # rust version of IronCore's ironoxide-cli
       devenv # quick setup of dev envs for projects
       openai-whisper-cpp # Allow GPU accelerated local transcriptions
       #qutebrowser

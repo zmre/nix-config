@@ -44,6 +44,8 @@
 
     ironhide.url = "github:IronCoreLabs/ironhide";
     ironhide.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    ironoxide.url = "github:IronCoreLabs/ironoxide-cli";
+    ironoxide.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     yt-x.url = "github:Benexl/yt-x"; # cmd line youtube browser
 

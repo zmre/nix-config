@@ -134,6 +134,7 @@
       inherit (inputs.babble-cli.packages.${final.system}) babble-cli;
       inherit (inputs.mkalias.packages.${final.system}) mkalias;
       inherit (inputs.ironhide.packages.${final.system}) ironhide;
+      inherit (inputs.ironoxide.packages.${final.system}) ironoxide-cli;
       inherit (inputs.pwnvim.packages.${final.system}) pwnvim;
       inherit (inputs.pwneovide.packages.${final.system}) pwneovide;
       inherit (inputs.devenv.packages.${final.system}) devenv;
