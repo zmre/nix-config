@@ -46,7 +46,10 @@
       #   name = "bartender"; # organize status bar
       #   greedy = true;
       # }
-      "bettertouchtool"
+      {
+        name = "bettertouchtool";
+        greedy = true;
+      }
       "blockblock"
       {
         name = "brave-browser"; # TODO: move to home-manager when it builds
