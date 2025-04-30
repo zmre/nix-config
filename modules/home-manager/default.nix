@@ -755,11 +755,7 @@ in {
       LANGUAGE="en_US.UTF-8"
       LC_ALL="en_US.UTF-8"
     '';
-    initExtraFirst = ''
-      #zmodload zsh/zprof
-    '';
 
-    #initExtraBeforeCompInit = "";
     completionInit = ''
       # only update compinit once each day
       # better solution would be to pre-build zcompdump with compinit call then link it in
@@ -777,7 +773,9 @@ in {
       # set list-colors to enable filename colorizing
       zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
     '';
-    initExtra = ''
+
+    initContent = lib.mkBefore ''
+      #zmodload zsh/zprof
       set -o vi
       bindkey -v
 
