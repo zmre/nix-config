@@ -262,7 +262,8 @@
       }
       # would be better to load these in a security shell, but nix versions don't build on mac
       "zap" # TODO: move to home-manager? (zap)
-      "zed" # visual studio alternative in beta now; written in rust, uses gpu and multithreads to be smokin fast
+      # moving zed to home-manager 2025-05-12
+      #"zed" # visual studio alternative in beta now; written in rust, uses gpu and multithreads to be smokin fast
       "burp-suite" # TODO: move to home-manager? (burpsuite)
       #"warp" # 2022-11-10 testing some crazy new rust-based terminal
       {
@@ -568,4 +569,3 @@
 #vulkan-sdk
 #wkhtmltopdf
 #zenmap
-

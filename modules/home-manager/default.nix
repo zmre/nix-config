@@ -663,6 +663,120 @@ in {
     fi
   '';
 
+  programs.zed-editor = {
+    enable = true;
+    extensions = [
+      "catpuccin"
+      "csv"
+      "graphql"
+      "java"
+      "log"
+      "lua"
+      "cargo-tom"
+      #"rust" # built-in
+      #"python" # built-in
+      "nix"
+      "make"
+      "marksman"
+      "mermaid"
+      "onedark-pro"
+      "onedark-extended"
+      "pest"
+      "prisma"
+      "pylsp"
+      "scala"
+      "scss"
+      "svelte"
+      "tailwind-theme"
+      "html"
+    ];
+    extraPackages = with pkgs; [
+      fd
+      ripgrep
+      fzy
+      zoxide
+      bat # previewer for telescope for now
+      zk # lsp for markdown notes in zk folders
+      #markdown-oxide # lsp for any markdown
+      marksman # lsp for any markdown
+      zsh # terminal requires it
+      git
+      curl # needed to fetch titles from urls
+      # todo: research https://github.com/artempyanykh/marksman
+      vale # linter for prose
+      proselint # ditto
+      luaformatter # ditto for lua
+      #prisma-engines # ditto for schema.prisma files # TODO: bring back when rust compile issues are fixed 2024-08-26
+      # Nix language servers summary 2023-11-23
+      # rnix-lsp -- seems abandoned
+      # nil -- way better than rnix and generally great, but
+      nixd # -- damn good at completions referencing back to nixpkgs, for example
+      #         at least provided you do some weird gymnastics in flakes:
+      #         https://github.com/nix-community/nixd/blob/main/docs/user-guide.md#faq
+      #         using this one for now
+      #nixfmt # nix formatter
+      alejandra # better nix formatter alternative
+      statix # linter for nix
+      shellcheck
+      languagetool # needed by grammarous, but must be v5.9 (see overlay)
+      # luajitPackages.lua-lsp
+      lua-language-server
+      pyright # python lsp (written in node? so weird)
+      vscode-langservers-extracted # lsp servers for json, html, css, eslint
+      nodePackages.eslint_d # js/ts code formatter and linter
+      nodePackages.prettier # ditto
+      #nodePackages.prisma # dependency prisma-engines not compiling right now 2024-08-26
+      nodePackages.svelte-language-server
+      nodePackages.diagnostic-languageserver
+      nodePackages.typescript-language-server
+      nodePackages.bash-language-server
+      nodePackages."@tailwindcss/language-server"
+      #nodePackages_latest.grammarly-languageserver # besides being a privacy issue if triggered, we have these issues:
+      # https://github.com/znck/grammarly/issues/411 grammarly sdk deprecated
+      # https://github.com/NixOS/nixpkgs/issues/293172 requires node16, which is EOL
+      yaml-language-server
+      # jinja-lsp # jinja is an html template language; i'm using zola right now which uses the tera language, which is a lot like jinja
+      mypy # static typing for python used by null-ls
+      ruff # python linter used by null-ls
+      black # python formatter
+      rust-analyzer # lsp for rust
+      # rust-analyzer is currently in a partially broken state as it cannot find rust sources so can't
+      # help with native language things, which sucks. Here are some issues to track:
+      # https://github.com/rust-lang/rust/issues/95736 - FIXED
+      # https://github.com/rust-lang/rust-analyzer/issues/13393 - CLOSED NOT RESOLVED
+      # https://github.com/mozilla/nixpkgs-mozilla/issues/238
+      #                     - suggestion to do export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src" which is like what we're doing below in customRC, I think
+      # https://github.com/rust-lang/cargo/issues/10096
+      rustfmt
+      cargo # have this as a fallback when a local flake isn't in place
+      rustc # have this as a fallback when a local flake isn't in place
+      vscode-extensions.vadimcn.vscode-lldb.adapter # for debugging rust
+      (python3.withPackages (ps: with ps; [debugpy])) # required for debugging python, but better if that's per project installed since we don't have python
+
+      metals # lsp for scala
+    ];
+    userKeymaps = {};
+    userSettings = {
+      vim_mode = true;
+      telemetry = {
+        metrics = false;
+      };
+      features = {
+        copilot = true;
+      };
+      ui_font_size = 16;
+      buffer_font_size = 16;
+      theme = {
+        mode = "system";
+        light = "One Light";
+        dark = "One Dark";
+      };
+      terminal = {
+        font_family = "MesloLGS Nerd Font";
+      };
+    };
+  };
+
   programs.fzf = {
     enable = true;
     enableZshIntegration = false;
