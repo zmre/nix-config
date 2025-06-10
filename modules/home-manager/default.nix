@@ -1095,7 +1095,7 @@ in {
         # Cachix on my whole nix store is burning unnecessary bandwidth and time -- slowing things down rather than speeding up
         # From now on will just use for select personal flakes and things
         #dwswitch = "pushd ~; cachix watch-exec zmre darwin-rebuild -- switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
-        dwswitchx = "pushd ~; darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
+        dwswitchx = "pushd ~; sudo darwin-rebuild switch --flake ~/.config/nixpkgs/.#$(hostname -s) ; popd";
         dwclean = "pushd ~; sudo nix-env --delete-generations +7 --profile /nix/var/nix/profiles/system; sudo nix-collect-garbage --delete-older-than 30d ; nix store optimise ; popd";
         dwupcheck = "pushd ~/.config/nixpkgs ; nix flake update ; darwin-rebuild build --flake ~/.config/nixpkgs/.#$(hostname -s) && nix store diff-closures /nix/var/nix/profiles/system ~/.config/nixpkgs/result; popd"; # todo: prefer nvd?
         # i use the zsh shell out in case anyone blindly copies this into their bash or fish profile since syntax is zsh specific

@@ -4,6 +4,7 @@
   pkgs,
   ...
 }: {
+  system.primaryUser = "pwalsh";
   # environment setup
   environment = {
     pathsToLink = ["/Applications"];
@@ -114,11 +115,13 @@
         '';
         # to create an importable plist, see export-plists.sh
       };
-      postUserActivation.text = ''
-        # Following line should allow us to avoid a logout/login cycle
-        echo "Activating settings"
-        /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
-      '';
+      # TODO: find the new root postActivation script name
+      # then do the activateSettings with su or sudo to primary user
+      # postUserActivation.text = ''
+      #   # Following line should allow us to avoid a logout/login cycle
+      #   echo "Activating settings"
+      #   /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+      # '';
     };
     keyboard = {
       enableKeyMapping = true;
