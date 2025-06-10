@@ -779,22 +779,6 @@
         "type": "github"
       }
     },
-    "homebrew-cask-drivers": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1700669263,
-        "narHash": "sha256-1sMuP+CUp9ViQu8tXHjzK/Ilr/HBaUzEI4qOFydBvPM=",
-        "owner": "homebrew",
-        "repo": "homebrew-cask-drivers",
-        "rev": "f062033b264109fcdde69596d34036fe1a9e227d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "homebrew",
-        "repo": "homebrew-cask-drivers",
-        "type": "github"
-      }
-    },
     "homebrew-core": {
       "flake": false,
       "locked": {
@@ -1474,7 +1458,6 @@
         "home-manager": "home-manager",
         "homebrew-bundle": "homebrew-bundle",
         "homebrew-cask": "homebrew-cask",
-        "homebrew-cask-drivers": "homebrew-cask-drivers",
         "homebrew-core": "homebrew-core",
         "homebrew-services": "homebrew-services",
         "ironhide": "ironhide",
