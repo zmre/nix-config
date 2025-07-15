@@ -1,4 +1,10 @@
 _: {
+  networking = {
+    applicationFirewall = {
+      enable = true;
+      enableStealthMode = true;
+    };
+  };
   system.defaults = {
     #
     # `man configuration.nix` on mac is useful in seeing available options
@@ -38,14 +44,6 @@ _: {
       Dragging = true; # tap and a half to drag
       # three finger click and drag
       TrackpadThreeFingerDrag = true;
-    };
-
-    # firewall settings
-    alf = {
-      # 0 = disabled 1 = enabled 2 = blocks all connections except for essential services
-      globalstate = 1;
-      loggingenabled = 0;
-      stealthenabled = 1;
     };
 
     # if using spaces, below should be false

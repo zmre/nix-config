@@ -40,7 +40,7 @@
         name = "amethyst"; # for window tiling -- I miss chunkwm but it's successor, yabai, was unstable for me and required security compromises.
         greedy = true;
       }
-      "audio-hijack" # used to use this for making my audio cleaner, but removed when I got a fancy audio setup. bringing back now (2024-07-11) to experiment with recording of sources
+      #"audio-hijack" # used to use this for making my audio cleaner, but removed when I got a fancy audio setup. bringing back now (2024-07-11) to experiment with recording of sources
       # {
       # Replacing with open source ice bar 2024-11-29
       #   name = "bartender"; # organize status bar
@@ -59,8 +59,7 @@
         name = "chatgpt";
         greedy = true;
       }
-      "canon-eos-utility"
-      #"canon-eos-webcam-utility"
+      #"canon-eos-utility"
       "choosy" # multi-browser url launch selector; see also https://github.com/johnste/finicky
       {
         name = "dash"; # offline developer docs
@@ -106,10 +105,10 @@
         name = "google-drive";
         greedy = true;
       }
-      {
-        name = "gotomeeting";
-        greedy = true;
-      }
+      # {
+      #   name = "gotomeeting";
+      #   greedy = true;
+      # }
       {
         name = "gpg-suite";
         greedy = true;
@@ -124,7 +123,7 @@
         name = "istat-menus";
         greedy = true;
       }
-      "jordanbaird-ice" # icebar alternative to bartender https://github.com/jordanbaird/Ice
+      #"jordanbaird-ice" # icebar alternative to bartender https://github.com/jordanbaird/Ice
       "keycastr"
       #"kitty" # would prefer to let nix install this as I have for over a year but post 15.1, nix version doesn't launch right
       {
@@ -138,7 +137,7 @@
         greedy = true;
       }
       #"lm-studio"
-      "lockrattler"
+      #"lockrattler"
       #"loopback" -- haven't been using this of late
       {
         name = "macwhisper";
@@ -152,10 +151,10 @@
       "stolendata-mpv" # 2024-12-11 switching to brew but keeping hm config; gui not launching
       "metasploit" # TODO 2024-07-31 nix version not running on mac
       "noun-project"
-      {
-        name = "obs"; # TODO: move to nix version obs-studio when not broken
-        greedy = true;
-      }
+      # {
+      #   name = "obs"; # TODO: move to nix version obs-studio when not broken
+      #   greedy = true;
+      # }
       {
         name = "orion"; # just trying out the Orion browser
         greedy = true;
@@ -171,16 +170,16 @@
         name = "proton-drive";
         greedy = true;
       }
-      {
-        name = "proton-mail"; # currently in beta, but snappier than web version
-        greedy = true;
-      }
+      # {
+      #   name = "proton-mail"; # currently in beta, but snappier than web version
+      #   greedy = true;
+      # }
       {
         name = "proton-mail-bridge"; # TODO: nix version now installs and works -- move over
         greedy = true;
       }
       "qflipper"
-      "qutebrowser" # TODO: move over when it builds on arm64 darwin
+      # "qutebrowser" # TODO: move over when it builds on arm64 darwin
       # Update: qutebrowser built today, 2023-09-07! but errors on launch :(
       {
         name = "qlmarkdown";
@@ -196,10 +195,13 @@
         name = "raycast";
         greedy = true;
       }
-      {
-        name = "rode-central";
-        greedy = true;
-      }
+      # rode-central no longer works with the rodecaster video. for that, you need the "rodecaster app" which now, months after release, still isn't in brew :-(
+      # currently needs to be installed manually
+      # TODO: see if rodecaster-app gets added to homebrew
+      # {
+      #   name = "rode-central";
+      #   greedy = true;
+      # }
       {
         name = "screenflow";
         greedy = true;
@@ -213,11 +215,11 @@
         greedy = true;
       }
       "silentknight"
-      "silnite"
-      {
-        name = "skype";
-        greedy = true;
-      }
+      #"silnite"
+      # {
+      #   name = "skype";
+      #   greedy = true;
+      # }
       "subler" # used to edit metadata on videos
       "swiftdefaultappsprefpane"
       "sync"
@@ -343,6 +345,8 @@
       "hydra" # the nix one only builds on linux
       "p0f" # the nix one only builds on linux
       "yt-dlp" # youtube downloader / 2024-11-19 moved back to nix now that curl-cffi (curl-impersonate) is supported
+      "zstd" # needed for yt-dlp curl-impersonate
+      "nghttp2" # needed for yt-dlp curl-impersonate
       # 2025-04-09 I'm getting errors saying curl-cffi is unavailable even though the nix recipe has it
       # so I'm adding it in both places for now
     ];

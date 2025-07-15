@@ -71,7 +71,7 @@
       kalker # cli calculator; alt. to bc and calc
       rink # calculator for unit conversions
       nix-tree # explore dependencies
-      asciinema # terminal screencast
+      #asciinema # terminal screencast
       ctags
       catimg # ascii rendering of any image in terminal x-pltfrm
       fortune
@@ -81,7 +81,7 @@
       optipng
       procps
       pstree
-      toot # mastodon tui
+      #toot # mastodon tui
       yubikey-manager # cli for yubikey
       pastel # cli for color manipulation
       gnugrep
@@ -95,17 +95,17 @@
       # pkgs.tickrs # track stocks
       #chkrootkit # build fail 2024-02-27
       pwnvim # moved my neovim config to its own repo for atomic management and install
-      gtm-okr
-      babble-cli # twitter tui
+      #gtm-okr
+      #babble-cli # twitter tui
       #enola # sherlock-like tool # TODO: build is failing 2024-09-11 see overlays file for more details
       kopia # deduping backup
       zk # cli for indexing markdown files
       hackernews-tui
       btop # currently like this better than bottom and htop
-      marp-cli # convert markdown to html slides
+      #marp-cli # convert markdown to html slides
       ironhide # rust version of IronCore's ironhide
       ironoxide-cli # rust version of IronCore's ironoxide-cli
-      devenv # quick setup of dev envs for projects
+      #devenv # quick setup of dev envs for projects
       openai-whisper-cpp # Allow GPU accelerated local transcriptions
       #qutebrowser
     ]);
@@ -124,7 +124,7 @@
       [
         pkgs.colima # command line docker server replacement
         pkgs.stable.docker
-        pkgs.utm # utm is a qemu wrapper gui for mac only
+        #pkgs.utm # utm is a qemu wrapper gui for mac only
         #pkgs.raycast # creates weird problems on upgrades having raycast in different paths, sadly; back to brew 2024-10-30
         #pkgs.spotify
         # Below is my packaging of aerospace, sketchy, and configs from a flake at https://github.com/zmre/aerospace-sketchybar-nix-lua-config
@@ -664,7 +664,7 @@ in {
   '';
 
   programs.zed-editor = {
-    enable = true;
+    enable = false; # 2025-07-02 disable until https://github.com/nix-community/home-manager/issues/7327 is resolved
     extensions = [
       "catpuccin"
       "csv"
@@ -673,8 +673,6 @@ in {
       "log"
       "lua"
       "cargo-tom"
-      #"rust" # built-in
-      #"python" # built-in
       "nix"
       "make"
       "marksman"
@@ -710,7 +708,7 @@ in {
       # Nix language servers summary 2023-11-23
       # rnix-lsp -- seems abandoned
       # nil -- way better than rnix and generally great, but
-      nixd # -- damn good at completions referencing back to nixpkgs, for example
+      stable.nixd # -- damn good at completions referencing back to nixpkgs, for example
       #         at least provided you do some weird gymnastics in flakes:
       #         https://github.com/nix-community/nixd/blob/main/docs/user-guide.md#faq
       #         using this one for now
@@ -740,6 +738,7 @@ in {
       ruff # python linter used by null-ls
       black # python formatter
       rust-analyzer # lsp for rust
+      clippy
       # rust-analyzer is currently in a partially broken state as it cannot find rust sources so can't
       # help with native language things, which sucks. Here are some issues to track:
       # https://github.com/rust-lang/rust/issues/95736 - FIXED
@@ -755,9 +754,36 @@ in {
 
       metals # lsp for scala
     ];
-    userKeymaps = {};
+    # userKeymaps = {};
     userSettings = {
       vim_mode = true;
+      load_direnv = "shell_hook";
+      tabs = {
+        "git_status" = true;
+        "code_actions" = true;
+      };
+      toolbar = {
+        "code_actions" = true;
+        "agent_review" = true;
+        "quick_actions" = true;
+      };
+      diagnostics = {
+        include_warnings = true;
+        inline = {
+          enabled = false;
+        };
+      };
+      git = {
+        inline_blame = {
+          enabled = false;
+        };
+      };
+      inlay_hints = {
+        enabled = true;
+        show_type_hints = true;
+        show_parameter_hint = true;
+        show_other_hints = true;
+      };
       telemetry = {
         metrics = false;
       };
@@ -773,6 +799,16 @@ in {
       };
       terminal = {
         font_family = "MesloLGS Nerd Font";
+      };
+      lsp = {
+        "rust-analyzer" = {
+          "initialization_options" = {
+            check = {
+              # default of "cargo check" just shows compile errors while "cargo clippy" gives other code advice that's useful
+              command = "clippy"; # rust-analyzer.check.command (default: "check")
+            };
+          };
+        };
       };
     };
   };
@@ -1622,6 +1658,7 @@ in {
       folder-rules = ./dotfiles/yazi/plugins/folder-rules.yazi;
     };
     settings = {
+      title_format = "y ({cwd})";
       manager = {
         sort_by = "natural";
         sort_dir_first = true;
@@ -1880,7 +1917,7 @@ in {
   };
 
   programs.newsboat = {
-    enable = true;
+    enable = false;
     autoReload = true;
     browser =
       if pkgs.stdenvNoCC.isDarwin

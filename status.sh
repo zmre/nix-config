@@ -11,8 +11,13 @@ echo "Last generation: $LAST_GEN"
 echo "Vulnerable packages: $NUM_VULN_PKGS ($NUM_CVES CVES)"
 echo
 echo "To view vulnerable packages:"
-echo "vulnix -S"
+echo "vulnix -S -D"
 echo
 echo "To understand what uses a vulnerable package:"
 echo "nix-store -q --referrers /nix/store/ydgqhrcv25qzh76i191xd0p38iyk0h7h-curl-7.82.0.drv"
 
+
+echo "Vulnix system:"
+vulnix -p /nix/var/nix/profiles/system -r -D
+echo "Vulnix pwalsh profile:"
+vulnix -p /nix/var/nix/profiles/per-user/pwalsh -r -D

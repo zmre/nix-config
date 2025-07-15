@@ -14,7 +14,7 @@
 
   # environment setup
   environment = {
-    systemPackages = [pkgs.cachix];
+    systemPackages = [pkgs.stable.cachix];
     etc = {
       home-manager.source = "${inputs.home-manager}";
       nixpkgs-unstable.source = "${inputs.nixpkgs-unstable}";
@@ -37,8 +37,9 @@
       else "/home/${username}";
   };
   nix = {
-    # package = pkgs.nixVersions.nix_2_11;
-    package = pkgs.nix;
+    package = pkgs.stable.nix;
+    # package = pkgs.nixVersions.nix_2_26; # Temporary roleback of nix while 2.28.3 is failing to build due to https://github.com/nixos/nixpkgs/issues/418695
+    # package = pkgs.nix;
     extraOptions = ''
       keep-outputs = true
       keep-derivations = true
