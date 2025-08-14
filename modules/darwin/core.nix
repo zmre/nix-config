@@ -176,7 +176,7 @@
   };
 
   services.tailscale = {
-    enable = true;
+    enable = false; # disabled 2025-08-08 cuz exit nodes https://tailscale.com/kb/1065/macos-variants#comparison-table
     overrideLocalDns = true;
   };
 

@@ -113,6 +113,7 @@
         name = "gpg-suite";
         greedy = true;
       }
+      "handbrake-app" # just temporary 2025-08-08
       "httpie"
       {
         name = "imageoptim";
@@ -227,6 +228,7 @@
       #   name = "syncthing"; # TODO: move to home-manager
       #   greedy = true;
       # }
+      "tailscale-app" # moved from darwin services cuz exit nodes https://tailscale.com/kb/1065/macos-variants#comparison-table
       {
         name = "tor-browser"; # TODO: move to home-manager (tor-browser-bundle-bin) when it builds
         greedy = true;

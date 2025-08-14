@@ -129,6 +129,7 @@
         #pkgs.spotify
         # Below is my packaging of aerospace, sketchy, and configs from a flake at https://github.com/zmre/aerospace-sketchybar-nix-lua-config
         pkgs.pwaerospace
+        pkgs.mactop
         # pkgs.ghostty
       ]);
 in {
