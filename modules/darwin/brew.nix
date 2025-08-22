@@ -114,7 +114,7 @@
         greedy = true;
       }
       "handbrake-app" # just temporary 2025-08-08
-      "httpie"
+      #"httpie"
       {
         name = "imageoptim";
         greedy = true;
@@ -145,7 +145,7 @@
         greedy = true;
       }
       {
-        name = "marked";
+        name = "marked-app";
         greedy = true;
       }
       #"microsoft-office" -- moved this to apple app store
@@ -228,7 +228,10 @@
       #   name = "syncthing"; # TODO: move to home-manager
       #   greedy = true;
       # }
-      "tailscale-app" # moved from darwin services cuz exit nodes https://tailscale.com/kb/1065/macos-variants#comparison-table
+      {
+        name = "tailscale-app"; # moved from darwin services cuz exit nodes https://tailscale.com/kb/1065/macos-variants#comparison-table
+        greedy = true;
+      }
       {
         name = "tor-browser"; # TODO: move to home-manager (tor-browser-bundle-bin) when it builds
         greedy = true;

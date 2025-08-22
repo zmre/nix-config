@@ -7,7 +7,7 @@
   ...
 }: let
   defaultPkgs =
-    (with pkgs.stable; [
+    (with pkgs; [
       # filesystem
       fd
       ripgrep

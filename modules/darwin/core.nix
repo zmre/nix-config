@@ -166,8 +166,9 @@
     raleway
     vegur
     noto-fonts
-    vistafonts # needed for msoffice
+    vista-fonts # needed for msoffice
   ];
+
   nix = {
     nixPath = ["nixpkgs=${inputs.nixpkgs}" "darwin=/etc/${config.environment.etc.darwin.target}"];
     extraOptions = ''

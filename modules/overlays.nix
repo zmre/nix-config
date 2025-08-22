@@ -110,7 +110,7 @@
         buildInputs =
           [prev.pkg-config prev.libiconv]
           ++ prev.lib.optionals prev.stdenv.isDarwin
-          [prev.darwin.apple_sdk.frameworks.Security];
+          [prev.apple-sdk];
         src = inputs.hackernews-tui;
       };
     })
@@ -123,7 +123,7 @@
         buildInputs =
           oldAttrs.buildInputs
           ++ prev.lib.optionals prev.stdenv.isDarwin
-          [prev.darwin.apple_sdk.frameworks.SystemConfiguration];
+          [prev.apple-sdk];
       });
     })
     (final: prev: {
@@ -137,7 +137,7 @@
       inherit (inputs.ironoxide.packages.${final.system}) ironoxide-cli;
       inherit (inputs.pwnvim.packages.${final.system}) pwnvim;
       inherit (inputs.pwneovide.packages.${final.system}) pwneovide;
-      inherit (inputs.devenv.packages.${final.system}) devenv;
+      #inherit (inputs.devenv.packages.${final.system}) devenv;
     })
     (final: prev: {
       # This exists so I can get rid of the damn ip6 localhost aliases in StevenBlack's hosts file

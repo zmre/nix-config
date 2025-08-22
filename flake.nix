@@ -31,7 +31,7 @@
       flake = false;
     };
     darwin.url = "github:lnl7/nix-darwin";
-    darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    # darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
     home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
@@ -70,13 +70,13 @@
     babble-cli.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     # devenv tool to simplify (?) project shells https://devenv.sh
-    devenv.url = "github:cachix/devenv/latest";
+    #devenv.url = "github:cachix/devenv/latest";
 
     # macos window manager: aerospace + sketchybar + jankyborders + configs
     pwaerospace.url = "github:zmre/aerospace-sketchybar-nix-lua-config";
 
     # Tool to make mac aliases without needing Finder scripting permissions for home-manager app linking
-    mkalias.url = "github:reckenrode/mkalias";
+    mkalias.url = "github:zmre/mkalias";
     mkalias.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
