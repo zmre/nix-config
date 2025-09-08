@@ -231,7 +231,7 @@ _: {
       };
       "com.apple.mail" = {
         # Disable inline attachments (just show the icons)
-        DisableInlineAttachmentViewing = true;
+        DisableInlineAttachmentViewing = false;
         ShouldShowUnreadMessagesInBold = true;
         ShowActivity = false;
         ShowBccHeader = true;

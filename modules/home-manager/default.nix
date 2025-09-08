@@ -822,15 +822,21 @@ in {
     fileWidgetCommand = "\fd --exclude .git --type f"; # for when ctrl-t is pressed
     changeDirWidgetCommand = "\fd --type d --hidden --follow --max-depth 3 --exclude .git";
   };
+
   programs.ssh = {
     enable = true;
-    compression = true;
-    controlMaster = "auto";
+    matchBlocks = {
+      "*" = {
+        compression = true;
+        controlMaster = "auto";
+      };
+    };
     includes = ["*.conf"];
     extraConfig = ''
       AddKeysToAgent yes
     '';
   };
+
   programs.gh = {
     enable = true;
     package = pkgs.gh;
