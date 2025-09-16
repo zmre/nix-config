@@ -290,24 +290,27 @@
     ];
 
     masApps = {
+      "1Blocker" = 1365531024;
       "Amphetamine" = 937984704;
-      "Apple Configurator 2" = 1037126344;
+      "Apple Configurator" = 1037126344;
       #"Blurred" = 1497527363; # dim non-foreground windows -- removed when I realized this is Intel not ARM :-(
+      "Blackmagic Disk Speed Test" = 425264550;
       "Boxy SVG" = 611658502; # nice code-oriented visual svg editor
       "Brother iPrint&Scan" = 1193539993;
       "Cardhop" = 1290358394; # contacts alternative
       "DaisyDisk" = 411643860;
       "Disk Decipher" = 516538625;
-      "Disk Speed Test" = 425264550;
       #"Drafts" = 1435957248;
       "Fantastical" = 975937182; # calendar alternative
       "Forecast Bar" = 982710545;
       #"Ghostery – Privacy Ad Blocker" = 1436953057; # old version
-      "Gifox 2" = 1461845568; # For short animated gif screen caps
+      "Gifox" = 1461845568; # For short animated gif screen caps
+      "iA Writer" = 775737590;
       #"Ice Cubes" = 6444915884; # mastodon client -- it's good but i switched to ivory
       "iMovie" = 408981434;
-      "iStumbler" = 546033581;
-      "com.kagimacOS.Kagi-Search" = 1622835804; # Paid private search engine plugin for Safari
+      #"iStumbler" = 546033581;
+      "Ivory" = 6444602274;
+      "Kagi Search" = 1622835804; # Paid private search engine plugin for Safari
       "Kaleidoscope" = 587512244; # GUI 3-way merge
       "Keynote" = 409183694;
       "Keyshape" = 1223341056; # animated svg editor
@@ -319,19 +322,22 @@
       "Monodraw" = 920404675; # ASCII drawings
       #"MsgFiler" = 6478043112; # Mail extension (sort of) for keyboard driven message filing
       #"NextDNS" = 1464122853;
-      "NotePlan 3" = 1505432629;
+      "NotePlan" = 1505432629;
+      "Numbers" = 409203825;
+      "Pages" = 409201541;
       "PCalc" = 403504866;
       #"PeakHour" = 1560576252;
-      "SQLPro Studio" = 985614903;
       "Save to Reader" = 1640236961; # readwise reader (my pocket replacement)
       "Scrivener" = 1310686187;
       "Slack" = 803453959;
+      "SQLPro Studio" = 985614903;
       #"StopTheMadness" = 1376402589;
       "Strongbox" = 1270075435; # password manager
       # app store sandbox version doesn't allow some features like ssh
       #"Tailscale" = 1475387142; # P2P mesh VPN for my devices
       "Vimari" = 1480933944;
       "Vinegar" = 1591303229;
+      "Wipr" = 1662217862;
       #"WireGuard" = 1451685025; # VPN -- but tailscale does it all for me now
       "Xcode" = 497799835;
       "Yubico Authenticator" = 1497506650;
