@@ -178,7 +178,7 @@ in {
     #LIBVA_DRIVER_NAME="iHD";
     ZK_NOTEBOOK_DIR =
       if pkgs.stdenvNoCC.isDarwin
-      then "/Users/${username}/Library/Containers/co.noteplan.NotePlan3/Data/Library/Application Support/co.noteplan.NotePlan3"
+      then "/Users/${username}/Library/Mobile Documents/com~apple~CloudDocs/Notes"
       else "/home/${username}/Notes";
   };
 
@@ -1460,7 +1460,7 @@ in {
         # Downloads = " ";
         # Music = " ";
         # Pictures = " ";
-        "Library/Containers/co.noteplan.NotePlan3/Data/Library/Application Support/co.noteplan.NotePlan3" = "Notes";
+        "Library/Mobile Documents/com~apple~CloudDocs/Notes" = "Notes";
       };
       package.disabled = true;
       package.format = "version [$version](bold green) ";
