@@ -95,7 +95,7 @@
       # pkgs.tickrs # track stocks
       #chkrootkit # build fail 2024-02-27
       pwnvim # moved my neovim config to its own repo for atomic management and install
-      #gtm-okr
+      gtm-okr
       #babble-cli # twitter tui
       #enola # sherlock-like tool # TODO: build is failing 2024-09-11 see overlays file for more details
       kopia # deduping backup
@@ -825,6 +825,7 @@ in {
 
   programs.ssh = {
     enable = true;
+    enableDefaultConfig = false;
     matchBlocks = {
       "*" = {
         compression = true;
@@ -842,8 +843,7 @@ in {
     package = pkgs.gh;
     # Ones I have installed that aren't available in pkgs 2024-07-31:
     #inputs.gh-feed
-    # TODO: investigate why gh-feed is no longer building 2024-10-30; removed from extensions for now
-    extensions = with pkgs; [gh-dash gh-notify gh-poi gh-worktree]; #gh-feed
+    extensions = with pkgs; [gh-dash gh-notify gh-poi gh-worktree gh-feed gh-s gh-i];
     settings = {git_protocol = "ssh";};
   };
 
@@ -1105,12 +1105,14 @@ in {
     shellAliases =
       {
         c = "clear";
-        ls = "ls --color=auto -F";
-        l = "eza --icons --git-ignore --git -F";
-        la = "eza --icons --git-ignore --git -F -a";
-        ll = "eza --icons --git-ignore --git -F --extended -l";
-        lt = "eza --icons --git-ignore --git -F -T";
-        llt = "eza --icons --git-ignore --git -F -l -T";
+        ls = "ls --hyperlink --color=auto -F";
+        l = "eza --icons --hyperlink --git-ignore --git -F";
+        la = "eza --icons --hyperlink --git-ignore --git -F -a";
+        ll = "eza --icons --hyperlink --git-ignore --git -F -l";
+        le = "eza --icons --hyperlink --git-ignore --git -F --extended -l";
+        lt = "eza --icons --hyperlink --git-ignore --git -F -T";
+        llt = "eza --icons --hyperlink --git-ignore --git -F -l -T";
+        lr = "eza -s oldest --git-ignore -F -l --hyperlink --color=always | head -30";
         fd = "\\fd -H -t d"; # default search directories
         f = "\\fd -H"; # default search this dir for files ignoring .gitignore etc
         #lf = "~/.config/lf/lfimg";

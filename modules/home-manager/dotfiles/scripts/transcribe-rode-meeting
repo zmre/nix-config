@@ -8,13 +8,13 @@ WHISPEROPTS="-tdrz"
 convert_audio() {
   # First take the mono SM7B and the stereo computer output and send them to different channels
   echo "Generating the stereo file..."
-  ffmpeg -hide_banner -loglevel error -i "${DIR}/Audio/1_SM7B.wav" -i "${DIR}/Audio/7_Computer.wav" -filter_complex '[0:a][1:a]amerge=inputs=2,pan=stereo|c0<c0+c1|c1<c2+c3[a]' -map '[a]' -ar 16000 -y "${DIR}/Audio/meeting-speaker-stereo.wav" > /dev/null
+  ffmpeg -hide_banner -loglevel error -i "${DIR}/Audio/1_SM7B.wav" -i "${DIR}/Audio/7_USB-1-CHAT.wav" -filter_complex '[0:a][1:a]amerge=inputs=2,pan=stereo|c0<c0+c1|c1<c2+c3[a]' -map '[a]' -ar 16000 -y "${DIR}/Audio/meeting-speaker-stereo.wav" > /dev/null
 }
 
 transcribe_audio() {
   # Next transcribe the file
   echo "Transcribing using ${WHISPERMODEL}..."
-  whisper-cpp -m "$WHISPERMODEL" $WHISPEROPTS -l en -p 4 -t 8 -np "${DIR}/Audio/meeting-speaker-stereo.wav" -otxt > /dev/null
+  whisper-cli -m "$WHISPERMODEL" $WHISPEROPTS -l en -p 4 -t 8 -np "${DIR}/Audio/meeting-speaker-stereo.wav" -otxt > /dev/null
   if [ -f "${DIR}/Audio/meeting-speaker-stereo.wav.txt" ] ; then
     pbcopy < "${DIR}/Audio/meeting-speaker-stereo.wav.txt"
     cat "${DIR}/Audio/meeting-speaker-stereo.wav.txt"
@@ -66,11 +66,11 @@ for arg in "$@"; do
   esac
 done
 
-if [ -f "${DIR}/Audio/1_SM7B.wav" ] && [ -f "${DIR}/Audio/7_Computer.wav" ]; then
+if [ -f "${DIR}/Audio/1_SM7B.wav" ] && [ -f "${DIR}/Audio/7_USB-1-CHAT.wav" ]; then
   convert_audio
   transcribe_audio
   summarize_audio
 else
-  echo "Please be in or provide the path to the root of the recording folder. Should have Audio/1_SM7B.wav under it"
+  echo "Please be in or provide the path to the root of the recording folder. Should have Audio/1_SM7B.wav and Audio/7_USB-1-CHAT.wav under it"
 fi
 

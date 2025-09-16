@@ -65,12 +65,26 @@ config.keys = {
 
   -- cmd-ctrl-a, [ puts us into a vim-like mode for navigating and selecting and copying out history
   { key = "[",         mods = "LEADER", action = act.ActivateCopyMode },
-  -- cmd-ctrl-a, | splits vertically while - splits horizontally
+  -- cmd-ctrl-a, u allows quick select and launch of on-screen url starting with http
+  {
+    key = "u",
+    mods = "LEADER",
+    action = act.QuickSelectArgs {
+      label = 'open url',
+      patterns = { 'https?://\\S+' },
+      action = wezterm.action_callback(function(window, pane)
+        local url = window:get_selection_text_for_pane(pane)
+        wezterm.open_with(url)
+      end),
+    },
+  },
+  -- cmd-ctrl-a, - splits horizontally
   {
     key = "-",
     mods = "LEADER",
     action = act.SplitVertical({ domain = "CurrentPaneDomain" }),
   },
+  -- cmd-ctrl-a, | splits vertically
   {
     key = "|",
     mods = "LEADER",
