@@ -46,15 +46,19 @@
       #   name = "bartender"; # organize status bar
       #   greedy = true;
       # }
-      {
-        name = "bettertouchtool";
-        greedy = true;
-      }
+      # {
+      #   name = "bettertouchtool";
+      #   greedy = true;
+      # }
       "blockblock"
       {
         name = "brave-browser"; # TODO: move to home-manager when it builds
         greedy = true;
       }
+      # Decided against Calibre since it doesn't do audio books and copies
+      # all books it finds into its own folder, which I couldn't stop
+      # Need an alternate option
+      #"calibre" # available in nix, but marked broken for darwin as of 2025-09-18
       {
         name = "chatgpt";
         greedy = true;
