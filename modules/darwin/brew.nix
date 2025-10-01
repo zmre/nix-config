@@ -104,6 +104,7 @@
         name = "fork";
         greedy = true;
       }
+      "ghostty" # available in nixos only for linux
       "gitkraken-cli"
       {
         name = "google-drive";
@@ -128,6 +129,7 @@
         name = "istat-menus";
         greedy = true;
       }
+      "karabiner-elements"
       #"jordanbaird-ice" # icebar alternative to bartender https://github.com/jordanbaird/Ice
       "keycastr"
       #"kitty" # would prefer to let nix install this as I have for over a year but post 15.1, nix version doesn't launch right
@@ -184,6 +186,10 @@
       # }
       {
         name = "proton-mail-bridge"; # TODO: nix version now installs and works -- move over
+        greedy = true;
+      }
+      {
+        name = "proton-mail";
         greedy = true;
       }
       "qflipper"
@@ -287,10 +293,19 @@
       "wireshark-chmodbpf"
 
       # Keeping the next three together as they act in concert and are made by the same guy
-      "kindavim" # ctrl-esc allows you to control an input area as if in vim normal mode
-      "scrolla" # use vim commands to select scroll areas and scroll
+      {
+        name = "kindavim"; # ctrl-esc allows you to control an input area as if in vim normal mode
+        greedy = true;
+      }
+      {
+        name = "scrolla"; # use vim commands to select scroll areas and scroll
+        greedy = true;
+      }
+      {
+        name = "wooshy"; # use cmd-shift-space to bring up search to select interface elements in current app
+        greedy = true;
+      }
       "wezterm"
-      "wooshy" # use cmd-shift-space to bring up search to select interface elements in current app
     ];
 
     masApps = {

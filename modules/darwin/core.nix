@@ -181,6 +181,8 @@
     overrideLocalDns = true;
   };
 
+  #services.karabiner-elements.enable = true;  # 2025-09-23 gives an error
+
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
   system.stateVersion = 4;

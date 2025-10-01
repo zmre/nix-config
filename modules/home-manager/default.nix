@@ -1105,7 +1105,7 @@ in {
     shellAliases =
       {
         c = "clear";
-        ls = "ls --hyperlink --color=auto -F";
+        ls = "ls --color=auto -F";
         l = "eza --icons --hyperlink --git-ignore --git -F";
         la = "eza --icons --hyperlink --git-ignore --git -F -a";
         ll = "eza --icons --hyperlink --git-ignore --git -F -l";
@@ -1113,8 +1113,9 @@ in {
         lt = "eza --icons --hyperlink --git-ignore --git -F -T";
         llt = "eza --icons --hyperlink --git-ignore --git -F -l -T";
         lr = "eza -s oldest --git-ignore -F -l --hyperlink --color=always | head -30";
-        fd = "\\fd -H -t d"; # default search directories
-        f = "\\fd -H"; # default search this dir for files ignoring .gitignore etc
+        fd = "\\fd -H -t d --hyperlink"; # default search directories
+        f = "\\fd -H --hyperlink"; # default search this dir for files ignoring .gitignore etc
+        fa = "\\fd -H -I -t f -t l --hyperlink"; # show all files and symlinks (including ignored and hidden)
         #lf = "~/.config/lf/lfimg";
         nixflakeupdate1 = "nix run github:vimjoyer/nix-update-input"; # does `nix flake lock --update-input` with relevant fuzzy complete. Though actually, our tab completion does the same
         qp = ''
@@ -2238,6 +2239,10 @@ in {
           {
             trigger = "p@w";
             replace = "pwalsh@well.com";
+          }
+          {
+            trigger = "p@m";
+            replace = "pwalsh@mistgate.org";
           }
           {
             trigger = "p@g";
