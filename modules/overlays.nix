@@ -26,6 +26,21 @@
           };
     })
     (final: prev: {
+      aichat = prev.aichat.overrideAttrs (
+        oldAttrs: {
+          nativeBuildInputs = (oldAttrs.nativeBuildInputs or []) ++ [final.makeBinaryWrapper];
+          postFixup =
+            (oldAttrs.postFixup or "")
+            + ''
+              bin="$out/bin/aichat"
+              wrapped="$out/bin/.aichat-wrapped"
+              mv "$bin" "$wrapped"
+              makeBinaryWrapper $wrapped $bin --prefix PATH : ${final.lib.makeBinPath (with final; [argc jq poppler_utils pdfminer tesseract])}
+            '';
+        }
+      );
+    })
+    (final: prev: {
       enola = prev.buildGo123Module {
         # TODO: this seems to be failing with this problem https://discourse.nixos.org/t/cant-update-a-go-package-getting-go-inconsistent-vendoring/27063/6
         # But I don't have time to figure out how to fix it right now 2024-09-11

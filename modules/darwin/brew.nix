@@ -58,7 +58,7 @@
       # Decided against Calibre since it doesn't do audio books and copies
       # all books it finds into its own folder, which I couldn't stop
       # Need an alternate option
-      #"calibre" # available in nix, but marked broken for darwin as of 2025-09-18
+      "calibre" # available in nix, but marked broken for darwin as of 2025-09-18
       {
         name = "chatgpt";
         greedy = true;
@@ -349,7 +349,7 @@
       "Save to Reader" = 1640236961; # readwise reader (my pocket replacement)
       "Scrivener" = 1310686187;
       "Slack" = 803453959;
-      "SQLPro Studio" = 985614903;
+      #"SQLPro Studio" = 985614903;
       #"StopTheMadness" = 1376402589;
       "Strongbox" = 1270075435; # password manager
       # app store sandbox version doesn't allow some features like ssh

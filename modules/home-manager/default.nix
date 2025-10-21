@@ -65,7 +65,7 @@
       neofetch # display key software/version info in term
       #nodePackages.readability-cli # quick commandline website article read
       vimv # shell script to bulk rename
-      vulnix # check for live nix apps that are listed in NVD
+      pkgs.stable.vulnix # check for live nix apps that are listed in NVD
       #taskwarrior-tui
       aspell # spell checker
       kalker # cli calculator; alt. to bc and calc
@@ -75,7 +75,7 @@
       ctags
       catimg # ascii rendering of any image in terminal x-pltfrm
       fortune
-      ipcalc
+      pkgs.stable.ipcalc
       kondo # free disk space by cleaning project build dirs
       #ncspot # control spotify
       optipng
@@ -1105,7 +1105,7 @@ in {
     shellAliases =
       {
         c = "clear";
-        ls = "ls --color=auto -F";
+        ls = "eza --hyperlink -F";
         l = "eza --icons --hyperlink --git-ignore --git -F";
         la = "eza --icons --hyperlink --git-ignore --git -F -a";
         ll = "eza --icons --hyperlink --git-ignore --git -F -l";
@@ -1820,39 +1820,41 @@ in {
   programs.git = {
     enable = true;
     lfs.enable = true;
-    userName = "Patrick Walsh";
-    userEmail = "patrick.walsh@ironcorelabs.com";
-    aliases = {
-      gone = ''
-        ! git fetch -p && git for-each-ref --format '%(refname:short) %(upstream:track)' | awk '$2 == "[gone]" {print $1}' | xargs -r git branch -D'';
-      tatus = "status";
-      co = "checkout";
-      br = "branch";
-      st = "status -sb";
-      wtf = "!git-wtf";
-      lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --topo-order --date=relative";
-      gl = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --topo-order --date=relative";
-      lp = "log -p";
-      lr = "reflog";
-      ls = "ls-files";
-      dall = "diff";
-      d = "diff --relative";
-      dv = "difftool";
-      df = "diff --relative --name-only";
-      dvf = "difftool --relative --name-only";
-      dfall = "diff --name-only";
-      ds = "diff --relative --name-status";
-      dvs = "difftool --relative --name-status";
-      dsall = "diff --name-status";
-      dvsall = "difftool --name-status";
-      dr = "diff-index --cached --name-only --relative HEAD";
-      di = "diff-index --cached --patch --relative HEAD";
-      dfi = "diff-index --cached --name-only --relative HEAD";
-      subpull = "submodule foreach git pull";
-      subco = "submodule foreach git checkout master";
-    };
-    extraConfig =
+    settings =
       {
+        user = {
+          name = "Patrick Walsh";
+          email = "patrick.walsh@ironcorelabs.com";
+        };
+        alias = {
+          gone = ''
+            ! git fetch -p && git for-each-ref --format '%(refname:short) %(upstream:track)' | awk '$2 == "[gone]" {print $1}' | xargs -r git branch -D'';
+          tatus = "status";
+          co = "checkout";
+          br = "branch";
+          st = "status -sb";
+          wtf = "!git-wtf";
+          lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --topo-order --date=relative";
+          gl = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --topo-order --date=relative";
+          lp = "log -p";
+          lr = "reflog";
+          ls = "ls-files";
+          dall = "diff";
+          d = "diff --relative";
+          dv = "difftool";
+          df = "diff --relative --name-only";
+          dvf = "difftool --relative --name-only";
+          dfall = "diff --name-only";
+          ds = "diff --relative --name-status";
+          dvs = "difftool --relative --name-status";
+          dsall = "diff --name-status";
+          dvsall = "difftool --name-status";
+          dr = "diff-index --cached --name-only --relative HEAD";
+          di = "diff-index --cached --patch --relative HEAD";
+          dfi = "diff-index --cached --name-only --relative HEAD";
+          subpull = "submodule foreach git pull";
+          subco = "submodule foreach git checkout master";
+        };
         github.user = "zmre";
         color.ui = true;
         pull.rebase = true;
@@ -1876,24 +1878,25 @@ in {
         core.fsmonitor = true;
         core.untrackedcache = true;
       };
-    # Really nice looking diffs
-    delta = {
-      enable = false;
-      options = {
-        syntax-theme = "Monokai Extended";
-        line-numbers = true;
-        navigate = true;
-        side-by-side = true;
-      };
-    };
-    # intelligent diffs that are syntax parse tree aware per language
-    difftastic = {
-      enable = true;
-      background = "dark";
-      # color = "always";
-    };
-    #ignores = [ ".cargo" ];
     ignores = import ./dotfiles/gitignore.nix;
+  };
+  # intelligent diffs that are syntax parse tree aware per language in git
+  programs.difftastic = {
+    enable = true;
+    git.enable = true;
+    options.background = "dark";
+    # color = "always";
+  };
+  # Really nice looking diffs
+  programs.delta = {
+    enable = false;
+    # git.enable = true;
+    options = {
+      syntax-theme = "Monokai Extended";
+      line-numbers = true;
+      navigate = true;
+      side-by-side = true;
+    };
   };
 
   programs.tmux = {
