@@ -26,20 +26,33 @@
           };
     })
     (final: prev: {
-      aichat = prev.aichat.overrideAttrs (
-        oldAttrs: {
-          nativeBuildInputs = (oldAttrs.nativeBuildInputs or []) ++ [final.makeBinaryWrapper];
-          postFixup =
-            (oldAttrs.postFixup or "")
-            + ''
-              bin="$out/bin/aichat"
-              wrapped="$out/bin/.aichat-wrapped"
-              mv "$bin" "$wrapped"
-              makeBinaryWrapper $wrapped $bin --prefix PATH : ${final.lib.makeBinPath (with final; [argc jq poppler_utils pdfminer tesseract])}
-            '';
-        }
-      );
+      aichat-wrapped = let
+        pkg = final.aichat;
+        tools = with final; [argc jq poppler_utils pdfminer tesseract];
+        toolPath = final.lib.makeBinPath tools;
+      in
+        final.runCommand "${pkg.pname}-wrapped" {
+          nativeBuildInputs = [final.makeBinaryWrapper];
+        } ''
+          mkdir -p $out/bin
+          makeBinaryWrapper ${final.lib.getExe pkg} $out/bin/${pkg.pname} --prefix PATH : ${toolPath}
+        '';
     })
+    # (final: prev: {
+    #   aichat = prev.aichat.overrideAttrs (
+    #     oldAttrs: {
+    #       nativeBuildInputs = (oldAttrs.nativeBuildInputs or []) ++ [final.makeBinaryWrapper];
+    #       postFixup =
+    #         (oldAttrs.postFixup or "")
+    #         + ''
+    #           bin="$out/bin/aichat"
+    #           wrapped="$out/bin/.aichat-wrapped"
+    #           mv "$bin" "$wrapped"
+    #           makeBinaryWrapper $wrapped $bin --prefix PATH : ${final.lib.makeBinPath (with final; [argc jq poppler_utils pdfminer tesseract])}
+    #         '';
+    #     }
+    #   );
+    # })
     (final: prev: {
       enola = prev.buildGo123Module {
         # TODO: this seems to be failing with this problem https://discourse.nixos.org/t/cant-update-a-go-package-getting-go-inconsistent-vendoring/27063/6

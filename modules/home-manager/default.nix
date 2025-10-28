@@ -88,7 +88,7 @@
       #zsh-fzf-tab # build fail 2024-02-27
       pkgs.yt-x # terminal youtube browser
       chafa # cmd line image viewer needed with yt-x
-      aichat # ai cli tool that can use local rag, local models, etc.
+      aichat-wrapped # ai cli tool that can use local rag, local models, etc.
     ])
     ++ (with pkgs; [
       # unstable packages
@@ -1105,13 +1105,13 @@ in {
     shellAliases =
       {
         c = "clear";
-        ls = "eza --hyperlink -F";
-        l = "eza --icons --hyperlink --git-ignore --git -F";
-        la = "eza --icons --hyperlink --git-ignore --git -F -a";
-        ll = "eza --icons --hyperlink --git-ignore --git -F -l";
-        le = "eza --icons --hyperlink --git-ignore --git -F --extended -l";
-        lt = "eza --icons --hyperlink --git-ignore --git -F -T";
-        llt = "eza --icons --hyperlink --git-ignore --git -F -l -T";
+        ls = "eza --hyperlink --classify=always";
+        l = "eza --icons --hyperlink --git-ignore --git --classify=always";
+        la = "eza --icons --hyperlink --git-ignore --git --classify=always -a";
+        ll = "eza --icons --hyperlink --git-ignore --git --classify=always -l";
+        le = "eza --icons --hyperlink --git-ignore --git --classify=always --extended -l";
+        lt = "eza --icons --hyperlink --git-ignore --git --classify=always -T";
+        llt = "eza --icons --hyperlink --git-ignore --git --classify=always -l -T";
         lr = "eza -s oldest --git-ignore -F -l --hyperlink --color=always | head -30";
         fd = "\\fd -H -t d --hyperlink"; # default search directories
         f = "\\fd -H --hyperlink"; # default search this dir for files ignoring .gitignore etc
@@ -1125,6 +1125,10 @@ in {
         # search for a note and with ctrl-n, create it if not found
         # add subdir as needed like "n meetings" or "n wiki"
         n = "zk edit --interactive";
+        "pwdev-rust" = "nix develop ~/src/sideprojects/pwdev#rust";
+        "pwdev-ts" = "nix develop ~/src/sideprojects/pwdev#ts";
+        "pwdev-python" = "nix develop ~/src/sideprojects/pwdev#python";
+        "pwdev-all" = "nix develop ~/src/sideprojects/pwdev#all";
         ".." = "cd ..";
         "..." = "cd ../..";
         "...." = "cd ../../..";
