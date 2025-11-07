@@ -28,7 +28,7 @@
     (final: prev: {
       aichat-wrapped = let
         pkg = final.aichat;
-        tools = with final; [argc jq poppler_utils pdfminer tesseract];
+        tools = with final; [argc jq poppler-utils pdfminer tesseract];
         toolPath = final.lib.makeBinPath tools;
       in
         final.runCommand "${pkg.pname}-wrapped" {

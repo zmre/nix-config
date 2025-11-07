@@ -11,7 +11,7 @@
       # filesystem
       fd
       ripgrep
-      du-dust
+      dust
       fzy
       curl
       duf # df alternative showing free disk space
@@ -38,7 +38,7 @@
       pandoc # for lf preview
       imagemagick # for lf preview
       highlight # code coloring in lf
-      poppler_utils # for pdf2text in lf
+      poppler-utils # for pdf2text in lf
       mediainfo # used by lf
       exiftool # used by lf
       #rich-cli # used by lf (experimenting with mdcat replacement)
@@ -55,7 +55,7 @@
       # not building on m1 right now
       #bmon # bandwidth monitor by interface
       static-web-server # serve local static files
-      aria # cli downloader
+      aria2 # cli downloader
       # ncftp
       hostname
       trippy # mtr alternative
@@ -103,10 +103,10 @@
       hackernews-tui
       btop # currently like this better than bottom and htop
       #marp-cli # convert markdown to html slides
-      ironhide # rust version of IronCore's ironhide
-      ironoxide-cli # rust version of IronCore's ironoxide-cli
+      #ironhide # rust version of IronCore's ironhide
+      #ironoxide-cli # rust version of IronCore's ironoxide-cli
       #devenv # quick setup of dev envs for projects
-      openai-whisper-cpp # Allow GPU accelerated local transcriptions
+      whisper-cpp # Allow GPU accelerated local transcriptions
       #qutebrowser
     ]);
   # using unstable in my home profile for nix commands
@@ -1642,7 +1642,7 @@ in {
     };
     initLua = ./dotfiles/yazi/init.lua;
     keymap = {
-      manager = {
+      mgr = {
         append_keymap = [
           {
             on = ["," " "]; # comma then space to preview, which is weird in yazi land where comma triggers sort options, but it works okay for me
@@ -1673,7 +1673,7 @@ in {
     };
     settings = {
       title_format = "y ({cwd})";
-      manager = {
+      mgr = {
         sort_by = "natural";
         sort_dir_first = true;
         sort_reverse = true;
