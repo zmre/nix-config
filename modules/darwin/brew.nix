@@ -69,6 +69,7 @@
         name = "dash"; # offline developer docs
         greedy = true;
       }
+      "claude"
       {
         name = "default-folder-x";
         greedy = true;
@@ -314,7 +315,7 @@
       "Apple Configurator" = 1037126344;
       #"Blurred" = 1497527363; # dim non-foreground windows -- removed when I realized this is Intel not ARM :-(
       "Blackmagic Disk Speed Test" = 425264550;
-      "Boxy SVG" = 611658502; # nice code-oriented visual svg editor
+      #"Boxy SVG" = 611658502; # nice code-oriented visual svg editor
       "Brother iPrint&Scan" = 1193539993;
       "Cardhop" = 1290358394; # contacts alternative
       "DaisyDisk" = 411643860;
@@ -341,7 +342,7 @@
       "Monodraw" = 920404675; # ASCII drawings
       #"MsgFiler" = 6478043112; # Mail extension (sort of) for keyboard driven message filing
       #"NextDNS" = 1464122853;
-      "NotePlan" = 1505432629;
+      #"NotePlan" = 1505432629;
       "Numbers" = 409203825;
       "Pages" = 409201541;
       "PCalc" = 403504866;

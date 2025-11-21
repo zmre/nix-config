@@ -165,6 +165,7 @@
       inherit (inputs.ironoxide.packages.${final.system}) ironoxide-cli;
       inherit (inputs.pwnvim.packages.${final.system}) pwnvim;
       inherit (inputs.pwneovide.packages.${final.system}) pwneovide;
+      inherit (inputs.iris.packages.${final.system}) iris;
       #inherit (inputs.devenv.packages.${final.system}) devenv;
     })
     (final: prev: {
