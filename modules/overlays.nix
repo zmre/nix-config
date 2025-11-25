@@ -156,6 +156,7 @@
     })
     (final: prev: {
       yt-x = inputs.yt-x.packages.${final.system}.default;
+      pwai = inputs.pwai.packages.${final.system}.default;
       pwaerospace = inputs.pwaerospace.packages.${final.system}.default;
       inherit (inputs.ghostty.packages.${final.system}) ghostty;
       inherit (inputs.gtm-okr.packages.${final.system}) gtm-okr;

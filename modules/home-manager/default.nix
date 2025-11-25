@@ -89,8 +89,8 @@
       pkgs.yt-x # terminal youtube browser
       chafa # cmd line image viewer needed with yt-x
       aichat-wrapped # ai cli tool that can use local rag, local models, etc.
-      #iris # my personal assistant, which wraps other tools and has crap tons of configs
-      # iris is commented out because right now, I just want it to live run current status in local file
+
+      pwai # my personal assistant, which wraps other tools and has crap tons of configs
     ])
     ++ (with pkgs; [
       # unstable packages
@@ -1134,8 +1134,8 @@ in {
         f = "\\fd -H --hyperlink"; # default search this dir for files ignoring .gitignore etc
         fa = "\\fd -H -I -t f -t l --hyperlink"; # show all files and symlinks (including ignored and hidden)
 
-        #i = "iris"; # shortcut for iris digital assistant TODO: enable this once iris is installed properly
-        i = "nix run ~/src/personal/pai --";
+        i = "iris"; # shortcut for iris digital assistant TODO: enable this once iris is installed properly
+        #i = "nix run ~/src/personal/pai --";
         iq = "fabric"; # this is like iris quick, but "IQ" works too and just shorter way to call fabric since "f" is taken
         iqp = "fabric -V Ollama -m gpt-oss:120b"; # this is like iris quick, but "IQ" works too and just shorter way to call fabric since "f" is taken
         it = "fabric --transcript -y"; # fetch a youtube video's transcript
@@ -2165,39 +2165,6 @@ in {
         # }
       ];
     };
-  };
-
-  programs.fabric-ai = {
-    enable = true;
-    enableZshIntegration = true;
-    enableYtAlias = false; # I already have a tool called yt, so if I want youtube transcription, I need to somewhere add the following function:
-    # yt() {
-    #           if [ "$#" -eq 0 ] || [ "$#" -gt 2 ]; then
-    #               echo "Usage: yt [-t | --timestamps] youtube-link"
-    #               echo "Use the '-t' flag to get the transcript with timestamps."
-    #               return 1
-    #           fi
-    #
-    #           transcript_flag="--transcript"
-    #           if [ "$1" = "-t" ] || [ "$1" = "--timestamps" ]; then
-    #               transcript_flag="--transcript-with-timestamps"
-    #               shift
-    #           fi
-    #           local video_link="$1"
-    #           fabric -y "$video_link" $transcript_flag
-    #       }
-  };
-
-  programs.opencode = {
-    enable = true;
-  };
-
-  programs.claude-code = {
-    enable = true;
-  };
-
-  programs.codex = {
-    enable = true;
   };
 
   # text expander functionality (but open source donationware, x-platform, rust-based)

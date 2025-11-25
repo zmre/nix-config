@@ -116,6 +116,8 @@
     homebrew-bundle.flake = false;
     homebrew-services.url = "github:homebrew/homebrew-services";
     homebrew-services.flake = false;
+
+    pwai.url = "git+ssh://git@github.com/zmre/pwai.git"; # my private ai assistant
   };
 
   outputs = inputs @ {

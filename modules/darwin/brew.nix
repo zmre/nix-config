@@ -160,8 +160,8 @@
       # alphebetized under mpv
       "stolendata-mpv" # 2024-12-11 switching to brew but keeping hm config; gui not launching
       "noun-project"
-      "ollama-app"
-      "lm-studio"
+      #"ollama-app"
+      #"lm-studio"
       # {
       #   name = "obs"; # TODO: move to nix version obs-studio when not broken
       #   greedy = true;
