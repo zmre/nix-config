@@ -253,4 +253,6 @@
   "~/.gitignore"
   ".cargo"
   ".direnv"
+  "result"
+  "settings.local.json"
 ]

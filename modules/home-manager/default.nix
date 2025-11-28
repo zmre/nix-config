@@ -179,19 +179,6 @@ in {
     HOMEBREW_NO_AUTO_UPDATE = 1;
     #LIBVA_DRIVER_NAME="iHD";
     # Where PAI is installed
-    PAI_DIR =
-      if pkgs.stdenvNoCC.isDarwin
-      then "/Users/${username}/src/personal/pai"
-      else "/home/${username}/src/personal/pai";
-
-    # Your home directory
-    PAI_HOME = "$HOME";
-
-    # Your AI assistant's name
-    DA = "Iris";
-
-    # Display color
-    DA_COLOR = "purple";
 
     ZK_NOTEBOOK_DIR =
       if pkgs.stdenvNoCC.isDarwin
@@ -1135,7 +1122,7 @@ in {
         fa = "\\fd -H -I -t f -t l --hyperlink"; # show all files and symlinks (including ignored and hidden)
 
         i = "iris"; # shortcut for iris digital assistant TODO: enable this once iris is installed properly
-        #i = "nix run ~/src/personal/pai --";
+        #i = "nix run ~/src/personal/pwai --";
         iq = "fabric"; # this is like iris quick, but "IQ" works too and just shorter way to call fabric since "f" is taken
         iqp = "fabric -V Ollama -m gpt-oss:120b"; # this is like iris quick, but "IQ" works too and just shorter way to call fabric since "f" is taken
         it = "fabric --transcript -y"; # fetch a youtube video's transcript

@@ -65,6 +65,10 @@ config.keys = {
 
   -- cmd-ctrl-a, [ puts us into a vim-like mode for navigating and selecting and copying out history
   { key = "[",         mods = "LEADER", action = act.ActivateCopyMode },
+
+  -- for claude, shift-enter should just put a backslash then enter
+  { mods = "SHIFT",    key = "Enter",   action = act.SendString "\\\n" },
+
   -- cmd-ctrl-a, u allows quick select and launch of on-screen url starting with http
   {
     key = "u",

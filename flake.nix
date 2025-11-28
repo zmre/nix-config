@@ -100,9 +100,6 @@
     yazi-flavors.url = "github:yazi-rs/flavors";
     yazi-flavors.flake = false;
 
-    # Experiments with AI and personal assistant stuff -- this is local only for now
-    iris.url = "path:/Users/pwalsh/src/personal/pai";
-
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
     nix-homebrew.inputs.nixpkgs.follows = "nixpkgs";
     #nix-homebrew.inputs.brew-src.follows = "brew-src";
