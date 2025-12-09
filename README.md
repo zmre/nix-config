@@ -1,4 +1,4 @@
-# Defunct Nix Config [ARCHIVED / RELOCATED]Nix Home-Manager Config
+# Defunct Nix Config [ARCHIVED / RELOCATED]
 
 I experimented with a new format for building nix configs that has a much more modular approach without a lot of the ugly boilerplate of classic modular setups.  It uses a "dendritic" pattern with flake-parts.  Because it was such a huge change, I just started it in a fresh repo.  This repo is getting archived.
 
